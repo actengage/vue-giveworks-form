@@ -1,0 +1,12 @@
+{
+  "name": "GiveworksForm",
+  "version": "0.0.1",
+  "description": "A Vue.js component for building and submitting Giveworks form.",
+  "main": "dist/giveworks-form.js",
+  "author": "Justin Kimbrell",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.17.1",
+    "vue": "^2.5.3"
+  }
+}

@@ -1,0 +1,29 @@
+<template>
+    <div class="gw-alert">
+        <h1 class="gw-alert-header">{{ header }}</h1>
+        <div class="gw-alert-body">{{ error.message }}</div>
+    </div>
+</template>
+
+<script>
+export default {
+
+    props: {
+        'error': {
+            type: Error,
+            default: function() {
+                return {};
+            }
+        },
+        'header': {
+            type: String,
+            default: 'Error!'
+        }
+    }
+
+}
+</script>
+
+<style>
+
+</style>

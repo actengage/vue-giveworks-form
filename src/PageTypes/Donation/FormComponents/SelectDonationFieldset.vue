@@ -39,17 +39,17 @@
             </div>
         </div>
 
-        <div class="form-group mt-3" v-if="!page.options.recurring_only">
-            <label>Make this a repeating donation?</label>
+        <div class="form-group mt-3" v-if="page.site.recurring && !page.options.recurring_only">
+            <label v-html="recurringMessage"></label>
             <div class="btn-group">
-                <button type="button" class="btn" :class="{'btn-success': type === 'single', 'btn-secondary': type === 'recur'}" @click="type = 'single'">One-Time</button>
-                <button type="button" class="btn" :class="{'btn-success': type === 'recur', 'btn-secondary': type === 'single'}" @click="type = 'recur'">Monthly</button>
+                <button type="button" class="btn" :class="{'btn-success': !recurring, 'btn-secondary': !!recurring}" @click="setRecurring(0);">One-Time</button>
+                <button type="button" class="btn" :class="{'btn-success': !!recurring, 'btn-secondary': !recurring}" @click="setRecurring(1);">Monthly</button>
             </div>
 
-            <small v-if="type === 'single'" class="text-muted form-text">You are making a single donation of the amount entered above. Click the 'monthly' button to make your gift go further as an automatic monthly donation.</small>
-            <small v-if="type === 'recur'" class="text-muted form-text">This amount will be charged automatically once each month, on or about the {{ chargeDate }}. You may cancel your donation at any time by contacting us.</small>
+            <small v-if="!recurring" class="text-muted form-text">You are making a single donation of the amount entered above. Click the 'monthly' button to make your gift go further as an automatic monthly donation.</small>
+            <small v-if="!!recurring" class="text-muted form-text">This amount will be charged automatically once each month, on or about the {{ chargeDate }}. You may cancel your donation at any time by contacting us.</small>
         </div>
-        <div class="alert alert-warning mt-3" v-else>
+        <div class="alert alert-warning mt-3" v-else-if="page.site.recurring && page.options.recurring_only">
             <h5 class="alert-heading"><icon name="warning"></icon> Monthly Donation</h5>
             <div v-if="page.options.recur_message" v-html="page.options.recur_message"></div>
             <div v-else>
@@ -80,12 +80,16 @@ export default {
 
     data: function() {
         return {
-            type: 'single',
+            recurring: 0,
             amount: null
         };
     },
 
     computed: {
+
+        recurringMessage: function() {
+            return this.page.options.recur_mess || this.page.site.config.giveworks.recur_mess;
+        },
 
         chargeDate: function() {
             return moment().format('do');
@@ -96,12 +100,23 @@ export default {
         },
 
         amounts: function() {
-            const minAmount = parseFloat(this.page.options.min_amount) || 10;
-            const values = ['10', '25', '50', '100', '150', '250', '500', '1000'];
+            // orig default values: ['10', '25', '50', '100', '150', '250', '500', '1000'];
+
+            const minAmount = parseFloat(this.page.options.min_amount) || 0;
+            const values = this.page.site.config.giveworks.ask_amounts;
 
             return values.filter(value => {
                 return value >= minAmount;
             });
+        }
+
+    },
+
+    methods: {
+
+        setRecurring: function(value) {
+            this.recurring = value;
+            this.$parent.$emit('set-recurring', !!value);
         }
 
     }

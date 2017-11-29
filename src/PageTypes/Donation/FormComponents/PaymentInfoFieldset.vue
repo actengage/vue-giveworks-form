@@ -82,7 +82,7 @@
 
         <div v-if="page.options.add_optin">
             <label class="custom-control custom-checkbox">
-                <input type="checkbox" name="optin" class="custom-control-input" checked>
+                <input type="checkbox" name="optin" value="1" class="custom-control-input" checked>
                 <span class="custom-control-indicator"></span>
                 <small v-html="optinMessage" class="custom-control-description text-muted form-text"></small>
             </label>
@@ -120,13 +120,13 @@ export default {
 
     computed: {
         commentMessage: function() {
-            return this.page.options.comment_message || 'Comment';
+            return this.page.options.comment_message || this.page.site.config.giveworks.comment_mess;
         },
         optinMessage: function() {
-            return this.page.options.optin_message || 'Yes, I\'d like to stay informed by joining your mailing list!';
+            return this.page.options.optin_message || this.page.site.config.giveworks.optin_mess;
         },
         buttonLabel: function() {
-            return this.page.options.button || 'Donate Now!';
+            return this.page.options.button || this.page.site.config.giveworks.button.donate;
         }
     },
 

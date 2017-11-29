@@ -12321,7 +12321,7 @@ var BaseComponent = {
 };
 
 var DonorInfoFieldset = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('fieldset', { staticClass: "mb-4" }, [_c('legend', [_vm._v("Your information")]), _vm._v(" "), _vm.page.options.add_title ? _c('div', { staticClass: "form-group mb-2" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "title" } }, [_vm._v("Title")]), _vm._v(" "), _c('select', { directives: [{ name: "model", rawName: "v-model", value: _vm.title, expression: "title" }], staticClass: "custom-select form-control", attrs: { "name": "title", "id": "title" }, on: { "change": function change($event) {
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [_c('fieldset', { staticClass: "mb-4" }, [_c('legend', [_vm._v("Your information")]), _vm._v(" "), _vm.page.options.add_title ? _c('div', { staticClass: "form-group mb-2" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "title" } }, [_vm._v("Title")]), _vm._v(" "), _c('select', { directives: [{ name: "model", rawName: "v-model", value: _vm.title, expression: "title" }], staticClass: "custom-select form-control", attrs: { "name": "title", "id": "title" }, on: { "change": function change($event) {
                     var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
                         return o.selected;
                     }).map(function (o) {
@@ -12365,19 +12365,20 @@ var DonorInfoFieldset = { render: function render() {
                     if ($event.target.composing) {
                         return;
                     }_vm.phone = $event.target.value;
-                } } })]) : _vm._e()]);
+                } } })]) : _vm._e()]), _vm._v(" "), _vm.shouldShowEmployment ? _c('fieldset', [_c('legend', [_vm._v("Employment Information")]), _vm._v(" "), !_vm.recurring ? _c('p', [_c('small', { staticClass: "text-muted", domProps: { "innerHTML": _vm._s(_vm.employmentOccurMessage) } })]) : _vm._e(), _vm._v(" "), !_vm.isRetired ? _c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-md-6" }, [_c('div', { staticClass: "form-group" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "employer" } }, [_vm._v("Employer")]), _vm._v(" "), _c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.employer, expression: "employer" }], staticClass: "form-control", attrs: { "type": "text", "name": "employer", "id": "employer" }, domProps: { "value": _vm.employer }, on: { "input": function input($event) {
+                    if ($event.target.composing) {
+                        return;
+                    }_vm.employer = $event.target.value;
+                } } })])]), _vm._v(" "), _c('div', { staticClass: "col-md-6" }, [_c('div', { staticClass: "form-group" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "occupation" } }, [_vm._v("Occupation")]), _vm._v(" "), _c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.occupation, expression: "occupation" }], staticClass: "form-control", attrs: { "type": "text", "name": "occupation", "id": "occupation" }, domProps: { "value": _vm.occupation }, on: { "input": function input($event) {
+                    if ($event.target.composing) {
+                        return;
+                    }_vm.occupation = $event.target.value;
+                } } })])])]) : _vm._e(), _vm._v(" "), _c('div', { staticClass: "form-group" }, [_c('label', { staticClass: "custom-control custom-checkbox" }, [_c('input', { staticClass: "custom-control-input", attrs: { "type": "checkbox", "name": "retired", "value": "1" }, on: { "change": function change($event) {
+                    _vm.setRetired($event.target.checked);
+                } } }), _vm._v(" "), _c('span', { staticClass: "custom-control-indicator" }), _vm._v(" "), _c('small', { staticClass: "custom-control-description text-muted form-text" }, [_vm._v("I'm retired")])])])]) : _vm._e()]);
     }, staticRenderFns: [],
 
     extends: BaseComponent,
-
-    computed: {
-        titles: function titles() {
-            return ['', 'Mr', 'Mrs', 'Ms', 'Dr', 'Miss'];
-        },
-        states: function states() {
-            return States;
-        }
-    },
 
     data: function data() {
         return {
@@ -12388,8 +12389,47 @@ var DonorInfoFieldset = { render: function render() {
             street: null,
             state: null,
             zip: null,
-            phone: null
+            phone: null,
+            employer: null,
+            occupation: null,
+            recurring: 0
         };
+    },
+
+    computed: {
+        isRetired: function isRetired() {
+            return this.employer === 'Retired' && this.occupation === 'Retired';
+        },
+        shouldShowEmployment: function shouldShowEmployment() {
+            return this.page.site.type === 'PAC' || this.page.site.type === 'Campaign'
+
+            // Remove this line before committing
+            // || this.page.site.type === 'C4'
+            ;
+        },
+        employmentOccurMessage: function employmentOccurMessage() {
+            return this.page.site.emp_occ_msg || this.page.site.config.giveworks.emp_occ_msg;
+        },
+        titles: function titles() {
+            return this.page.site.config.giveworks.titles;
+        },
+        states: function states() {
+            return States;
+        }
+    },
+
+    methods: {
+        setRetired: function setRetired(isChecked) {
+            this.occupation = this.employer = isChecked ? 'Retired' : '';
+        }
+    },
+
+    created: function created() {
+        var _this = this;
+
+        this.$parent.$on('set-recurring', function (value) {
+            _this.recurring = value;
+        });
     }
 
 };
@@ -12574,7 +12614,7 @@ var PaymentInfoFieldset = { render: function render() {
                     _vm.setPaymentGateway('paypal');
                 } } }, [_c('icon', { attrs: { "name": "paypal", "scale": "2" } })], 1)]), _vm._v(" "), _c('div', { staticClass: "col-sm-4" }, [_c('button', { staticClass: "btn btn-secondary btn-block py-4", class: { 'btn-info': _vm.gateway === 'btc' }, attrs: { "type": "button" }, on: { "click": function click($event) {
                     _vm.setPaymentGateway('btc');
-                } } }, [_c('icon', { attrs: { "name": "btc", "scale": "2" } })], 1)])]), _vm._v(" "), _vm._m(0), _vm._v(" "), _vm._m(1), _vm._v(" "), _vm.page.options.add_comment ? _c('div', { staticClass: "form-group" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "comment" }, domProps: { "innerHTML": _vm._s(_vm.commentMessage) } }), _vm._v(" "), _c('textarea', { staticClass: "form-control", attrs: { "name": "comment", "id": "comment" } })]) : _vm._e(), _vm._v(" "), _c('button', { staticClass: "btn btn-lg btn-block btn-primary", attrs: { "type": "submit" }, domProps: { "innerHTML": _vm._s(_vm.buttonLabel) } }), _vm._v(" "), _vm.page.options.add_optin ? _c('div', [_c('label', { staticClass: "custom-control custom-checkbox" }, [_c('input', { staticClass: "custom-control-input", attrs: { "type": "checkbox", "name": "optin", "checked": "checked" } }), _vm._v(" "), _c('span', { staticClass: "custom-control-indicator" }), _vm._v(" "), _c('small', { staticClass: "custom-control-description text-muted form-text", domProps: { "innerHTML": _vm._s(_vm.optinMessage) } })])]) : _vm._e(), _vm._v(" "), _vm.page.site.disclaimer ? _c('div', { staticClass: "mt-3" }, [_c('small', { staticClass: "text-muted", domProps: { "innerHTML": _vm._s(_vm.page.site.disclaimer) } })]) : _vm._e()]);
+                } } }, [_c('icon', { attrs: { "name": "btc", "scale": "2" } })], 1)])]), _vm._v(" "), _vm._m(0), _vm._v(" "), _vm._m(1), _vm._v(" "), _vm.page.options.add_comment ? _c('div', { staticClass: "form-group" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "comment" }, domProps: { "innerHTML": _vm._s(_vm.commentMessage) } }), _vm._v(" "), _c('textarea', { staticClass: "form-control", attrs: { "name": "comment", "id": "comment" } })]) : _vm._e(), _vm._v(" "), _c('button', { staticClass: "btn btn-lg btn-block btn-primary", attrs: { "type": "submit" }, domProps: { "innerHTML": _vm._s(_vm.buttonLabel) } }), _vm._v(" "), _vm.page.options.add_optin ? _c('div', [_c('label', { staticClass: "custom-control custom-checkbox" }, [_c('input', { staticClass: "custom-control-input", attrs: { "type": "checkbox", "name": "optin", "value": "1", "checked": "checked" } }), _vm._v(" "), _c('span', { staticClass: "custom-control-indicator" }), _vm._v(" "), _c('small', { staticClass: "custom-control-description text-muted form-text", domProps: { "innerHTML": _vm._s(_vm.optinMessage) } })])]) : _vm._e(), _vm._v(" "), _vm.page.site.disclaimer ? _c('div', { staticClass: "mt-3" }, [_c('small', { staticClass: "text-muted", domProps: { "innerHTML": _vm._s(_vm.page.site.disclaimer) } })]) : _vm._e()]);
     }, staticRenderFns: [function () {
         var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "row my-2" }, [_c('div', { staticClass: "col-sm-8" }, [_c('div', { staticClass: "form-group mb-2" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "number" } }, [_vm._v("Credit Card Number")]), _vm._v(" "), _c('input', { staticClass: "form-control", attrs: { "type": "text", "name": "number", "id": "number", "value": "" } })])]), _vm._v(" "), _c('div', { staticClass: "col-sm-4" }, [_c('div', { staticClass: "form-group mb-2" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "ccv" } }, [_vm._v("CVV")]), _vm._v(" "), _c('input', { staticClass: "form-control", attrs: { "type": "text", "name": "ccv", "id": "ccv", "value": "" } })])])]);
     }, function () {
@@ -12595,13 +12635,13 @@ var PaymentInfoFieldset = { render: function render() {
 
     computed: {
         commentMessage: function commentMessage() {
-            return this.page.options.comment_message || 'Comment';
+            return this.page.options.comment_message || this.page.site.config.giveworks.comment_mess;
         },
         optinMessage: function optinMessage() {
-            return this.page.options.optin_message || 'Yes, I\'d like to stay informed by joining your mailing list!';
+            return this.page.options.optin_message || this.page.site.config.giveworks.optin_mess;
         },
         buttonLabel: function buttonLabel() {
-            return this.page.options.button || 'Donate Now!';
+            return this.page.options.button || this.page.site.config.giveworks.button.donate;
         }
     },
 
@@ -17155,11 +17195,11 @@ var SelectDonationFieldset = { render: function render() {
                     if ($event.target.composing) {
                         return;
                     }_vm.amount = $event.target.value;
-                } } }), _vm._v(" "), _c('div', { staticClass: "invalid-feedback" }, [_vm._v("Some inline error message here.")])])]), _vm._v(" "), !_vm.page.options.recurring_only ? _c('div', { staticClass: "form-group mt-3" }, [_c('label', [_vm._v("Make this a repeating donation?")]), _vm._v(" "), _c('div', { staticClass: "btn-group" }, [_c('button', { staticClass: "btn", class: { 'btn-success': _vm.type === 'single', 'btn-secondary': _vm.type === 'recur' }, attrs: { "type": "button" }, on: { "click": function click($event) {
-                    _vm.type = 'single';
-                } } }, [_vm._v("One-Time")]), _vm._v(" "), _c('button', { staticClass: "btn", class: { 'btn-success': _vm.type === 'recur', 'btn-secondary': _vm.type === 'single' }, attrs: { "type": "button" }, on: { "click": function click($event) {
-                    _vm.type = 'recur';
-                } } }, [_vm._v("Monthly")])]), _vm._v(" "), _vm.type === 'single' ? _c('small', { staticClass: "text-muted form-text" }, [_vm._v("You are making a single donation of the amount entered above. Click the 'monthly' button to make your gift go further as an automatic monthly donation.")]) : _vm._e(), _vm._v(" "), _vm.type === 'recur' ? _c('small', { staticClass: "text-muted form-text" }, [_vm._v("This amount will be charged automatically once each month, on or about the " + _vm._s(_vm.chargeDate) + ". You may cancel your donation at any time by contacting us.")]) : _vm._e()]) : _c('div', { staticClass: "alert alert-warning mt-3" }, [_c('h5', { staticClass: "alert-heading" }, [_c('icon', { attrs: { "name": "warning" } }), _vm._v(" Monthly Donation")], 1), _vm._v(" "), _vm.page.options.recur_message ? _c('div', { domProps: { "innerHTML": _vm._s(_vm.page.options.recur_message) } }) : _c('div', [_vm._v(" Please note that this will be a monthly recurring donation. The amount you select will be charged automatically once each month on or about the " + _vm._s(_vm.chargeDate) + ". You may cancel your donation at any time by contacting us. ")])])]);
+                } } }), _vm._v(" "), _c('div', { staticClass: "invalid-feedback" }, [_vm._v("Some inline error message here.")])])]), _vm._v(" "), _vm.page.site.recurring && !_vm.page.options.recurring_only ? _c('div', { staticClass: "form-group mt-3" }, [_c('label', { domProps: { "innerHTML": _vm._s(_vm.recurringMessage) } }), _vm._v(" "), _c('div', { staticClass: "btn-group" }, [_c('button', { staticClass: "btn", class: { 'btn-success': !_vm.recurring, 'btn-secondary': !!_vm.recurring }, attrs: { "type": "button" }, on: { "click": function click($event) {
+                    _vm.setRecurring(0);
+                } } }, [_vm._v("One-Time")]), _vm._v(" "), _c('button', { staticClass: "btn", class: { 'btn-success': !!_vm.recurring, 'btn-secondary': !_vm.recurring }, attrs: { "type": "button" }, on: { "click": function click($event) {
+                    _vm.setRecurring(1);
+                } } }, [_vm._v("Monthly")])]), _vm._v(" "), !_vm.recurring ? _c('small', { staticClass: "text-muted form-text" }, [_vm._v("You are making a single donation of the amount entered above. Click the 'monthly' button to make your gift go further as an automatic monthly donation.")]) : _vm._e(), _vm._v(" "), !!_vm.recurring ? _c('small', { staticClass: "text-muted form-text" }, [_vm._v("This amount will be charged automatically once each month, on or about the " + _vm._s(_vm.chargeDate) + ". You may cancel your donation at any time by contacting us.")]) : _vm._e()]) : _vm.page.site.recurring && _vm.page.options.recurring_only ? _c('div', { staticClass: "alert alert-warning mt-3" }, [_c('h5', { staticClass: "alert-heading" }, [_c('icon', { attrs: { "name": "warning" } }), _vm._v(" Monthly Donation")], 1), _vm._v(" "), _vm.page.options.recur_message ? _c('div', { domProps: { "innerHTML": _vm._s(_vm.page.options.recur_message) } }) : _c('div', [_vm._v(" Please note that this will be a monthly recurring donation. The amount you select will be charged automatically once each month on or about the " + _vm._s(_vm.chargeDate) + ". You may cancel your donation at any time by contacting us. ")])]) : _vm._e()]);
     }, staticRenderFns: [function () {
         var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('label', { staticClass: "col-sm-6 col-form-label", attrs: { "for": "amount" } }, [_c('span', { staticClass: "text-bold" }, [_vm._v("Your Amount")])]);
     }],
@@ -17172,12 +17212,16 @@ var SelectDonationFieldset = { render: function render() {
 
     data: function data() {
         return {
-            type: 'single',
+            recurring: 0,
             amount: null
         };
     },
 
     computed: {
+
+        recurringMessage: function recurringMessage() {
+            return this.page.options.recur_mess || this.page.site.config.giveworks.recur_mess;
+        },
 
         chargeDate: function chargeDate() {
             return moment().format('do');
@@ -17188,12 +17232,23 @@ var SelectDonationFieldset = { render: function render() {
         },
 
         amounts: function amounts() {
-            var minAmount = parseFloat(this.page.options.min_amount) || 10;
-            var values = ['10', '25', '50', '100', '150', '250', '500', '1000'];
+            // orig default values: ['10', '25', '50', '100', '150', '250', '500', '1000'];
+
+            var minAmount = parseFloat(this.page.options.min_amount) || 0;
+            var values = this.page.site.config.giveworks.ask_amounts;
 
             return values.filter(function (value) {
                 return value >= minAmount;
             });
+        }
+
+    },
+
+    methods: {
+
+        setRecurring: function setRecurring(value) {
+            this.recurring = value;
+            this.$parent.$emit('set-recurring', !!value);
         }
 
     }

@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import HttpConfig from './Config/Http';
-import FormComponent from './Components/GiveworksForm.vue';
+import GiveworksForm from './Components/GiveworksForm.vue';
 
-export default class GiveworksForm {
+export default class GiveworksVueApp {
 
     constructor(el, options) {
         this.setApp(el);
@@ -12,7 +12,7 @@ export default class GiveworksForm {
         this.app = new Vue({
             el: el,
             components: {
-                'giveworks-form': FormComponent
+                GiveworksForm
             }
         });
     }

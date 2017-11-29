@@ -3,6 +3,7 @@ import vue from 'rollup-plugin-vue';
 import json from 'rollup-plugin-json';
 import babel from 'rollup-plugin-babel';
 import serve from 'rollup-plugin-serve';
+import commonjs from 'rollup-plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import rootImport from 'rollup-plugin-root-import';
@@ -38,12 +39,17 @@ export default {
             extensions: ['.js', '.vue']
         }),
         resolve({
-            customResolveOptions: {
-                moduleDirectory: './node_modules'
-            }
+            sourceMap: true,
+            extensions: [ '.js', '.scss', '.vue']
+        }),
+        commonjs({
+            include: 'node_modules/**',
         }),
         json(),
         vue({
+            scss: {
+                indentedSyntax: true
+            },
             css: function(style, styles, compiler) {
                 fs.writeFileSync('./css/giveworks-form.css', style);
                 //fs.writeFileSync('dist/giveworks-form.sass', styles.map(style => style.code).concat('\n'));

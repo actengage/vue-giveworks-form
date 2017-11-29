@@ -63,12 +63,12 @@
 
 <script>
 
+// Icons that are used on this page
+import 'vue-awesome/icons/warning';
+
 import moment from 'moment';
 import Icon from 'vue-awesome/components/Icon';
 import BaseComponent from './BaseComponent.vue';
-
-// Icons that are used on this page
-import 'vue-awesome/icons/warning';
 
 export default {
 

@@ -12566,6 +12566,7 @@ Icon.register({"paypal":{"width":1536,"height":1792,"paths":[{"d":"M1519 646q18 
 
 Icon.register({"credit-card":{"width":1920,"height":1792,"paths":[{"d":"M1760 128q66 0 113 47t47 113v1216q0 66-47 113t-113 47h-1600q-66 0-113-47t-47-113v-1216q0-66 47-113t113-47h1600zM160 256q-13 0-22.5 9.5t-9.5 22.5v224h1664v-224q0-13-9.5-22.5t-22.5-9.5h-1600zM1760 1536q13 0 22.5-9.5t9.5-22.5v-608h-1664v608q0 13 9.5 22.5t22.5 9.5h1600zM256 1408v-128h256v128h-256zM640 1408v-128h384v128h-384z"}]}});
 
+// Icons that are used on this page
 var PaymentInfoFieldset = { render: function render() {
         var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('fieldset', [_c('legend', [_vm._v("Payment information")]), _vm._v(" "), _c('div', { staticClass: "row mb-3" }, [_c('div', { staticClass: "col-sm-4" }, [_c('button', { staticClass: "btn btn-secondary btn-block py-4", class: { 'btn-info': _vm.gateway === 'cc' }, attrs: { "type": "button" }, on: { "click": function click($event) {
                     _vm.setPaymentGateway('cc');
@@ -12611,6 +12612,8 @@ var PaymentInfoFieldset = { render: function render() {
     }
 
 };
+
+Icon.register({"warning":{"width":1792,"height":1792,"paths":[{"d":"M1024 1375v-190q0-14-9.5-23.5t-22.5-9.5h-192q-13 0-22.5 9.5t-9.5 23.5v190q0 14 9.5 23.5t22.5 9.5h192q13 0 22.5-9.5t9.5-23.5zM1022 1001l18-459q0-12-10-19-13-11-24-11h-220q-11 0-24 11-10 7-10 21l17 457q0 10 10 16.5t24 6.5h185q14 0 23.5-6.5t10.5-16.5zM1008 67l768 1408q35 63-2 126-17 29-46.5 46t-63.5 17h-1536q-34 0-63.5-17t-46.5-46q-37-63-2-126l768-1408q17-31 47-49t65-18 65 18 47 49z"}]}});
 
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -17137,8 +17140,6 @@ return hooks;
 
 })));
 });
-
-Icon.register({"warning":{"width":1792,"height":1792,"paths":[{"d":"M1024 1375v-190q0-14-9.5-23.5t-22.5-9.5h-192q-13 0-22.5 9.5t-9.5 23.5v190q0 14 9.5 23.5t22.5 9.5h192q13 0 22.5-9.5t9.5-23.5zM1022 1001l18-459q0-12-10-19-13-11-24-11h-220q-11 0-24 11-10 7-10 21l17 457q0 10 10 16.5t24 6.5h185q14 0 23.5-6.5t10.5-16.5zM1008 67l768 1408q35 63-2 126-17 29-46.5 46t-63.5 17h-1536q-34 0-63.5-17t-46.5-46q-37-63-2-126l768-1408q17-31 47-49t65-18 65 18 47 49z"}]}});
 
 // Icons that are used on this page
 var SelectDonationFieldset = { render: function render() {

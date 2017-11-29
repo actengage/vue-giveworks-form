@@ -96,12 +96,13 @@
 
 <script>
 
-import BaseComponent from './BaseComponent.vue';
-
+// Icons that are used on this page
 import 'vue-awesome/icons/btc';
 import 'vue-awesome/icons/paypal';
 import 'vue-awesome/icons/credit-card';
+
 import Icon from 'vue-awesome/components/Icon';
+import BaseComponent from './BaseComponent.vue';
 
 export default {
 

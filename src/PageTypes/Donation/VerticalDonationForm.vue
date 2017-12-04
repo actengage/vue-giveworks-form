@@ -8,7 +8,7 @@
 
                 <select-donation-fieldset :page="page"></select-donation-fieldset>
 
-                <donor-info-fieldset :page="page"></donor-info-fieldset>
+                <contact-info-fieldset :page="page"></contact-info-fieldset>
 
                 <payment-info-fieldset :page="page"></payment-info-fieldset>
 
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import BaseDonationForm from './BaseDonationForm.vue';
+import BaseDonationForm from './BaseDonationForm';
 
 export default {
 

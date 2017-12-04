@@ -1,6 +1,6 @@
 <template>
 
-    <form>
+    <form >
 
         <div class="row">
 
@@ -13,30 +13,32 @@
 
             <div class="col-md-4">
 
-                <select-donation-fieldset :page="page"></select-donation-fieldset>
+                <select-donation-fieldset :form="form" :page="page"></select-donation-fieldset>
 
             </div>
 
             <div class="col-md-4">
 
-                <donor-info-fieldset :page="page"></donor-info-fieldset>
+                <contact-info-fieldset :form="form" :page="page"></contact-info-fieldset>
 
             </div>
 
             <div class="col-md-4">
 
-                <payment-info-fieldset :page="page"></payment-info-fieldset>
+                <payment-info-fieldset :form="form" :page="page"></payment-info-fieldset>
 
             </div>
 
         </div>
+
+        {{ form }}
 
     </form>
 
 </template>
 
 <script>
-import BaseDonationForm from './BaseDonationForm.vue';
+import BaseDonationForm from './BaseDonationForm';
 
 export default {
 

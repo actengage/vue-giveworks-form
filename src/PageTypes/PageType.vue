@@ -8,8 +8,8 @@
 
 <script>
 
-import VerticalDonationForm from './Donation/VerticalDonationForm.vue';
-import HorizontalDonationForm from './Donation/HorizontalDonationForm.vue';
+import VerticalDonationForm from './Donation/VerticalDonationForm';
+import HorizontalDonationForm from './Donation/HorizontalDonationForm';
 
 export default {
 
@@ -28,14 +28,14 @@ export default {
     },
 
     computed: {
-        componentName: function() {
-            return this.orientation + '-' + this.page.special;
+        componentName() {
+            return this.orientation + '-' + this.page.special + '-form';
         }
     },
 
     components: {
-        'vertical-donation': VerticalDonationForm,
-        'horizontal-donation': HorizontalDonationForm
+        VerticalDonationForm,
+        HorizontalDonationForm
     }
 
 }

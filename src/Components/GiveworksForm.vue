@@ -15,9 +15,9 @@
 import axios from 'axios';
 import Api from '/Http/Api';
 import HttpConfig from '/Config/Http';
-import PageType from '/PageTypes/PageType.vue';
-import ActivityIndicator from './ActivityIndicator.vue';
-import HttpErrorResponse from './HttpErrorResponse.vue';
+import PageType from '/PageTypes/PageType';
+import ActivityIndicator from './ActivityIndicator';
+import HttpErrorResponse from './HttpErrorResponse';
 
 export default {
 

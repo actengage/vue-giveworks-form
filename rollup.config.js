@@ -17,11 +17,12 @@ export default {
     },
     external: [
         'vue',
-        'axios'
+        'axios',
     ],
     globals: {
         'vue': 'Vue',
-        'axios': 'axios'
+        'axios': 'axios',
+        //'broadcast': 'Broadcast'
     },
     sourcemap: true,
     sourcemapFile: './dist/giveworks-form.js.map',
@@ -59,9 +60,23 @@ export default {
             exclude: 'node_modules/**',
             presets: ['es2015-rollup']
         }),
-        serve(),
+        serve({
+            // Folder to serve files from
+            contentBase: '',
+
+            https: {
+                key: fs.readFileSync('./livereload.key'),
+                cert: fs.readFileSync('./livereload.crt'),
+                ca: fs.readFileSync("./livereload.pem")
+            }
+        }),
         livereload({
-            watch: './dist/giveworks-form.js'
+            watch: './dist/giveworks-form.js',
+            https: {
+                key: fs.readFileSync('./livereload.key'),
+                cert: fs.readFileSync('./livereload.crt'),
+                ca: fs.readFileSync("./livereload.pem")
+            }
         })
     ]
 };

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import HttpConfig from './Config/Http';
-import GiveworksForm from './Components/GiveworksForm.vue';
+import GiveworksForm from './Components/GiveworksForm';
 
 export default class GiveworksVueApp {
 

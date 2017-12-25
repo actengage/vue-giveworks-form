@@ -6,6 +6,7 @@ import commonjs from 'rollup-plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import rootImport from 'rollup-plugin-root-import';
+import json from 'rollup-plugin-json';
 
 export default {
     input: 'src/main.js',
@@ -28,6 +29,7 @@ export default {
         include: './src/**'
     },
     plugins: [
+        json(),
         rootImport({
             // Will first look in `client/src/*` and then `common/src/*`.
             root: `${__dirname}/src`,
@@ -39,6 +41,8 @@ export default {
             extensions: [ '.js']
         }),
         resolve({
+            jsnext: true,
+            main: true,
             sourceMap: true,
             extensions: [ '.js', '.scss', '.vue']
         }),

@@ -20,7 +20,7 @@
         </div>
 
         <div v-for="button in buttons" v-if="button.active">
-            <component :is="button.component" :form="form" :page="page" :gateway="button.gateway"></component>
+            <component :is="button.component" :form="form" :page="page" :errors="errors" :gateway="button.gateway"></component>
         </div>
 
     </div>

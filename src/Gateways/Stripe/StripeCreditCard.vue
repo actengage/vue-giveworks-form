@@ -1,21 +1,22 @@
 <template>
 
-    <div class="form-group" :class="{'was-validated': !!error}">
-        <label class="text-bold d-block mt-3">Credit Card
-            <div class="form-control p-2" :class="{'is-invalid': !!error}">
+    <div class="form-group" :class="{'was-validated': !!errors.token}">
+        <label class="d-block mt-3">
+            <div class="text-bold mb-2">Credit Card</div>
+            <div class="form-control p-2" :class="{'is-invalid': !!errors.token}">
                 <div class="stripe-field"></div>
             </div>
-            <div class="invalid-feedback" v-if="error" v-html="error.message"></div>
+            <div class="invalid-feedback" v-if="errors.token" v-html="errors.token.join('<br>')"></div>
         </label>
     </div>
 
 </template>
 
 <script>
+///import Broadcast from 'broadcast';
 import Gateway from '/Gateways/Gateway';
-import BroadcastManager from 'broadcast/src/BroadcastManager';
 
-const dispatch = (new BroadcastManager).dispatch('app');
+//const dispatch = (new Broadcast).dispatch('app');
 
 export default {
 
@@ -30,6 +31,10 @@ export default {
             type: Object,
             required: true
         },
+        errors: {
+            type: Object,
+            required: true
+        },
         gateway: {
             type: Object,
             required: true
@@ -38,12 +43,6 @@ export default {
             type: Boolean,
             default: false
         }
-    },
-
-    data() {
-        return {
-            error: null
-        };
     },
 
     mounted() {
@@ -58,12 +57,20 @@ export default {
             });
 
             card.addEventListener('change', (event) => {
-                if(!(this.error = event.error)) {
-                    console.log(event);
+                this.$set(this.errors, 'token', event.error ? [event.error.message] : null);
+
+                if(event.complete) {
+                    gateway.createToken(card, {
+                        currency: 'usd'
+                    }).then((result) => {
+                        if (result.error) {
+                            this.$set(this.errors, 'token', [event.error.message]);
+                        } else {
+                            this.$set(this.form, 'token', result.token.id);
+                        }
+                    });
                 }
             });
-
-            console.log(this);
 
             card.mount(this.$el.querySelector('.stripe-field'));
         });

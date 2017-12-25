@@ -1,16 +1,16 @@
 <template>
 
-    <form class="container">
+    <form :submit="submit">
 
         <div class="row">
 
             <div class="col-md-5 col-lg-4">
 
-                <select-donation-fieldset :page="page"></select-donation-fieldset>
+                <select-donation-fieldset :form="form" :errors="errors" :page="page"></select-donation-fieldset>
 
-                <contact-info-fieldset :page="page"></contact-info-fieldset>
+                <contact-info-fieldset :form="form" :errors="errors" :page="page"></contact-info-fieldset>
 
-                <payment-info-fieldset :page="page"></payment-info-fieldset>
+                <payment-info-fieldset :form="form" :errors="errors" :page="page"></payment-info-fieldset>
 
             </div>
 

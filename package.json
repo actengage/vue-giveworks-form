@@ -1,26 +1,26 @@
 {
-  "name": "GiveworksForm",
-  "version": "0.0.1",
+  "name": "vue-giveworks-form",
+  "version": "0.1.2",
   "description": "A Vue.js component for building and submitting Giveworks form.",
   "main": "dist/giveworks-form.js",
   "module": "dist/giveworks-form.es6.js",
   "author": "Justin Kimbrell",
   "license": "MIT",
   "dependencies": {
-    "broadcast": "file:///Users/justinkimbrell/Github/Broadcast",
-    "axios": "^0.17.1",
     "lodash-es": "^4.17.4",
     "moment": "^2.19.2",
-    "the-one-true-form": "file:///Users/justinkimbrell/Github/the-one-true-form",
-    "vue": "^2.5.3",
+    "the-one-true-form": "^1.0.0",
     "vue-awesome": "^2.3.4"
+  },
+  "peerDependencies": {
+    "axios": "^0.17.1",
+    "vue": "^2.5.3"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-preset-es2015-rollup": "^3.0.0",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-commonjs": "^8.2.6",
-    "rollup-plugin-json": "^2.3.0",
     "rollup-plugin-livereload": "^0.6.0",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-root-import": "^0.2.2",

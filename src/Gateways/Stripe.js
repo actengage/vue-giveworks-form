@@ -1,16 +1,15 @@
 import Api from './Api';
-import Icon from 'vue-awesome/components/Icon'
-
 import '/Icons/apple-pay';
 import { extend } from 'lodash-es';
 import script from '/Helpers/Script';
 import 'vue-awesome/icons/credit-card';
 import 'vue-awesome/icons/google-wallet';
+import Icon from 'vue-awesome/components/Icon'
 
 export default class Stripe extends Api {
 
     api() {
-        return 'App\\SiteApis\\Apis\\Stripe';
+        return 'App\\SiteApis\\Gateways\\Stripe';
     }
 
     buttons() {
@@ -62,6 +61,10 @@ export default class Stripe extends Api {
         });
     }
 
+    createToken(card, options) {
+        return this.stripe().createToken(card, options);
+    }
+
     paymentRequestButton(paymentRequest) {
         const elements = this.elements();
 
@@ -95,8 +98,13 @@ export default class Stripe extends Api {
     }
 
     stripe() {
+        // 4242 4242 4242 4242
+        // pk_test_ETiEPWUdZbGK6GXNlmU7H4DK -- objectivehtml.com public_key
+        // pk_test_Mb0QwaMGePjeORABK9f6BZ0W -- test account public_key
+        // acct_1BcfrdH9HJpiOrw7 -- test account account_id
+
         if(!this._stripe) {
-            this._stripe = new window.Stripe(this.options.public_key);
+            this._stripe = new window.Stripe(this.options.publishable_key);
         }
 
         return this._stripe;

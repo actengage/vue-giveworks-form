@@ -1,14 +1,12 @@
 (function(l, i, v, e) { v = l.createElement(i); v.async = 1; v.src = '//' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; e = l.getElementsByTagName(i)[0]; e.parentNode.insertBefore(v, e)})(document, 'script');
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('vue'), require('axios'), require('../../../../../Helpers/Is.js'), require('../../../../../Helpers/isFunction')) :
-	typeof define === 'function' && define.amd ? define(['vue', 'axios', '../../../../../Helpers/Is.js', '../../../../../Helpers/isFunction'], factory) :
-	(global.GiveworksForm = factory(global.Vue,global.axios,global.is,global.isFunction));
-}(this, (function (Vue,axios,is,isFunction) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('vue'), require('axios')) :
+	typeof define === 'function' && define.amd ? define(['vue', 'axios'], factory) :
+	(global.GiveworksForm = factory(global.Vue,global.axios));
+}(this, (function (Vue,axios) { 'use strict';
 
 Vue = Vue && Vue.hasOwnProperty('default') ? Vue['default'] : Vue;
 axios = axios && axios.hasOwnProperty('default') ? axios['default'] : axios;
-is = is && is.hasOwnProperty('default') ? is['default'] : is;
-isFunction = isFunction && isFunction.hasOwnProperty('default') ? isFunction['default'] : isFunction;
 
 /** Detect free variable `global` from Node.js. */
 var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
@@ -558,7 +556,7 @@ var proxyTag = '[object Proxy]';
  * _.isFunction(/abc/);
  * // => false
  */
-function isFunction$1(value) {
+function isFunction(value) {
   if (!isObject(value)) {
     return false;
   }
@@ -650,7 +648,7 @@ function baseIsNative(value) {
   if (!isObject(value) || isMasked(value)) {
     return false;
   }
-  var pattern = isFunction$1(value) ? reIsNative : reIsHostCtor;
+  var pattern = isFunction(value) ? reIsNative : reIsHostCtor;
   return pattern.test(toSource(value));
 }
 
@@ -2241,7 +2239,7 @@ function isLength(value) {
  * // => false
  */
 function isArrayLike(value) {
-  return value != null && isLength(value.length) && !isFunction$1(value);
+  return value != null && isLength(value.length) && !isFunction(value);
 }
 
 /**
@@ -7370,7 +7368,7 @@ function baseMergeDeep(object, source, key, srcIndex, mergeFunc, customizer, sta
       if (isArguments(objValue)) {
         newValue = toPlainObject(objValue);
       }
-      else if (!isObject(objValue) || (srcIndex && isFunction$1(objValue))) {
+      else if (!isObject(objValue) || (srcIndex && isFunction(objValue))) {
         newValue = initCloneObject(srcValue);
       }
     }
@@ -9394,7 +9392,7 @@ function fromPairs(pairs) {
  */
 function baseFunctions(object, props) {
   return arrayFilter(props, function(key) {
-    return isFunction$1(object[key]);
+    return isFunction(object[key]);
   });
 }
 
@@ -10708,7 +10706,7 @@ function isNaN$1(value) {
  * @param {*} value The value to check.
  * @returns {boolean} Returns `true` if `func` is maskable, else `false`.
  */
-var isMaskable = coreJsData ? isFunction$1 : stubFalse;
+var isMaskable = coreJsData ? isFunction : stubFalse;
 
 /** Error message constants. */
 var CORE_ERROR_TEXT = 'Unsupported core-js use. Try https://npms.io/search?q=ponyfill.';
@@ -11757,7 +11755,7 @@ function mixin(object, source, options) {
       methodNames = baseFunctions(source, props);
 
   var chain = !(isObject(options) && 'chain' in options) || !!options.chain,
-      isFunc = isFunction$1(object);
+      isFunc = isFunction(object);
 
   arrayEach(methodNames, function(methodName) {
     var func = source[methodName];
@@ -13889,7 +13887,7 @@ function result(object, path, defaultValue) {
       index = length;
       value = defaultValue;
     }
-    object = isFunction$1(value) ? value.call(object) : value;
+    object = isFunction(value) ? value.call(object) : value;
   }
   return object;
 }
@@ -15839,7 +15837,7 @@ function transform(object, iteratee, accumulator) {
       accumulator = isArr ? new Ctor : [];
     }
     else if (isObject(object)) {
-      accumulator = isFunction$1(Ctor) ? baseCreate(getPrototype(object)) : {};
+      accumulator = isFunction(Ctor) ? baseCreate(getPrototype(object)) : {};
     }
     else {
       accumulator = {};
@@ -16446,7 +16444,7 @@ function uniqueId(prefix) {
  * console.log(object);
  * // => { 'a': [{ 'b': {} }] };
  */
-function unset$1(object, path) {
+function unset(object, path) {
   return object == null ? true : baseUnset(object, path);
 }
 
@@ -17069,7 +17067,7 @@ var lang = {
   conformsTo, eq, gt, gte, isArguments,
   isArray, isArrayBuffer, isArrayLike, isArrayLikeObject, isBoolean,
   isBuffer, isDate, isElement, isEmpty, isEqual,
-  isEqualWith, isError, isFinite: isFinite$1, isFunction: isFunction$1, isInteger,
+  isEqualWith, isError, isFinite: isFinite$1, isFunction, isInteger,
   isLength, isMap, isMatch, isMatchWith, isNaN: isNaN$1,
   isNative, isNil, isNull, isNumber, isObject,
   isObjectLike, isPlainObject, isRegExp, isSafeInteger, isSet,
@@ -17098,7 +17096,7 @@ var object = {
   invoke, keys, keysIn: keysIn$1, mapKeys, mapValues,
   merge, mergeWith, omit, omitBy, pick,
   pickBy, result, set, setWith, toPairs,
-  toPairsIn, transform, unset: unset$1, update, updateWith,
+  toPairsIn, transform, unset, update, updateWith,
   values, valuesIn
 };
 
@@ -18001,13 +17999,18 @@ var Page = function (_Endpoint) {
         value: function slug() {
             return 'page';
         }
+    }, {
+        key: 'submit',
+        value: function submit(id, data, options) {
+            return this.api.post(this.api.url(this.slug(), id), data, options);
+        }
     }]);
     return Page;
 }(Endpoint);
 
 var HttpConfig = {
 
-    baseUrl: 'https://giveworks.dev/api/v1/',
+    baseUrl: 'https://giveworks.test/api/public/',
 
     endpoints: {
         page: Page
@@ -18078,220 +18081,6 @@ var Api = function () {
 }();
 
 var Api$1 = new Api();
-
-// This file can be required in Browserify and Node.js for automatic polyfill
-// To use it:  require('es6-promise/auto');
-module.exports = require('./').polyfill();
-
-var is$1 = function (instance, proto) {
-    return instance instanceof proto;
-};
-
-var BroadcastEvent = function () {
-    function BroadcastEvent(key, callback) {
-        classCallCheck(this, BroadcastEvent);
-
-        this.key = key;
-        this.allowMultipleEmits = true;
-
-        if (isFunction(callback)) {
-            this.handle = callback;
-        }
-    }
-
-    createClass(BroadcastEvent, [{
-        key: 'allowsMultipleEmits',
-        value: function allowsMultipleEmits() {
-            return !!this.allowMultipleEmits;
-        }
-    }, {
-        key: 'once',
-        value: function once() {
-            this.allowMultipleEmits = false;
-
-            return this;
-        }
-    }, {
-        key: 'handle',
-        value: function handle() {
-            //
-        }
-    }]);
-    return BroadcastEvent;
-}();
-
-var BroadcastReply = function () {
-    function BroadcastReply(key, callback) {
-        classCallCheck(this, BroadcastReply);
-
-        this.key = key;
-        this.allowMultipleRequests = false;
-
-        if (typeof callback === "function") {
-            this.handle = callback;
-        }
-    }
-
-    createClass(BroadcastReply, [{
-        key: "allowsMultipleRequests",
-        value: function allowsMultipleRequests() {
-            return !!this.allowMultipleRequests;
-        }
-    }, {
-        key: "once",
-        value: function once() {
-            this.allowMultipleRequests = true;
-
-            return this;
-        }
-    }, {
-        key: "handle",
-        value: function handle() {
-            //
-        }
-    }]);
-    return BroadcastReply;
-}();
-
-var Dispatcher = function () {
-    function Dispatcher(channel) {
-        classCallCheck(this, Dispatcher);
-
-        this.channel = channel;
-        this._events = [];
-        this._replies = [];
-    }
-
-    createClass(Dispatcher, [{
-        key: 'createEvent',
-        value: function createEvent(key, callback) {
-            return !is(key, BroadcastEvent) ? new BroadcastEvent(key, callback) : key;
-        }
-    }, {
-        key: 'createReply',
-        value: function createReply(key, callback) {
-            return !is(key, BroadcastReply) ? new BroadcastReply(key, callback) : key;
-        }
-    }, {
-        key: 'on',
-        value: function on(key, callback) {
-            var event = this.createEvent(key, callback);
-
-            this._events.push(event);
-
-            return event;
-        }
-    }, {
-        key: 'once',
-        value: function once(key, callback) {
-            var event = this.createEvent(key, callback);
-
-            this.on(event.once());
-
-            return event;
-        }
-    }, {
-        key: 'off',
-        value: function off(key) {
-            var removed = [];
-
-            for (var i in this._events) {
-                if (is(key, BroadcastEvent) && key == this._events[i] || key === this._events[i].key) {
-                    removed.push(this._events[i]);
-                    delete this._events[i];
-                }
-            }
-
-            return removed;
-        }
-    }, {
-        key: 'emit',
-        value: function emit(event) {
-            var args = [].slice.call(arguments).slice(1);
-
-            for (var i in this._events) {
-                if (this._events[i].key === (event.key || event)) {
-                    this._events[i].handle.apply(this, args);
-
-                    if (!this._events[i].allowsMultipleEmits()) {
-                        delete this._events[i];
-                    }
-                }
-            }
-        }
-    }, {
-        key: 'request',
-        value: function request(reply, context) {
-            var args = [].slice.call(arguments).slice(1);
-
-            if (!this._replies[reply.key || reply]) {
-                throw new Error('No BroadcastReply exists by the name "' + (reply.key || reply) + '"!');
-            }
-
-            var handle = this._replies[reply.key || reply].handle;
-
-            return new Promise(function (resolve, reject) {
-                handle.apply(this, [resolve, reject].concat(args));
-            });
-        }
-    }, {
-        key: 'reply',
-        value: function reply(key, callback) {
-            var reply = this.createReply(key, callback);
-
-            return this._replies[reply.key] = reply;
-        }
-    }, {
-        key: 'stopReply',
-        value: function stopReply(key) {
-            delete this._replies[reply.key || reply];
-        }
-    }]);
-    return Dispatcher;
-}();
-
-var BroadcastManager = function () {
-    function BroadcastManager() {
-        classCallCheck(this, BroadcastManager);
-
-        this._dispatchers = {};
-    }
-
-    createClass(BroadcastManager, [{
-        key: 'dispatch',
-        value: function dispatch(channel) {
-            if (this.doesDispatchExist(channel)) {
-                return this._dispatchers[channel];
-            }
-
-            return this.registerDispatch(new Dispatcher(channel));
-        }
-    }, {
-        key: 'doesDispatchExist',
-        value: function doesDispatchExist(instance) {
-            return !!this._dispatchers[instance.channel || instance];
-        }
-    }, {
-        key: 'registerDispatch',
-        value: function registerDispatch(instance) {
-            if (!is$1(instance, Dispatcher)) {
-                throw new Error('The argument must be an instance of Broadcast/BroadcastDispatch!');
-            }
-
-            if (this.doesDispatchExist(instance.channel)) {
-                throw new Error('There is already a Broadcast/BroadcastDispatch instance assigned to "' + instance.channel + '"!');
-            }
-
-            return this._dispatchers[instance.channel] = instance;
-        }
-    }, {
-        key: 'unregisterDispatch',
-        value: function unregisterDispatch(dispatch) {
-            unset(this._dispatchers[dispatch.channel || dispatch]);
-        }
-    }]);
-    return BroadcastManager;
-}();
 
 var States = {
     'AL': 'Alabama',
@@ -18365,57 +18154,144 @@ var BaseComponent = {
         form: {
             type: Object,
             required: true
+        },
+        errors: {
+            type: [Boolean, Object],
+            required: true
+        }
+    }
+
+};
+
+var InputField = { render: function render() {
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "form-group", class: { 'was-validated': _vm.errors[_vm.name] } }, [_c('label', { staticClass: "text-bold", attrs: { "for": "{{name}}" } }, [_vm._v(_vm._s(_vm.label))]), _vm._v(" "), _vm.type === 'checkbox' ? _c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.form[_vm.name], expression: "form[name]" }], staticClass: "form-control", class: { 'is-invalid': _vm.errors[_vm.name] }, attrs: { "name": _vm.name, "id": _vm.name || _vm.id, "required": _vm.required, "placeholder": _vm.placeholder, "type": "checkbox" }, domProps: { "checked": Array.isArray(_vm.form[_vm.name]) ? _vm._i(_vm.form[_vm.name], null) > -1 : _vm.form[_vm.name] }, on: { "change": function change($event) {
+                    var $$a = _vm.form[_vm.name],
+                        $$el = $event.target,
+                        $$c = $$el.checked ? true : false;if (Array.isArray($$a)) {
+                        var $$v = null,
+                            $$i = _vm._i($$a, $$v);if ($$el.checked) {
+                            $$i < 0 && (_vm.form[_vm.name] = $$a.concat([$$v]));
+                        } else {
+                            $$i > -1 && (_vm.form[_vm.name] = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+                        }
+                    } else {
+                        _vm.$set(_vm.form, _vm.name, $$c);
+                    }
+                } } }) : _vm.type === 'radio' ? _c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.form[_vm.name], expression: "form[name]" }], staticClass: "form-control", class: { 'is-invalid': _vm.errors[_vm.name] }, attrs: { "name": _vm.name, "id": _vm.name || _vm.id, "required": _vm.required, "placeholder": _vm.placeholder, "type": "radio" }, domProps: { "checked": _vm._q(_vm.form[_vm.name], null) }, on: { "change": function change($event) {
+                    _vm.$set(_vm.form, _vm.name, null);
+                } } }) : _c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.form[_vm.name], expression: "form[name]" }], staticClass: "form-control", class: { 'is-invalid': _vm.errors[_vm.name] }, attrs: { "name": _vm.name, "id": _vm.name || _vm.id, "required": _vm.required, "placeholder": _vm.placeholder, "type": _vm.type }, domProps: { "value": _vm.form[_vm.name] }, on: { "input": function input($event) {
+                    if ($event.target.composing) {
+                        return;
+                    }_vm.$set(_vm.form, _vm.name, $event.target.value);
+                } } }), _vm._v(" "), _vm.errors[_vm.name] ? _c('div', { staticClass: "invalid-feedback", domProps: { "innerHTML": _vm._s(_vm.errors[_vm.name].join('<br>')) } }) : _vm._e()]);
+    }, staticRenderFns: [],
+
+    props: {
+        'form': {
+            required: true,
+            type: Object
+        },
+        'errors': {
+            type: [Boolean, Object],
+            required: true
+        },
+        'name': {
+            required: true,
+            type: String
+        },
+        'label': {
+            required: true,
+            type: String
+        },
+        'type': {
+            type: String,
+            default: 'text'
+        },
+        'id': {
+            type: String
+        },
+        'placeholder': {
+            type: String
+        },
+        'required': {
+            type: Boolean,
+            default: false
+        },
+        'mask': {
+            type: String
+        }
+    }
+
+};
+
+var SelectField = { render: function render() {
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "form-group", class: { 'was-validated': _vm.errors[_vm.name] } }, [_c('label', { staticClass: "text-bold", attrs: { "for": "{{name}}" } }, [_vm._v(_vm._s(_vm.label))]), _vm._v(" "), _c('select', { directives: [{ name: "model", rawName: "v-model", value: _vm.form[_vm.name], expression: "form[name]" }], staticClass: "custom-select form-control", class: { 'is-invalid': _vm.errors[_vm.name] }, attrs: { "name": _vm.name, "id": _vm.name || _vm.id, "required": _vm.required }, on: { "change": function change($event) {
+                    var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
+                        return o.selected;
+                    }).map(function (o) {
+                        var val = "_value" in o ? o._value : o.value;return val;
+                    });_vm.$set(_vm.form, _vm.name, $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
+                } } }, _vm._l(_vm.selectOptions, function (option) {
+            return _c('option', { domProps: { "value": option.value || option } }, [_vm._v(_vm._s(option.label || option))]);
+        })), _vm._v(" "), _vm.errors[_vm.name] ? _c('div', { staticClass: "invalid-feedback", domProps: { "innerHTML": _vm._s(_vm.errors[_vm.name].join('<br>')) } }) : _vm._e()]);
+    }, staticRenderFns: [],
+
+    props: {
+        'form': {
+            required: true,
+            type: Object
+        },
+        'errors': {
+            type: [Boolean, Object],
+            required: true
+        },
+        'name': {
+            required: true,
+            type: String
+        },
+        'label': {
+            required: true,
+            type: String
+        },
+        'options': {
+            type: [Object, Array],
+            required: true
+        },
+        'id': {
+            type: String
+        },
+        'placeholder': {
+            type: String
+        },
+        'required': {
+            type: Boolean,
+            default: false
+        }
+    },
+
+    computed: {
+        selectOptions: function selectOptions() {
+            if (isArray(this.options)) {
+                return this.options;
+            }
+
+            var options = [];
+
+            for (var i in this.options) {
+                options.push({
+                    value: i,
+                    label: this.options[i]
+                });
+            }
+
+            return options;
         }
     }
 
 };
 
 var ContactInfoFieldset = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [_c('fieldset', { staticClass: "mb-4" }, [_c('legend', [_vm._v("Your information")]), _vm._v(" "), _vm.page.options.add_title ? _c('div', { staticClass: "form-group mb-2" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "title" } }, [_vm._v("Title")]), _vm._v(" "), _c('select', { directives: [{ name: "model", rawName: "v-model", value: _vm.form.title, expression: "form.title" }], staticClass: "custom-select form-control", attrs: { "name": "title", "id": "title" }, on: { "change": function change($event) {
-                    var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
-                        return o.selected;
-                    }).map(function (o) {
-                        var val = "_value" in o ? o._value : o.value;return val;
-                    });_vm.$set(_vm.form, "title", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
-                } } }, _vm._l(_vm.titles, function (title) {
-            return _c('option', { domProps: { "value": title } }, [_vm._v(_vm._s(title))]);
-        }))]) : _vm._e(), _vm._v(" "), _c('div', { staticClass: "form-group mb-2" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "first" } }, [_vm._v("First Name")]), _vm._v(" "), _c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.form.first, expression: "form.first" }], staticClass: "form-control", attrs: { "type": "text", "name": "first", "id": "first" }, domProps: { "value": _vm.form.first }, on: { "input": function input($event) {
-                    if ($event.target.composing) {
-                        return;
-                    }_vm.$set(_vm.form, "first", $event.target.value);
-                } } })]), _vm._v(" "), _c('div', { staticClass: "form-group mb-2" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "last" } }, [_vm._v("Last Name")]), _vm._v(" "), _c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.form.last, expression: "form.last" }], staticClass: "form-control", attrs: { "type": "text", "name": "last", "id": "last" }, domProps: { "value": _vm.form.last }, on: { "input": function input($event) {
-                    if ($event.target.composing) {
-                        return;
-                    }_vm.$set(_vm.form, "last", $event.target.value);
-                } } })]), _vm._v(" "), _c('div', { staticClass: "form-group mb-2" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "email" } }, [_vm._v("Email")]), _vm._v(" "), _c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.form.email, expression: "form.email" }], staticClass: "form-control", attrs: { "type": "email", "name": "email", "id": "email", "placeholder": "you@example.com" }, domProps: { "value": _vm.form.email }, on: { "input": function input($event) {
-                    if ($event.target.composing) {
-                        return;
-                    }_vm.$set(_vm.form, "email", $event.target.value);
-                } } })]), _vm._v(" "), _c('div', { staticClass: "form-group mb-2" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "street" } }, [_vm._v("Address")]), _vm._v(" "), _c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.form.street, expression: "form.street" }], staticClass: "form-control", attrs: { "type": "text", "name": "street", "id": "street" }, domProps: { "value": _vm.form.street }, on: { "input": function input($event) {
-                    if ($event.target.composing) {
-                        return;
-                    }_vm.$set(_vm.form, "street", $event.target.value);
-                } } })]), _vm._v(" "), _c('div', { staticClass: "form-group mb-2" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "city" } }, [_vm._v("City")]), _vm._v(" "), _c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.form.city, expression: "form.city" }], staticClass: "form-control", attrs: { "type": "text", "name": "city", "id": "city" }, domProps: { "value": _vm.form.city }, on: { "input": function input($event) {
-                    if ($event.target.composing) {
-                        return;
-                    }_vm.$set(_vm.form, "city", $event.target.value);
-                } } })]), _vm._v(" "), _c('div', { staticClass: "row mb-2" }, [_c('div', { staticClass: "col-sm-8" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "state" } }, [_vm._v("State")]), _vm._v(" "), _c('select', { directives: [{ name: "model", rawName: "v-model", value: _vm.form.state, expression: "form.state" }], staticClass: "custom-select form-control", attrs: { "name": "state", "id": "state" }, on: { "change": function change($event) {
-                    var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
-                        return o.selected;
-                    }).map(function (o) {
-                        var val = "_value" in o ? o._value : o.value;return val;
-                    });_vm.$set(_vm.form, "state", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
-                } } }, _vm._l(_vm.states, function (label, value) {
-            return _c('option', { domProps: { "value": value } }, [_vm._v(_vm._s(label) + " ")]);
-        }))]), _vm._v(" "), _c('div', { staticClass: "col-sm-4" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "zip" } }, [_vm._v("Zip")]), _vm._v(" "), _c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.form.zip, expression: "form.zip" }], staticClass: "form-control", attrs: { "type": "text", "name": "zip", "id": "zip" }, domProps: { "value": _vm.form.zip }, on: { "input": function input($event) {
-                    if ($event.target.composing) {
-                        return;
-                    }_vm.$set(_vm.form, "zip", $event.target.value);
-                } } })])]), _vm._v(" "), _vm.page.options.add_phone ? _c('div', { staticClass: "form-group mb-2" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "phone" } }, [_vm._v("Phone Number")]), _vm._v(" "), _c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.form.phone, expression: "form.phone" }], staticClass: "form-control", attrs: { "type": "text", "name": "phone", "id": "phone" }, domProps: { "value": _vm.form.phone }, on: { "input": function input($event) {
-                    if ($event.target.composing) {
-                        return;
-                    }_vm.$set(_vm.form, "phone", $event.target.value);
-                } } })]) : _vm._e()]), _vm._v(" "), _vm.shouldShowEmployment ? _c('fieldset', [_c('legend', [_vm._v("Employment Information")]), _vm._v(" "), !_vm.recurring ? _c('p', [_c('small', { staticClass: "text-muted", domProps: { "innerHTML": _vm._s(_vm.employmentOccurMessage) } })]) : _vm._e(), _vm._v(" "), !_vm.isRetired ? _c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-md-6" }, [_c('div', { staticClass: "form-group" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "employer" } }, [_vm._v("Employer")]), _vm._v(" "), _c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.form.employer, expression: "form.employer" }], staticClass: "form-control", attrs: { "type": "text", "name": "employer", "id": "employer" }, domProps: { "value": _vm.form.employer }, on: { "input": function input($event) {
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [_c('fieldset', { staticClass: "mb-4" }, [_c('legend', [_vm._v("Your information")]), _vm._v(" "), _vm.page.options.add_title ? _c('select-field', { attrs: { "name": "title", "label": "Title", "options": _vm.titles, "form": _vm.form, "errors": _vm.errors } }) : _vm._e(), _vm._v(" "), _c('input-field', { attrs: { "name": "first", "label": "First Name", "form": _vm.form, "errors": _vm.errors } }), _vm._v(" "), _c('input-field', { attrs: { "name": "last", "label": "Last Name", "form": _vm.form, "errors": _vm.errors } }), _vm._v(" "), _c('input-field', { attrs: { "type": "email", "name": "email", "label": "Email", "placeholder": "you@example.com", "form": _vm.form, "errors": _vm.errors } }), _vm._v(" "), _c('input-field', { attrs: { "name": "street", "label": "Address", "form": _vm.form, "errors": _vm.errors } }), _vm._v(" "), _c('input-field', { attrs: { "name": "city", "label": "City", "form": _vm.form, "errors": _vm.errors } }), _vm._v(" "), _c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-sm-8" }, [_c('select-field', { attrs: { "name": "state", "label": "State", "options": _vm.states, "form": _vm.form, "errors": _vm.errors } })], 1), _vm._v(" "), _c('div', { staticClass: "col-sm-4" }, [_c('input-field', { attrs: { "name": "zip", "label": "Zip", "form": _vm.form, "errors": _vm.errors } })], 1)]), _vm._v(" "), _vm.page.options.add_phone ? _c('input-field', { attrs: { "name": "phone", "label": "Phone Number", "mask": "(999) 999-9999", "form": _vm.form, "errors": _vm.errors } }) : _vm._e()], 1), _vm._v(" "), _vm.shouldShowEmployment ? _c('fieldset', [_c('legend', [_vm._v("Employment Information")]), _vm._v(" "), !_vm.recurring ? _c('p', [_c('small', { staticClass: "text-muted", domProps: { "innerHTML": _vm._s(_vm.employmentOccurMessage) } })]) : _vm._e(), _vm._v(" "), !_vm.isRetired ? _c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-md-6" }, [_c('div', { staticClass: "form-group" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "employer" } }, [_vm._v("Employer")]), _vm._v(" "), _c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.form.employer, expression: "form.employer" }], staticClass: "form-control", attrs: { "type": "text", "name": "employer", "id": "employer" }, domProps: { "value": _vm.form.employer }, on: { "input": function input($event) {
                     if ($event.target.composing) {
                         return;
                     }_vm.$set(_vm.form, "employer", $event.target.value);
@@ -18430,23 +18306,10 @@ var ContactInfoFieldset = { render: function render() {
 
     extends: BaseComponent,
 
-    /*
-    data() {
-        return {
-            title: null,
-            first: null,
-            last: null,
-            email: null,
-            street: null,
-            state: null,
-            zip: null,
-            phone: null,
-            employer: null,
-            occupation: null,
-            recurring: 0
-        };
+    components: {
+        InputField: InputField,
+        SelectField: SelectField
     },
-    */
 
     computed: {
         isRetired: function isRetired() {
@@ -18463,6 +18326,17 @@ var ContactInfoFieldset = { render: function render() {
         },
         states: function states() {
             return States;
+
+            var states = [];
+
+            for (var i in States) {
+                states.push({
+                    value: i,
+                    label: States[i]
+                });
+            }
+
+            return states;
         }
     },
 
@@ -18706,7 +18580,7 @@ var Stripe = function (_Api) {
     createClass(Stripe, [{
         key: 'api',
         value: function api() {
-            return 'App\\SiteApis\\Apis\\Stripe';
+            return 'App\\SiteApis\\Gateways\\Stripe';
         }
     }, {
         key: 'buttons',
@@ -18758,6 +18632,11 @@ var Stripe = function (_Api) {
             });
         }
     }, {
+        key: 'createToken',
+        value: function createToken(card, options) {
+            return this.stripe().createToken(card, options);
+        }
+    }, {
         key: 'paymentRequestButton',
         value: function paymentRequestButton(paymentRequest) {
             var elements = this.elements();
@@ -18795,8 +18674,13 @@ var Stripe = function (_Api) {
     }, {
         key: 'stripe',
         value: function stripe() {
+            // 4242 4242 4242 4242
+            // pk_test_ETiEPWUdZbGK6GXNlmU7H4DK -- objectivehtml.com public_key
+            // pk_test_Mb0QwaMGePjeORABK9f6BZ0W -- test account public_key
+            // acct_1BcfrdH9HJpiOrw7 -- test account account_id
+
             if (!this._stripe) {
-                this._stripe = new window.Stripe(this.options.public_key);
+                this._stripe = new window.Stripe(this.options.publishable_key);
             }
 
             return this._stripe;
@@ -18835,10 +18719,11 @@ var Gateway = function (key, options) {
     return instances[key];
 };
 
-var dispatch$1 = new BroadcastManager().dispatch('app');
+///import Broadcast from 'broadcast';
+//const dispatch = (new Broadcast).dispatch('app');
 
 var StripeCreditCard = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "form-group", class: { 'was-validated': !!_vm.error } }, [_c('label', { staticClass: "text-bold d-block mt-3" }, [_vm._v("Credit Card "), _c('div', { staticClass: "form-control p-2", class: { 'is-invalid': !!_vm.error } }, [_c('div', { staticClass: "stripe-field" })]), _vm._v(" "), _vm.error ? _c('div', { staticClass: "invalid-feedback", domProps: { "innerHTML": _vm._s(_vm.error.message) } }) : _vm._e()])]);
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "form-group", class: { 'was-validated': !!_vm.errors.token } }, [_c('label', { staticClass: "d-block mt-3" }, [_c('div', { staticClass: "text-bold mb-2" }, [_vm._v("Credit Card")]), _vm._v(" "), _c('div', { staticClass: "form-control p-2", class: { 'is-invalid': !!_vm.errors.token } }, [_c('div', { staticClass: "stripe-field" })]), _vm._v(" "), _vm.errors.token ? _c('div', { staticClass: "invalid-feedback", domProps: { "innerHTML": _vm._s(_vm.errors.token.join('<br>')) } }) : _vm._e()])]);
     }, staticRenderFns: [],
 
     name: 'stripe-credit-card',
@@ -18852,6 +18737,10 @@ var StripeCreditCard = { render: function render() {
             type: Object,
             required: true
         },
+        errors: {
+            type: Object,
+            required: true
+        },
         gateway: {
             type: Object,
             required: true
@@ -18862,11 +18751,6 @@ var StripeCreditCard = { render: function render() {
         }
     },
 
-    data: function data() {
-        return {
-            error: null
-        };
-    },
     mounted: function mounted() {
         var _this = this;
 
@@ -18881,12 +18765,20 @@ var StripeCreditCard = { render: function render() {
             });
 
             card.addEventListener('change', function (event) {
-                if (!(_this.error = event.error)) {
-                    console.log(event);
+                _this.$set(_this.errors, 'token', event.error ? [event.error.message] : null);
+
+                if (event.complete) {
+                    gateway.createToken(card, {
+                        currency: 'usd'
+                    }).then(function (result) {
+                        if (result.error) {
+                            _this.$set(_this.errors, 'token', [event.error.message]);
+                        } else {
+                            _this.$set(_this.form, 'token', result.token.id);
+                        }
+                    });
                 }
             });
-
-            console.log(_this);
 
             card.mount(_this.$el.querySelector('.stripe-field'));
         });
@@ -18945,7 +18837,7 @@ var PaymentGateways = { render: function render() {
                         _vm.activate(button);
                     } } }, [_c('icon', { class: { 'mt-2 mb-1': !button.label }, attrs: { "name": button.icon, "scale": button.iconScale || 2 } }), _vm._v(" "), button.label ? _c('div', { staticClass: "pt-1 small" }, [_vm._v(_vm._s(button.label))]) : _vm._e()], 1)]);
         })), _vm._v(" "), _vm._l(_vm.buttons, function (button) {
-            return button.active ? _c('div', [_c(button.component, { tag: "component", attrs: { "form": _vm.form, "page": _vm.page, "gateway": button.gateway } })], 1) : _vm._e();
+            return button.active ? _c('div', [_c(button.component, { tag: "component", attrs: { "form": _vm.form, "page": _vm.page, "errors": _vm.errors, "gateway": button.gateway } })], 1) : _vm._e();
         })], 2);
     }, staticRenderFns: [],
 
@@ -18999,7 +18891,7 @@ var PaymentGateways = { render: function render() {
 };
 
 var PaymentInfoFieldset = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('fieldset', [_c('legend', [_vm._v("Payment information")]), _vm._v(" "), _c('payment-gateways', { attrs: { "form": _vm.form, "page": _vm.page } }), _vm._v(" "), _vm.page.options.add_comment ? _c('div', { staticClass: "form-group" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "comment" }, domProps: { "innerHTML": _vm._s(_vm.commentMessage) } }), _vm._v(" "), _c('textarea', { directives: [{ name: "model", rawName: "v-model", value: _vm.form.comment, expression: "form.comment" }], staticClass: "form-control", attrs: { "id": "comment" }, domProps: { "value": _vm.form.comment }, on: { "input": function input($event) {
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('fieldset', [_c('legend', [_vm._v("Payment information")]), _vm._v(" "), _c('payment-gateways', { attrs: { "form": _vm.form, "errors": _vm.errors, "page": _vm.page } }), _vm._v(" "), _vm.page.options.add_comment ? _c('div', { staticClass: "form-group" }, [_c('label', { staticClass: "text-bold", attrs: { "for": "comment" }, domProps: { "innerHTML": _vm._s(_vm.commentMessage) } }), _vm._v(" "), _c('textarea', { directives: [{ name: "model", rawName: "v-model", value: _vm.form.comment, expression: "form.comment" }], staticClass: "form-control", attrs: { "id": "comment" }, domProps: { "value": _vm.form.comment }, on: { "input": function input($event) {
                     if ($event.target.composing) {
                         return;
                     }_vm.$set(_vm.form, "comment", $event.target.value);
@@ -19393,7 +19285,7 @@ function deprecateSimple(name, msg) {
 hooks.suppressDeprecationWarnings = false;
 hooks.deprecationHandler = null;
 
-function isFunction$$1(input) {
+function isFunction(input) {
     return input instanceof Function || Object.prototype.toString.call(input) === '[object Function]';
 }
 
@@ -19401,7 +19293,7 @@ function set (config) {
     var prop, i;
     for (i in config) {
         prop = config[i];
-        if (isFunction$$1(prop)) {
+        if (isFunction(prop)) {
             this[i] = prop;
         } else {
             this['_' + i] = prop;
@@ -19475,7 +19367,7 @@ var defaultCalendar = {
 
 function calendar (key, mom, now) {
     var output = this._calendar[key] || this._calendar['sameElse'];
-    return isFunction$$1(output) ? output.call(mom, now) : output;
+    return isFunction(output) ? output.call(mom, now) : output;
 }
 
 var defaultLongDateFormat = {
@@ -19534,14 +19426,14 @@ var defaultRelativeTime = {
 
 function relativeTime (number, withoutSuffix, string, isFuture) {
     var output = this._relativeTime[string];
-    return (isFunction$$1(output)) ?
+    return (isFunction(output)) ?
         output(number, withoutSuffix, string, isFuture) :
         output.replace(/%d/i, number);
 }
 
 function pastFuture (diff, output) {
     var format = this._relativeTime[diff > 0 ? 'future' : 'past'];
-    return isFunction$$1(format) ? format(output) : format.replace(/%s/i, output);
+    return isFunction(format) ? format(output) : format.replace(/%s/i, output);
 }
 
 var aliases = {};
@@ -19652,7 +19544,7 @@ function makeFormatFunction(format) {
     return function (mom) {
         var output = '', i;
         for (i = 0; i < length; i++) {
-            output += isFunction$$1(array[i]) ? array[i].call(mom, format) : array[i];
+            output += isFunction(array[i]) ? array[i].call(mom, format) : array[i];
         }
         return output;
     };
@@ -19715,7 +19607,7 @@ var matchWord = /[0-9]{0,256}['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-
 var regexes = {};
 
 function addRegexToken (token, regex, strictRegex) {
-    regexes[token] = isFunction$$1(regex) ? regex : function (isStrict, localeData) {
+    regexes[token] = isFunction(regex) ? regex : function (isStrict, localeData) {
         return (isStrict && strictRegex) ? strictRegex : regex;
     };
 }
@@ -19877,7 +19769,7 @@ function set$1 (mom, unit, value) {
 
 function stringGet (units) {
     units = normalizeUnits(units);
-    if (isFunction$$1(this[units])) {
+    if (isFunction(this[units])) {
         return this[units]();
     }
     return this;
@@ -19893,7 +19785,7 @@ function stringSet (units, value) {
         }
     } else {
         units = normalizeUnits(units);
-        if (isFunction$$1(this[units])) {
+        if (isFunction(this[units])) {
             return this[units](value);
         }
     }
@@ -22222,7 +22114,7 @@ function calendar$1 (time, formats) {
         sod = cloneWithOffset(now, this).startOf('day'),
         format = hooks.calendarFormat(this, sod) || 'sameElse';
 
-    var output = formats && (isFunction$$1(formats[format]) ? formats[format].call(this, now) : formats[format]);
+    var output = formats && (isFunction(formats[format]) ? formats[format].call(this, now) : formats[format]);
 
     return this.format(output || this.localeData().calendar(format, this, createLocal(now)));
 }
@@ -22356,7 +22248,7 @@ function toISOString() {
     if (m.year() < 0 || m.year() > 9999) {
         return formatMoment(m, 'YYYYYY-MM-DD[T]HH:mm:ss.SSS[Z]');
     }
-    if (isFunction$$1(Date.prototype.toISOString)) {
+    if (isFunction(Date.prototype.toISOString)) {
         // native implementation is ~50x faster, use it when we can
         return this.toDate().toISOString();
     }
@@ -23567,21 +23459,21 @@ return hooks;
 
 // Icons that are used on this page
 var SelectDonationFieldset = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('fieldset', [_c('legend', { class: { 'mb-0': _vm.hasMinimumAmount } }, [_vm._v("Select your donation amount")]), _vm._v(" "), _vm.hasMinimumAmount ? _c('div', { staticClass: "mb-2" }, [_c('small', { staticClass: "text-muted" }, [_vm._v("Minimum accepted amount is $" + _vm._s(_vm.page.options.min_amount))])]) : _vm._e(), _vm._v(" "), _c('div', { staticClass: "row mb-2" }, [_c('div', { staticClass: "col-sm-6" }, _vm._l(_vm.amounts.slice(0, _vm.amounts.length / 2), function (value) {
-            return _c('div', { staticClass: "custom-controls-stacked" }, [_c('label', { staticClass: "custom-control custom-radio" }, [_c('input', { directives: [{ name: "model", rawName: "v-model.number", value: _vm.form.amount, expression: "form.amount", modifiers: { "number": true } }], staticClass: "custom-control-input", attrs: { "type": "radio" }, domProps: { "value": value, "checked": _vm._q(_vm.form.amount, _vm._n(value)) }, on: { "change": function change($event) {
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('fieldset', [_c('legend', { class: { 'mb-0': _vm.hasMinimumAmount } }, [_vm._v("Select your donation amount")]), _vm._v(" "), _vm.hasMinimumAmount ? _c('div', { staticClass: "mb-2" }, [_c('small', { staticClass: "text-muted" }, [_vm._v("Minimum accepted amount is $" + _vm._s(_vm.page.options.min_amount))])]) : _vm._e(), _vm._v(" "), _c('div', { staticClass: "row mb-2", class: { 'was-validated': _vm.errors.amount } }, [_c('div', { staticClass: "col-sm-6" }, _vm._l(_vm.amounts.slice(0, _vm.amounts.length / 2), function (value) {
+            return _c('div', { staticClass: "custom-controls-stacked" }, [_c('label', { staticClass: "custom-control custom-radio" }, [_c('input', { directives: [{ name: "model", rawName: "v-model.number", value: _vm.form.amount, expression: "form.amount", modifiers: { "number": true } }], staticClass: "custom-control-input", class: { 'is-invalid': _vm.errors.amount }, attrs: { "type": "radio" }, domProps: { "value": value, "checked": _vm._q(_vm.form.amount, _vm._n(value)) }, on: { "change": function change($event) {
                         _vm.$set(_vm.form, "amount", _vm._n(value));
                     } } }), _vm._v(" "), _c('span', { staticClass: "custom-control-indicator" }), _vm._v(" "), _c('span', { staticClass: "custom-control-description" }, [_vm._v("$" + _vm._s(value))])])]);
         })), _vm._v(" "), _c('div', { staticClass: "col-sm-6" }, _vm._l(_vm.amounts.slice(_vm.amounts.length / 2), function (value) {
-            return _c('div', { staticClass: "custom-controls-stacked" }, [_c('label', { staticClass: "custom-control custom-radio" }, [_c('input', { directives: [{ name: "model", rawName: "v-model.number", value: _vm.form.amount, expression: "form.amount", modifiers: { "number": true } }], staticClass: "custom-control-input", attrs: { "type": "radio" }, domProps: { "value": value, "checked": _vm._q(_vm.form.amount, _vm._n(value)) }, on: { "change": function change($event) {
+            return _c('div', { staticClass: "custom-controls-stacked" }, [_c('label', { staticClass: "custom-control custom-radio" }, [_c('input', { directives: [{ name: "model", rawName: "v-model.number", value: _vm.form.amount, expression: "form.amount", modifiers: { "number": true } }], staticClass: "custom-control-input", class: { 'is-invalid': _vm.errors.amount }, attrs: { "type": "radio" }, domProps: { "value": value, "checked": _vm._q(_vm.form.amount, _vm._n(value)) }, on: { "change": function change($event) {
                         _vm.$set(_vm.form, "amount", _vm._n(value));
                     } } }), _vm._v(" "), _c('span', { staticClass: "custom-control-indicator" }), _vm._v(" "), _c('span', { staticClass: "custom-control-description" }, [_vm._v("$" + _vm._s(value))])])]);
-        }))]), _vm._v(" "), _c('div', { staticClass: "row" }, [_vm._m(0, false, false), _vm._v(" "), _c('div', { staticClass: "col-sm-6" }, [_c('input', { directives: [{ name: "model", rawName: "v-model.number", value: _vm.form.amount, expression: "form.amount", modifiers: { "number": true } }], staticClass: "form-control", attrs: { "type": "text", "name": "amount", "id": "amount", "placeholder": "$" }, domProps: { "value": _vm.form.amount }, on: { "input": function input($event) {
+        }))]), _vm._v(" "), _c('div', { staticClass: "row", class: { 'was-validated': _vm.errors.amount } }, [_vm._m(0, false, false), _vm._v(" "), _c('div', { staticClass: "col-sm-6" }, [_c('input', { directives: [{ name: "model", rawName: "v-model.number", value: _vm.form.amount, expression: "form.amount", modifiers: { "number": true } }], staticClass: "form-control", class: { 'is-invalid': _vm.errors.amount }, attrs: { "type": "text", "name": "amount", "id": "amount", "placeholder": "$" }, domProps: { "value": _vm.form.amount }, on: { "input": function input($event) {
                     if ($event.target.composing) {
                         return;
                     }_vm.$set(_vm.form, "amount", _vm._n($event.target.value));
                 }, "blur": function blur($event) {
                     _vm.$forceUpdate();
-                } } }), _vm._v(" "), _c('div', { staticClass: "invalid-feedback" }, [_vm._v("Some inline error message here.")])])]), _vm._v(" "), _vm.page.site.recurring && !_vm.page.options.recurring_only ? _c('div', { staticClass: "form-group mt-3" }, [_c('label', { domProps: { "innerHTML": _vm._s(_vm.recurringMessage) } }), _vm._v(" "), _c('div', { staticClass: "btn-group" }, [_c('button', { staticClass: "btn", class: { 'btn-success': !_vm.form.recurring, 'btn-secondary': !!_vm.form.recurring }, attrs: { "type": "button" }, on: { "click": function click($event) {
+                } } }), _vm._v(" "), _vm.errors.amount ? _c('div', { staticClass: "invalid-feedback", domProps: { "innerHTML": _vm._s(_vm.errors.amount.join('<br>')) } }) : _vm._e()])]), _vm._v(" "), _vm.page.site.recurring && !_vm.page.options.recurring_only ? _c('div', { staticClass: "form-group mt-3" }, [_c('label', { domProps: { "innerHTML": _vm._s(_vm.recurringMessage) } }), _vm._v(" "), _c('div', { staticClass: "btn-group" }, [_c('button', { staticClass: "btn", class: { 'btn-success': !_vm.form.recurring, 'btn-secondary': !!_vm.form.recurring }, attrs: { "type": "button" }, on: { "click": function click($event) {
                     _vm.form.recurring = 0;
                 } } }, [_vm._v("One-Time")]), _vm._v(" "), _c('button', { staticClass: "btn", class: { 'btn-success': !!_vm.form.recurring, 'btn-secondary': !_vm.form.recurring }, attrs: { "type": "button" }, on: { "click": function click($event) {
                     _vm.form.recurring = 1;
@@ -23616,24 +23508,34 @@ var SelectDonationFieldset = { render: function render() {
             return this.page.options.min_amount && (parseFloat(this.page.options.min_amount) || 0) > 0;
         },
         amounts: function amounts() {
-            var minAmount = parseFloat(this.page.options.min_amount) || 0;
-            var values = this.page.site.config.giveworks.ask_amounts;
+            var _this = this;
+
+            var values = this.page.options.amounts ? this.page.options.amounts.split(',') : this.page.site.config.giveworks.ask_amounts;
 
             return values.filter(function (value) {
-                return value >= minAmount;
+                return value >= (parseFloat(_this.page.options.min_amount) || 0);
             });
         }
     }
 
 };
 
-var dispatch = new Broadcast().dispatch('app');
+//import Broadcast from 'broadcast';
+//const dispatch = (new Broadcast).dispatch('app');
 
 var BaseDonationForm = {
 
     props: {
         page: {
             type: Object,
+            required: true
+        },
+        form: {
+            type: Object,
+            required: true
+        },
+        errors: {
+            type: [Boolean, Object],
             required: true
         }
     },
@@ -23642,39 +23544,12 @@ var BaseDonationForm = {
         'contact-info-fieldset': ContactInfoFieldset,
         'payment-info-fieldset': PaymentInfoFieldset,
         'select-donation-fieldset': SelectDonationFieldset
-    },
-
-    data: function data() {
-        return {
-            form: {
-                recurring: 1,
-                optin: 1
-            }
-        };
-    },
-
-
-    methods: {
-        disable: function disable() {
-            this.$el.querySelector('[type=submit]').disabled = true;
-        },
-        enabled: function enabled() {
-            this.$el.querySelector('[type=submit]').disabled = false;
-        }
-    },
-
-    created: function created() {
-        dispatch.on('form:enable', this.enable);
-        dispatch.on('form:disable', this.disable);
-    },
-    destroyed: function destroyed() {
-        dispatch.off('form:enable');
-        dispatch.off('form:disabled');
     }
+
 };
 
 var VerticalDonationForm = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('form', { staticClass: "container" }, [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-md-5 col-lg-4" }, [_c('select-donation-fieldset', { attrs: { "page": _vm.page } }), _vm._v(" "), _c('contact-info-fieldset', { attrs: { "page": _vm.page } }), _vm._v(" "), _c('payment-info-fieldset', { attrs: { "page": _vm.page } })], 1), _vm._v(" "), _c('div', { staticClass: "col-md-7 col-lg-8", domProps: { "innerHTML": _vm._s(_vm.page.body) } })])]);
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('form', { attrs: { "submit": _vm.submit } }, [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-md-5 col-lg-4" }, [_c('select-donation-fieldset', { attrs: { "form": _vm.form, "errors": _vm.errors, "page": _vm.page } }), _vm._v(" "), _c('contact-info-fieldset', { attrs: { "form": _vm.form, "errors": _vm.errors, "page": _vm.page } }), _vm._v(" "), _c('payment-info-fieldset', { attrs: { "form": _vm.form, "errors": _vm.errors, "page": _vm.page } })], 1), _vm._v(" "), _c('div', { staticClass: "col-md-7 col-lg-8", domProps: { "innerHTML": _vm._s(_vm.page.body) } })])]);
     }, staticRenderFns: [],
 
     extends: BaseDonationForm
@@ -23682,7 +23557,7 @@ var VerticalDonationForm = { render: function render() {
 };
 
 var HorizontalDonationForm = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('form', [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-sm-12", domProps: { "innerHTML": _vm._s(_vm.page.body) } })]), _vm._v(" "), _c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-md-4" }, [_c('select-donation-fieldset', { attrs: { "form": _vm.form, "page": _vm.page } })], 1), _vm._v(" "), _c('div', { staticClass: "col-md-4" }, [_c('contact-info-fieldset', { attrs: { "form": _vm.form, "page": _vm.page } })], 1), _vm._v(" "), _c('div', { staticClass: "col-md-4" }, [_c('payment-info-fieldset', { attrs: { "form": _vm.form, "page": _vm.page } })], 1)]), _vm._v(" " + _vm._s(_vm.form) + " ")]);
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-sm-12", domProps: { "innerHTML": _vm._s(_vm.page.body) } })]), _vm._v(" "), _c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-md-4" }, [_c('select-donation-fieldset', { attrs: { "form": _vm.form, "errors": _vm.errors, "page": _vm.page } })], 1), _vm._v(" "), _c('div', { staticClass: "col-md-4" }, [_c('contact-info-fieldset', { attrs: { "form": _vm.form, "errors": _vm.errors, "page": _vm.page } })], 1), _vm._v(" "), _c('div', { staticClass: "col-md-4" }, [_c('payment-info-fieldset', { attrs: { "form": _vm.form, "errors": _vm.errors, "page": _vm.page } })], 1)])]);
     }, staticRenderFns: [],
 
     extends: BaseDonationForm
@@ -23690,11 +23565,19 @@ var HorizontalDonationForm = { render: function render() {
 };
 
 var PageType = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "container" }, [_c(_vm.componentName, { tag: "component", attrs: { "orientation": _vm.orientation, "page": _vm.page } })], 1);
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "container" }, [_c(_vm.componentName, { tag: "component", attrs: { "orientation": _vm.orientation, "form": _vm.form, "errors": _vm.errors, "page": _vm.page } })], 1);
     }, staticRenderFns: [],
 
     props: {
         page: {
+            type: Object,
+            required: true
+        },
+        form: {
+            type: Object,
+            required: true
+        },
+        errors: {
             type: Object,
             required: true
         },
@@ -23757,17 +23640,27 @@ var HttpErrorResponse = { render: function render() {
 };
 
 var GiveworksForm = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _vm.page ? _c('div', { staticClass: "one-true-form" }, [_c('page-type', { attrs: { "orientation": _vm.orientation, "page": _vm.page } })], 1) : _vm.error ? _c('div', [_c('http-error-response', { attrs: { "error": _vm.error } })], 1) : _c('div', [_c('activity-indicator')], 1);
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _vm.page ? _c('div', { staticClass: "one-true-form" }, [_c('form', { on: { "submit": _vm.onSubmit } }, [_c('page-type', { attrs: { "orientation": _vm.orientation, "form": _vm.form, "errors": _vm.errors, "page": _vm.page } })], 1)]) : _vm.error ? _c('div', [_c('http-error-response', { attrs: { "error": _vm.error } })], 1) : _c('div', [_c('activity-indicator')], 1);
     }, staticRenderFns: [],
 
     name: 'giveworks-form',
 
     props: {
-        'id': [Boolean, Number, String],
-        'orientation': [String],
         'api-key': {
             type: String,
             required: true
+        },
+        'page-id': {
+            type: [Number, String],
+            required: true
+        },
+        'orientation': {
+            type: String,
+            default: 'vertical'
+        },
+        'redirect': {
+            type: [Boolean, String],
+            default: false
         }
     },
 
@@ -23778,15 +23671,36 @@ var GiveworksForm = { render: function render() {
     },
 
     methods: {
+        disable: function disable() {
+            this.$el.querySelector('[type=submit]').disabled = true;
+        },
+        enable: function enable() {
+            this.$el.querySelector('[type=submit]').disabled = false;
+        },
         onSubmit: function onSubmit(event) {
-            console.log('Submit!');
+            var _this = this;
+
+            this.disable();
+
+            Api$1.page.submit(this.page.id, this.form).then(function (response) {
+                window.location = _this.redirect || _this.page.next_page.url;
+            }, function (error) {
+                _this.enable();
+                _this.$set(_this, 'errors', error.response.data.errors || {});
+            });
+
+            event.preventDefault();
         }
     },
 
     data: function data() {
         return {
+            errors: {},
             page: this.$attrs.page,
-            error: null
+            form: {
+                recurring: 0,
+                optin: 1
+            }
         };
     },
     created: function created() {
@@ -23794,13 +23708,13 @@ var GiveworksForm = { render: function render() {
         HttpConfig.defaultRequestOptions.headers['Authorization'] = 'Bearer ' + this.apiKey;
     },
     mounted: function mounted() {
-        var _this = this;
+        var _this2 = this;
 
         if (!this.page) {
-            Api$1.page.find(this.id).then(function (response) {
-                _this.page = response.data;
+            Api$1.page.find(this.pageId).then(function (response) {
+                _this2.page = response.data;
             }).catch(function (error) {
-                _this.error = error;
+                _this2.error = error;
             });
         }
     }

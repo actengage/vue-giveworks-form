@@ -8,11 +8,11 @@
             <small class="text-muted">Minimum accepted amount is ${{ page.options.min_amount }}</small>
         </div>
 
-        <div class="row mb-2">
+        <div class="row mb-2" :class="{'was-validated': errors.amount}">
             <div class="col-sm-6">
                 <div class="custom-controls-stacked" v-for="value in amounts.slice(0, amounts.length / 2)">
                     <label class="custom-control custom-radio">
-                        <input type="radio" :value="value" class="custom-control-input" v-model.number="form.amount">
+                        <input type="radio"class="custom-control-input" :value="value" :class="{'is-invalid': errors.amount}" v-model.number="form.amount">
                         <span class="custom-control-indicator"></span>
                         <span class="custom-control-description">${{value}}</span>
                     </label>
@@ -21,7 +21,7 @@
             <div class="col-sm-6">
                 <div class="custom-controls-stacked" v-for="value in amounts.slice(amounts.length / 2)">
                     <label class="custom-control custom-radio">
-                        <input type="radio" :value="value" class="custom-control-input" v-model.number="form.amount">
+                        <input type="radio" class="custom-control-input" :value="value" :class="{'is-invalid': errors.amount}" v-model.number="form.amount">
                         <span class="custom-control-indicator"></span>
                         <span class="custom-control-description">${{value}}</span>
                     </label>
@@ -29,13 +29,13 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row" :class="{'was-validated': errors.amount}">
             <label for="amount" class="col-sm-6 col-form-label">
                 <span class="text-bold">Your Amount</span>
             </label>
             <div class="col-sm-6">
-                <input type="text" name="amount" class="form-control" id="amount" placeholder="$" v-model.number="form.amount">
-                <div class="invalid-feedback">Some inline error message here.</div>
+                <input type="text" name="amount" class="form-control" id="amount" placeholder="$" :class="{'is-invalid': errors.amount}" v-model.number="form.amount">
+                <div v-if="errors.amount" class="invalid-feedback" v-html="errors.amount.join('<br>')"></div>
             </div>
         </div>
 
@@ -102,11 +102,12 @@ export default {
         },
 
         amounts() {
-            const minAmount = parseFloat(this.page.options.min_amount) || 0;
-            const values = this.page.site.config.giveworks.ask_amounts;
+            const values = this.page.options.amounts ?
+                this.page.options.amounts.split(',') :
+                this.page.site.config.giveworks.ask_amounts;
 
             return values.filter(value => {
-                return value >= minAmount;
+                return value >= (parseFloat(this.page.options.min_amount) || 0);
             });
         }
 

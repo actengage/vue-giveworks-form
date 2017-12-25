@@ -1,6 +1,8 @@
 <template>
     <div v-if="page" class="one-true-form">
-        <page-type :orientation="orientation" :page="page"></page-type>
+        <form @submit="onSubmit">
+            <page-type :orientation="orientation" :form="form" :errors="errors" :page="page"></page-type>
+        </form>
     </div>
     <div v-else-if="error">
         <http-error-response :error="error"></http-error-response>
@@ -24,11 +26,21 @@ export default {
     name: 'giveworks-form',
 
     props: {
-        'id': [Boolean, Number, String],
-        'orientation': [String],
         'api-key': {
             type: String,
             required: true
+        },
+        'page-id': {
+            type: [Number, String],
+            required: true
+        },
+        'orientation': {
+            type: String,
+            default: 'vertical'
+        },
+        'redirect': {
+            type: [Boolean, String],
+            default: false
         }
     },
 
@@ -39,15 +51,34 @@ export default {
     },
 
     methods: {
-        onSubmit(event) {
-            console.log('Submit!');
+        disable: function() {
+            this.$el.querySelector('[type=submit]').disabled = true;
+        },
+        enable: function() {
+            this.$el.querySelector('[type=submit]').disabled = false;
+        },
+        onSubmit: function(event) {
+            this.disable();
+
+            Api.page.submit(this.page.id, this.form).then((response) => {
+                window.location = this.redirect || this.page.next_page.url;
+            }, (error) => {
+                this.enable();
+                this.$set(this, 'errors', error.response.data.errors || {});
+            });
+
+            event.preventDefault();
         }
     },
 
     data() {
         return {
+            errors: {},
             page: this.$attrs.page,
-            error: null
+            form: {
+                recurring: 0,
+                optin: 1
+            }
         };
     },
 
@@ -58,7 +89,7 @@ export default {
 
     mounted() {
         if(!this.page) {
-            Api.page.find(this.id).then((response) => {
+            Api.page.find(this.pageId).then((response) => {
                 this.page = response.data;
             }).catch((error) => {
                 this.error = error;

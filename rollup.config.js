@@ -1,6 +1,5 @@
 import fs from 'fs';
 import vue from 'rollup-plugin-vue';
-import json from 'rollup-plugin-json';
 import babel from 'rollup-plugin-babel';
 import serve from 'rollup-plugin-serve';
 import commonjs from 'rollup-plugin-commonjs';
@@ -17,12 +16,11 @@ export default {
     },
     external: [
         'vue',
-        'axios',
+        'axios'
     ],
     globals: {
         'vue': 'Vue',
-        'axios': 'axios',
-        //'broadcast': 'Broadcast'
+        'axios': 'axios'
     },
     sourcemap: true,
     sourcemapFile: './dist/giveworks-form.js.map',
@@ -33,27 +31,23 @@ export default {
         rootImport({
             // Will first look in `client/src/*` and then `common/src/*`.
             root: `${__dirname}/src`,
-
-            //useEntry: 'prepend',
-
             // If we don't find the file verbatim, try adding these extensions
             extensions: ['.js', '.vue']
+        }),
+        commonjs({
+            include: 'node_modules/**',
+            extensions: [ '.js']
         }),
         resolve({
             sourceMap: true,
             extensions: [ '.js', '.scss', '.vue']
         }),
-        commonjs({
-            include: 'node_modules/**',
-        }),
-        json(),
         vue({
             scss: {
                 indentedSyntax: true
             },
             css: function(style, styles, compiler) {
                 fs.writeFileSync('./css/giveworks-form.css', style);
-                //fs.writeFileSync('dist/giveworks-form.sass', styles.map(style => style.code).concat('\n'));
             }
         }),
         babel({
@@ -63,13 +57,14 @@ export default {
         serve({
             // Folder to serve files from
             contentBase: '',
-
             https: {
                 key: fs.readFileSync('./livereload.key'),
                 cert: fs.readFileSync('./livereload.crt'),
                 ca: fs.readFileSync("./livereload.pem")
             }
         }),
+        //https://alexanderzeitler.com/articles/Fixing-Chrome-missing_subjectAltName-selfsigned-cert-openssl/
+        //defaults write com.google.Chrome EnableCommonNameFallbackForLocalAnchors -bool true
         livereload({
             watch: './dist/giveworks-form.js',
             https: {

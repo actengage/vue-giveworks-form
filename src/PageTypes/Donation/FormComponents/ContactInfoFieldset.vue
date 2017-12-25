@@ -6,55 +6,28 @@
 
             <legend>Your information</legend>
 
-            <div class="form-group mb-2" v-if="page.options.add_title">
-                <label class="text-bold" for="title">Title</label>
-                <select name="title" id="title" class="custom-select form-control" v-model="form.title">
-                    <option :value="title" v-for="title in titles">{{title}}</option>
-                </select>
-            </div>
+            <select-field v-if="page.options.add_title" name="title" label="Title" :options="titles" :form="form" :errors="errors"></select-field>
 
-            <div class="form-group mb-2">
-                <label class="text-bold" for="first">First Name</label>
-                <input type="text" name="first" id="first" class="form-control" v-model="form.first">
-            </div>
+            <input-field name="first" label="First Name" :form="form" :errors="errors"></input-field>
 
-            <div class="form-group mb-2">
-                <label class="text-bold" for="last">Last Name</label>
-                <input type="text" name="last" id="last" class="form-control" v-model="form.last">
-            </div>
+            <input-field name="last" label="Last Name" :form="form" :errors="errors"></input-field>
 
-            <div class="form-group mb-2">
-                <label class="text-bold" for="email">Email</label>
-                <input type="email" name="email" id="email" class="form-control" placeholder="you@example.com" v-model="form.email">
-            </div>
+            <input-field type="email" name="email" label="Email" placeholder="you@example.com" :form="form" :errors="errors"></input-field>
 
-            <div class="form-group mb-2">
-                <label class="text-bold" for="street">Address</label>
-                <input type="text" name="street" id="street" class="form-control" v-model="form.street">
-            </div>
+            <input-field name="street" label="Address" :form="form" :errors="errors"></input-field>
 
-            <div class="form-group mb-2">
-                <label class="text-bold" for="city">City</label>
-                <input type="text" name="city" id="city" class="form-control" v-model="form.city">
-            </div>
+            <input-field name="city" label="City" :form="form" :errors="errors"></input-field>
 
-            <div class="row mb-2">
+            <div class="row">
                 <div class="col-sm-8">
-                    <label class="text-bold" for="state">State</label>
-                    <select name="state" id="state" class="custom-select form-control" v-model="form.state">
-                        <option :value="value" v-for="(label, value) in states">{{label}}</options>
-                    </select>
+                    <select-field name="state" label="State" :options="states" :form="form" :errors="errors"></select-field>
                 </div>
                 <div class="col-sm-4">
-                    <label class="text-bold" for="zip">Zip</label>
-                    <input type="text" name="zip" id="zip" class="form-control" v-model="form.zip">
+                    <input-field name="zip" label="Zip" :form="form" :errors="errors"></input-field>
                 </div>
             </div>
 
-            <div class="form-group mb-2" v-if="page.options.add_phone">
-                <label class="text-bold" for="phone">Phone Number</label>
-                <input type="text" name="phone" id="phone" class="form-control" v-model="form.phone">
-            </div>
+            <input-field v-if="page.options.add_phone" name="phone" label="Phone Number" mask="(999) 999-9999" :form="form" :errors="errors"></input-field>
 
         </fieldset>
 
@@ -97,28 +70,17 @@
 <script>
 import States from '/Config/States';
 import BaseComponent from './BaseComponent';
+import InputField from '/Components/Forms/InputField';
+import SelectField from '/Components/Forms/SelectField';
 
 export default {
 
     extends: BaseComponent,
 
-    /*
-    data() {
-        return {
-            title: null,
-            first: null,
-            last: null,
-            email: null,
-            street: null,
-            state: null,
-            zip: null,
-            phone: null,
-            employer: null,
-            occupation: null,
-            recurring: 0
-        };
+    components: {
+        InputField,
+        SelectField
     },
-    */
 
     computed: {
         isRetired() {
@@ -142,6 +104,17 @@ export default {
 
         states() {
             return States;
+
+            const states = [];
+
+            for(let i in States) {
+                states.push({
+                    value: i,
+                    label: States[i]
+                });
+            }
+
+            return states;
         }
     },
 

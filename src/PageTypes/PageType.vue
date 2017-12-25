@@ -1,7 +1,7 @@
 <template>
 
     <div class="container">
-        <component :is="componentName" :orientation="orientation" :page="page"></component>
+        <component :is="componentName" :orientation="orientation" :form="form" :errors="errors" :page="page"></component>
     </div>
 
 </template>
@@ -15,6 +15,14 @@ export default {
 
     props: {
         page: {
+            type: Object,
+            required: true
+        },
+        form: {
+            type: Object,
+            required: true
+        },
+        errors: {
             type: Object,
             required: true
         },

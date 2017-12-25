@@ -9,6 +9,10 @@ export default {
         form: {
             type: Object,
             required: true
+        },
+        errors: {
+            type: [Boolean, Object],
+            required: true
         }
     }
 

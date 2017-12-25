@@ -4,7 +4,7 @@
 
         <legend>Payment information</legend>
 
-        <payment-gateways :form="form" :page="page"></payment-gateways>
+        <payment-gateways :form="form" :errors="errors" :page="page"></payment-gateways>
 
         <div v-if="page.options.add_comment" class="form-group">
             <label for="comment" class="text-bold" v-html="commentMessage"></label>

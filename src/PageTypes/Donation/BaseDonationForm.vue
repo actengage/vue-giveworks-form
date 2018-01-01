@@ -26,9 +26,9 @@ export default {
     },
 
     components: {
-        'contact-info-fieldset': ContactInfoFieldset,
-        'payment-info-fieldset': PaymentInfoFieldset,
-        'select-donation-fieldset': SelectDonationFieldset
+        ContactInfoFieldset,
+        PaymentInfoFieldset,
+        SelectDonationFieldset
     }
 
 }

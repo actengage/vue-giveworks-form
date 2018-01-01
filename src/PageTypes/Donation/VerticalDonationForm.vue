@@ -1,6 +1,6 @@
 <template>
 
-    <form :submit="submit">
+    <div>
 
         <div class="row">
 
@@ -19,7 +19,7 @@
 
         </div>
 
-    </form>
+    <div>
 
 </template>
 

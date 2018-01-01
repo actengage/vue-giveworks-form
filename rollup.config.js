@@ -1,12 +1,13 @@
 import fs from 'fs';
 import vue from 'rollup-plugin-vue';
+import json from 'rollup-plugin-json';
 import babel from 'rollup-plugin-babel';
 import serve from 'rollup-plugin-serve';
 import commonjs from 'rollup-plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import rootImport from 'rollup-plugin-root-import';
-import json from 'rollup-plugin-json';
+import conditional from "rollup-plugin-conditional";
 
 export default {
     input: 'src/main.js',
@@ -17,11 +18,15 @@ export default {
     },
     external: [
         'vue',
-        'axios'
+        'axios',
+        'moment',
+        'lodash-es',
     ],
     globals: {
         'vue': 'Vue',
-        'axios': 'axios'
+        'axios': 'axios',
+        'moment': 'moment',
+        'lodash-es': 'lodash-es'
     },
     sourcemap: true,
     sourcemapFile: './dist/giveworks-form.js.map',
@@ -58,24 +63,28 @@ export default {
             exclude: 'node_modules/**',
             presets: ['es2015-rollup']
         }),
-        serve({
-            // Folder to serve files from
-            contentBase: '',
-            https: {
-                key: fs.readFileSync('./livereload.key'),
-                cert: fs.readFileSync('./livereload.crt'),
-                ca: fs.readFileSync("./livereload.pem")
+        conditional(process.env.ROLLUP_WATCH == 'true', [{
+            onwrite: (...args) => {
+                return serve({
+                    contentBase: '',
+                    https: {
+                        key: fs.readFileSync('./livereload.key'),
+                        cert: fs.readFileSync('./livereload.crt'),
+                        ca: fs.readFileSync("./livereload.pem")
+                    }
+                })
             }
-        }),
-        //https://alexanderzeitler.com/articles/Fixing-Chrome-missing_subjectAltName-selfsigned-cert-openssl/
-        //defaults write com.google.Chrome EnableCommonNameFallbackForLocalAnchors -bool true
-        livereload({
-            watch: './dist/giveworks-form.js',
-            https: {
-                key: fs.readFileSync('./livereload.key'),
-                cert: fs.readFileSync('./livereload.crt'),
-                ca: fs.readFileSync("./livereload.pem")
+        }, {
+            onwrite: (...args) => {
+                return livereload({
+                    watch: './dist/giveworks-form.js',
+                    https: {
+                        key: fs.readFileSync('./livereload.key'),
+                        cert: fs.readFileSync('./livereload.crt'),
+                        ca: fs.readFileSync("./livereload.pem")
+                    }
+                })
             }
-        })
+        }])
     ]
 };

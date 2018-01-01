@@ -11,7 +11,7 @@
             <textarea id="comment" class="form-control" v-model="form.comment"></textarea>
         </div>
 
-        <button type="submit" class="btn btn-lg btn-block btn-primary" v-html="buttonLabel"></button>
+        <activity-button type="submit" size="lg" orientation="right" :block="true" :label="buttonLabel"></activity-button>
 
         <div v-if="page.options.add_optin">
             <label class="custom-control custom-checkbox">
@@ -31,12 +31,16 @@
 
 import BaseComponent from './BaseComponent';
 import PaymentGateways from './PaymentGateways';
+import ActivityButton from '/Components/ActivityIndicators/ActivityButton';
 
 export default {
 
     extends: BaseComponent,
 
+    name: 'payment-info-fieldset',
+
     components: {
+        ActivityButton,
         PaymentGateways
     },
 

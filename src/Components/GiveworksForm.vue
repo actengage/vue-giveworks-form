@@ -1,5 +1,5 @@
 <template>
-    <div v-if="page" class="one-true-form">
+    <div v-if="page">
         <form @submit="onSubmit">
             <page-type :orientation="orientation" :form="form" :errors="errors" :page="page"></page-type>
         </form>
@@ -8,7 +8,7 @@
         <http-error-response :error="error"></http-error-response>
     </div>
     <div v-else>
-        <activity-indicator></activity-indicator>
+        <activity-indicator :center="true" size="xl"></activity-indicator>
     </div>
 </template>
 
@@ -18,8 +18,8 @@ import axios from 'axios';
 import Api from '/Http/Api';
 import HttpConfig from '/Config/Http';
 import PageType from '/PageTypes/PageType';
-import ActivityIndicator from './ActivityIndicator';
 import HttpErrorResponse from './HttpErrorResponse';
+import ActivityIndicator from './ActivityIndicators/ActivityIndicator';
 
 export default {
 
@@ -51,6 +51,20 @@ export default {
     },
 
     methods: {
+        showActivity: function() {
+            const el = this.$el.querySelector('[type=submit]');
+
+            if(el) {
+                el.dispatchEvent(new Event('activity:show'));
+            }
+        },
+        hideActivity: function() {
+            const el = this.$el.querySelector('[type=submit]');
+
+            if(el) {
+                el.dispatchEvent(new Event('activity:hide'));
+            }
+        },
         disable: function() {
             this.$el.querySelector('[type=submit]').disabled = true;
         },
@@ -58,14 +72,18 @@ export default {
             this.$el.querySelector('[type=submit]').disabled = false;
         },
         onSubmit: function(event) {
-            this.disable();
+            if(!this.$submitting) {
+                this.$submitting = true;
+                this.showActivity();
 
-            Api.page.submit(this.page.id, this.form).then((response) => {
-                window.location = this.redirect || this.page.next_page.url;
-            }, (error) => {
-                this.enable();
-                this.$set(this, 'errors', error.response.data.errors || {});
-            });
+                Api.page.submit(this.page.id, this.form).then((response) => {
+                    window.location = this.redirect || this.page.next_page.url;
+                }, (error) => {
+                    this.$submitting = false;
+                    this.hideActivity();
+                    this.$set(this, 'errors', error.response.data.errors || {});
+                });
+            }
 
             event.preventDefault();
         }
@@ -88,6 +106,7 @@ export default {
     },
 
     mounted() {
+
         if(!this.page) {
             Api.page.find(this.pageId).then((response) => {
                 this.page = response.data;

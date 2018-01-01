@@ -30,7 +30,6 @@
 <script>
 import { each } from 'lodash-es';
 import { merge } from 'lodash-es';
-import { uniq } from 'lodash-es';
 import Gateway from '/Gateways/Gateway';
 import BaseComponent from './BaseComponent';
 import Icon from 'vue-awesome/components/Icon';

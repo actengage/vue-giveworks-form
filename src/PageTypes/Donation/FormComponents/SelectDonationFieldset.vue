@@ -34,8 +34,13 @@
                 <span class="text-bold">Your Amount</span>
             </label>
             <div class="col-sm-6">
-                <input type="text" name="amount" class="form-control" id="amount" placeholder="$" :class="{'is-invalid': errors.amount}" v-model.number="form.amount">
-                <div v-if="errors.amount" class="invalid-feedback" v-html="errors.amount.join('<br>')"></div>
+                <div class="input-group">
+                    <label for="amount" class="input-group-prepend">
+                        <div class="input-group-text">$</div>
+                    </label>
+                    <input type="text" name="amount" class="form-control" id="amount" placeholder="10.00" :class="{'is-invalid': errors.amount}" v-model.number="form.amount">
+                    <!-- <div v-if="errors.amount" class="invalid-feedback" v-html="errors.amount.join('<br>')"></div> -->
+                </div>
             </div>
         </div>
 
@@ -74,18 +79,11 @@ export default {
 
     extends: BaseComponent,
 
+    name: 'select-donation-fieldset',
+
     components: {
         Icon
     },
-
-    /*
-    data() {
-        return {
-            recurring: 0,
-            amount: null
-        };
-    },
-    */
 
     computed: {
 

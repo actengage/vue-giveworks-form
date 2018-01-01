@@ -77,6 +77,8 @@ export default {
 
     extends: BaseComponent,
 
+    name: 'contact-info-fieldset',
+
     components: {
         InputField,
         SelectField

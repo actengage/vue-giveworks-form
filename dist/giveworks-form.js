@@ -143,7 +143,7 @@ var Page = function (_Endpoint) {
 
 var HttpConfig = {
 
-    baseUrl: 'https://giveworks.test/api/public/',
+    baseUrl: 'https://giveworks.test/api/public/v1/',
 
     endpoints: {
         page: Page

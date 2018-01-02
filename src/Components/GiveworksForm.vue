@@ -14,7 +14,6 @@
 
 <script>
 
-import axios from 'axios';
 import Api from '/Http/Api';
 import HttpConfig from '/Config/Http';
 import PageType from '/PageTypes/PageType';

@@ -1,7 +1,7 @@
-import axios from 'axios';
 import { each } from 'lodash-es';
 import { extend } from 'lodash-es';
 import { trimEnd } from 'lodash-es';
+import axios from 'axios/dist/axios';
 import HttpConfig from '/Config/Http';
 import PageEndpoint from '/Http/Endpoints/Page';
 

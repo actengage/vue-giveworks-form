@@ -42,8 +42,7 @@ export default {
             extensions: ['.js', '.vue']
         }),
         commonjs({
-            include: 'node_modules/**',
-            extensions: [ '.js']
+            include: 'node_modules/**'
         }),
         resolve({
             jsnext: true,

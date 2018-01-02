@@ -13774,8 +13774,8 @@ var GiveworksForm = { render: function render() {
             required: true
         },
         'page-id': {
-            type: [Number, String],
-            required: true
+            type: [Boolean, Number, String],
+            default: false
         },
         'orientation': {
             type: String,
@@ -13862,17 +13862,20 @@ var GiveworksForm = { render: function render() {
 };
 
 var GiveworksVueApp = function () {
-    function GiveworksVueApp(el, options) {
+    function GiveworksVueApp(el, data) {
         classCallCheck(this, GiveworksVueApp);
 
-        this.setApp(el);
+        this.setApp(el, data);
     }
 
     createClass(GiveworksVueApp, [{
         key: 'setApp',
-        value: function setApp(el, options) {
+        value: function setApp(el, _data) {
             this.app = new Vue({
                 el: el,
+                data: function data() {
+                    return _data;
+                },
                 components: {
                     GiveworksForm: GiveworksForm
                 }

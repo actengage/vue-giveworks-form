@@ -4,13 +4,16 @@ import GiveworksForm from './Components/GiveworksForm';
 
 export default class GiveworksVueApp {
 
-    constructor(el, options) {
-        this.setApp(el);
+    constructor(el, data) {
+        this.setApp(el, data);
     }
 
-    setApp(el, options) {
+    setApp(el, data) {
         this.app = new Vue({
             el: el,
+            data: function() {
+                return data;
+            },
             components: {
                 GiveworksForm
             }

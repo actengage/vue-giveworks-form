@@ -30,8 +30,8 @@ export default {
             required: true
         },
         'page-id': {
-            type: [Number, String],
-            required: true
+            type: [Boolean, Number, String],
+            default: false
         },
         'orientation': {
             type: String,

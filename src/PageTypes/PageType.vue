@@ -13,6 +13,8 @@ import HorizontalDonationForm from './Donation/HorizontalDonationForm';
 
 export default {
 
+    name: 'page-type',
+
     props: {
         page: {
             type: Object,

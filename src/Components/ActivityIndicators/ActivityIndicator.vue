@@ -18,6 +18,8 @@ import ActivityIndicatorSpinner from './Types/Spinner';
 
 export default {
 
+    name: 'activity-indicator',
+
     props: extend({}, BaseType.props, {
         center: {
             type: Boolean,

@@ -44,9 +44,9 @@ export default {
     },
 
     components: {
-        'page-type': PageType,
-        'activity-indicator': ActivityIndicator,
-        'http-error-response': HttpErrorResponse
+        PageType,
+        ActivityIndicator,
+        HttpErrorResponse
     },
 
     methods: {

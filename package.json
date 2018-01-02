@@ -1,8 +1,9 @@
 {
   "name": "vue-giveworks-form",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A Vue.js component for building and submitting Giveworks form.",
-  "main": "dist/giveworks-form.js",
+  "main": "dist/giveworks-form.min.js",
+  "module": "dist/giveworks-form.es.min.js",
   "author": "Justin Kimbrell",
   "license": "MIT",
   "dependencies": {
@@ -24,16 +25,19 @@
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-root-import": "^0.2.2",
     "rollup-plugin-serve": "^0.4.2",
-    "rollup-plugin-uglify": "^2.0.1",
     "rollup-plugin-vue": "^2.5.2",
     "uglify-es": "^3.3.4",
     "vue-template-compiler": "^2.5.13"
   },
   "scripts": {
     "build": "rollup -c --watch; npm run uglify-library;",
-    "build-vendor": "rollup -c rollup.vendor.js; npm run uglify-vendor;",
-    "uglify": "npm run uglify-library; npm run uglify-vendor;",
+    "build-library": "rollup -c;",
+    "build-vendor": "rollup -c rollup.vendor.js;",
+    "build-es2015": "rollup -c -f es -o dist/giveworks-form.es.js;",
+    "release": "npm run build-library; npm run build-es2015; npm run build-vendor; npm run uglify;",
+    "uglify": "npm run uglify-library; npm run uglify-es2015; npm run uglify-vendor;",
     "uglify-vendor": "./node_modules/.bin/uglifyjs dist/vendor.js -o dist/vendor.min.js;",
-    "uglify-library": "./node_modules/.bin/uglifyjs dist/giveworks-form.js -o dist/giveworks-form.min.js;"
+    "uglify-library": "./node_modules/.bin/uglifyjs dist/giveworks-form.js -o dist/giveworks-form.min.js;",
+    "uglify-es2015": "./node_modules/.bin/uglifyjs dist/giveworks-form.es.js -o dist/giveworks-form.es.min.js;"
   }
 }

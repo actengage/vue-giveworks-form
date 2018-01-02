@@ -1,5 +1,3 @@
-import { minify } from 'uglify-es';
-import uglify from 'rollup-plugin-uglify';
 import commonjs from 'rollup-plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
 

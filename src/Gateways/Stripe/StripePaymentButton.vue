@@ -11,13 +11,12 @@
 
         <div v-if="!error">
             <div v-if="card" class="my-3">
+                <button type="button" class="btn btn-xs btn-warning" style="float:right" @click="changeCard($event)">Change Card</button>
+
                 <p>
                     <span v-if="card.name">{{card.name}}<br></span>
-                    <span>****{{card.last4}}<br></span>
-                    <span>{{card.exp_month}}/{{card.exp_year}}</span>
+                    ****{{card.last4}} <span class="pl-2">{{card.exp_month}}/{{card.exp_year}}</span>
                 </p>
-
-                <button type="button" class="btn btn-xs btn-warning" @click="changeCard($event)">Change Card</button>
             </div>
 
             <div class="stripe-payment-button mt-2 mb-4"></div>

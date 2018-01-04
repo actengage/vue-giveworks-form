@@ -56,17 +56,17 @@ export default {
             });
 
             card.addEventListener('change', (event) => {
-                this.$set(this.errors, 'token', event.error ? [event.error.message] : null);
+                this.errors.token = event.error ? [event.error.message] : null;
 
                 if(event.complete) {
                     gateway.createToken(card, {
                         currency: 'usd'
                     }).then((result) => {
-                         if (result.error) {
-                            this.$set(this.errors, 'token', [event.error.message]);
+                        if (result.error) {
+                            this.errors.token = [event.error.message];
                         } else {
+                            this.form.token = result.token.id;
                             this.$dispatch.request('form:enable');
-                            this.$set(this.form, 'token', result.token.id);
                         }
                     });
                 }

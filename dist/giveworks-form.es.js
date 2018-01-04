@@ -13389,17 +13389,17 @@ var StripeCreditCard = { render: function render() {
             });
 
             card.addEventListener('change', function (event) {
-                _this.$set(_this.errors, 'token', event.error ? [event.error.message] : null);
+                _this.errors.token = event.error ? [event.error.message] : null;
 
                 if (event.complete) {
                     gateway.createToken(card, {
                         currency: 'usd'
                     }).then(function (result) {
                         if (result.error) {
-                            _this.$set(_this.errors, 'token', [event.error.message]);
+                            _this.errors.token = [event.error.message];
                         } else {
+                            _this.form.token = result.token.id;
                             _this.$dispatch.request('form:enable');
-                            _this.$set(_this.form, 'token', result.token.id);
                         }
                     });
                 }
@@ -13549,8 +13549,6 @@ var StripePaymentButton = { render: function render() {
 
         this.loading = true;
         this.$dispatch.request('form:disable');
-
-        return;
 
         gateway.script(function (event) {
 

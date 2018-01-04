@@ -13501,7 +13501,9 @@ var ActivityIndicator = { render: function render() {
 };
 
 var StripePaymentButton = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [_vm.loading ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : _vm._e(), _vm._v(" "), !_vm.error ? _c('div', [_c('div', { staticClass: "stripe-payment-button mt-2 mb-4" })]) : _c('div', { staticClass: "alert alert-danger" }, [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-xs-3 text-center" }, [_c('icon', { staticClass: "mt-2", attrs: { "name": "warning", "scale": "2" } })], 1), _vm._v(" "), _c('div', { staticClass: "col-xs-9" }, [_vm._v(" " + _vm._s(_vm.error.message) + " ")])])])]);
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [_vm.loading ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : _vm._e(), _vm._v(" "), !_vm.error ? _c('div', [_vm.form.token ? _c('div', { staticClass: "my-3" }, [_vm._v(" Card Number: ****1234 "), _c('button', { staticClass: "btn btn-sm btn-warning", attrs: { "type": "button" }, on: { "click": function click($event) {
+                    _vm.changeCard($event);
+                } } }, [_vm._v("Change Card")])]) : _vm._e(), _vm._v(" "), _c('div', { staticClass: "stripe-payment-button mt-2 mb-4" })]) : _c('div', { staticClass: "alert alert-danger" }, [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-xs-3 text-center" }, [_c('icon', { staticClass: "mt-2", attrs: { "name": "warning", "scale": "2" } })], 1), _vm._v(" "), _c('div', { staticClass: "col-xs-9" }, [_vm._v(" " + _vm._s(_vm.error.message) + " ")])])])]);
     }, staticRenderFns: [],
 
     name: 'stripe-payment-button',
@@ -13539,6 +13541,10 @@ var StripePaymentButton = { render: function render() {
 
 
     methods: {
+        changeCard: function changeCard(event) {
+            this.form.token = null;
+            this.$paymentRequestButton.click();
+        },
         getPaymentLabel: function getPaymentLabel() {
             return 'Donation to ' + this.page.site.name;
         }
@@ -13557,23 +13563,25 @@ var StripePaymentButton = { render: function render() {
         this.$dispatch.request('submit:hide');
 
         gateway.script(function (event) {
-            var paymentRequest = gateway.paymentRequest(1000, _this.getPaymentLabel());
-            var paymentRequestButton = gateway.paymentRequestButton(paymentRequest);
+            _this.$paymentRequest = gateway.paymentRequest(1000, _this.getPaymentLabel());
+            _this.$paymentRequestButton = gateway.paymentRequestButton(_this.$paymentRequest);
 
-            paymentRequestButton.on('click', function (event) {
+            _this.$paymentRequestButton.on('click', function (event) {
                 if (_this.form.token) {
                     _this.$dispatch.request('form:submit', event);
                 }
             });
 
-            paymentRequest.on('token', function (event) {
+            _this.$paymentRequest.on('token', function (event) {
+                console.log('token', event);
+
                 _this.form.token = event.token.id;
                 event.complete('success');
             });
 
-            paymentRequest.canMakePayment().then(function (result) {
+            _this.$paymentRequest.canMakePayment().then(function (result) {
                 _this.loading = false;
-                paymentRequestButton.mount(el);
+                _this.$paymentRequestButton.mount(el);
             }).catch(function (error) {
                 _this.error = error;
                 _this.form.token = null;

@@ -8,6 +8,10 @@
         </div>
 
         <div v-if="!error">
+            <div v-if="form.token" class="my-3">
+                Card Number: ****1234 <button type="button" class="btn btn-sm btn-warning" @click="changeCard($event)">Change Card</button>
+            </div>
+
             <div class="stripe-payment-button mt-2 mb-4"></div>
         </div>
 
@@ -68,6 +72,10 @@ export default {
     },
 
     methods: {
+        changeCard: function(event) {
+            this.form.token = null;
+            this.$paymentRequestButton.click();
+        },
         getPaymentLabel: function() {
             return 'Donation to ' + this.page.site.name;
         }
@@ -85,23 +93,25 @@ export default {
         this.$dispatch.request('submit:hide');
 
         gateway.script((event) => {
-            const paymentRequest = gateway.paymentRequest(1000, this.getPaymentLabel());
-            const paymentRequestButton = gateway.paymentRequestButton(paymentRequest);
+            this.$paymentRequest = gateway.paymentRequest(1000, this.getPaymentLabel());
+            this.$paymentRequestButton = gateway.paymentRequestButton(this.$paymentRequest);
 
-            paymentRequestButton.on('click', (event) => {
+            this.$paymentRequestButton.on('click', (event) => {
                 if(this.form.token) {
                     this.$dispatch.request('form:submit', event);
                 }
             });
 
-            paymentRequest.on('token', (event) => {
+            this.$paymentRequest.on('token', (event) => {
+                console.log('token', event);
+
                 this.form.token = event.token.id;
                 event.complete('success');
             });
 
-            paymentRequest.canMakePayment().then((result) => {
+            this.$paymentRequest.canMakePayment().then((result) => {
                 this.loading = false;
-                paymentRequestButton.mount(el);
+                this.$paymentRequestButton.mount(el);
             }).catch((error) => {
                 this.error = error;
                 this.form.token = null;

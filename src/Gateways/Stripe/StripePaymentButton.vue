@@ -12,13 +12,13 @@
                 <div class="row">
                     <div class="col-xs-3">
                         <div class="mr-6">
-                            <icon v-if="card.brand === 'Visa'" name="cc-visa" scale="4"></icon>
-                            <icon v-if="card.brand === 'MasterCard'" name="cc-mastercard" scale="4"></icon>
-                            <icon v-if="card.brand === 'American Express'" name="cc-amex" scale="4"></icon>
-                            <icon v-if="card.brand === 'Discover'" name="cc-discover" scale="4"></icon>
-                            <icon v-if="card.brand === 'JCB'" name="cc-jcb" scale="4"></icon>
-                            <icon v-if="card.brand === 'Diners Club'" name="cc-diners-club" scale="4"></icon>
-                            <icon v-else name="cc-credit-card" scale="4"></icon>
+                            <icon v-if="card.brand === 'Visa'" name="cc-visa" scale="3.5"></icon>
+                            <icon v-if="card.brand === 'MasterCard'" name="cc-mastercard" scale="3.5"></icon>
+                            <icon v-if="card.brand === 'American Express'" name="cc-amex" scale="3.5"></icon>
+                            <icon v-if="card.brand === 'Discover'" name="cc-discover" scale="3.5"></icon>
+                            <icon v-if="card.brand === 'JCB'" name="cc-jcb" scale="3.5"></icon>
+                            <icon v-if="card.brand === 'Diners Club'" name="cc-diners-club" scale="3.5"></icon>
+                            <icon v-else name="cc-credit-card" scale="3.5"></icon>
                         </div>
                     </div>
                     <div class="col-xs-9">

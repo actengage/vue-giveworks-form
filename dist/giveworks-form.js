@@ -13629,7 +13629,7 @@ var StripePaymentButton = { render: function render() {
             _this3.$paymentRequestButton = gateway.paymentRequestButton(_this3.$paymentRequest);
 
             _this3.$paymentRequestButton.on('click', function (event) {
-                if (_this3.form.token && !_this3.changingCard) {
+                if (_this3.form.token) {
                     _this3.$dispatch.request('form:submit', event);
                 }
             });
@@ -13644,11 +13644,14 @@ var StripePaymentButton = { render: function render() {
             });
 
             _this3.$paymentRequest.on('token', function (event) {
+                event.complete('success');
                 _this3.changingCard = false;
                 _this3.card = event.token.card;
                 _this3.form.token = event.token.id;
-                _this3.$dispatch.request('form:submit');
-                event.complete('success');
+
+                if (!_this3.changingCard) {
+                    _this3.$dispatch.request('form:submit');
+                }
             });
 
             _this3.$paymentRequest.canMakePayment().then(function (api) {

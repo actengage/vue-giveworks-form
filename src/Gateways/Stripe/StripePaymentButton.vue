@@ -162,7 +162,7 @@ export default {
             this.$paymentRequestButton = gateway.paymentRequestButton(this.$paymentRequest);
 
             this.$paymentRequestButton.on('click', (event) => {
-                if(this.form.token && !this.changingCard) {
+                if(this.form.token) {
                     this.$dispatch.request('form:submit', event);
                 }
             });
@@ -177,11 +177,14 @@ export default {
             });
 
             this.$paymentRequest.on('token', (event) => {
+                event.complete('success');
                 this.changingCard = false;
                 this.card = event.token.card;
                 this.form.token = event.token.id;
-                this.$dispatch.request('form:submit');
-                event.complete('success');
+
+                if(!this.changingCard) {
+                    this.$dispatch.request('form:submit');
+                }
             });
 
             this.$paymentRequest.canMakePayment().then((api) => {

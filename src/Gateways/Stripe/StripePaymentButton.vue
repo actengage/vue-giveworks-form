@@ -18,7 +18,7 @@
                             <icon v-if="card.brand === 'Discover'" name="cc-discover" scale="3.5"></icon>
                             <icon v-if="card.brand === 'JCB'" name="cc-jcb" scale="3.5"></icon>
                             <icon v-if="card.brand === 'Diners Club'" name="cc-diners-club" scale="3.5"></icon>
-                            <icon v-else name="cc-credit-card" scale="3.5"></icon>
+                            <icon v-else name="credit-card" scale="3.5"></icon>
                         </div>
                     </div>
                     <div class="col-xs-9">
@@ -52,10 +52,10 @@ import 'vue-awesome/icons/cc-jcb';
 import 'vue-awesome/icons/warning';
 import 'vue-awesome/icons/cc-visa';
 import 'vue-awesome/icons/cc-amex';
+import 'vue-awesome/icons/credit-card';
 import 'vue-awesome/icons/cc-discover';
 import 'vue-awesome/icons/cc-mastercard';
 import 'vue-awesome/icons/cc-diners-club';
-import 'vue-awesome/icons/cc-credit-card';
 import Gateway from '/Gateways/Gateway';
 import Icon from 'vue-awesome/components/Icon';
 import ActivityIndicator from '/Components/ActivityIndicators/ActivityIndicator';

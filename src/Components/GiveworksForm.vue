@@ -154,6 +154,10 @@ export default {
             });
         });
 
+        this.$dispatch.reply('form', (resolve, reject) => {
+            resolve(this);
+        });
+
         this.$dispatch.reply('form:submit', (resolve, reject, event) => {
             const promise = this.submit(event);
 

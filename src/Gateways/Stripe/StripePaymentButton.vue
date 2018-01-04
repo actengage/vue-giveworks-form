@@ -103,6 +103,12 @@ export default {
     },
 
     created() {
+        this.$dispatch.request('form').then((form) => {
+            if(form.$card) {
+                this.card.$card = form.$card;
+            }
+        });
+
         this.$submitEvent = this.$dispatch.on('form:submit', () => {
             this.submitting = true;
         });
@@ -113,6 +119,12 @@ export default {
     },
 
     beforeDestroy() {
+        if(this.card) {
+            this.$dispatch.request('form').then((form) => {
+                form.$card = this.card;
+            });
+        }
+
         this.$dispatch.request('submit:show');
         this.$dispatch.off(this.$submitEvent);
         this.$dispatch.off(this.$submitCompleteEvent);

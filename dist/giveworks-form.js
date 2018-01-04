@@ -13577,6 +13577,12 @@ var StripePaymentButton = { render: function render() {
     created: function created() {
         var _this = this;
 
+        this.$dispatch.request('form').then(function (form) {
+            if (form.$card) {
+                _this.card.$card = form.$card;
+            }
+        });
+
         this.$submitEvent = this.$dispatch.on('form:submit', function () {
             _this.submitting = true;
         });
@@ -13586,12 +13592,20 @@ var StripePaymentButton = { render: function render() {
         });
     },
     beforeDestroy: function beforeDestroy() {
+        var _this2 = this;
+
+        if (this.card) {
+            this.$dispatch.request('form').then(function (form) {
+                form.$card = _this2.card;
+            });
+        }
+
         this.$dispatch.request('submit:show');
         this.$dispatch.off(this.$submitEvent);
         this.$dispatch.off(this.$submitCompleteEvent);
     },
     mounted: function mounted() {
-        var _this2 = this;
+        var _this3 = this;
 
         var el = this.$el.querySelector('.stripe-payment-button');
         var gateway = Gateway(this.gateway);
@@ -13599,29 +13613,29 @@ var StripePaymentButton = { render: function render() {
         this.$dispatch.request('submit:hide');
 
         gateway.script(function (event) {
-            _this2.$paymentRequest = gateway.paymentRequest(1000, _this2.getPaymentLabel());
-            _this2.$paymentRequestButton = gateway.paymentRequestButton(_this2.$paymentRequest);
+            _this3.$paymentRequest = gateway.paymentRequest(1000, _this3.getPaymentLabel());
+            _this3.$paymentRequestButton = gateway.paymentRequestButton(_this3.$paymentRequest);
 
-            _this2.$paymentRequestButton.on('click', function (event) {
-                if (_this2.form.token) {
-                    _this2.$dispatch.request('form:submit', event);
+            _this3.$paymentRequestButton.on('click', function (event) {
+                if (_this3.form.token) {
+                    _this3.$dispatch.request('form:submit', event);
                 }
             });
 
-            _this2.$paymentRequest.on('cancel', function (event) {
-                _this2.card = false;
-                _this2.form.token = null;
+            _this3.$paymentRequest.on('cancel', function (event) {
+                _this3.card = false;
+                _this3.form.token = null;
             });
 
-            _this2.$paymentRequest.on('token', function (event) {
-                _this2.card = event.token.card;
-                _this2.form.token = event.token.id;
-                _this2.$dispatch.request('form:submit');
+            _this3.$paymentRequest.on('token', function (event) {
+                _this3.card = event.token.card;
+                _this3.form.token = event.token.id;
+                _this3.$dispatch.request('form:submit');
                 event.complete('success');
             });
 
-            _this2.$paymentRequest.canMakePayment().then(function (api) {
-                _this2.loaded = true;
+            _this3.$paymentRequest.canMakePayment().then(function (api) {
+                _this3.loaded = true;
             });
         });
     }
@@ -14166,6 +14180,10 @@ var GiveworksForm = { render: function render() {
                     reject();
                 }
             });
+        });
+
+        this.$dispatch.reply('form', function (resolve, reject) {
+            resolve(_this3);
         });
 
         this.$dispatch.reply('form:submit', function (resolve, reject, event) {

@@ -7,7 +7,7 @@
             </div>
         </div>
 
-        <div v-else-if="!error">
+        <div v-if="!error">
             <div v-if="card" class="my-3">
                 <div class="row">
                     <div class="col-xs-2">
@@ -31,7 +31,7 @@
                 </div>
             </div>
 
-            <div class="stripe-payment-button mt-2 mb-4"></div>
+            <div v-if="loaded && !submitting" class="stripe-payment-button mt-2 mb-4"></div>
         </div>
 
         <div v-else class="alert alert-danger">

@@ -1,9 +1,7 @@
 <template>
 
     <div>
-        card: {{card}}
-
-        <div v-if="loading" class="row my-5 py-1">
+        <div v-if="!loaded" class="row my-5 py-1">
             <div class="col-xs-12">
                 <activity-indicator size="sm" :center="true"></activity-indicator>
             </div>
@@ -74,8 +72,8 @@ export default {
     data() {
         return {
             card: false,
-            loading: false,
-            error: false
+            error: false,
+            loaded: false
         };
     },
 
@@ -94,11 +92,25 @@ export default {
         this.$dispatch.request('submit:show');
     },
 
+    updated() {
+        const el = this.$el.querySelector('.stripe-payment-button');
+
+        if(this.loaded && !this.error) {
+            try {
+                this.$paymentRequestButton.mount(el);
+            }
+            catch(error) {
+                this.card = false;
+                this.error = error;
+                this.form.token = null;
+            }
+        }
+    },
+
     mounted() {
         const el = this.$el.querySelector('.stripe-payment-button');
         const gateway = Gateway(this.gateway);
 
-        this.loading = true;
         this.$dispatch.request('submit:hide');
 
         gateway.script((event) => {
@@ -123,12 +135,8 @@ export default {
                 this.$dispatch.request('form:submit');
             });
 
-            this.$paymentRequest.canMakePayment().then((result) => {
-                this.loading = false;
-                this.$paymentRequestButton.mount(el);
-            }).catch((error) => {
-                this.error = error;
-                this.form.token = null;
+            this.$paymentRequest.canMakePayment().then((api) => {
+                this.loaded = true;
             });
         });
     }

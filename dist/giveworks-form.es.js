@@ -13496,7 +13496,7 @@ var ActivityIndicator = { render: function render() {
 };
 
 var StripePaymentButton = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [_vm._v(" card: " + _vm._s(_vm.card) + " "), _vm.loading ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : _vm._e(), _vm._v(" "), !_vm.error ? _c('div', [_vm.card ? _c('div', { staticClass: "my-3" }, [_c('button', { staticClass: "btn btn-xs btn-warning", staticStyle: { "float": "right" }, attrs: { "type": "button" }, on: { "click": function click($event) {
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [!_vm.loaded ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : _vm._e(), _vm._v(" "), !_vm.error ? _c('div', [_vm.card ? _c('div', { staticClass: "my-3" }, [_c('button', { staticClass: "btn btn-xs btn-warning", staticStyle: { "float": "right" }, attrs: { "type": "button" }, on: { "click": function click($event) {
                     _vm.changeCard($event);
                 } } }, [_vm._v("Change Card")]), _vm._v(" "), _c('p', [_vm.card.name ? _c('span', [_vm._v(_vm._s(_vm.card.name)), _c('br')]) : _vm._e(), _vm._v(" ****" + _vm._s(_vm.card.last4) + " "), _c('span', { staticClass: "pl-2" }, [_vm._v(_vm._s(_vm.card.exp_month) + "/" + _vm._s(_vm.card.exp_year))])])]) : _vm._e(), _vm._v(" "), _c('div', { staticClass: "stripe-payment-button mt-2 mb-4" })]) : _c('div', { staticClass: "alert alert-danger" }, [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-xs-3 text-center" }, [_c('icon', { staticClass: "mt-2", attrs: { "name": "warning", "scale": "2" } })], 1), _vm._v(" "), _c('div', { staticClass: "col-xs-9" }, [_vm._v(" " + _vm._s(_vm.error.message) + " ")])])])]);
     }, staticRenderFns: [],
@@ -13530,8 +13530,8 @@ var StripePaymentButton = { render: function render() {
     data: function data() {
         return {
             card: false,
-            loading: false,
-            error: false
+            error: false,
+            loaded: false
         };
     },
 
@@ -13550,13 +13550,25 @@ var StripePaymentButton = { render: function render() {
     beforeDestroy: function beforeDestroy() {
         this.$dispatch.request('submit:show');
     },
+    updated: function updated() {
+        var el = this.$el.querySelector('.stripe-payment-button');
+
+        if (this.loaded && !this.error) {
+            try {
+                this.$paymentRequestButton.mount(el);
+            } catch (error) {
+                this.card = false;
+                this.error = error;
+                this.form.token = null;
+            }
+        }
+    },
     mounted: function mounted() {
         var _this = this;
 
         var el = this.$el.querySelector('.stripe-payment-button');
         var gateway = Gateway(this.gateway);
 
-        this.loading = true;
         this.$dispatch.request('submit:hide');
 
         gateway.script(function (event) {
@@ -13581,12 +13593,8 @@ var StripePaymentButton = { render: function render() {
                 _this.$dispatch.request('form:submit');
             });
 
-            _this.$paymentRequest.canMakePayment().then(function (result) {
-                _this.loading = false;
-                _this.$paymentRequestButton.mount(el);
-            }).catch(function (error) {
-                _this.error = error;
-                _this.form.token = null;
+            _this.$paymentRequest.canMakePayment().then(function (api) {
+                _this.loaded = true;
             });
         });
     }

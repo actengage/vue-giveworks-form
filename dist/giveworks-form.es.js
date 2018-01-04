@@ -13624,7 +13624,7 @@ var StripePaymentButton = { render: function render() {
             _this3.$paymentRequestButton = gateway.paymentRequestButton(_this3.$paymentRequest);
 
             _this3.$paymentRequestButton.on('click', function (event) {
-                if (_this3.form.token) {
+                if (_this3.form.token && !_this3.changingCard) {
                     _this3.$dispatch.request('form:submit', event);
                 }
             });

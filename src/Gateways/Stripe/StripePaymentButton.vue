@@ -162,7 +162,7 @@ export default {
             this.$paymentRequestButton = gateway.paymentRequestButton(this.$paymentRequest);
 
             this.$paymentRequestButton.on('click', (event) => {
-                if(this.form.token) {
+                if(this.form.token && !this.changingCard) {
                     this.$dispatch.request('form:submit', event);
                 }
             });

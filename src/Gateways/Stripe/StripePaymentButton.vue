@@ -22,7 +22,7 @@
                         </div>
                     </div>
                     <div class="col-xs-10">
-                        <div class="pl-3">
+                        <div class="pl-2">
                             <button type="button" class="btn btn-xs btn-warning" style="float:right" @click="changeCard($event)">Change Card</button>
                             <span v-if="card.name">{{card.name}}<br></span>
                             ****{{card.last4}} <span class="pl-2">{{card.exp_month}}/{{card.exp_year}}</span>
@@ -95,14 +95,14 @@ export default {
             card: false,
             error: false,
             loaded: false,
-            submitting: false
+            submitting: false,
+            changingCard: false
         };
     },
 
     methods: {
         changeCard: function(event) {
-            this.card = false;
-            this.form.token = null;
+            this.changingCard = true;
             this.$paymentRequest.show();
         },
         getPaymentLabel: function() {
@@ -168,11 +168,16 @@ export default {
             });
 
             this.$paymentRequest.on('cancel', (event) => {
-                this.card = false;
-                this.form.token = null;
+                if(!this.changingCard) {
+                    this.card = false;
+                    this.form.token = null;
+                }
+
+                this.changingCard = false;
             });
 
             this.$paymentRequest.on('token', (event) => {
+                this.changingCard = false;
                 this.card = event.token.card;
                 this.form.token = event.token.id;
                 this.$dispatch.request('form:submit');

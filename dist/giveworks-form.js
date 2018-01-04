@@ -13523,7 +13523,7 @@ var ActivityIndicator = { render: function render() {
 };
 
 var StripePaymentButton = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [!_vm.loaded || _vm.submitting ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : !_vm.error ? _c('div', [_vm.card ? _c('div', { staticClass: "my-3" }, [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-xs-2" }, [_c('div', { staticClass: "mr-6" }, [_vm.card.brand === 'Visa' ? _c('icon', { attrs: { "name": "cc-visa", "scale": "3.5" } }) : _vm.card.brand === 'MasterCard' ? _c('icon', { attrs: { "name": "cc-mastercard", "scale": "3.5" } }) : _vm.card.brand === 'American Express' ? _c('icon', { attrs: { "name": "cc-amex", "scale": "3.5" } }) : _vm.card.brand === 'Discover' ? _c('icon', { attrs: { "name": "cc-discover", "scale": "3.5" } }) : _vm.card.brand === 'JCB' ? _c('icon', { attrs: { "name": "cc-jcb", "scale": "3.5" } }) : _vm.card.brand === 'Diners Club' ? _c('icon', { attrs: { "name": "cc-diners-club", "scale": "3.5" } }) : _c('icon', { attrs: { "name": "credit-card", "scale": "3.5" } })], 1)]), _vm._v(" "), _c('div', { staticClass: "col-xs-10" }, [_c('div', { staticClass: "pl-3" }, [_c('button', { staticClass: "btn btn-xs btn-warning", staticStyle: { "float": "right" }, attrs: { "type": "button" }, on: { "click": function click($event) {
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [!_vm.loaded || _vm.submitting ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : !_vm.error ? _c('div', [_vm.card ? _c('div', { staticClass: "my-3" }, [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-xs-2" }, [_c('div', { staticClass: "mr-6" }, [_vm.card.brand === 'Visa' ? _c('icon', { attrs: { "name": "cc-visa", "scale": "3.5" } }) : _vm.card.brand === 'MasterCard' ? _c('icon', { attrs: { "name": "cc-mastercard", "scale": "3.5" } }) : _vm.card.brand === 'American Express' ? _c('icon', { attrs: { "name": "cc-amex", "scale": "3.5" } }) : _vm.card.brand === 'Discover' ? _c('icon', { attrs: { "name": "cc-discover", "scale": "3.5" } }) : _vm.card.brand === 'JCB' ? _c('icon', { attrs: { "name": "cc-jcb", "scale": "3.5" } }) : _vm.card.brand === 'Diners Club' ? _c('icon', { attrs: { "name": "cc-diners-club", "scale": "3.5" } }) : _c('icon', { attrs: { "name": "credit-card", "scale": "3.5" } })], 1)]), _vm._v(" "), _c('div', { staticClass: "col-xs-10" }, [_c('div', { staticClass: "pl-2" }, [_c('button', { staticClass: "btn btn-xs btn-warning", staticStyle: { "float": "right" }, attrs: { "type": "button" }, on: { "click": function click($event) {
                     _vm.changeCard($event);
                 } } }, [_vm._v("Change Card")]), _vm._v(" "), _vm.card.name ? _c('span', [_vm._v(_vm._s(_vm.card.name)), _c('br')]) : _vm._e(), _vm._v(" ****" + _vm._s(_vm.card.last4) + " "), _c('span', { staticClass: "pl-2" }, [_vm._v(_vm._s(_vm.card.exp_month) + "/" + _vm._s(_vm.card.exp_year))])])])])]) : _vm._e(), _vm._v(" "), _c('div', { staticClass: "stripe-payment-button mt-2 mb-4" })]) : _c('div', { staticClass: "alert alert-danger" }, [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-xs-3 text-center" }, [_c('icon', { staticClass: "mt-2", attrs: { "name": "warning", "scale": "2" } })], 1), _vm._v(" "), _c('div', { staticClass: "col-xs-9" }, [_vm._v(" " + _vm._s(_vm.error.message) + " ")])])])]);
     }, staticRenderFns: [],
@@ -13559,15 +13559,15 @@ var StripePaymentButton = { render: function render() {
             card: false,
             error: false,
             loaded: false,
-            submitting: false
+            submitting: false,
+            changingCard: false
         };
     },
 
 
     methods: {
         changeCard: function changeCard(event) {
-            this.card = false;
-            this.form.token = null;
+            this.changingCard = true;
             this.$paymentRequest.show();
         },
         getPaymentLabel: function getPaymentLabel() {
@@ -13635,11 +13635,16 @@ var StripePaymentButton = { render: function render() {
             });
 
             _this3.$paymentRequest.on('cancel', function (event) {
-                _this3.card = false;
-                _this3.form.token = null;
+                if (!_this3.changingCard) {
+                    _this3.card = false;
+                    _this3.form.token = null;
+                }
+
+                _this3.changingCard = false;
             });
 
             _this3.$paymentRequest.on('token', function (event) {
+                _this3.changingCard = false;
                 _this3.card = event.token.card;
                 _this3.form.token = event.token.id;
                 _this3.$dispatch.request('form:submit');

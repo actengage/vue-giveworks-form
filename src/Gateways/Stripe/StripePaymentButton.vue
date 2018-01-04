@@ -1,12 +1,6 @@
 <template>
 
     <div>
-        <div v-if="!loaded || submitting" class="row my-5 py-1">
-            <div class="col-xs-12">
-                <activity-indicator size="sm" :center="true"></activity-indicator>
-            </div>
-        </div>
-
         <div v-if="!error">
             <div v-if="card" class="my-3">
                 <div class="row">
@@ -31,7 +25,13 @@
                 </div>
             </div>
 
-            <div v-if="loaded && !submitting">
+            <div v-if="!loaded || submitting" class="row my-5 py-1">
+                <div class="col-xs-12">
+                    <activity-indicator size="sm" :center="true"></activity-indicator>
+                </div>
+            </div>
+
+            <div v-else>
                 <div class="stripe-payment-button mt-2 mb-4"></div>
             </div>
         </div>

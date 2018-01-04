@@ -2,7 +2,7 @@
 
     <div>
         card: {{card}}
-        
+
         <div v-if="loading" class="row my-5 py-1">
             <div class="col-xs-12">
                 <activity-indicator size="sm" :center="true"></activity-indicator>
@@ -11,7 +11,13 @@
 
         <div v-if="!error">
             <div v-if="card" class="my-3">
-                Card Number: ****1234 <button type="button" class="btn btn-sm btn-warning" @click="changeCard($event)">Change Card</button>
+                <p>
+                    <span v-if="card.name">{{card.name}}<br></span>
+                    <span>****{{card.last4}}<br></span>
+                    <span>{{card.exp_month}}/{{card.exp_year}}</span>
+                </p>
+
+                <button type="button" class="btn btn-xs btn-warning" @click="changeCard($event)">Change Card</button>
             </div>
 
             <div class="stripe-payment-button mt-2 mb-4"></div>

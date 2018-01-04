@@ -1,9 +1,8 @@
 <template>
 
     <div>
-        <div v-if="!loaded" class="row my-5 py-1">
+        <div v-if="!loaded || submitting" class="row my-5 py-1">
             <div class="col-xs-12">
-                loading
                 <activity-indicator size="sm" :center="true"></activity-indicator>
             </div>
         </div>
@@ -74,7 +73,8 @@ export default {
         return {
             card: false,
             error: false,
-            loaded: false
+            loaded: false,
+            submitting: false
         };
     },
 
@@ -87,10 +87,6 @@ export default {
         getPaymentLabel: function() {
             return 'Donation to ' + this.page.site.name;
         }
-    },
-
-    beforeDestroy() {
-        this.$dispatch.request('submit:show');
     },
 
     updated() {
@@ -106,6 +102,22 @@ export default {
                 this.form.token = null;
             }
         }
+    },
+
+    created() {
+        this.$submitEvent = this.$dispatch.on('form:submit', () => {
+            this.submitting = true;
+        });
+
+        this.$submitCompleteEvent = this.$dispatch.on('form:submit:complete', () => {
+            this.submitting = false;
+        });
+    },
+
+    beforeDestroy() {
+        this.$dispatch.request('submit:show');
+        this.$dispatch.off(this.$submitEvent);
+        this.$dispatch.off(this.$submitCompleteEvent);
     },
 
     mounted() {
@@ -130,10 +142,10 @@ export default {
             });
 
             this.$paymentRequest.on('token', (event) => {
-                event.complete('success');
                 this.card = event.token.card;
                 this.form.token = event.token.id;
                 this.$dispatch.request('form:submit');
+                event.complete('success');
             });
 
             this.$paymentRequest.canMakePayment().then((api) => {

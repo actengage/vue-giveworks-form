@@ -42,24 +42,34 @@ export default {
         }
     },
 
+    created() {
+        this.$submitEvent = this.$dispatch.on('form:submit', (form) => {
+            this.$card.blur();
+        });
+    },
+
+    beforeDestroy() {
+        this.$dispatch.off(this.$submitEvent);
+    },
+
     mounted() {
         const gateway = Gateway(this.gateway);
 
         this.$dispatch.request('submit:disable');
 
         gateway.script((event) => {
-            const card = gateway.card({
+            this.$card = gateway.card({
                 hidePostalCode: this.hidePostalCode,
                 value: {
                     postalCode: this.form.zip
                 }
             });
 
-            card.addEventListener('change', (event) => {
+            this.$card.addEventListener('change', (event) => {
                 this.errors.token = event.error ? [event.error.message] : null;
 
                 if(event.complete) {
-                    gateway.createToken(card, {
+                    gateway.createToken(this.$card, {
                         currency: 'usd'
                     }).then((result) => {
                         if (result.error) {
@@ -72,7 +82,7 @@ export default {
                 }
             });
 
-            card.mount(this.$el.querySelector('.stripe-field'));
+            this.$card.mount(this.$el.querySelector('.stripe-field'));
         });
     }
 

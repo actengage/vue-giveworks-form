@@ -13376,39 +13376,49 @@ var StripeCreditCard = { render: function render() {
         }
     },
 
-    mounted: function mounted() {
+    created: function created() {
         var _this = this;
+
+        this.$submitEvent = this.$dispatch.on('form:submit', function (form) {
+            _this.$card.blur();
+        });
+    },
+    beforeDestroy: function beforeDestroy() {
+        this.$dispatch.off(this.$submitEvent);
+    },
+    mounted: function mounted() {
+        var _this2 = this;
 
         var gateway = Gateway(this.gateway);
 
         this.$dispatch.request('submit:disable');
 
         gateway.script(function (event) {
-            var card = gateway.card({
-                hidePostalCode: _this.hidePostalCode,
+            _this2.$card = gateway.card({
+                hidePostalCode: _this2.hidePostalCode,
                 value: {
-                    postalCode: _this.form.zip
+                    postalCode: _this2.form.zip
                 }
             });
 
-            card.addEventListener('change', function (event) {
-                _this.errors.token = event.error ? [event.error.message] : null;
+            _this2.$card.addEventListener('change', function (event) {
+                _this2.errors.token = event.error ? [event.error.message] : null;
 
                 if (event.complete) {
-                    gateway.createToken(card, {
+                    gateway.createToken(_this2.$card, {
                         currency: 'usd'
                     }).then(function (result) {
                         if (result.error) {
-                            _this.errors.token = [event.error.message];
+                            _this2.errors.token = [event.error.message];
                         } else {
-                            _this.form.token = result.token.id;
-                            _this.$dispatch.request('submit:enable');
+                            _this2.form.token = result.token.id;
+                            _this2.$dispatch.request('submit:enable');
                         }
                     });
                 }
             });
 
-            card.mount(_this.$el.querySelector('.stripe-field'));
+            _this2.$card.mount(_this2.$el.querySelector('.stripe-field'));
         });
     }
 };
@@ -13501,7 +13511,7 @@ var ActivityIndicator = { render: function render() {
 };
 
 var StripePaymentButton = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [!_vm.loaded ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_vm._v(" loading "), _c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : !_vm.error ? _c('div', [_vm.card ? _c('div', { staticClass: "my-3" }, [_c('button', { staticClass: "btn btn-xs btn-warning", staticStyle: { "float": "right" }, attrs: { "type": "button" }, on: { "click": function click($event) {
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [!_vm.loaded || _vm.submitting ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : !_vm.error ? _c('div', [_vm.card ? _c('div', { staticClass: "my-3" }, [_c('button', { staticClass: "btn btn-xs btn-warning", staticStyle: { "float": "right" }, attrs: { "type": "button" }, on: { "click": function click($event) {
                     _vm.changeCard($event);
                 } } }, [_vm._v("Change Card")]), _vm._v(" "), _c('p', [_vm.card.name ? _c('span', [_vm._v(_vm._s(_vm.card.name)), _c('br')]) : _vm._e(), _vm._v(" ****" + _vm._s(_vm.card.last4) + " "), _c('span', { staticClass: "pl-2" }, [_vm._v(_vm._s(_vm.card.exp_month) + "/" + _vm._s(_vm.card.exp_year))])])]) : _vm._e(), _vm._v(" "), _c('div', { staticClass: "stripe-payment-button mt-2 mb-4" })]) : _c('div', { staticClass: "alert alert-danger" }, [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-xs-3 text-center" }, [_c('icon', { staticClass: "mt-2", attrs: { "name": "warning", "scale": "2" } })], 1), _vm._v(" "), _c('div', { staticClass: "col-xs-9" }, [_vm._v(" " + _vm._s(_vm.error.message) + " ")])])])]);
     }, staticRenderFns: [],
@@ -13536,7 +13546,8 @@ var StripePaymentButton = { render: function render() {
         return {
             card: false,
             error: false,
-            loaded: false
+            loaded: false,
+            submitting: false
         };
     },
 
@@ -13552,9 +13563,6 @@ var StripePaymentButton = { render: function render() {
         }
     },
 
-    beforeDestroy: function beforeDestroy() {
-        this.$dispatch.request('submit:show');
-    },
     updated: function updated() {
         var el = this.$el.querySelector('.stripe-payment-button');
 
@@ -13568,8 +13576,24 @@ var StripePaymentButton = { render: function render() {
             }
         }
     },
-    mounted: function mounted() {
+    created: function created() {
         var _this = this;
+
+        this.$submitEvent = this.$dispatch.on('form:submit', function () {
+            _this.submitting = true;
+        });
+
+        this.$submitCompleteEvent = this.$dispatch.on('form:submit:complete', function () {
+            _this.submitting = false;
+        });
+    },
+    beforeDestroy: function beforeDestroy() {
+        this.$dispatch.request('submit:show');
+        this.$dispatch.off(this.$submitEvent);
+        this.$dispatch.off(this.$submitCompleteEvent);
+    },
+    mounted: function mounted() {
+        var _this2 = this;
 
         var el = this.$el.querySelector('.stripe-payment-button');
         var gateway = Gateway(this.gateway);
@@ -13577,29 +13601,29 @@ var StripePaymentButton = { render: function render() {
         this.$dispatch.request('submit:hide');
 
         gateway.script(function (event) {
-            _this.$paymentRequest = gateway.paymentRequest(1000, _this.getPaymentLabel());
-            _this.$paymentRequestButton = gateway.paymentRequestButton(_this.$paymentRequest);
+            _this2.$paymentRequest = gateway.paymentRequest(1000, _this2.getPaymentLabel());
+            _this2.$paymentRequestButton = gateway.paymentRequestButton(_this2.$paymentRequest);
 
-            _this.$paymentRequestButton.on('click', function (event) {
-                if (_this.form.token) {
-                    _this.$dispatch.request('form:submit', event);
+            _this2.$paymentRequestButton.on('click', function (event) {
+                if (_this2.form.token) {
+                    _this2.$dispatch.request('form:submit', event);
                 }
             });
 
-            _this.$paymentRequest.on('cancel', function (event) {
-                _this.card = false;
-                _this.form.token = null;
+            _this2.$paymentRequest.on('cancel', function (event) {
+                _this2.card = false;
+                _this2.form.token = null;
             });
 
-            _this.$paymentRequest.on('token', function (event) {
+            _this2.$paymentRequest.on('token', function (event) {
+                _this2.card = event.token.card;
+                _this2.form.token = event.token.id;
+                _this2.$dispatch.request('form:submit');
                 event.complete('success');
-                _this.card = event.token.card;
-                _this.form.token = event.token.id;
-                _this.$dispatch.request('form:submit');
             });
 
-            _this.$paymentRequest.canMakePayment().then(function (api) {
-                _this.loaded = true;
+            _this2.$paymentRequest.canMakePayment().then(function (api) {
+                _this2.loaded = true;
             });
         });
     }
@@ -14090,15 +14114,20 @@ var GiveworksForm = { render: function render() {
             }
 
             if (!this.$submitting) {
-                this.$submitting = true;
                 this.showActivity();
+                this.$submitting = true;
+                this.$dispatch.emit('form:submit', this);
 
                 return Api$1.page.submit(this.page.id, this.form).then(function (response) {
+                    _this.$dispatch.emit('form:submit:complete', true, response);
+                    _this.$dispatch.emit('form:submit:success', response);
                     window.location = _this.redirect || _this.page.next_page.url;
                 }, function (error) {
-                    _this.$submitting = false;
                     _this.hideActivity();
+                    _this.$submitting = false;
                     _this.$set(_this, 'errors', error.response.data.errors || {});
+                    _this.$dispatch.emit('form:submit:complete', false, error);
+                    _this.$dispatch.emit('form:submit:error', error);
 
                     throw error;
                 });

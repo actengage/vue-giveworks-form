@@ -98,16 +98,21 @@ export default {
             }
 
             if(!this.$submitting) {
-                this.$submitting = true;
                 this.showActivity();
+                this.$submitting = true;
+                this.$dispatch.emit('form:submit', this);
 
                 return Api.page.submit(this.page.id, this.form)
                     .then((response) => {
+                        this.$dispatch.emit('form:submit:complete', true, response);
+                        this.$dispatch.emit('form:submit:success', response);
                         window.location = this.redirect || this.page.next_page.url;
                     }, (error) => {
-                        this.$submitting = false;
                         this.hideActivity();
+                        this.$submitting = false;
                         this.$set(this, 'errors', error.response.data.errors || {});
+                        this.$dispatch.emit('form:submit:complete', false, error);
+                        this.$dispatch.emit('form:submit:error', error);
 
                         throw error;
                     });

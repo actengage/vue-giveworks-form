@@ -13556,8 +13556,6 @@ var StripePaymentButton = { render: function render() {
             var paymentRequestButton = gateway.paymentRequestButton(paymentRequest);
 
             paymentRequestButton.on('click', function (event) {
-                console.log('click', event);
-
                 if (_this.form.token) {
                     _this.$dispatch.request('form:submit', event);
                 }
@@ -14100,7 +14098,7 @@ var GiveworksForm = { render: function render() {
         this.$dispatch.reply('submit:hide', function () {
             _this3.hide();
         });
-        this.$dispatch.reply('form.submit', function (event) {
+        this.$dispatch.reply('form:submit', function (event) {
             _this3.submit(event);
         });
         this.$dispatch.reply('submit:enable', function () {

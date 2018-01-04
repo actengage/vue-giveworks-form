@@ -89,8 +89,6 @@ export default {
             const paymentRequestButton = gateway.paymentRequestButton(paymentRequest);
 
             paymentRequestButton.on('click', (event) => {
-                console.log('click', event);
-                
                 if(this.form.token) {
                     this.$dispatch.request('form:submit', event);
                 }

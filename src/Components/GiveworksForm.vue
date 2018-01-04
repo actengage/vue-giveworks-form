@@ -127,7 +127,7 @@ export default {
     beforeCreate() {
         this.$dispatch.reply('submit:show', () => { this.show(); });
         this.$dispatch.reply('submit:hide', () => { this.hide(); });
-        this.$dispatch.reply('form.submit', (event) => { this.submit(event); });
+        this.$dispatch.reply('form:submit', (event) => { this.submit(event); });
         this.$dispatch.reply('submit:enable', () => { this.enable(); });
         this.$dispatch.reply('submit:disable', () => { this.disable(); });
     },

@@ -14057,20 +14057,22 @@ var GiveworksForm = { render: function render() {
         submit: function submit(event) {
             var _this = this;
 
+            event.preventDefault();
+
             if (!this.$submitting) {
                 this.$submitting = true;
                 this.showActivity();
 
-                Api$1.page.submit(this.page.id, this.form).then(function (response) {
+                return Api$1.page.submit(this.page.id, this.form).then(function (response) {
                     window.location = _this.redirect || _this.page.next_page.url;
                 }, function (error) {
                     _this.$submitting = false;
                     _this.hideActivity();
                     _this.$set(_this, 'errors', error.response.data.errors || {});
+
+                    throw error;
                 });
             }
-
-            event.preventDefault();
         }
     },
 
@@ -14092,20 +14094,35 @@ var GiveworksForm = { render: function render() {
     beforeCreate: function beforeCreate() {
         var _this3 = this;
 
-        this.$dispatch.reply('submit:show', function () {
-            _this3.show();
+        var replies = {
+            'submit:show': 'show',
+            'submit:hide': 'hide',
+            'submit:enable': 'enable',
+            'submit:disable': 'disable'
+        };
+
+        each(replies, function (method, name) {
+            _this3.$dispatch.reply(name, function (resolve, reject) {
+                try {
+                    resolve(_this3[method]());
+                } catch (e) {
+                    reject();
+                }
+            });
         });
-        this.$dispatch.reply('submit:hide', function () {
-            _this3.hide();
-        });
-        this.$dispatch.reply('form:submit', function (event) {
-            _this3.submit(event);
-        });
-        this.$dispatch.reply('submit:enable', function () {
-            _this3.enable();
-        });
-        this.$dispatch.reply('submit:disable', function () {
-            _this3.disable();
+
+        this.$dispatch.reply('form:submit', function (resolve, reject, event) {
+            var promise = _this3.submit(event);
+
+            if (promise) {
+                promise.then(function (response) {
+                    resolve(response);
+                }, function (error) {
+                    reject(error);
+                });
+            } else {
+                reject(event);
+            }
         });
     },
     beforeDestroy: function beforeDestroy() {

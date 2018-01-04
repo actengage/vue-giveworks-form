@@ -15,6 +15,7 @@
 <script>
 
 import Api from '/Http/Api';
+import { each } from 'lodash-es';
 import HttpConfig from '/Config/Http';
 import PageType from '/PageTypes/PageType';
 import HttpErrorResponse from './HttpErrorResponse';
@@ -92,20 +93,23 @@ export default {
             this.$el.querySelector('[type=submit]').style.display = 'block';
         },
         submit: function(event) {
+            event.preventDefault();
+
             if(!this.$submitting) {
                 this.$submitting = true;
                 this.showActivity();
 
-                Api.page.submit(this.page.id, this.form).then((response) => {
-                    window.location = this.redirect || this.page.next_page.url;
-                }, (error) => {
-                    this.$submitting = false;
-                    this.hideActivity();
-                    this.$set(this, 'errors', error.response.data.errors || {});
-                });
-            }
+                return Api.page.submit(this.page.id, this.form)
+                    .then((response) => {
+                        window.location = this.redirect || this.page.next_page.url;
+                    }, (error) => {
+                        this.$submitting = false;
+                        this.hideActivity();
+                        this.$set(this, 'errors', error.response.data.errors || {});
 
-            event.preventDefault();
+                        throw error;
+                    });
+            }
         }
     },
 
@@ -125,11 +129,38 @@ export default {
     },
 
     beforeCreate() {
-        this.$dispatch.reply('submit:show', () => { this.show(); });
-        this.$dispatch.reply('submit:hide', () => { this.hide(); });
-        this.$dispatch.reply('form:submit', (event) => { this.submit(event); });
-        this.$dispatch.reply('submit:enable', () => { this.enable(); });
-        this.$dispatch.reply('submit:disable', () => { this.disable(); });
+        const replies = {
+            'submit:show': 'show',
+            'submit:hide': 'hide',
+            'submit:enable': 'enable',
+            'submit:disable': 'disable',
+        };
+
+        each(replies, (method, name) => {
+            this.$dispatch.reply(name, (resolve, reject) =>  {
+                try {
+                    resolve(this[method]());
+                }
+                catch(e) {
+                    reject();
+                }
+            });
+        });
+
+        this.$dispatch.reply('form:submit', (resolve, reject, event) => {
+            const promise = this.submit(event);
+
+            if(promise) {
+                promise.then((response) => {
+                    resolve(response);
+                }, (error) => {
+                    reject(error);
+                });
+            }
+            else {
+                reject(event);
+            }
+        });
     },
 
     beforeDestroy() {

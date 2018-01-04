@@ -80,6 +80,8 @@ export default {
         this.loading = true;
         this.$dispatch.request('form:disable');
 
+        return;
+        
         gateway.script((event) => {
 
             const paymentRequest = gateway.paymentRequest(1000, this.getPaymentLabel());

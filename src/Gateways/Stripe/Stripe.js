@@ -72,8 +72,8 @@ export default class Stripe extends Api {
             style: {
                 label: 'test 1',
                 paymentRequestButton: {
-                    type: 'buy', // 'default' | 'donate' | 'buy'
-                    theme: 'light-outline', // 'dark' | 'light' | 'light-outline'
+                    type: 'default', // 'default' | 'donate' | 'buy'
+                    theme: 'dark', // 'dark' | 'light' | 'light-outline'
                     height: '51.59px' // default: '40px', the width is always '100%'
                 }
             }

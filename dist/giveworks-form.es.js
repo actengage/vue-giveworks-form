@@ -13268,8 +13268,8 @@ var Stripe = function (_Api) {
                 style: {
                     label: 'test 1',
                     paymentRequestButton: {
-                        type: 'buy', // 'default' | 'donate' | 'buy'
-                        theme: 'light-outline', // 'dark' | 'light' | 'light-outline'
+                        type: 'default', // 'default' | 'donate' | 'buy'
+                        theme: 'dark', // 'dark' | 'light' | 'light-outline'
                         height: '51.59px' // default: '40px', the width is always '100%'
                     }
                 }
@@ -13549,6 +13549,8 @@ var StripePaymentButton = { render: function render() {
 
         this.loading = true;
         this.$dispatch.request('form:disable');
+
+        return;
 
         gateway.script(function (event) {
 

@@ -10,21 +10,23 @@
         <div v-else-if="!error">
             <div v-if="card" class="my-3">
                 <div class="row">
-                    <div class="col-xs-3">
+                    <div class="col-xs-2">
                         <div class="mr-6">
-                            <icon v-if="card.brand === 'Visa'" name="cc-visa" scale="3.5"></icon>
-                            <icon v-else-if="card.brand === 'MasterCard'" name="cc-mastercard" scale="3.5"></icon>
-                            <icon v-else-if="card.brand === 'American Express'" name="cc-amex" scale="3.5"></icon>
-                            <icon v-else-if="card.brand === 'Discover'" name="cc-discover" scale="3.5"></icon>
-                            <icon v-else-if="card.brand === 'JCB'" name="cc-jcb" scale="3.5"></icon>
-                            <icon v-else-if="card.brand === 'Diners Club'" name="cc-diners-club" scale="3.5"></icon>
-                            <icon v-else name="credit-card" scale="3.5"></icon>
+                            <icon v-if="card.brand === 'Visa'" name="cc-visa" scale="3.25"></icon>
+                            <icon v-else-if="card.brand === 'MasterCard'" name="cc-mastercard" scale="3.25"></icon>
+                            <icon v-else-if="card.brand === 'American Express'" name="cc-amex" scale="3.25"></icon>
+                            <icon v-else-if="card.brand === 'Discover'" name="cc-discover" scale="3.25"></icon>
+                            <icon v-else-if="card.brand === 'JCB'" name="cc-jcb" scale="3.25"></icon>
+                            <icon v-else-if="card.brand === 'Diners Club'" name="cc-diners-club" scale="3.25"></icon>
+                            <icon v-else name="credit-card" scale="3.25"></icon>
                         </div>
                     </div>
-                    <div class="col-xs-9">
-                        <button type="button" class="btn btn-xs btn-warning" style="float: right;">Change Card</button>
-                        <span v-if="card.name">{{card.name}}<br></span>
-                        ****{{card.last4}} <span class="pl-2">{{card.exp_month}}/{{card.exp_year}}</span>
+                    <div class="col-xs-10">
+                        <div class="pl-3">
+                            <button type="button" class="btn btn-xs btn-warning" style="float: right;">Change Card</button>
+                            <span v-if="card.name">{{card.name}}<br></span>
+                            ****{{card.last4}} <span class="pl-2">{{card.exp_month}}/{{card.exp_year}}</span>
+                        </div>
                     </div>
                 </div>
             </div>

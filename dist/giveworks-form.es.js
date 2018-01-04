@@ -13496,7 +13496,7 @@ var ActivityIndicator = { render: function render() {
 };
 
 var StripePaymentButton = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [_vm.loading ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : _vm._e(), _vm._v(" "), !_vm.error ? _c('div', [_vm.form.token ? _c('div', { staticClass: "my-3" }, [_vm._v(" Card Number: ****1234 "), _c('button', { staticClass: "btn btn-sm btn-warning", attrs: { "type": "button" }, on: { "click": function click($event) {
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [_vm.loading ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : _vm._e(), _vm._v(" "), !_vm.error ? _c('div', [_vm.card ? _c('div', { staticClass: "my-3" }, [_vm._v(" Card Number: ****1234 "), _c('button', { staticClass: "btn btn-sm btn-warning", attrs: { "type": "button" }, on: { "click": function click($event) {
                     _vm.changeCard($event);
                 } } }, [_vm._v("Change Card")])]) : _vm._e(), _vm._v(" "), _c('div', { staticClass: "stripe-payment-button mt-2 mb-4" })]) : _c('div', { staticClass: "alert alert-danger" }, [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-xs-3 text-center" }, [_c('icon', { staticClass: "mt-2", attrs: { "name": "warning", "scale": "2" } })], 1), _vm._v(" "), _c('div', { staticClass: "col-xs-9" }, [_vm._v(" " + _vm._s(_vm.error.message) + " ")])])])]);
     }, staticRenderFns: [],
@@ -13529,14 +13529,16 @@ var StripePaymentButton = { render: function render() {
 
     data: function data() {
         return {
+            card: false,
             loading: false,
-            error: null
+            error: false
         };
     },
 
 
     methods: {
         changeCard: function changeCard(event) {
+            this.card = false;
             this.form.token = null;
             this.$paymentRequestButton.click();
         },
@@ -13568,8 +13570,7 @@ var StripePaymentButton = { render: function render() {
             });
 
             _this.$paymentRequest.on('token', function (event) {
-                console.log('token', event);
-
+                _this.card = event.token.card;
                 _this.form.token = event.token.id;
                 event.complete('success');
             });

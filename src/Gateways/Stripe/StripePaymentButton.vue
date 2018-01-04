@@ -8,7 +8,7 @@
         </div>
 
         <div v-if="!error">
-            <div v-if="form.token" class="my-3">
+            <div v-if="card" class="my-3">
                 Card Number: ****1234 <button type="button" class="btn btn-sm btn-warning" @click="changeCard($event)">Change Card</button>
             </div>
 
@@ -66,13 +66,15 @@ export default {
 
     data() {
         return {
+            card: false,
             loading: false,
-            error: null
+            error: false
         };
     },
 
     methods: {
         changeCard: function(event) {
+            this.card = false;
             this.form.token = null;
             this.$paymentRequestButton.click();
         },
@@ -103,8 +105,7 @@ export default {
             });
 
             this.$paymentRequest.on('token', (event) => {
-                console.log('token', event);
-
+                this.card = event.token.card;
                 this.form.token = event.token.id;
                 event.complete('success');
             });

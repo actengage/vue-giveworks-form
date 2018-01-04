@@ -1,10 +1,9 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('lodash-es'), require('broadcast'), require('moment')) :
-	typeof define === 'function' && define.amd ? define(['lodash-es', 'broadcast', 'moment'], factory) :
-	(global.GiveworksForm = factory(global['lodash-es'],global.Broadcast,global.moment));
-}(this, (function (lodashEs,Broadcast,moment) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('lodash-es'), require('moment')) :
+	typeof define === 'function' && define.amd ? define(['lodash-es', 'moment'], factory) :
+	(global.GiveworksForm = factory(global['lodash-es'],global.moment));
+}(this, (function (lodashEs,moment) { 'use strict';
 
-Broadcast = Broadcast && Broadcast.hasOwnProperty('default') ? Broadcast['default'] : Broadcast;
 moment = moment && moment.hasOwnProperty('default') ? moment['default'] : moment;
 
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
@@ -10965,6 +10964,194 @@ var HttpConfig = {
 
 };
 
+var is = function(instance, proto) {
+    return instance instanceof proto;
+};
+
+var isFunction = function(subject) {
+    return subject !== null && typeof subject === "function";
+};
+
+class BroadcastEvent {
+
+    constructor(key, callback) {
+        this.key = key;
+        this.allowMultipleEmits = true;
+
+        if(isFunction(callback)) {
+            this.handle = callback;
+        }
+    }
+
+    allowsMultipleEmits() {
+        return !!this.allowMultipleEmits;
+    }
+
+    once() {
+        this.allowMultipleEmits = false;
+
+        return this;
+    }
+
+    handle() {
+        //
+    }
+
+}
+
+class BroadcastReply {
+
+    constructor(key, callback) {
+        this.key = key;
+        this.allowMultipleRequests = false;
+
+        if(typeof callback === "function") {
+            this.handle = callback;
+        }
+    }
+
+    allowsMultipleRequests() {
+        return !!this.allowMultipleRequests;
+    }
+
+    once() {
+        this.allowMultipleRequests = true;
+
+        return this;
+    }
+
+    handle() {
+        //
+    }
+
+}
+
+class Dispatcher {
+
+    constructor(channel) {
+        this.channel = channel;
+        this._events = [];
+        this._replies = [];
+    }
+
+    createEvent(key, callback) {
+        return !is(key, BroadcastEvent) ? new BroadcastEvent(key, callback) : key;
+    }
+
+    createReply(key, callback) {
+        return !is(key, BroadcastReply) ? new BroadcastReply(key, callback) : key;
+    }
+
+    on(key, callback) {
+        const event = this.createEvent(key, callback);
+
+        this._events.push(event);
+
+        return event;
+    }
+
+    once(key, callback) {
+        const event = this.createEvent(key, callback);
+
+        this.on(event.once());
+
+        return event;
+    }
+
+    off(key) {
+        const removed = [];
+
+        for(let i in this._events) {
+            if(is(key, BroadcastEvent) && key == this._events[i] || key === this._events[i].key) {
+                removed.push(this._events[i]);
+                delete this._events[i];
+            }
+        }
+
+        return removed;
+    }
+
+    emit(event) {
+        const args = [].slice.call(arguments).slice(1);
+
+        for(let i in this._events) {
+            if(this._events[i].key === (event.key || event)) {
+                this._events[i].handle.apply(this, args);
+
+                if(!this._events[i].allowsMultipleEmits()) {
+                    delete this._events[i];
+                }
+            }
+        }
+    }
+
+    request(reply, context) {
+        const args = [].slice.call(arguments).slice(1);
+
+        if(!this._replies[reply.key || reply]) {
+            throw new Error('No BroadcastReply exists by the name "'+(reply.key || reply)+'"!');
+        }
+
+        const handle = this._replies[reply.key || reply].handle;
+
+        return new Promise(function(resolve, reject) {
+            handle.apply(this, [resolve, reject].concat(args));
+        });
+    }
+
+    reply(key, callback) {
+        const reply = this.createReply(key, callback);
+
+        return this._replies[reply.key] = reply;
+    }
+
+    stopReply(key) {
+        delete this._replies[reply.key || reply];
+    }
+
+}
+
+//import 'es6-promise/auto';
+class BroadcastManager {
+
+    constructor(channel) {
+        this._dispatchers = {};
+        this.defaultChannel = 'app';
+        this.dispatch(channel || this.defaultChannel);
+    }
+
+    dispatch(channel) {
+        channel || (channel = this.defaultChannel);
+
+        if(this.doesDispatchExist(channel)) {
+            return this._dispatchers[channel];
+        }
+
+        return this.registerDispatch(new Dispatcher(channel));
+    }
+
+    doesDispatchExist(instance) {
+        return !!this._dispatchers[instance.channel || instance];
+    }
+
+    registerDispatch(instance) {
+        if(!is(instance, Dispatcher)) {
+            throw new Error('The argument must be an instance of Broadcast/BroadcastDispatch!');
+        }
+
+        if(this.doesDispatchExist(instance.channel)) {
+            throw new Error('There is already a Broadcast/BroadcastDispatch instance assigned to "'+instance.channel+'"!');
+        }
+
+        return this._dispatchers[instance.channel] = instance;
+    }
+
+    unregisterDispatch(dispatch) {
+        unset(this._dispatchers[dispatch.channel || dispatch]);
+    }
+
+}
+
 var axios = createCommonjsModule(function (module, exports) {
 /* axios v0.17.1 | (c) 2017 by Matt Zabriskie */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -13689,7 +13876,6 @@ var SelectDonationFieldset = { render: function render() {
 
 };
 
-//import Broadcast from 'broadcast';
 //const dispatch = (new Broadcast).dispatch('app');
 
 var BaseDonationForm = {
@@ -13925,9 +14111,9 @@ var GiveworksVueApp = function () {
     createClass(GiveworksVueApp, [{
         key: 'setApp',
         value: function setApp(el, _data) {
-            var broadcast = new Broadcast();
+            var broadcast = new BroadcastManager();
 
-            Vue.prototype.$broadcast = new Broadcast();
+            Vue.prototype.$broadcast = new BroadcastManager();
             Vue.prototype.$dispatch = Vue.prototype.$broadcast.dispatch();
 
             this.app = new Vue({

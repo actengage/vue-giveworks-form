@@ -13545,7 +13545,7 @@ var StripePaymentButton = { render: function render() {
         changeCard: function changeCard(event) {
             this.card = false;
             this.form.token = null;
-            this.$paymentRequestButton.click();
+            this.$paymentRequest.show();
         },
         getPaymentLabel: function getPaymentLabel() {
             return 'Donation to ' + this.page.site.name;
@@ -13572,6 +13572,11 @@ var StripePaymentButton = { render: function render() {
                 if (_this.form.token) {
                     _this.$dispatch.request('form:submit', event);
                 }
+            });
+
+            _this.$paymentRequest.on('cancel', function (event) {
+                _this.card = false;
+                _this.form.token = null;
             });
 
             _this.$paymentRequest.on('token', function (event) {

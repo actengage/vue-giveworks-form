@@ -84,7 +84,7 @@ export default {
         changeCard: function(event) {
             this.card = false;
             this.form.token = null;
-            this.$paymentRequestButton.click();
+            this.$paymentRequest.show();
         },
         getPaymentLabel: function() {
             return 'Donation to ' + this.page.site.name;
@@ -110,6 +110,11 @@ export default {
                 if(this.form.token) {
                     this.$dispatch.request('form:submit', event);
                 }
+            });
+
+            this.$paymentRequest.on('cancel', (event) => {
+                this.card = false;
+                this.form.token = null;
             });
 
             this.$paymentRequest.on('token', (event) => {

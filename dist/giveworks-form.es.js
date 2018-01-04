@@ -13270,7 +13270,7 @@ var Stripe = function (_Api) {
                     paymentRequestButton: {
                         type: 'buy', // 'default' | 'donate' | 'buy'
                         theme: 'light-outline', // 'dark' | 'light' | 'light-outline'
-                        height: '40.38px' // default: '40px', the width is always '100%'
+                        height: '51.59px' // default: '40px', the width is always '100%'
                     }
                 }
             });
@@ -13412,139 +13412,6 @@ var StripeCreditCard = { render: function render() {
 
 Icon.register({"warning":{"width":1792,"height":1792,"paths":[{"d":"M1024 1375v-190q0-14-9.5-23.5t-22.5-9.5h-192q-13 0-22.5 9.5t-9.5 23.5v190q0 14 9.5 23.5t22.5 9.5h192q13 0 22.5-9.5t9.5-23.5zM1022 1001l18-459q0-12-10-19-13-11-24-11h-220q-11 0-24 11-10 7-10 21l17 457q0 10 10 16.5t24 6.5h185q14 0 23.5-6.5t10.5-16.5zM1008 67l768 1408q35 63-2 126-17 29-46.5 46t-63.5 17h-1536q-34 0-63.5-17t-46.5-46q-37-63-2-126l768-1408q17-31 47-49t65-18 65 18 47 49z"}]}});
 
-var StripePaymentButton = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [!_vm.error ? _c('div', [_c('div', { staticClass: "stripe-payment-button mt-2 mb-4" })]) : _c('div', { staticClass: "alert alert-danger" }, [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-xs-3 text-center" }, [_c('icon', { staticClass: "mt-2", attrs: { "name": "warning", "scale": "2" } })], 1), _vm._v(" "), _c('div', { staticClass: "col-xs-9" }, [_vm._v(" " + _vm._s(_vm.error.message) + " ")])])])]);
-    }, staticRenderFns: [],
-
-    name: 'stripe-payment-button',
-
-    components: {
-        Icon: Icon
-    },
-
-    props: {
-        page: {
-            type: Object,
-            required: true
-        },
-        form: {
-            type: Object,
-            required: true
-        },
-        errors: {
-            type: Object,
-            required: true
-        },
-        gateway: {
-            type: Object,
-            required: true
-        }
-    },
-
-    data: function data() {
-        return {
-            error: null
-        };
-    },
-
-
-    methods: {
-        getPaymentLabel: function getPaymentLabel() {
-            return 'Donation to ' + this.page.site.name;
-        }
-    },
-
-    mounted: function mounted() {
-        var _this = this;
-
-        var gateway = Gateway(this.gateway);
-
-        this.$dispatch.request('form:disable');
-
-        gateway.script(function (event) {
-            var paymentRequest = gateway.paymentRequest(1000, _this.getPaymentLabel());
-            var paymentRequestButton = gateway.paymentRequestButton(paymentRequest);
-
-            paymentRequest.on('token', function (event) {
-                _this.$dispatch.request('form:enable');
-                _this.$set(_this.form, 'token', event.token.id);
-
-                console.log('token', event);
-
-                // Report to the browser that the payment was successful, prompting
-                // it to close the browser payment interface. (or event.complete('fail'))
-                event.complete('success');
-            });
-
-            paymentRequest.canMakePayment().then(function (result) {
-                paymentRequestButton.mount(_this.$el.querySelector('.stripe-payment-button'));
-            }).catch(function (error) {
-                _this.error = error;
-                _this.$set(_this.form, 'token', null);
-            });
-        });
-    }
-};
-
-var PaymentGateways = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [_c('div', { staticClass: "row" }, _vm._l(_vm.buttons, function (button) {
-            return _c('div', { staticClass: "col-md-6 col-lg-4" }, [_c('button', { staticClass: "btn btn-block payment-gateway-button", class: { 'btn-success': button.active, 'btn-secondary': !button.active }, attrs: { "type": "button" }, on: { "click": function click($event) {
-                        _vm.activate(button);
-                    } } }, [_c('icon', { class: { 'mt-2 mb-1': !button.label }, attrs: { "name": button.icon, "scale": button.iconScale || 2 } }), _vm._v(" "), button.label ? _c('div', { staticClass: "pt-1 small" }, [_vm._v(_vm._s(button.label))]) : _vm._e()], 1)]);
-        })), _vm._v(" "), _vm._l(_vm.buttons, function (button) {
-            return button.active ? _c('div', [_c(button.component, { tag: "component", attrs: { "form": _vm.form, "page": _vm.page, "errors": _vm.errors, "gateway": button.gateway } })], 1) : _vm._e();
-        })], 2);
-    }, staticRenderFns: [],
-
-    extends: BaseComponent,
-
-    name: 'payment-gateways',
-
-    components: {
-        Icon: Icon,
-        StripeCreditCard: StripeCreditCard,
-        StripePaymentButton: StripePaymentButton
-    },
-
-    data: function data() {
-        var buttons = [];
-
-        each(this.page.site.gateways, function (gateway) {
-            var gatewayButtons = each(Gateway(gateway).buttons(), function (button) {
-                button.active = false;
-                button.gateway = gateway;
-            });
-
-            merge(buttons, gatewayButtons);
-        });
-
-        return {
-            buttons: buttons,
-            gateway: null
-        };
-    },
-
-
-    methods: {
-        deactivate: function deactivate() {
-            each(this.buttons, function (button) {
-                button.active = false;
-            });
-        },
-        activate: function activate(button) {
-            this.deactivate();
-
-            button.active = true;
-
-            this.$set(this.form, 'gateway', Gateway(button.gateway).api());
-        }
-    },
-
-    created: function created() {
-        this.activate(this.buttons[0]);
-    }
-};
-
 var BaseType = { render: function render() {
         var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "activity-indicator", class: _vm.classes }, _vm._l(_vm.nodes, function (i) {
             return _c('div');
@@ -13628,6 +13495,143 @@ var ActivityIndicator = { render: function render() {
         }
     }
 
+};
+
+var StripePaymentButton = { render: function render() {
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [_vm.loading ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : _vm._e(), _vm._v(" "), !_vm.error ? _c('div', [_c('div', { staticClass: "stripe-payment-button mt-2 mb-4" })]) : _c('div', { staticClass: "alert alert-danger" }, [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-xs-3 text-center" }, [_c('icon', { staticClass: "mt-2", attrs: { "name": "warning", "scale": "2" } })], 1), _vm._v(" "), _c('div', { staticClass: "col-xs-9" }, [_vm._v(" " + _vm._s(_vm.error.message) + " ")])])])]);
+    }, staticRenderFns: [],
+
+    name: 'stripe-payment-button',
+
+    components: {
+        Icon: Icon,
+        ActivityIndicator: ActivityIndicator
+    },
+
+    props: {
+        page: {
+            type: Object,
+            required: true
+        },
+        form: {
+            type: Object,
+            required: true
+        },
+        errors: {
+            type: Object,
+            required: true
+        },
+        gateway: {
+            type: Object,
+            required: true
+        }
+    },
+
+    data: function data() {
+        return {
+            loading: false,
+            error: null
+        };
+    },
+
+
+    methods: {
+        getPaymentLabel: function getPaymentLabel() {
+            return 'Donation to ' + this.page.site.name;
+        }
+    },
+
+    mounted: function mounted() {
+        var _this = this;
+
+        var el = this.$el.querySelector('.stripe-payment-button');
+        var gateway = Gateway(this.gateway);
+
+        this.loading = true;
+        this.$dispatch.request('form:disable');
+
+        gateway.script(function (event) {
+
+            var paymentRequest = gateway.paymentRequest(1000, _this.getPaymentLabel());
+            var paymentRequestButton = gateway.paymentRequestButton(paymentRequest);
+
+            paymentRequest.on('token', function (event) {
+                _this.form.token = event.token.id;
+                _this.$dispatch.request('form:enable');
+
+                // Report to the browser that the payment was successful, prompting
+                // it to close the browser payment interface. (or event.complete('fail'))
+                event.complete('success');
+            });
+
+            paymentRequest.canMakePayment().then(function (result) {
+                _this.loading = false;
+                paymentRequestButton.mount(el);
+            }).catch(function (error) {
+                _this.error = error;
+                _this.form.token = null;
+            });
+        });
+    }
+};
+
+var PaymentGateways = { render: function render() {
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [_c('div', { staticClass: "row" }, _vm._l(_vm.buttons, function (button) {
+            return _c('div', { staticClass: "col-md-6 col-lg-4" }, [_c('button', { staticClass: "btn btn-block payment-gateway-button", class: { 'btn-success': button.active, 'btn-secondary': !button.active }, attrs: { "type": "button" }, on: { "click": function click($event) {
+                        _vm.activate(button);
+                    } } }, [_c('icon', { class: { 'mt-2 mb-1': !button.label }, attrs: { "name": button.icon, "scale": button.iconScale || 2 } }), _vm._v(" "), button.label ? _c('div', { staticClass: "pt-1 small" }, [_vm._v(_vm._s(button.label))]) : _vm._e()], 1)]);
+        })), _vm._v(" "), _vm._l(_vm.buttons, function (button) {
+            return button.active ? _c('div', [_c(button.component, { tag: "component", attrs: { "form": _vm.form, "page": _vm.page, "errors": _vm.errors, "gateway": button.gateway } })], 1) : _vm._e();
+        })], 2);
+    }, staticRenderFns: [],
+
+    extends: BaseComponent,
+
+    name: 'payment-gateways',
+
+    components: {
+        Icon: Icon,
+        StripeCreditCard: StripeCreditCard,
+        StripePaymentButton: StripePaymentButton
+    },
+
+    data: function data() {
+        var buttons = [];
+
+        each(this.page.site.gateways, function (gateway) {
+            var gatewayButtons = each(Gateway(gateway).buttons(), function (button) {
+                button.active = false;
+                button.gateway = gateway;
+            });
+
+            merge(buttons, gatewayButtons);
+        });
+
+        return {
+            buttons: buttons,
+            gateway: null
+        };
+    },
+
+
+    methods: {
+        deactivate: function deactivate() {
+            each(this.buttons, function (button) {
+                button.active = false;
+            });
+        },
+        activate: function activate(button) {
+            this.deactivate();
+
+            button.active = true;
+
+            this.$set(this.form, 'gateway', Gateway(button.gateway).api());
+        }
+    },
+
+    created: function created() {
+        this.activate(this.buttons[0]);
+    }
 };
 
 var convertAnimationDelayToInt = function convertAnimationDelayToInt(delay) {

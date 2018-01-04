@@ -118,9 +118,10 @@ export default {
             });
 
             this.$paymentRequest.on('token', (event) => {
+                event.complete('success');
                 this.card = event.token.card;
                 this.form.token = event.token.id;
-                event.complete('success');
+                this.$dispatch.request('form:submit');
             });
 
             this.$paymentRequest.canMakePayment().then((result) => {

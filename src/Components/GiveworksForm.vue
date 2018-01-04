@@ -93,7 +93,9 @@ export default {
             this.$el.querySelector('[type=submit]').style.display = 'block';
         },
         submit: function(event) {
-            event.preventDefault();
+            if(event) {
+                event.preventDefault();
+            }
 
             if(!this.$submitting) {
                 this.$submitting = true;

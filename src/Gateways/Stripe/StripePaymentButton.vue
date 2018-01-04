@@ -31,7 +31,9 @@
                 </div>
             </div>
 
-            <div v-if="loaded && !submitting" class="stripe-payment-button mt-2 mb-4"></div>
+            <div v-if="loaded && !submitting">
+                <div class="stripe-payment-button mt-2 mb-4"></div>
+            </div>
         </div>
 
         <div v-else class="alert alert-danger">

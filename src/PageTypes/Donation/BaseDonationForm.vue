@@ -5,8 +5,6 @@ import ContactInfoFieldset from './FormComponents/ContactInfoFieldset';
 import PaymentInfoFieldset from './FormComponents/PaymentInfoFieldset';
 import SelectDonationFieldset from './FormComponents/SelectDonationFieldset';
 
-//const dispatch = (new Broadcast).dispatch('app');
-
 export default {
 
     components: {

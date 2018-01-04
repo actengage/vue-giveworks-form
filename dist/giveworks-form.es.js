@@ -13264,13 +13264,11 @@ var Stripe = function (_Api) {
         value: function paymentRequestButton(paymentRequest) {
             return this.elements().create('paymentRequestButton', {
                 paymentRequest: paymentRequest,
-                label: 'test 1',
                 style: {
-                    label: 'test 1',
                     paymentRequestButton: {
-                        type: 'default', // 'default' | 'donate' | 'buy'
+                        type: 'donate', // 'default' | 'donate' | 'buy'
                         theme: 'dark', // 'dark' | 'light' | 'light-outline'
-                        height: '51.59px' // default: '40px', the width is always '100%'
+                        height: '51.60px' // default: '40px', the width is always '100%'
                     }
                 }
             });
@@ -13378,7 +13376,7 @@ var StripeCreditCard = { render: function render() {
 
         var gateway = Gateway(this.gateway);
 
-        this.$dispatch.request('form:disable');
+        this.$dispatch.request('submit:disable');
 
         gateway.script(function (event) {
             var card = gateway.card({
@@ -13399,7 +13397,7 @@ var StripeCreditCard = { render: function render() {
                             _this.errors.token = [event.error.message];
                         } else {
                             _this.form.token = result.token.id;
-                            _this.$dispatch.request('form:enable');
+                            _this.$dispatch.request('submit:enable');
                         }
                     });
                 }
@@ -13541,6 +13539,9 @@ var StripePaymentButton = { render: function render() {
         }
     },
 
+    beforeDestroy: function beforeDestroy() {
+        this.$dispatch.request('submit:show');
+    },
     mounted: function mounted() {
         var _this = this;
 
@@ -13548,19 +13549,22 @@ var StripePaymentButton = { render: function render() {
         var gateway = Gateway(this.gateway);
 
         this.loading = true;
-        this.$dispatch.request('form:disable');
+        this.$dispatch.request('submit:hide');
 
         gateway.script(function (event) {
-
             var paymentRequest = gateway.paymentRequest(1000, _this.getPaymentLabel());
             var paymentRequestButton = gateway.paymentRequestButton(paymentRequest);
 
+            paymentRequestButton.on('click', function (event) {
+                console.log('click', event);
+
+                if (_this.form.token) {
+                    _this.$dispatch.request('form:submit', event);
+                }
+            });
+
             paymentRequest.on('token', function (event) {
                 _this.form.token = event.token.id;
-                _this.$dispatch.request('form:enable');
-
-                // Report to the browser that the payment was successful, prompting
-                // it to close the browser payment interface. (or event.complete('fail'))
                 event.complete('success');
             });
 
@@ -13875,8 +13879,6 @@ var SelectDonationFieldset = { render: function render() {
 
 };
 
-//const dispatch = (new Broadcast).dispatch('app');
-
 var BaseDonationForm = {
 
     components: {
@@ -13981,7 +13983,7 @@ var HttpErrorResponse = { render: function render() {
 };
 
 var GiveworksForm = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _vm.page.id ? _c('div', [_c('form', { on: { "submit": _vm.onSubmit } }, [_c('page-type', { attrs: { "orientation": _vm.orientation, "form": _vm.form, "errors": _vm.errors, "page": _vm.page } })], 1)]) : _vm.error ? _c('div', [_c('http-error-response', { attrs: { "error": _vm.error } })], 1) : _c('div', [_c('activity-indicator', { attrs: { "center": true, "size": "xl" } })], 1);
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _vm.page.id ? _c('div', [_c('form', { on: { "submit": _vm.submit } }, [_c('page-type', { attrs: { "orientation": _vm.orientation, "form": _vm.form, "errors": _vm.errors, "page": _vm.page } })], 1)]) : _vm.error ? _c('div', [_c('http-error-response', { attrs: { "error": _vm.error } })], 1) : _c('div', [_c('activity-indicator', { attrs: { "center": true, "size": "xl" } })], 1);
     }, staticRenderFns: [],
 
     name: 'giveworks-form',
@@ -14048,7 +14050,13 @@ var GiveworksForm = { render: function render() {
         enable: function enable() {
             this.$el.querySelector('[type=submit]').disabled = false;
         },
-        onSubmit: function onSubmit(event) {
+        hide: function hide() {
+            this.$el.querySelector('[type=submit]').style.display = 'none';
+        },
+        show: function show() {
+            this.$el.querySelector('[type=submit]').style.display = 'block';
+        },
+        submit: function submit(event) {
             var _this = this;
 
             if (!this.$submitting) {
@@ -14086,17 +14094,28 @@ var GiveworksForm = { render: function render() {
     beforeCreate: function beforeCreate() {
         var _this3 = this;
 
-        this.$dispatch.reply('form:enable', function () {
+        this.$dispatch.reply('submit:show', function () {
+            _this3.show();
+        });
+        this.$dispatch.reply('submit:hide', function () {
+            _this3.hide();
+        });
+        this.$dispatch.reply('form.submit', function (event) {
+            _this3.submit(event);
+        });
+        this.$dispatch.reply('submit:enable', function () {
             _this3.enable();
         });
-
-        this.$dispatch.reply('form:disable', function () {
+        this.$dispatch.reply('submit:disable', function () {
             _this3.disable();
         });
     },
     beforeDestroy: function beforeDestroy() {
-        this.$dispatch.stopReply('form:enable');
-        this.$dispatch.stopReply('form:disable');
+        this.$dispatch.stopReply('form:submit');
+        this.$dispatch.stopReply('submit:enable');
+        this.$dispatch.stopReply('submit:disable');
+        this.$dispatch.stopReply('submit:show');
+        this.$dispatch.stopReply('submit:hide');
     }
 };
 

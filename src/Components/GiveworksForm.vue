@@ -1,6 +1,6 @@
 <template>
     <div v-if="page.id">
-        <form @submit="onSubmit">
+        <form @submit="submit">
             <page-type :orientation="orientation" :form="form" :errors="errors" :page="page"></page-type>
         </form>
     </div>
@@ -85,7 +85,13 @@ export default {
         enable: function() {
             this.$el.querySelector('[type=submit]').disabled = false;
         },
-        onSubmit: function(event) {
+        hide: function() {
+            this.$el.querySelector('[type=submit]').style.display = 'none';
+        },
+        show: function() {
+            this.$el.querySelector('[type=submit]').style.display = 'block';
+        },
+        submit: function(event) {
             if(!this.$submitting) {
                 this.$submitting = true;
                 this.showActivity();
@@ -119,18 +125,19 @@ export default {
     },
 
     beforeCreate() {
-        this.$dispatch.reply('form:enable', () => {
-            this.enable();
-        });
-        
-        this.$dispatch.reply('form:disable', () => {
-            this.disable();
-        });
+        this.$dispatch.reply('submit:show', () => { this.show(); });
+        this.$dispatch.reply('submit:hide', () => { this.hide(); });
+        this.$dispatch.reply('form.submit', (event) => { this.submit(event); });
+        this.$dispatch.reply('submit:enable', () => { this.enable(); });
+        this.$dispatch.reply('submit:disable', () => { this.disable(); });
     },
 
     beforeDestroy() {
-        this.$dispatch.stopReply('form:enable');
-        this.$dispatch.stopReply('form:disable');
+        this.$dispatch.stopReply('form:submit');
+        this.$dispatch.stopReply('submit:enable');
+        this.$dispatch.stopReply('submit:disable');
+        this.$dispatch.stopReply('submit:show');
+        this.$dispatch.stopReply('submit:hide');
     }
 
 }

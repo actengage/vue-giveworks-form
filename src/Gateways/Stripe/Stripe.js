@@ -68,13 +68,11 @@ export default class Stripe extends Api {
     paymentRequestButton(paymentRequest) {
         return this.elements().create('paymentRequestButton', {
             paymentRequest: paymentRequest,
-            label: 'test 1',
             style: {
-                label: 'test 1',
                 paymentRequestButton: {
-                    type: 'default', // 'default' | 'donate' | 'buy'
+                    type: 'donate', // 'default' | 'donate' | 'buy'
                     theme: 'dark', // 'dark' | 'light' | 'light-outline'
-                    height: '51.59px' // default: '40px', the width is always '100%'
+                    height: '51.60px' // default: '40px', the width is always '100%'
                 }
             }
         });

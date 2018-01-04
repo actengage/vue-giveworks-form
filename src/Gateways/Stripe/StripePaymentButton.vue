@@ -73,24 +73,31 @@ export default {
         }
     },
 
+    beforeDestroy() {
+        this.$dispatch.request('submit:show');
+    },
+
     mounted() {
         const el = this.$el.querySelector('.stripe-payment-button');
         const gateway = Gateway(this.gateway);
 
         this.loading = true;
-        this.$dispatch.request('form:disable');
+        this.$dispatch.request('submit:hide');
 
         gateway.script((event) => {
-
             const paymentRequest = gateway.paymentRequest(1000, this.getPaymentLabel());
             const paymentRequestButton = gateway.paymentRequestButton(paymentRequest);
 
+            paymentRequestButton.on('click', (event) => {
+                console.log('click', event);
+                
+                if(this.form.token) {
+                    this.$dispatch.request('form:submit', event);
+                }
+            });
+
             paymentRequest.on('token', (event) => {
                 this.form.token = event.token.id;
-                this.$dispatch.request('form:enable');
-
-                // Report to the browser that the payment was successful, prompting
-                // it to close the browser payment interface. (or event.complete('fail'))
                 event.complete('success');
             });
 

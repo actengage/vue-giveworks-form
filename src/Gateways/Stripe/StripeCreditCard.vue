@@ -45,7 +45,7 @@ export default {
     mounted() {
         const gateway = Gateway(this.gateway);
 
-        this.$dispatch.request('form:disable');
+        this.$dispatch.request('submit:disable');
 
         gateway.script((event) => {
             const card = gateway.card({
@@ -66,7 +66,7 @@ export default {
                             this.errors.token = [event.error.message];
                         } else {
                             this.form.token = result.token.id;
-                            this.$dispatch.request('form:enable');
+                            this.$dispatch.request('submit:enable');
                         }
                     });
                 }

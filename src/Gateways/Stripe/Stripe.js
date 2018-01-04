@@ -1,4 +1,4 @@
-import Api from './Api';
+import Api from '../Api';
 import '/Icons/apple-pay';
 import { extend } from 'lodash-es';
 import script from '/Helpers/Script';
@@ -74,7 +74,7 @@ export default class Stripe extends Api {
                 paymentRequestButton: {
                     type: 'buy', // 'default' | 'donate' | 'buy'
                     theme: 'light-outline', // 'dark' | 'light' | 'light-outline'
-                    height: '40.38px' // default: '40px', the width is always '100%'
+                    height: '51.59px' // default: '40px', the width is always '100%'
                 }
             }
         });

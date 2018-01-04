@@ -1,4 +1,4 @@
-import Stripe from './Stripe';
+import Stripe from './Stripe/Stripe';
 
 const Gateways = {
     'Stripe': Stripe

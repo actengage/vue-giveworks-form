@@ -1,6 +1,11 @@
 <template>
 
     <div>
+        <div v-if="loading" class="row my-5 py-1">
+            <div class="col-xs-12">
+                <activity-indicator size="sm" :center="true"></activity-indicator>
+            </div>
+        </div>
 
         <div v-if="!error">
             <div class="stripe-payment-button mt-2 mb-4"></div>
@@ -25,13 +30,15 @@
 import 'vue-awesome/icons/warning';
 import Gateway from '/Gateways/Gateway';
 import Icon from 'vue-awesome/components/Icon';
+import ActivityIndicator from '/Components/ActivityIndicators/ActivityIndicator';
 
 export default {
 
     name: 'stripe-payment-button',
 
     components: {
-        Icon
+        Icon,
+        ActivityIndicator
     },
 
     props: {
@@ -55,6 +62,7 @@ export default {
 
     data() {
         return {
+            loading: false,
             error: null
         };
     },
@@ -66,19 +74,20 @@ export default {
     },
 
     mounted() {
+        const el = this.$el.querySelector('.stripe-payment-button');
         const gateway = Gateway(this.gateway);
 
+        this.loading = true;
         this.$dispatch.request('form:disable');
 
         gateway.script((event) => {
+
             const paymentRequest = gateway.paymentRequest(1000, this.getPaymentLabel());
             const paymentRequestButton = gateway.paymentRequestButton(paymentRequest);
 
             paymentRequest.on('token', (event) => {
+                this.form.token = event.token.id;
                 this.$dispatch.request('form:enable');
-                this.$set(this.form, 'token', event.token.id);
-
-                console.log('token', event);
 
                 // Report to the browser that the payment was successful, prompting
                 // it to close the browser payment interface. (or event.complete('fail'))
@@ -86,10 +95,11 @@ export default {
             });
 
             paymentRequest.canMakePayment().then((result) => {
-                paymentRequestButton.mount(this.$el.querySelector('.stripe-payment-button'));
+                this.loading = false;
+                paymentRequestButton.mount(el);
             }).catch((error) => {
                 this.error = error;
-                this.$set(this.form, 'token', null);
+                this.form.token = null;
             });
         });
     }

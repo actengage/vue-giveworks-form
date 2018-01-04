@@ -1,6 +1,8 @@
 <template>
 
     <div>
+        card: {{card}}
+        
         <div v-if="loading" class="row my-5 py-1">
             <div class="col-xs-12">
                 <activity-indicator size="sm" :center="true"></activity-indicator>

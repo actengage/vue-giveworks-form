@@ -1,4 +1,5 @@
 import { each, extend, isArray, kebabCase, merge, trimEnd } from 'lodash-es';
+import Broadcast from 'broadcast';
 import moment from 'moment';
 
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
@@ -13074,10 +13075,17 @@ var Stripe = function (_Api) {
     }, {
         key: 'paymentRequestButton',
         value: function paymentRequestButton(paymentRequest) {
-            var elements = this.elements();
-
-            return elements.create('paymentRequestButton', {
-                paymentRequest: paymentRequest
+            return this.elements().create('paymentRequestButton', {
+                paymentRequest: paymentRequest,
+                label: 'test 1',
+                style: {
+                    label: 'test 1',
+                    paymentRequestButton: {
+                        type: 'buy', // 'default' | 'donate' | 'buy'
+                        theme: 'light-outline', // 'dark' | 'light' | 'light-outline'
+                        height: '40.38px' // default: '40px', the width is always '100%'
+                    }
+                }
             });
         }
     }, {
@@ -13109,11 +13117,6 @@ var Stripe = function (_Api) {
     }, {
         key: 'stripe',
         value: function stripe() {
-            // 4242 4242 4242 4242
-            // pk_test_ETiEPWUdZbGK6GXNlmU7H4DK -- objectivehtml.com public_key
-            // pk_test_Mb0QwaMGePjeORABK9f6BZ0W -- test account public_key
-            // acct_1BcfrdH9HJpiOrw7 -- test account account_id
-
             if (!this._stripe) {
                 this._stripe = new window.Stripe(this.options.publishable_key);
             }
@@ -13154,9 +13157,6 @@ var Gateway = function (key, options) {
     return instances[key];
 };
 
-///import Broadcast from 'broadcast';
-//const dispatch = (new Broadcast).dispatch('app');
-
 var StripeCreditCard = { render: function render() {
         var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "form-group", class: { 'was-validated': !!_vm.errors.token } }, [_c('label', { staticClass: "d-block mt-3" }, [_c('div', { staticClass: "text-bold mb-2" }, [_vm._v("Credit Card")]), _vm._v(" "), _c('div', { staticClass: "form-control p-2", class: { 'is-invalid': !!_vm.errors.token } }, [_c('div', { staticClass: "stripe-field" })]), _vm._v(" "), _vm.errors.token ? _c('div', { staticClass: "invalid-feedback", domProps: { "innerHTML": _vm._s(_vm.errors.token.join('<br>')) } }) : _vm._e()])]);
     }, staticRenderFns: [],
@@ -13191,6 +13191,8 @@ var StripeCreditCard = { render: function render() {
 
         var gateway = Gateway(this.gateway);
 
+        this.$dispatch.request('form:disable');
+
         gateway.script(function (event) {
             var card = gateway.card({
                 hidePostalCode: _this.hidePostalCode,
@@ -13209,6 +13211,7 @@ var StripeCreditCard = { render: function render() {
                         if (result.error) {
                             _this.$set(_this.errors, 'token', [event.error.message]);
                         } else {
+                            _this.$dispatch.request('form:enable');
                             _this.$set(_this.form, 'token', result.token.id);
                         }
                     });
@@ -13223,7 +13226,7 @@ var StripeCreditCard = { render: function render() {
 Icon.register({"warning":{"width":1792,"height":1792,"paths":[{"d":"M1024 1375v-190q0-14-9.5-23.5t-22.5-9.5h-192q-13 0-22.5 9.5t-9.5 23.5v190q0 14 9.5 23.5t22.5 9.5h192q13 0 22.5-9.5t9.5-23.5zM1022 1001l18-459q0-12-10-19-13-11-24-11h-220q-11 0-24 11-10 7-10 21l17 457q0 10 10 16.5t24 6.5h185q14 0 23.5-6.5t10.5-16.5zM1008 67l768 1408q35 63-2 126-17 29-46.5 46t-63.5 17h-1536q-34 0-63.5-17t-46.5-46q-37-63-2-126l768-1408q17-31 47-49t65-18 65 18 47 49z"}]}});
 
 var StripePaymentButton = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [!_vm.error ? _c('div', [_c('div', { staticClass: "stripe-payment-button" })]) : _c('div', { staticClass: "alert alert-danger" }, [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-xs-3 text-center" }, [_c('icon', { staticClass: "mt-2", attrs: { "name": "warning", "scale": "2" } })], 1), _vm._v(" "), _c('div', { staticClass: "col-xs-9" }, [_vm._v(" " + _vm._s(_vm.error.message) + " ")])])])]);
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [!_vm.error ? _c('div', [_c('div', { staticClass: "stripe-payment-button mt-2 mb-4" })]) : _c('div', { staticClass: "alert alert-danger" }, [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-xs-3 text-center" }, [_c('icon', { staticClass: "mt-2", attrs: { "name": "warning", "scale": "2" } })], 1), _vm._v(" "), _c('div', { staticClass: "col-xs-9" }, [_vm._v(" " + _vm._s(_vm.error.message) + " ")])])])]);
     }, staticRenderFns: [],
 
     name: 'stripe-payment-button',
@@ -13234,6 +13237,14 @@ var StripePaymentButton = { render: function render() {
 
     props: {
         page: {
+            type: Object,
+            required: true
+        },
+        form: {
+            type: Object,
+            required: true
+        },
+        errors: {
             type: Object,
             required: true
         },
@@ -13248,19 +13259,41 @@ var StripePaymentButton = { render: function render() {
             error: null
         };
     },
+
+
+    methods: {
+        getPaymentLabel: function getPaymentLabel() {
+            return 'Donation to ' + this.page.site.name;
+        }
+    },
+
     mounted: function mounted() {
         var _this = this;
 
         var gateway = Gateway(this.gateway);
 
+        this.$dispatch.request('form:disable');
+
         gateway.script(function (event) {
-            var paymentRequest = gateway.paymentRequest(1000, 'Test label...');
-            var button = gateway.paymentRequestButton(paymentRequest);
+            var paymentRequest = gateway.paymentRequest(1000, _this.getPaymentLabel());
+            var paymentRequestButton = gateway.paymentRequestButton(paymentRequest);
+
+            paymentRequest.on('token', function (event) {
+                _this.$dispatch.request('form:enable');
+                _this.$set(_this.form, 'token', event.token.id);
+
+                console.log('token', event);
+
+                // Report to the browser that the payment was successful, prompting
+                // it to close the browser payment interface. (or event.complete('fail'))
+                event.complete('success');
+            });
 
             paymentRequest.canMakePayment().then(function (result) {
-                button.mount(_this.$el.querySelector('.stripe-payment-button'));
+                paymentRequestButton.mount(_this.$el.querySelector('.stripe-payment-button'));
             }).catch(function (error) {
                 _this.error = error;
+                _this.$set(_this.form, 'token', null);
             });
         });
     }
@@ -13656,6 +13689,12 @@ var SelectDonationFieldset = { render: function render() {
 
 var BaseDonationForm = {
 
+    components: {
+        ContactInfoFieldset: ContactInfoFieldset,
+        PaymentInfoFieldset: PaymentInfoFieldset,
+        SelectDonationFieldset: SelectDonationFieldset
+    },
+
     props: {
         page: {
             type: Object,
@@ -13669,12 +13708,6 @@ var BaseDonationForm = {
             type: [Boolean, Object],
             required: true
         }
-    },
-
-    components: {
-        ContactInfoFieldset: ContactInfoFieldset,
-        PaymentInfoFieldset: PaymentInfoFieldset,
-        SelectDonationFieldset: SelectDonationFieldset
     }
 
 };
@@ -13758,15 +13791,37 @@ var HttpErrorResponse = { render: function render() {
 };
 
 var GiveworksForm = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _vm.page ? _c('div', [_c('form', { on: { "submit": _vm.onSubmit } }, [_c('page-type', { attrs: { "orientation": _vm.orientation, "form": _vm.form, "errors": _vm.errors, "page": _vm.page } })], 1)]) : _vm.error ? _c('div', [_c('http-error-response', { attrs: { "error": _vm.error } })], 1) : _c('div', [_c('activity-indicator', { attrs: { "center": true, "size": "xl" } })], 1);
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _vm.page.id ? _c('div', [_c('form', { on: { "submit": _vm.onSubmit } }, [_c('page-type', { attrs: { "orientation": _vm.orientation, "form": _vm.form, "errors": _vm.errors, "page": _vm.page } })], 1)]) : _vm.error ? _c('div', [_c('http-error-response', { attrs: { "error": _vm.error } })], 1) : _c('div', [_c('activity-indicator', { attrs: { "center": true, "size": "xl" } })], 1);
     }, staticRenderFns: [],
 
     name: 'giveworks-form',
+
+    components: {
+        PageType: PageType,
+        ActivityIndicator: ActivityIndicator,
+        HttpErrorResponse: HttpErrorResponse
+    },
+
+    data: function data() {
+        return {
+            page: this.data || {},
+            errors: {},
+            form: {
+                recurring: 0,
+                optin: 1
+            }
+        };
+    },
+
 
     props: {
         'api-key': {
             type: String,
             required: true
+        },
+        'data': {
+            type: [Boolean, Object],
+            default: false
         },
         'page-id': {
             type: [Boolean, Number, String],
@@ -13780,12 +13835,6 @@ var GiveworksForm = { render: function render() {
             type: [Boolean, String],
             default: false
         }
-    },
-
-    components: {
-        PageType: PageType,
-        ActivityIndicator: ActivityIndicator,
-        HttpErrorResponse: HttpErrorResponse
     },
 
     methods: {
@@ -13829,16 +13878,6 @@ var GiveworksForm = { render: function render() {
         }
     },
 
-    data: function data() {
-        return {
-            errors: {},
-            page: this.$attrs.page,
-            form: {
-                recurring: 0,
-                optin: 1
-            }
-        };
-    },
     created: function created() {
         HttpConfig.defaultRequestOptions || (HttpConfig.defaultRequestOptions = {});
         HttpConfig.defaultRequestOptions.headers['Authorization'] = 'Bearer ' + this.apiKey;
@@ -13846,13 +13885,28 @@ var GiveworksForm = { render: function render() {
     mounted: function mounted() {
         var _this2 = this;
 
-        if (!this.page) {
+        if (!this.page.id) {
             Api$1.page.find(this.pageId).then(function (response) {
                 _this2.page = response.data;
             }).catch(function (error) {
                 _this2.error = error;
             });
         }
+    },
+    beforeCreate: function beforeCreate() {
+        var _this3 = this;
+
+        this.$dispatch.reply('form:enable', function () {
+            _this3.enable();
+        });
+
+        this.$dispatch.reply('form:disable', function () {
+            _this3.disable();
+        });
+    },
+    beforeDestroy: function beforeDestroy() {
+        this.$dispatch.stopReply('form:enable');
+        this.$dispatch.stopReply('form:disable');
     }
 };
 
@@ -13866,6 +13920,11 @@ var GiveworksVueApp = function () {
     createClass(GiveworksVueApp, [{
         key: 'setApp',
         value: function setApp(el, _data) {
+            var broadcast = new Broadcast();
+
+            Vue.prototype.$broadcast = new Broadcast();
+            Vue.prototype.$dispatch = Vue.prototype.$broadcast.dispatch();
+
             this.app = new Vue({
                 el: el,
                 data: function data() {

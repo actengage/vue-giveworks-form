@@ -3,7 +3,7 @@
     <div>
 
         <div v-if="!error">
-            <div class="stripe-payment-button"></div>
+            <div class="stripe-payment-button mt-2 mb-4"></div>
         </div>
 
         <div class="alert alert-danger" v-else>
@@ -22,7 +22,6 @@
 </template>
 
 <script>
-
 import 'vue-awesome/icons/warning';
 import Gateway from '/Gateways/Gateway';
 import Icon from 'vue-awesome/components/Icon';
@@ -40,6 +39,14 @@ export default {
             type: Object,
             required: true
         },
+        form: {
+            type: Object,
+            required: true
+        },
+        errors: {
+            type: Object,
+            required: true
+        },
         gateway: {
             type: Object,
             required: true
@@ -52,17 +59,37 @@ export default {
         };
     },
 
+    methods: {
+        getPaymentLabel: function() {
+            return 'Donation to ' + this.page.site.name;
+        }
+    },
+
     mounted() {
         const gateway = Gateway(this.gateway);
 
+        this.$dispatch.request('form:disable');
+
         gateway.script((event) => {
-            const paymentRequest = gateway.paymentRequest(1000, 'Test label...');
-            const button = gateway.paymentRequestButton(paymentRequest);
+            const paymentRequest = gateway.paymentRequest(1000, this.getPaymentLabel());
+            const paymentRequestButton = gateway.paymentRequestButton(paymentRequest);
+
+            paymentRequest.on('token', (event) => {
+                this.$dispatch.request('form:enable');
+                this.$set(this.form, 'token', event.token.id);
+
+                console.log('token', event);
+
+                // Report to the browser that the payment was successful, prompting
+                // it to close the browser payment interface. (or event.complete('fail'))
+                event.complete('success');
+            });
 
             paymentRequest.canMakePayment().then((result) => {
-                button.mount(this.$el.querySelector('.stripe-payment-button'));
+                paymentRequestButton.mount(this.$el.querySelector('.stripe-payment-button'));
             }).catch((error) => {
                 this.error = error;
+                this.$set(this.form, 'token', null);
             });
         });
     }

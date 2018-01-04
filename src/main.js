@@ -1,5 +1,6 @@
 import Vue from 'vue/dist/vue';
 import HttpConfig from './Config/Http';
+import Broadcast from '@objectivehtml/broadcast';
 import GiveworksForm from './Components/GiveworksForm';
 
 export default class GiveworksVueApp {
@@ -9,6 +10,11 @@ export default class GiveworksVueApp {
     }
 
     setApp(el, data) {
+        const broadcast = new Broadcast;
+
+        Vue.prototype.$broadcast = new Broadcast;
+        Vue.prototype.$dispatch = Vue.prototype.$broadcast.dispatch();
+
         this.app = new Vue({
             el: el,
             data: function() {

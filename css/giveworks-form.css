@@ -375,16 +375,16 @@ template {
   @media (min-width: 1200px) {
     .one-true-form .container {
       width: 1170px; } }
-  .one-true-form .row {
+  .one-true-form .row, .one-true-form .row .row {
     margin-left: -15px;
     margin-right: -15px; }
-    .one-true-form .row.no-gutter {
-      margin-left: 0;
-      margin-right: 0; }
-    .one-true-form .row::after {
-      content: "";
-      display: table;
-      clear: both; }
+  .one-true-form .row.no-gutter {
+    margin-left: 0;
+    margin-right: 0; }
+  .one-true-form .row::after {
+    content: "";
+    display: table;
+    clear: both; }
   .one-true-form .no-gutter [class^="col-"] {
     padding-left: 0; }
   .one-true-form [class^="col-"] {
@@ -2137,6 +2137,7 @@ template {
   .one-true-form .form-control {
     margin: 0;
     width: 100%;
+    height: auto;
     display: block;
     background-image: none;
     background-clip: padding-box;

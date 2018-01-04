@@ -1,6 +1,5 @@
 <script>
 
-//import Broadcast from 'broadcast';
 import Api from '/Http/Api';
 import ContactInfoFieldset from './FormComponents/ContactInfoFieldset';
 import PaymentInfoFieldset from './FormComponents/PaymentInfoFieldset';
@@ -9,6 +8,12 @@ import SelectDonationFieldset from './FormComponents/SelectDonationFieldset';
 //const dispatch = (new Broadcast).dispatch('app');
 
 export default {
+
+    components: {
+        ContactInfoFieldset,
+        PaymentInfoFieldset,
+        SelectDonationFieldset
+    },
 
     props: {
         page: {
@@ -23,12 +28,6 @@ export default {
             type: [Boolean, Object],
             required: true
         }
-    },
-
-    components: {
-        ContactInfoFieldset,
-        PaymentInfoFieldset,
-        SelectDonationFieldset
     }
 
 }

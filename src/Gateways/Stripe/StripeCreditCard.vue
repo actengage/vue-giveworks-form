@@ -13,10 +13,7 @@
 </template>
 
 <script>
-///import Broadcast from 'broadcast';
 import Gateway from '/Gateways/Gateway';
-
-//const dispatch = (new Broadcast).dispatch('app');
 
 export default {
 
@@ -48,6 +45,8 @@ export default {
     mounted() {
         const gateway = Gateway(this.gateway);
 
+        this.$dispatch.request('form:disable');
+
         gateway.script((event) => {
             const card = gateway.card({
                 hidePostalCode: this.hidePostalCode,
@@ -63,9 +62,10 @@ export default {
                     gateway.createToken(card, {
                         currency: 'usd'
                     }).then((result) => {
-                        if (result.error) {
+                         if (result.error) {
                             this.$set(this.errors, 'token', [event.error.message]);
                         } else {
+                            this.$dispatch.request('form:enable');
                             this.$set(this.form, 'token', result.token.id);
                         }
                     });

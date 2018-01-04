@@ -1,5 +1,5 @@
 <template>
-    <div v-if="page">
+    <div v-if="page.id">
         <form @submit="onSubmit">
             <page-type :orientation="orientation" :form="form" :errors="errors" :page="page"></page-type>
         </form>
@@ -24,10 +24,31 @@ export default {
 
     name: 'giveworks-form',
 
+    components: {
+        PageType,
+        ActivityIndicator,
+        HttpErrorResponse
+    },
+
+    data() {
+        return {
+            page: this.data || {},
+            errors: {},
+            form: {
+                recurring: 0,
+                optin: 1
+            }
+        };
+    },
+
     props: {
         'api-key': {
             type: String,
             required: true
+        },
+        'data': {
+            type: [Boolean, Object],
+            default: false
         },
         'page-id': {
             type: [Boolean, Number, String],
@@ -41,12 +62,6 @@ export default {
             type: [Boolean, String],
             default: false
         }
-    },
-
-    components: {
-        PageType,
-        ActivityIndicator,
-        HttpErrorResponse
     },
 
     methods: {
@@ -88,31 +103,34 @@ export default {
         }
     },
 
-    data() {
-        return {
-            errors: {},
-            page: this.$attrs.page,
-            form: {
-                recurring: 0,
-                optin: 1
-            }
-        };
-    },
-
     created() {
         HttpConfig.defaultRequestOptions || (HttpConfig.defaultRequestOptions = {});
         HttpConfig.defaultRequestOptions.headers['Authorization'] = 'Bearer ' + this.apiKey;
     },
 
     mounted() {
-
-        if(!this.page) {
+        if(!this.page.id) {
             Api.page.find(this.pageId).then((response) => {
                 this.page = response.data;
             }).catch((error) => {
                 this.error = error;
             });
         }
+    },
+
+    beforeCreate() {
+        this.$dispatch.reply('form:enable', () => {
+            this.enable();
+        });
+        
+        this.$dispatch.reply('form:disable', () => {
+            this.disable();
+        });
+    },
+
+    beforeDestroy() {
+        this.$dispatch.stopReply('form:enable');
+        this.$dispatch.stopReply('form:disable');
     }
 
 }

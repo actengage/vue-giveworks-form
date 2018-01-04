@@ -66,10 +66,17 @@ export default class Stripe extends Api {
     }
 
     paymentRequestButton(paymentRequest) {
-        const elements = this.elements();
-
-        return elements.create('paymentRequestButton', {
-            paymentRequest: paymentRequest
+        return this.elements().create('paymentRequestButton', {
+            paymentRequest: paymentRequest,
+            label: 'test 1',
+            style: {
+                label: 'test 1',
+                paymentRequestButton: {
+                    type: 'buy', // 'default' | 'donate' | 'buy'
+                    theme: 'light-outline', // 'dark' | 'light' | 'light-outline'
+                    height: '40.38px' // default: '40px', the width is always '100%'
+                }
+            }
         });
     }
 
@@ -98,11 +105,6 @@ export default class Stripe extends Api {
     }
 
     stripe() {
-        // 4242 4242 4242 4242
-        // pk_test_ETiEPWUdZbGK6GXNlmU7H4DK -- objectivehtml.com public_key
-        // pk_test_Mb0QwaMGePjeORABK9f6BZ0W -- test account public_key
-        // acct_1BcfrdH9HJpiOrw7 -- test account account_id
-
         if(!this._stripe) {
             this._stripe = new window.Stripe(this.options.publishable_key);
         }

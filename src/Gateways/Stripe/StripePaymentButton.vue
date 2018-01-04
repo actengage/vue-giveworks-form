@@ -103,9 +103,9 @@ export default {
     },
 
     created() {
-        this.$dispatch.request('form').then((form) => {
+        this.$dispatch.request('form').then(form => {
             if(form.$card) {
-                this.card.$card = form.$card;
+                this.card = form.$card;
             }
         });
 
@@ -120,7 +120,7 @@ export default {
 
     beforeDestroy() {
         if(this.card) {
-            this.$dispatch.request('form').then((form) => {
+            this.$dispatch.request('form').then(form => {
                 form.$card = this.card;
             });
         }

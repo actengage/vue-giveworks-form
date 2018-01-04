@@ -13574,7 +13574,7 @@ var StripePaymentButton = { render: function render() {
 
         this.$dispatch.request('form').then(function (form) {
             if (form.$card) {
-                _this.card.$card = form.$card;
+                _this.card = form.$card;
             }
         });
 

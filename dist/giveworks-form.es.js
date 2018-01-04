@@ -13559,11 +13559,9 @@ var StripePaymentButton = { render: function render() {
     },
 
     updated: function updated() {
-        var el = this.$el.querySelector('.stripe-payment-button');
-
-        if (this.loaded && !this.error) {
+        if (this.loaded && !this.submitting && !this.error) {
             try {
-                this.$paymentRequestButton.mount(el);
+                this.$paymentRequestButton.mount(this.$el.querySelector('.stripe-payment-button'));
             } catch (error) {
                 this.card = false;
                 this.error = error;

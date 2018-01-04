@@ -172,18 +172,21 @@ export default {
                     this.card = false;
                     this.form.token = null;
                 }
-
-                this.changingCard = false;
+                else {
+                    this.changingCard = false;
+                }
             });
 
             this.$paymentRequest.on('token', (event) => {
                 event.complete('success');
-                this.changingCard = false;
                 this.card = event.token.card;
                 this.form.token = event.token.id;
 
                 if(!this.changingCard) {
                     this.$dispatch.request('form:submit');
+                }
+                else {
+                    this.changingCard = false;
                 }
             });
 

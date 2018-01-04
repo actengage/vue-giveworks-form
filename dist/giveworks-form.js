@@ -13638,19 +13638,20 @@ var StripePaymentButton = { render: function render() {
                 if (!_this3.changingCard) {
                     _this3.card = false;
                     _this3.form.token = null;
+                } else {
+                    _this3.changingCard = false;
                 }
-
-                _this3.changingCard = false;
             });
 
             _this3.$paymentRequest.on('token', function (event) {
                 event.complete('success');
-                _this3.changingCard = false;
                 _this3.card = event.token.card;
                 _this3.form.token = event.token.id;
 
                 if (!_this3.changingCard) {
                     _this3.$dispatch.request('form:submit');
+                } else {
+                    _this3.changingCard = false;
                 }
             });
 

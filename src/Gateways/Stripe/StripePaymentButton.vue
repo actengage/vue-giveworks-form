@@ -9,8 +9,6 @@
 
         <div v-else-if="!error">
             <div v-if="card" class="my-3">
-                <button type="button" class="btn btn-xs btn-warning" style="float:right" @click="changeCard($event)">Change Card</button>
-
                 <div class="row">
                     <div class="col-xs-3">
                         <div class="mr-6">

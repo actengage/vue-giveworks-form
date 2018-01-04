@@ -1,13 +1,14 @@
 <template>
 
     <div>
-        <div class="row my-5 py-1">
+        <div v-if="!loaded" class="row my-5 py-1">
             <div class="col-xs-12">
+                loading
                 <activity-indicator size="sm" :center="true"></activity-indicator>
             </div>
         </div>
 
-        <div v-if="!error">
+        <div v-else-if="!error">
             <div v-if="card" class="my-3">
                 <button type="button" class="btn btn-xs btn-warning" style="float:right" @click="changeCard($event)">Change Card</button>
 
@@ -20,7 +21,7 @@
             <div class="stripe-payment-button mt-2 mb-4"></div>
         </div>
 
-        <div class="alert alert-danger" v-else>
+        <div v-else class="alert alert-danger">
             <div class="row">
                 <div class="col-xs-3 text-center">
                     <icon name="warning" scale="2" class="mt-2"></icon>

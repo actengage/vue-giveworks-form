@@ -41,7 +41,7 @@ export default {
             default: false
         }
     },
-
+    
     created() {
         this.$submitEvent = this.$dispatch.on('form:submit', (form) => {
             this.$card.blur();

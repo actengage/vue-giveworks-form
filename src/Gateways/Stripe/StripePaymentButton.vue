@@ -11,10 +11,24 @@
             <div v-if="card" class="my-3">
                 <button type="button" class="btn btn-xs btn-warning" style="float:right" @click="changeCard($event)">Change Card</button>
 
-                <p>
-                    <span v-if="card.name">{{card.name}}<br></span>
-                    ****{{card.last4}} <span class="pl-2">{{card.exp_month}}/{{card.exp_year}}</span>
-                </p>
+                <div class="row">
+                    <div class="col-xs-3">
+                        <div class="mr-6">
+                            <icon v-if="card.brand === 'Visa'" name="cc-visa" scale="4"></icon>
+                            <icon v-if="card.brand === 'MasterCard'" name="cc-mastercard" scale="4"></icon>
+                            <icon v-if="card.brand === 'American Express'" name="cc-amex" scale="4"></icon>
+                            <icon v-if="card.brand === 'Discover'" name="cc-discover" scale="4"></icon>
+                            <icon v-if="card.brand === 'JCB'" name="cc-jcb" scale="4"></icon>
+                            <icon v-if="card.brand === 'Diners Club'" name="cc-diners-club" scale="4"></icon>
+                            <icon v-else name="cc-credit-card" scale="4"></icon>
+                        </div>
+                    </div>
+                    <div class="col-xs-9">
+                        <button type="button" class="btn btn-xs btn-warning" style="float: right;">Change Card</button>
+                        <span v-if="card.name">{{card.name}}<br></span>
+                        ****{{card.last4}} <span class="pl-2">{{card.exp_month}}/{{card.exp_year}}</span>
+                    </div>
+                </div>
             </div>
 
             <div class="stripe-payment-button mt-2 mb-4"></div>
@@ -36,7 +50,14 @@
 </template>
 
 <script>
+import 'vue-awesome/icons/cc-jcb';
 import 'vue-awesome/icons/warning';
+import 'vue-awesome/icons/cc-visa';
+import 'vue-awesome/icons/cc-amex';
+import 'vue-awesome/icons/cc-discover';
+import 'vue-awesome/icons/cc-mastercard';
+import 'vue-awesome/icons/cc-diners-club';
+import 'vue-awesome/icons/cc-credit-card';
 import Gateway from '/Gateways/Gateway';
 import Icon from 'vue-awesome/components/Icon';
 import ActivityIndicator from '/Components/ActivityIndicators/ActivityIndicator';

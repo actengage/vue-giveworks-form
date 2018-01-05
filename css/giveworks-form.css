@@ -462,14 +462,20 @@ template {
     margin-right: 83.33333%; }
   .one-true-form .col-xs-pull-11 {
     margin-right: 91.66667%; }
-  .one-true-form .d-xs-none, .one-true-form .d-none {
-    display: none !important; }
-  .one-true-form .d-xs-block, .one-true-form .d-block {
+  .one-true-form .d-block {
     display: block !important; }
-  .one-true-form .d-xs-inline-block, .one-true-form .d-inline-block {
+  .one-true-form .d-inline-block {
     display: inline-block !important; }
-  .one-true-form .d-xs-inline, .one-true-form .d-inline {
+  .one-true-form .d-inline {
     display: inline !important; }
+  .one-true-form .d-none {
+    display: none !important; }
+  .one-true-form .float-right {
+    float: right !important; }
+  .one-true-form .float-left {
+    float: left !important; }
+  .one-true-form .float-none {
+    float: none !important; }
   .one-true-form .m-0 {
     margin: 0rem !important; }
   .one-true-form .m-1 {
@@ -694,6 +700,20 @@ template {
   .one-true-form .py-auto {
     padding-top: auto !important;
     padding-bottom: auto !important; }
+  .one-true-form .d-xs-block {
+    display: block !important; }
+  .one-true-form .d-xs-inline-block {
+    display: inline-block !important; }
+  .one-true-form .d-xs-inline {
+    display: inline !important; }
+  .one-true-form .d-xs-none {
+    display: none !important; }
+  .one-true-form .float-xs-right {
+    float: right; }
+  .one-true-form .float-xs-left {
+    float: left; }
+  .one-true-form .float-xs-none {
+    float: none; }
   .one-true-form .m-0-xs {
     margin: 0rem !important; }
   .one-true-form .m-1-xs {
@@ -995,6 +1015,12 @@ template {
       display: inline !important; }
     .one-true-form .d-sm-none {
       display: none !important; }
+    .one-true-form .float-sm-right {
+      float: right; }
+    .one-true-form .float-sm-left {
+      float: left; }
+    .one-true-form .float-sm-none {
+      float: none; }
     .one-true-form .m-0-sm {
       margin: 0rem !important; }
     .one-true-form .m-1-sm {
@@ -1296,6 +1322,12 @@ template {
       display: inline !important; }
     .one-true-form .d-md-none {
       display: none !important; }
+    .one-true-form .float-md-right {
+      float: right; }
+    .one-true-form .float-md-left {
+      float: left; }
+    .one-true-form .float-md-none {
+      float: none; }
     .one-true-form .m-0-md {
       margin: 0rem !important; }
     .one-true-form .m-1-md {
@@ -1597,6 +1629,12 @@ template {
       display: inline !important; }
     .one-true-form .d-lg-none {
       display: none !important; }
+    .one-true-form .float-lg-right {
+      float: right; }
+    .one-true-form .float-lg-left {
+      float: left; }
+    .one-true-form .float-lg-none {
+      float: none; }
     .one-true-form .m-0-lg {
       margin: 0rem !important; }
     .one-true-form .m-1-lg {
@@ -1898,6 +1936,12 @@ template {
       display: inline !important; }
     .one-true-form .d-xl-none {
       display: none !important; }
+    .one-true-form .float-xl-right {
+      float: right; }
+    .one-true-form .float-xl-left {
+      float: left; }
+    .one-true-form .float-xl-none {
+      float: none; }
     .one-true-form .m-0-xl {
       margin: 0rem !important; }
     .one-true-form .m-1-xl {

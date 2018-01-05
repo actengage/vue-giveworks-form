@@ -17,9 +17,9 @@
                     </div>
                     <div class="col-xs-10">
                         <div class="pl-2">
-                            <button type="button" class="btn btn-xs btn-warning" style="float:right" :disabled="submitting" @click="changeCard($event)">Change Card</button>
+                            <button type="button" class="btn btn-xs btn-warning float-right" :disabled="submitting" @click="changeCard($event)">Change Card</button>
                             <span v-if="card.name">{{card.name}}<br></span>
-                            ****{{card.last4}} <span class="pl-2">{{card.exp_month}}/{{card.exp_year}}</span>
+                            <small>****{{card.last4}} <span class="pl-2">{{card.exp_month}}/{{card.exp_year}}</span></small>
                         </div>
                     </div>
                 </div>

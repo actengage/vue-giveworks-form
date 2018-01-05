@@ -1,7 +1,9 @@
 import Stripe from './Stripe/Stripe';
+import AuthorizeNet from './AuthorizeNet/AuthorizeNet';
 
 const Gateways = {
-    'Stripe': Stripe
+    'Stripe': Stripe,
+    'Authorize.Net': AuthorizeNet
 };
 
 const instances = {};

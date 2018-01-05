@@ -10815,155 +10815,6 @@ return Vue$3;
 
 var Vue = unwrapExports(vue);
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-  return typeof obj;
-} : function (obj) {
-  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-};
-
-
-
-
-
-
-
-
-
-
-
-var classCallCheck = function (instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-};
-
-var createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) defineProperties(Constructor, staticProps);
-    return Constructor;
-  };
-}();
-
-
-
-
-
-
-
-
-
-var inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-};
-
-
-
-
-
-
-
-
-
-
-
-var possibleConstructorReturn = function (self, call) {
-  if (!self) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return call && (typeof call === "object" || typeof call === "function") ? call : self;
-};
-
-var Endpoint = function () {
-    function Endpoint(api) {
-        classCallCheck(this, Endpoint);
-
-        this.api = api;
-        this._ensureMethodExists('slug');
-    }
-
-    createClass(Endpoint, [{
-        key: 'find',
-        value: function find(id, options) {
-            return this.api.get(this.api.url(this.slug(), id), options);
-        }
-    }, {
-        key: '_ensureMethodExists',
-        value: function _ensureMethodExists(method) {
-            if (!this._doesMethodExists(method)) {
-                throw new Error('The "slug" method must exist in all Http/Endpoints/Endpoint classes');
-            }
-        }
-    }, {
-        key: '_doesMethodExists',
-        value: function _doesMethodExists(method) {
-            return typeof this[method] === "function";
-        }
-    }]);
-    return Endpoint;
-}();
-
-var Page = function (_Endpoint) {
-    inherits(Page, _Endpoint);
-
-    function Page() {
-        classCallCheck(this, Page);
-        return possibleConstructorReturn(this, (Page.__proto__ || Object.getPrototypeOf(Page)).apply(this, arguments));
-    }
-
-    createClass(Page, [{
-        key: 'slug',
-        value: function slug() {
-            return 'page';
-        }
-    }, {
-        key: 'submit',
-        value: function submit(id, data, options) {
-            return this.api.post(this.api.url(this.slug(), id), data, options);
-        }
-    }]);
-    return Page;
-}(Endpoint);
-
-var HttpConfig = {
-
-    baseUrl: 'https://giveworks.test/api/public/v1/',
-
-    endpoints: {
-        page: Page
-    },
-
-    defaultRequestOptions: {
-        headers: {
-            Authorization: false
-        }
-    }
-
-};
-
 var is = function(instance, proto) {
     return instance instanceof proto;
 };
@@ -12647,8 +12498,157 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 
-
+//# sourceMappingURL=axios.map
 });
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
+
+
+
+
+
+
+
+
+
+
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+var createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+
+
+
+
+
+
+
+
+var inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+};
+
+
+
+
+
+
+
+
+
+
+
+var possibleConstructorReturn = function (self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+};
+
+var Endpoint = function () {
+    function Endpoint(api) {
+        classCallCheck(this, Endpoint);
+
+        this.api = api;
+        this._ensureMethodExists('slug');
+    }
+
+    createClass(Endpoint, [{
+        key: 'find',
+        value: function find(id, options) {
+            return this.api.get(this.api.url(this.slug(), id), options);
+        }
+    }, {
+        key: '_ensureMethodExists',
+        value: function _ensureMethodExists(method) {
+            if (!this._doesMethodExists(method)) {
+                throw new Error('The "slug" method must exist in all Http/Endpoints/Endpoint classes');
+            }
+        }
+    }, {
+        key: '_doesMethodExists',
+        value: function _doesMethodExists(method) {
+            return typeof this[method] === "function";
+        }
+    }]);
+    return Endpoint;
+}();
+
+var Page = function (_Endpoint) {
+    inherits(Page, _Endpoint);
+
+    function Page() {
+        classCallCheck(this, Page);
+        return possibleConstructorReturn(this, (Page.__proto__ || Object.getPrototypeOf(Page)).apply(this, arguments));
+    }
+
+    createClass(Page, [{
+        key: 'slug',
+        value: function slug() {
+            return 'page';
+        }
+    }, {
+        key: 'submit',
+        value: function submit(id, data, options) {
+            return this.api.post(this.api.url(this.slug(), id), data, options);
+        }
+    }]);
+    return Page;
+}(Endpoint);
+
+var HttpConfig = {
+
+    baseUrl: 'https://giveworks.test/api/public/v1/',
+
+    endpoints: {
+        page: Page
+    },
+
+    defaultRequestOptions: {
+        headers: {
+            Authorization: false
+        }
+    }
+
+};
 
 var Api = function () {
     function Api() {
@@ -13322,8 +13322,50 @@ var Stripe = function (_Api) {
     return Stripe;
 }(Gateway$1);
 
+var App = {
+
+    debug: true
+
+};
+
+var AuthorizetNet = function (_Api) {
+    inherits(AuthorizetNet, _Api);
+
+    function AuthorizetNet() {
+        classCallCheck(this, AuthorizetNet);
+        return possibleConstructorReturn(this, (AuthorizetNet.__proto__ || Object.getPrototypeOf(AuthorizetNet)).apply(this, arguments));
+    }
+
+    createClass(AuthorizetNet, [{
+        key: 'api',
+        value: function api() {
+            return 'App\\SiteApis\\Gateways\\AuthorizeNet';
+        }
+    }, {
+        key: 'buttons',
+        value: function buttons() {
+            return [{
+                icon: 'credit-card',
+                label: 'Credit Card',
+                component: 'authorize-net-button'
+            }];
+        }
+    }, {
+        key: 'script',
+        value: function script$$1(callback) {
+            var url = App.debug ? // Is app in developer mode?
+            'https://jstest.authorize.net/v1/Accept.js' : // Developer
+            'https://js.authorize.net/v1/Accept.js'; // Production;
+
+            script(url, callback);
+        }
+    }]);
+    return AuthorizetNet;
+}(Gateway$1);
+
 var Gateways = {
-    'Stripe': Stripe
+    'Stripe': Stripe,
+    'Authorize.Net': AuthorizetNet
 };
 
 var instances = {};
@@ -13662,6 +13704,71 @@ var StripePaymentButton = { render: function render() {
     }
 };
 
+var AuthorizeNetButton = { render: function render() {
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [!_vm.loaded ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : _c('div', { staticClass: "my-3 py-1" }, [_c('button', { staticClass: "btn btn-success btn-lg btn-block", attrs: { "type": "button" }, on: { "click": _vm.showCardForm } }, [_vm._v("Enter Payment Information")])])]);
+    }, staticRenderFns: [],
+
+    name: 'authorize-net-button',
+
+    components: {
+        Icon: Icon,
+        ActivityIndicator: ActivityIndicator
+    },
+
+    props: {
+        page: {
+            type: Object,
+            required: true
+        },
+        form: {
+            type: Object,
+            required: true
+        },
+        errors: {
+            type: Object,
+            required: true
+        },
+        gateway: {
+            type: Object,
+            required: true
+        }
+    },
+
+    data: function data() {
+        return {
+            card: false,
+            error: false,
+            loaded: false
+        };
+    },
+
+
+    methods: {
+        showCardForm: function showCardForm() {
+            console.log('show card');
+        }
+    },
+
+    created: function created() {
+        //
+    },
+    beforeDestroy: function beforeDestroy() {
+        // this.$dispatch.off(this.$submitEvent);
+        // this.$dispatch.off(this.$submitCompleteEvent);
+    },
+    mounted: function mounted() {
+        var _this = this;
+
+        var gateway = Gateway(this.gateway);
+
+        // this.$dispatch.request('submit:disable');
+
+        gateway.script(function (event) {
+            _this.loaded = true;
+        });
+    }
+};
+
 var PaymentGateways = { render: function render() {
         var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [_c('div', { staticClass: "row" }, _vm._l(_vm.buttons, function (button) {
             return _c('div', { staticClass: "col-md-6 col-lg-4" }, [_c('button', { staticClass: "btn btn-block payment-gateway-button", class: { 'btn-success': button.active, 'btn-secondary': !button.active }, attrs: { "type": "button" }, on: { "click": function click($event) {
@@ -13679,13 +13786,18 @@ var PaymentGateways = { render: function render() {
     components: {
         Icon: Icon,
         StripeCreditCard: StripeCreditCard,
-        StripePaymentButton: StripePaymentButton
+        StripePaymentButton: StripePaymentButton,
+        AuthorizeNetButton: AuthorizeNetButton
     },
 
     data: function data() {
         var buttons = [];
 
         lodashEs.each(this.page.site.gateways, function (gateway) {
+            if (!Gateway(gateway).buttons) {
+                throw new Error(Gateway(gateway).api() + ' doesn\'t have a required buttons() method.');
+            }
+
             var gatewayButtons = lodashEs.each(Gateway(gateway).buttons(), function (button) {
                 button.active = false;
                 button.gateway = gateway;
@@ -13695,8 +13807,8 @@ var PaymentGateways = { render: function render() {
         });
 
         return {
-            buttons: buttons,
-            gateway: null
+            gateway: null,
+            buttons: buttons
         };
     },
 
@@ -13716,7 +13828,11 @@ var PaymentGateways = { render: function render() {
         }
     },
 
-    created: function created() {
+    mounted: function mounted() {
+        if (!this.buttons || !this.buttons[0]) {
+            throw new Error('Every Gateway must have at least one button defined.');
+        }
+
         this.activate(this.buttons[0]);
     }
 };
@@ -14240,8 +14356,6 @@ var GiveworksVueApp = function () {
     createClass(GiveworksVueApp, [{
         key: 'setApp',
         value: function setApp(el, _data) {
-            var broadcast = new BroadcastManager();
-
             Vue.prototype.$broadcast = new BroadcastManager();
             Vue.prototype.$dispatch = Vue.prototype.$broadcast.dispatch();
 

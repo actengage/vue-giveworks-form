@@ -35,6 +35,7 @@ import BaseComponent from './BaseComponent';
 import Icon from 'vue-awesome/components/Icon';
 import StripeCreditCard from '/Gateways/Stripe/StripeCreditCard';
 import StripePaymentButton from '/Gateways/Stripe/StripePaymentButton';
+import AuthorizeNetButton from '/Gateways/AuthorizeNet/AuthorizeNetButton';
 
 export default {
 
@@ -45,13 +46,18 @@ export default {
     components: {
         Icon,
         StripeCreditCard,
-        StripePaymentButton
+        StripePaymentButton,
+        AuthorizeNetButton
     },
 
     data() {
         const buttons = [];
 
         each(this.page.site.gateways, gateway => {
+            if(!Gateway(gateway).buttons) {
+                throw new Error(Gateway(gateway).api()+' doesn\'t have a required buttons() method.');
+            }
+
             const gatewayButtons = each(Gateway(gateway).buttons(), button => {
                 button.active = false;
                 button.gateway = gateway;
@@ -61,8 +67,8 @@ export default {
         });
 
         return {
+            gateway: null,
             buttons: buttons,
-            gateway: null
         };
     },
 
@@ -84,7 +90,11 @@ export default {
 
     },
 
-    created() {
+    mounted() {
+        if(!this.buttons || !this.buttons[0]) {
+            throw new Error('Every Gateway must have at least one button defined.');
+        }
+
         this.activate(this.buttons[0]);
     }
 

@@ -1,7 +1,7 @@
 import Api from '../Api';
 import '/Icons/apple-pay';
 import { extend } from 'lodash-es';
-import script from '/Helpers/Script';
+import Script from '/Helpers/Script';
 import 'vue-awesome/icons/credit-card';
 import 'vue-awesome/icons/google-wallet';
 import Icon from 'vue-awesome/components/Icon'
@@ -111,7 +111,7 @@ export default class Stripe extends Api {
     }
 
     script(callback) {
-        script('https://js.stripe.com/v3/', callback);
+        Script('https://js.stripe.com/v3/', callback);
     }
 
 }

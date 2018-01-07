@@ -19,6 +19,8 @@
 
         </div>
 
+        <hr>
+
         <div v-for="button in buttons" v-if="button.active">
             <component :is="button.component" :form="form" :page="page" :errors="errors" :gateway="button.gateway"></component>
         </div>
@@ -35,7 +37,7 @@ import BaseComponent from './BaseComponent';
 import Icon from 'vue-awesome/components/Icon';
 import StripeCreditCard from '/Gateways/Stripe/StripeCreditCard';
 import StripePaymentButton from '/Gateways/Stripe/StripePaymentButton';
-import AuthorizeNetButton from '/Gateways/AuthorizeNet/AuthorizeNetButton';
+import AuthorizeNetCreditCard from '/Gateways/AuthorizeNet/AuthorizeNetCreditCard';
 
 export default {
 
@@ -47,32 +49,34 @@ export default {
         Icon,
         StripeCreditCard,
         StripePaymentButton,
-        AuthorizeNetButton
+        AuthorizeNetCreditCard
     },
 
     data() {
-        const buttons = [];
-
-        each(this.page.site.gateways, gateway => {
-            if(!Gateway(gateway).buttons) {
-                throw new Error(Gateway(gateway).api()+' doesn\'t have a required buttons() method.');
-            }
-
-            const gatewayButtons = each(Gateway(gateway).buttons(), button => {
-                button.active = false;
-                button.gateway = gateway;
-            });
-
-            merge(buttons, gatewayButtons);
-        });
-
         return {
             gateway: null,
-            buttons: buttons,
+            buttons: this.getButtons()
         };
     },
 
     methods: {
+        getButtons: function() {
+            const buttons = [];
+
+            each(this.page.site.gateways, gateway => {
+                if(!Gateway(gateway).buttons) {
+                    throw new Error(Gateway(gateway).api()+' doesn\'t have a required buttons() method.');
+                }
+
+                each(Gateway(gateway).buttons(), button => {
+                    button.active = false;
+                    button.gateway = gateway;
+                    buttons.push(button);
+                });
+            });
+
+            return buttons;
+        },
 
         deactivate() {
             each(this.buttons, button => {
@@ -82,9 +86,7 @@ export default {
 
         activate(button) {
             this.deactivate();
-
             button.active = true;
-
             this.$set(this.form, 'gateway', Gateway(button.gateway).api());
         }
 
@@ -103,9 +105,5 @@ export default {
 </script>
 
 <style>
-
-    .payment-gateway-button {
-        height: 82px;
-    }
-
+    .payment-gateway-button { height: 85px; }
 </style>

@@ -27,7 +27,7 @@ const plugins = [
     }),
     vue({
         scss: {
-            indentedSyntax: true
+            indentedSyntax: false
         },
         css: function(style, styles, compiler) {
             fs.writeFileSync('./css/giveworks-form.css', style);

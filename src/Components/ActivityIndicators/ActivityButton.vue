@@ -29,7 +29,7 @@ const convertAnimationDelayToInt = function(delay) {
 };
 
 const animated = function(el, callback) {
-    var defaultView = (el.ownerDocument || document).defaultView;
+    const defaultView = (el.ownerDocument || document).defaultView;
 
     setTimeout(() => {
         callback.apply();

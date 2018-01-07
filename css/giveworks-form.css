@@ -4286,10 +4286,8 @@ template {
 
 
 
-.payment-gateway-button {
-    height: 82px;
-}
 
+.payment-gateway-button { height: 85px; }
 
 
 
@@ -4348,6 +4346,139 @@ template {
     transform: rotate(360deg);
   }
 }
+
+.form-control.input-credit-card {
+  box-sizing: border-box;
+  padding: 1.125rem 0.7875rem;
+  overflow: hidden;
+  position: relative;
+  /*
+    &.has-focus-expiration,
+    &.is-invalid-expiration:not(.has-focus) {
+        & .input-credit-card-expiration {
+            transform: translateX(-4rem);
+        }
+        & .input-credit-card-cvc {
+            transform: translateX(-.5rem);
+        }
+    }
+
+    &.has-focus-cvc,
+    &.is-invalid-cvc:not(.has-focus),
+    &.has-focus-postal,
+    &.is-invalid-postal:not(.has-focus) {
+        & .input-credit-card-expiration {
+            transform: translateX(-8rem);
+        }
+        & .input-credit-card-cvc {
+            transform: translateX(-5rem);
+        }
+        & .input-credit-card-postal {
+            transform: translateX(-1rem);
+        }
+    }
+    */ }
+  .form-control.input-credit-card ::-webkit-input-placeholder {
+    color: #adb5bd; }
+  .form-control.input-credit-card ::-moz-placeholder {
+    color: #adb5bd; }
+  .form-control.input-credit-card :-ms-input-placeholder {
+    color: #adb5bd; }
+  .form-control.input-credit-card :-moz-placeholder {
+    color: #ced4da; }
+  .form-control.input-credit-card .input-credit-card-security-fields {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; }
+  .form-control.input-credit-card .input-credit-card-field {
+    z-index: 1;
+    position: absolute;
+    top: 0.56rem;
+    border: none;
+    outline: 0;
+    background: none;
+    box-shadow: none;
+    line-height: 1rem;
+    transition: transform ease 0.25s; }
+    .form-control.input-credit-card .input-credit-card-field.is-invalid {
+      color: #b41327; }
+  .form-control.input-credit-card .input-credit-card-icon {
+    position: absolute;
+    left: 0;
+    top: 2.25px;
+    height: 1.75rem;
+    width: 2.5rem;
+    padding: 0 .5rem;
+    background: white;
+    z-index: 2;
+    color: #adb5bd; }
+    .form-control.input-credit-card .input-credit-card-icon svg {
+      display: none; }
+  .form-control.input-credit-card:not(.brand-jcb):not(.brand-visa):not(.brand-amex):not(.brand-discover):not(.brand-mastercard):not(.brand-discover) svg[data-brand="unknown"],
+  .form-control.input-credit-card.brand-jcb svg[data-brand="jcb"],
+  .form-control.input-credit-card.brand-visa svg[data-brand=visa],
+  .form-control.input-credit-card.brand-amex svg[data-brand="amex"],
+  .form-control.input-credit-card.brand-discover svg[data-brand="discover"],
+  .form-control.input-credit-card.brand-mastercard svg[data-brand="mastercard"],
+  .form-control.input-credit-card.brand-dinersclub svg[data-brand="dinersclub"] {
+    display: inline-block; }
+  .form-control.input-credit-card .input-credit-card-placeholder-mask,
+  .form-control.input-credit-card .input-credit-card-number-mask {
+    width: auto;
+    opacity: 0;
+    position: absolute;
+    color: #adb5bd;
+    top: 0.56rem;
+    left: 2.5rem;
+    line-height: 1rem;
+    min-height: 20px;
+    font-size: 1rem;
+    white-space: nowrap; }
+  .form-control.input-credit-card .input-credit-card-placeholder-mask {
+    padding: 2px 0;
+    transition: opacity ease 0.25s; }
+  .form-control.input-credit-card .input-credit-card-number {
+    left: 2.5rem;
+    width: 10rem; }
+  .form-control.input-credit-card .input-credit-card-expiration {
+    right: 0.35rem;
+    left: auto;
+    width: 4rem; }
+  .form-control.input-credit-card .input-credit-card-cvc {
+    width: 2.5rem;
+    right: -2.5rem; }
+  .form-control.input-credit-card .input-credit-card-postal {
+    width: 3rem;
+    right: -3rem; }
+  .form-control.input-credit-card.show-security-fields .input-credit-card-expiration {
+    transform: translateX(-7rem); }
+  .form-control.input-credit-card.show-security-fields .input-credit-card-cvc {
+    transform: translateX(-6.75rem); }
+  .form-control.input-credit-card.show-security-fields .input-credit-card-postal {
+    transform: translateX(-3.5rem); }
+  .form-control.input-credit-card.has-focus {
+    outline: none;
+    border-color: #96b9f6;
+    box-shadow: 0 0 0 0.2rem rgba(150, 185, 246, 0.5); }
+  .form-control.input-credit-card.is-invalid, .form-control.input-credit-card:invalid {
+    outline: none;
+    border-color: #b41327;
+    box-shadow: 0 0 0 0.2rem rgba(180, 19, 39, 0.25); }
+    .form-control.input-credit-card.is-invalid .input-credit-card-icon, .form-control.input-credit-card:invalid .input-credit-card-icon {
+      color: #b41327; }
+  .form-control.input-credit-card.is-valid, .form-control.input-credit-card:valid {
+    outline: none;
+    border-color: #72af37;
+    box-shadow: 0 0 0 0.2rem rgba(114, 175, 55, 0.25); }
+    .form-control.input-credit-card.is-valid .input-credit-card-icon, .form-control.input-credit-card:valid .input-credit-card-icon {
+      color: #72af37; }
+  .form-control.input-credit-card.has-focus:not(.has-focus-number) .input-credit-card-number.is-empty {
+    opacity: 0; }
+  .form-control.input-credit-card.has-focus:not(.has-focus-number) .input-credit-card-number.is-empty ~ .input-credit-card-placeholder-mask {
+    opacity: 1; }
 
 
 

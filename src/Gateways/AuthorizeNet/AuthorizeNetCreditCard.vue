@@ -6,10 +6,9 @@
         </div>
     </div>
 
-    <div v-else class="mb-5">
-
+    <div v-else class="form-group">
+        <div class="text-bold mb-2">Credit Card</div>
         <credit-card-field :change="change" :complete="complete" :invalid="invalid"></credit-card-field>
-
     </div>
 
 </template>

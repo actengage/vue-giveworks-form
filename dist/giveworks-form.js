@@ -14877,7 +14877,7 @@ var CreditCardField = { render: function render() {
 };
 
 var AuthorizeNetCreditCard = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return !_vm.loaded ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : _c('div', { staticClass: "mb-5" }, [_c('credit-card-field', { attrs: { "change": _vm.change, "complete": _vm.complete, "invalid": _vm.invalid } })], 1);
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return !_vm.loaded ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : _c('div', { staticClass: "form-group" }, [_c('div', { staticClass: "text-bold mb-2" }, [_vm._v("Credit Card")]), _vm._v(" "), _c('credit-card-field', { attrs: { "change": _vm.change, "complete": _vm.complete, "invalid": _vm.invalid } })], 1);
     }, staticRenderFns: [],
 
     name: 'authorize-net-credit-card',

@@ -16,6 +16,26 @@ export default class AuthorizetNet extends Api {
         }];
     }
 
+    createToken(card, callback) {
+        console.log(this.accept());
+
+        return this.accept().dispatchData({
+            cardData: card,
+            authData: {
+                apiLoginID: this.options.login_id,
+                clientKey: this.options.public_key
+            }
+        }, callback);
+    }
+
+    accept() {
+        if(!this._accept) {
+            this._accept = window.Accept;
+        }
+
+        return this._accept;
+    }
+
     script(callback) {
         const url = App.debug ? // Is app in developer mode?
             'https://jstest.authorize.net/v1/Accept.js' : // Developer

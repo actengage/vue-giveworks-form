@@ -17,7 +17,12 @@ export default function script(url, callback) {
                 script = document.createElement('script');
                 script.setAttribute('src', url);
                 script.setAttribute('type', 'text/javascript');
+                script.setAttribute('charset', 'utf-8');
+
                 heads[0].appendChild(script);
+
+                dispatchEvent(new Event('load'));
+
                 handleCallback();
             }
         }

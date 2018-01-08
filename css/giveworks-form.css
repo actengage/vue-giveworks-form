@@ -4393,6 +4393,8 @@ template {
     width: 100%;
     height: 100%;
     overflow: hidden; }
+  .form-control.input-credit-card + .invalid-feedback {
+    display: block; }
   .form-control.input-credit-card .input-credit-card-field {
     z-index: 1;
     position: absolute;
@@ -4414,7 +4416,7 @@ template {
     padding: 0 .5rem;
     background: white;
     z-index: 2;
-    color: #adb5bd; }
+    color: #868e96; }
     .form-control.input-credit-card .input-credit-card-icon svg {
       display: none; }
   .form-control.input-credit-card:not(.brand-jcb):not(.brand-visa):not(.brand-amex):not(.brand-discover):not(.brand-mastercard):not(.brand-discover) svg[data-brand="unknown"],

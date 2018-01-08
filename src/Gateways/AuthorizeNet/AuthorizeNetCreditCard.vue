@@ -8,7 +8,7 @@
 
     <div v-else class="form-group">
         <div class="text-bold mb-2">Credit Card</div>
-        <credit-card-field :change="change" :complete="complete" :invalid="invalid"></credit-card-field>
+        <credit-card-field :error="error" :change="change" :complete="complete" :invalid="invalid"></credit-card-field>
     </div>
 
 </template>
@@ -60,7 +60,25 @@ export default {
             }
         },
         complete: function(event) {
-            this.$dispatch.request('submit:enable');
+            Gateway(this.gateway).createToken({
+                cardNumber: event.card.number,
+                month: event.card.expMonth,
+                year: event.card.expYear,
+                cardCode: event.card.cvc
+            }, (event) => {
+                if(event.messages.resultCode === 'Ok') {
+                    this.$set(this.form, 'token', event.opaqueData.dataValue);
+                    this.$children[0].makeValid();
+                    this.$dispatch.request('submit:enable');
+                }
+                else if(event.messages.resultCode === 'Error') {
+                    const error = event.messages.message[0];
+                    this.$children[0].makeInvalid();
+                    this.$dispatch.request('submit:disable');
+                    this.error = error.text + (error.code ? ' ('+error.code+')' : '');
+                }
+            });
+
         }
     },
 

@@ -14900,8 +14900,6 @@ var CreditCardField = { render: function render() {
         validateInput: function validateInput(event, method) {
             var _this = this;
 
-            console.log('validateInput', event.target.classList);
-
             setTimeout(function () {
                 var el = event.target,
                     isValid = _this.isValid(el, method);

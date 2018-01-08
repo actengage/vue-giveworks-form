@@ -351,8 +351,6 @@ export default {
         },
 
         validateInput(event, method) {
-            console.log('validateInput', event.target.classList);
-
             setTimeout(() => {
                 const el = event.target, isValid = this.isValid(el, method);
 

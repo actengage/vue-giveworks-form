@@ -8,7 +8,7 @@
 
     <div v-else class="form-group">
         <div class="text-bold mb-2">Credit Card</div>
-        <credit-card-field :error="error" :change="change" :complete="complete" :invalid="invalid"></credit-card-field>
+        <credit-card-field :error="error" :change="change" :complete="complete" :valid="valid" :invalid="invalid" :focus="focus" :blur="blur"></credit-card-field>
     </div>
 
 </template>
@@ -72,10 +72,9 @@ export default {
                     this.$dispatch.request('submit:enable');
                 }
                 else if(event.messages.resultCode === 'Error') {
-                    const error = event.messages.message[0];
                     this.$children[0].makeInvalid();
                     this.$dispatch.request('submit:disable');
-                    this.error = error.text + (error.code ? ' ('+error.code+')' : '');
+                    this.error = event.messages.message[0].text;
                 }
             });
 

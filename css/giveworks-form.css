@@ -4416,7 +4416,7 @@ template {
     padding: 0 .5rem;
     background: white;
     z-index: 2;
-    color: #868e96; }
+    color: #495057; }
     .form-control.input-credit-card .input-credit-card-icon svg {
       display: none; }
   .form-control.input-credit-card:not(.brand-jcb):not(.brand-visa):not(.brand-amex):not(.brand-discover):not(.brand-mastercard):not(.brand-discover) svg[data-brand="unknown"],

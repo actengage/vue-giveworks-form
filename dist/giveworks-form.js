@@ -12498,7 +12498,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 
-
+//# sourceMappingURL=axios.map
 });
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
@@ -14607,27 +14607,29 @@ var lib = createCommonjsModule(function (module) {
 
 Icon.register({"credit-card-alt":{"width":2304,"height":1792,"paths":[{"d":"M0 1504v-608h2304v608q0 66-47 113t-113 47h-1984q-66 0-113-47t-47-113zM640 1280v128h384v-128h-384zM256 1280v128h256v-128h-256zM2144 128q66 0 113 47t47 113v224h-2304v-224q0-66 47-113t113-47h1984z"}]}});
 
+var AVAILABLE_EVENTS = ['change', 'invalid', 'complete', 'focus', 'blur'];
+
 var SUPPORTED_BRANDS = ['unknown', 'visa', 'mastercard', 'discover', 'amex', 'jcb', 'dinersclub', 'maestro', 'laser', 'unionpay', 'elo', 'hipercard'];
 
 var CreditCardField = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "input-credit-card-wrapper" }, [_c('div', { staticClass: "form-control input-credit-card brand-unknown" }, [_c('input', { staticClass: "input-credit-card-field input-credit-card-number", class: { 'is-empty': !_vm.card.number, 'can-transform': _vm.card.number && _vm.card.number.length > 4 }, attrs: { "type": "text", "placeholder": "Card number", "maxlength": "19" }, domProps: { "value": _vm.card.number }, on: { "focus": function focus($event) {
-                    _vm.addFocusClass($event.target);_vm.removeTransform($event.target);_vm.hideSecurityFields();
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "input-credit-card-wrapper" }, [_c('div', { staticClass: "form-control input-credit-card brand-unknown" }, [_c('input', { staticClass: "input-credit-card-field input-credit-card-number", attrs: { "type": "text", "placeholder": "Card number", "maxlength": "19" }, domProps: { "value": _vm.card.number }, on: { "focus": function focus($event) {
+                    _vm.addFocusClass($event.target, 'validateNumber');_vm.removeTransform($event.target);_vm.hideSecurityFields();
                 }, "blur": function blur($event) {
                     _vm.removeFocusClass($event.target, 'validateNumber');
-                }, "input": function input($event) {
-                    _vm.updateModel($event.target, 'number', 'validateNumber');
-                } } }), _vm._v(" "), _c('div', { staticClass: "input-credit-card-security-fields" }, [_c('input', { staticClass: "input-credit-card-field input-credit-card-expiration", class: { 'is-empty': !_vm.card.expiration }, attrs: { "type": "text", "placeholder": "MM / YY", "maxlength": "7" }, domProps: { "value": _vm.card.expiration }, on: { "focus": function focus($event) {
-                    _vm.addFocusClass($event.target, true);
+                }, "keyup": function keyup($event) {
+                    _vm.updateModel($event, 'number', 'validateNumber');
+                } } }), _vm._v(" "), _c('div', { staticClass: "input-credit-card-security-fields" }, [_c('input', { staticClass: "input-credit-card-field input-credit-card-expiration", attrs: { "type": "text", "placeholder": "MM / YY", "maxlength": "7" }, domProps: { "value": _vm.card.expiration }, on: { "focus": function focus($event) {
+                    _vm.addFocusClass($event.target, 'validateExpiration', true);
                 }, "blur": function blur($event) {
                     _vm.removeFocusClass($event.target, 'validateExpiration');
-                }, "input": function input($event) {
-                    _vm.updateModel($event.target, 'expiration', 'validateExpiration');
+                }, "keyup": function keyup($event) {
+                    _vm.updateModel($event, 'expiration', 'validateExpiration');
                 }, "keydown": function keydown($event) {
                     if (!('button' in $event) && _vm._k($event.keyCode, "delete", [8, 46], $event.key)) {
                         return null;
                     }_vm.focusPrevElement($event.target);
-                } } }), _vm._v(" "), _c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.card.cvc, expression: "card.cvc" }], staticClass: "input-credit-card-field input-credit-card-cvc", class: { 'is-empty': !_vm.card.cvc }, attrs: { "type": "text", "placeholder": "CVC", "maxlength": "4" }, domProps: { "value": _vm.card.cvc }, on: { "focus": function focus($event) {
-                    _vm.addFocusClass($event.target, true);
+                } } }), _vm._v(" "), _c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.card.cvc, expression: "card.cvc" }], staticClass: "input-credit-card-field input-credit-card-cvc", attrs: { "type": "text", "placeholder": "CVC", "maxlength": "4", "autocomplete": "off" }, domProps: { "value": _vm.card.cvc }, on: { "focus": function focus($event) {
+                    _vm.addFocusClass($event.target, 'validateCvc', true);
                 }, "blur": function blur($event) {
                     _vm.removeFocusClass($event.target, 'validateCvc');
                 }, "input": [function ($event) {
@@ -14635,13 +14637,13 @@ var CreditCardField = { render: function render() {
                         return;
                     }_vm.$set(_vm.card, "cvc", $event.target.value);
                 }, function ($event) {
-                    _vm.validateInput($event.target, 'validateCvc');
+                    _vm.validateInput($event, 'validateCvc');
                 }], "keydown": function keydown($event) {
                     if (!('button' in $event) && _vm._k($event.keyCode, "delete", [8, 46], $event.key)) {
                         return null;
                     }_vm.focusPrevElement($event.target);
-                } } }), _vm._v(" "), _c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.card.postalCode, expression: "card.postalCode" }], staticClass: "input-credit-card-field input-credit-card-postal", class: { 'is-empty': !_vm.card.postalCode }, attrs: { "type": "text", "placeholder": "Zip", "maxlength": "5" }, domProps: { "value": _vm.card.postalCode }, on: { "focus": function focus($event) {
-                    _vm.addFocusClass($event.target, true);
+                } } }), _vm._v(" "), _c('input', { directives: [{ name: "model", rawName: "v-model", value: _vm.card.postalCode, expression: "card.postalCode" }], staticClass: "input-credit-card-field input-credit-card-postal", attrs: { "type": "text", "placeholder": "Zip", "maxlength": "5" }, domProps: { "value": _vm.card.postalCode }, on: { "focus": function focus($event) {
+                    _vm.addFocusClass($event.target, 'validatePostalCode', true);
                 }, "blur": function blur($event) {
                     _vm.removeFocusClass($event.target, 'validatePostalCode');
                 }, "input": [function ($event) {
@@ -14649,7 +14651,7 @@ var CreditCardField = { render: function render() {
                         return;
                     }_vm.$set(_vm.card, "postalCode", $event.target.value);
                 }, function ($event) {
-                    _vm.validateInput($event.target, 'validatePostalCode');
+                    _vm.validateInput($event, 'validatePostalCode');
                 }], "keydown": function keydown($event) {
                     if (!('button' in $event) && _vm._k($event.keyCode, "delete", [8, 46], $event.key)) {
                         return null;
@@ -14664,6 +14666,14 @@ var CreditCardField = { render: function render() {
     },
 
     props: {
+        focus: {
+            type: [Boolean, Function],
+            default: false
+        },
+        blur: {
+            type: [Boolean, Function],
+            default: false
+        },
         invalid: {
             type: [Boolean, Function],
             default: false
@@ -14684,21 +14694,27 @@ var CreditCardField = { render: function render() {
 
     data: function data() {
         return {
-            card: {
-                cvc: '',
-                number: '',
-                expiration: '',
-                postalCode: ''
-            }
+            card: {}
         };
     },
 
 
     watch: {
         'card.number': function cardNumber(newVal, oldVal) {
+            this.handleTranformClass();
             this.addBrandClass(lib.fns.cardType(newVal) || 'unknown');
+            this.handleEmptyClass(this.$el.querySelector('.input-credit-card-number'), newVal);
         },
-        'error': function error(newVal, oldVal) {
+        'card.expiration': function cardExpiration(newVal, oldVal) {
+            this.handleEmptyClass(this.$el.querySelector('.input-credit-card-expiration'), newVal);
+        },
+        'card.cvc': function cardCvc(newVal, oldVal) {
+            this.handleEmptyClass(this.$el.querySelector('.input-credit-card-cvc'), newVal);
+        },
+        'card.postalCode': function cardPostalCode(newVal, oldVal) {
+            this.handleEmptyClass(this.$el.querySelector('.input-credit-card-postal'), newVal);
+        },
+        error: function error(newVal, oldVal) {
             if (newVal) {
                 this.makeInvalid();
             }
@@ -14706,58 +14722,67 @@ var CreditCardField = { render: function render() {
     },
 
     methods: {
+        handleTranformClass: function handleTranformClass() {
+            this.card.number && this.card.number.length > 4 ? this.$el.querySelector('.input-credit-card-number').classList.add('can-transform') : this.$el.querySelector('.input-credit-card-number').classList.remove('can-transform');
+        },
+        handleEmptyClass: function handleEmptyClass(el, value) {
+            return value === '' ? el.classList.add('is-empty') : el.classList.remove('is-empty');
+        },
         addHasClass: function addHasClass(el) {
-            this.$el.querySelector('.input-credit-card').classList.add(this.getHasClassName(el));
+            this.getCardField().classList.add(this.getHasClassName(el));
         },
         removeHasClass: function removeHasClass(el) {
-            this.$el.querySelector('.input-credit-card').classList.remove(this.getHasClassName(el));
+            this.getCardField().classList.remove(this.getHasClassName(el));
         },
         addBrandClass: function addBrandClass(brand) {
             this.removeBrandClass();
-            this.$el.querySelector('.input-credit-card').classList.add('brand-' + brand);
+            this.getCardField().classList.add('brand-' + brand);
         },
         removeBrandClass: function removeBrandClass() {
             for (var i in SUPPORTED_BRANDS) {
-                this.$el.querySelector('.input-credit-card').classList.remove('brand-' + SUPPORTED_BRANDS[i]);
+                this.getCardField().classList.remove('brand-' + SUPPORTED_BRANDS[i]);
             }
         },
         addErrorClass: function addErrorClass(el) {
+            this.removeHasClass(el);
             el.classList.add('is-invalid');
             el.classList.remove('is-valid');
-            this.$el.querySelector('.input-credit-card').classList.remove('is-valid');
-            this.$el.querySelector('.input-credit-card').classList.add('is-invalid', this.getErrorClassName(el));
-            this.removeHasClass(el);
+            this.getCardField().classList.remove('is-valid');
+            this.getCardField().classList.add('is-invalid', this.getErrorClassName(el));
         },
         removeErrorClass: function removeErrorClass(el) {
             el.classList.remove('is-invalid');
-            this.$el.querySelector('.input-credit-card').classList.remove(this.getErrorClassName(el));
+            this.getCardField().classList.remove(this.getErrorClassName(el));
 
             if (!this.$el.querySelector('.input-credit-card-field.is-invalid')) {
-                this.$el.querySelector('.input-credit-card').classList.remove('is-invalid');
+                this.getCardField().classList.remove('is-invalid');
             }
         },
-        addFocusClass: function addFocusClass(el, showSecurityFields) {
-            el.classList.add('is-focused');
-            this.$el.querySelector('.input-credit-card').classList.add('has-focus', this.getFocusClassName(el));
+        addFocusClass: function addFocusClass(el, method, showSecurityFields) {
             this.removeErrorClass(el);
+            el.classList.add('is-focused');
             this.addTransform(this.$el.querySelector('.input-credit-card-number'));
+            this.getCardField().classList.add('has-focus', this.getFocusClassName(el));
 
             if (showSecurityFields) {
                 this.showSecurityFields();
             }
+
+            this.$emit('focus', this.getEventPayload(el, this.isValid(el, method)));
         },
         removeFocusClass: function removeFocusClass(el, method) {
             el.classList.remove('is-focused');
-            this.$el.querySelector('.input-credit-card').classList.remove('has-focus', this.getFocusClassName(el));
+            this.getCardField().classList.remove('has-focus', this.getFocusClassName(el));
 
             if (this.shouldTransform()) {
                 this.addTransform(this.$el.querySelector('.input-credit-card-number'));
             }
 
-            if (!this.validate(el, method)) {
+            if (!this.isValid(el, method)) {
                 this.addErrorClass(el);
-                this.$emit('invalid', this.getEventPayload(el, false));
             }
+
+            this.$emit('blur', this.getEventPayload(el, this.isValid(el, method)));
         },
         addTransform: function addTransform(el) {
             if (el.classList.contains('can-transform')) {
@@ -14772,16 +14797,27 @@ var CreditCardField = { render: function render() {
             }
         },
         shouldTransform: function shouldTransform() {
-            return this.$el.querySelector('.input-credit-card').classList.contains('is-invalid-expiration') || this.$el.querySelector('.input-credit-card').classList.contains('is-invalid-cvc') || this.$el.querySelector('.input-credit-card').classList.contains('is-invalid-postal');
+            return this.getCardField().classList.contains('is-invalid-expiration') || this.getCardField().classList.contains('is-invalid-cvc') || this.getCardField().classList.contains('is-invalid-postal');
         },
         removeTransform: function removeTransform(el) {
             el.style.transform = '';
         },
         hideSecurityFields: function hideSecurityFields() {
-            this.$el.querySelector('.input-credit-card').classList.remove('show-security-fields');
+            this.getCardField().classList.remove('show-security-fields');
         },
         showSecurityFields: function showSecurityFields() {
-            this.$el.querySelector('.input-credit-card').classList.add('show-security-fields');
+            this.getCardField().classList.add('show-security-fields');
+        },
+        getDefaultCard: function getDefaultCard() {
+            return {
+                number: this.$attrs.number || '',
+                expiration: this.$attrs.expiration || '',
+                cvc: this.$attrs.cvc || '',
+                postalCode: this.$attrs.postalCode || ''
+            };
+        },
+        getCardField: function getCardField() {
+            return this.$el.querySelector('.input-credit-card');
         },
         getEventPayload: function getEventPayload(el, isValid) {
             var card = JSON.parse(JSON.stringify(this.card));
@@ -14794,7 +14830,7 @@ var CreditCardField = { render: function render() {
 
             return {
                 card: card,
-                invalid: this.$el.querySelector('.input-credit-card').classList.contains('is-invalid'),
+                valid: !this.getCardField().classList.contains('is-invalid'),
                 complete: this.isComplete(),
                 input: {
                     el: el,
@@ -14824,12 +14860,12 @@ var CreditCardField = { render: function render() {
             return 'has-focus-' + this.getClassName(el);
         },
         focusNextElement: function focusNextElement(el) {
-            if (el.nextElementSibling && el.nextElementSibling.children[0]) {
-                el.nextElementSibling.children[0].focus();
-            } else if (el.nextElementSibling) {
-                el.nextElementSibling.focus();
-            } else {
-                el.blur();
+            if (el.classList.contains('is-focused')) {
+                if (el.nextElementSibling && el.nextElementSibling.children[0]) {
+                    el.nextElementSibling.children[0].focus();
+                } else if (el.nextElementSibling) {
+                    el.nextElementSibling.focus();
+                }
             }
         },
         focusPrevElement: function focusPrevElement(el) {
@@ -14842,20 +14878,17 @@ var CreditCardField = { render: function render() {
             }
         },
         makeValid: function makeValid() {
-            this.$el.querySelector('.input-credit-card').classList.add('is-valid');
-            this.$el.querySelector('.input-credit-card').classList.remove('is-invalid');
+            this.getCardField().classList.add('is-valid');
+            this.getCardField().classList.remove('is-invalid');
             this.$el.querySelectorAll('.is-invalid').forEach(function (el) {
                 el.classList.remove('is-invalid');
             });
         },
         makeInvalid: function makeInvalid() {
-            this.$el.querySelector('.input-credit-card').classList.add('is-invalid');
+            this.getCardField().classList.add('is-invalid');
             this.$el.querySelectorAll('.is-invalid').forEach(function (el) {
                 el.blur();
             });
-        },
-        validate: function validate(el, method) {
-            return el.value === '' || this[method](el.value);
         },
         validateCvc: function validateCvc(value) {
             return lib.fns.validateCardCVC(value);
@@ -14869,65 +14902,74 @@ var CreditCardField = { render: function render() {
         validatePostalCode: function validatePostalCode(value) {
             return value.match(/^\d{5}(?:[-\s]\d{4})?$/) !== null;
         },
-        validateInput: function validateInput(el, method) {
+        validateInput: function validateInput(event, method) {
             var _this = this;
 
-            setTimeout(function () {
-                var isValid = _this.validate(el, method);
+            console.log('validateInput', event.target.classList);
 
-                if (el.value === '' || el.maxLength !== el.value.length && !isValid) {
+            setTimeout(function () {
+                var el = event.target,
+                    isValid = _this.isValid(el, method);
+
+                if (el.value !== '' && isValid) {
+                    _this.addHasClass(el);
+                    _this.focusNextElement(el);
+                } else if (!isValid) {
                     _this.removeHasClass(el);
-                } else {
-                    if (isValid) {
-                        _this.addHasClass(el);
-                        _this.focusNextElement(el);
-                    } else {
+
+                    if (el.value === '' || el.maxLength === el.value.length) {
                         _this.addErrorClass(el);
-                        _this.removeHasClass(el);
                     }
                 }
 
-                _this.emitEvents(el, isValid);
+                _this.$emit('change', _this.getEventPayload(el, isValid));
+                _this.$emit(isValid ? 'valid' : 'invalid', _this.getEventPayload(el, isValid));
+                _this.$emit(_this.isComplete() ? 'complete' : 'incomplete', _this.getEventPayload(el, isValid));
             });
         },
-        emitEvents: function emitEvents(el, isValid) {
-            var payload = this.getEventPayload(el, isValid);
+        updateModel: function updateModel(event, prop, method) {
+            this.card[prop] = event.target.value;
 
-            this.$emit('change', payload);
-
-            if (payload.complete) {
-                this.$emit('complete', payload);
-            } else {
-                this.$emit('incomplete', payload);
+            if (this.isPrintableKeyCode(event.keyCode)) {
+                this.validateInput(event, method);
             }
         },
-        updateModel: function updateModel(el, prop, method) {
-            this.card[prop] = el.value;
-            this.validateInput(el, method);
+        isPrintableKeyCode: function isPrintableKeyCode(keycode) {
+            return keycode > 47 && keycode < 58 || // number keys
+            keycode == 32 || keycode == 13 || // spacebar & return key(s) (if you want to allow carriage returns)
+            keycode > 64 && keycode < 91 || // letter keys
+            keycode > 95 && keycode < 112 || // numpad keys
+            keycode > 185 && keycode < 193 || // ;=,-./` (in order)
+            keycode > 218 && keycode < 223 // [\]' (in order)
+            ;
+        },
+        isValid: function isValid(el, method) {
+            return el.value === '' || this[method](el.value);
         },
         isComplete: function isComplete() {
-            return this.$el.querySelector('.input-credit-card').classList.contains('has-number') && this.$el.querySelector('.input-credit-card').classList.contains('has-expiration') && this.$el.querySelector('.input-credit-card').classList.contains('has-postal') && this.$el.querySelector('.input-credit-card').classList.contains('has-cvc');
+            return this.getCardField().classList.contains('has-number') && this.getCardField().classList.contains('has-expiration') && this.getCardField().classList.contains('has-postal') && this.getCardField().classList.contains('has-cvc');
         }
     },
 
+    created: function created() {
+        this.card = this.getDefaultCard();
+    },
     mounted: function mounted() {
         lib.formatCardCVC(this.$el.querySelector('.input-credit-card-cvc'));
         lib.restrictNumeric(this.$el.querySelector('.input-credit-card-postal'));
         lib.formatCardNumber(this.$el.querySelector('.input-credit-card-number'));
         lib.formatCardExpiry(this.$el.querySelector('.input-credit-card-expiration'));
 
-        var events = ['change', 'invalid', 'complete'];
-
-        for (var i in events) {
-            if (this[events[i]]) {
-                this.$on(events[i], this[events[i]]);
+        for (var i in AVAILABLE_EVENTS) {
+            if (this[AVAILABLE_EVENTS[i]]) {
+                this.$on(AVAILABLE_EVENTS[i], this[AVAILABLE_EVENTS[i]]);
             }
         }
     }
 };
 
 var AuthorizeNetCreditCard = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return !_vm.loaded ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : _c('div', { staticClass: "form-group" }, [_c('div', { staticClass: "text-bold mb-2" }, [_vm._v("Credit Card")]), _vm._v(" "), _c('credit-card-field', { attrs: { "error": _vm.error, "change": _vm.change, "complete": _vm.complete, "invalid": _vm.invalid } })], 1);
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return !_vm.loaded ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : _c('div', { staticClass: "form-group" }, [_c('div', { staticClass: "text-bold mb-2" }, [_vm._v("Credit Card")]), _vm._v(" "), _c('credit-card-field', { attrs: { "error": _vm.error, "change": _vm.change, "complete": _vm.complete, "valid": _vm.valid, "invalid": _vm.invalid, "focus": _vm.focus, "blur": _vm.blur } })], 1);
     }, staticRenderFns: [],
 
     name: 'authorize-net-credit-card',
@@ -14984,10 +15026,9 @@ var AuthorizeNetCreditCard = { render: function render() {
                     _this.$children[0].makeValid();
                     _this.$dispatch.request('submit:enable');
                 } else if (event.messages.resultCode === 'Error') {
-                    var error = event.messages.message[0];
                     _this.$children[0].makeInvalid();
                     _this.$dispatch.request('submit:disable');
-                    _this.error = error.text + (error.code ? ' (' + error.code + ')' : '');
+                    _this.error = event.messages.message[0].text;
                 }
             });
         }

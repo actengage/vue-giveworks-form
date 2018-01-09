@@ -13358,8 +13358,6 @@ var AuthorizetNet = function (_Api) {
     }, {
         key: 'createToken',
         value: function createToken(card, callback) {
-            console.log(this.accept());
-
             return this.accept().dispatchData({
                 cardData: card,
                 authData: {
@@ -14967,7 +14965,7 @@ var CreditCardField = { render: function render() {
 };
 
 var AuthorizeNetCreditCard = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return !_vm.loaded ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : _c('div', { staticClass: "form-group" }, [_c('div', { staticClass: "text-bold mb-2" }, [_vm._v("Credit Card")]), _vm._v(" "), _c('credit-card-field', { attrs: { "error": _vm.error, "change": _vm.change, "complete": _vm.complete, "valid": _vm.valid, "invalid": _vm.invalid, "focus": _vm.focus, "blur": _vm.blur } })], 1);
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return !_vm.loaded ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : _c('div', { staticClass: "form-group" }, [_c('div', { staticClass: "text-bold mb-2" }, [_vm._v("Credit Card")]), _vm._v(" "), _c('credit-card-field', { attrs: { "error": _vm.error || _vm.errors.token, "change": _vm.change, "complete": _vm.complete, "valid": _vm.valid, "invalid": _vm.invalid, "focus": _vm.focus, "blur": _vm.blur } })], 1);
     }, staticRenderFns: [],
 
     name: 'authorize-net-credit-card',
@@ -15020,13 +15018,14 @@ var AuthorizeNetCreditCard = { render: function render() {
                 cardCode: event.card.cvc
             }, function (event) {
                 if (event.messages.resultCode === 'Ok') {
-                    _this.$set(_this.form, 'token', event.opaqueData.dataValue);
                     _this.$children[0].makeValid();
+                    _this.$set(_this.form, 'token', event.opaqueData.dataValue);
+                    _this.$set(_this.form, 'tokenDescriptor', event.opaqueData.dataDescriptor);
                     _this.$dispatch.request('submit:enable');
                 } else if (event.messages.resultCode === 'Error') {
                     _this.$children[0].makeInvalid();
-                    _this.$dispatch.request('submit:disable');
                     _this.error = event.messages.message[0].text;
+                    _this.$dispatch.request('submit:disable');
                 }
             });
         }

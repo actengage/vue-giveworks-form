@@ -8,7 +8,7 @@
 
     <div v-else class="form-group">
         <div class="text-bold mb-2">Credit Card</div>
-        <credit-card-field :error="error" :change="change" :complete="complete" :valid="valid" :invalid="invalid" :focus="focus" :blur="blur"></credit-card-field>
+        <credit-card-field :error="error || errors.token" :change="change" :complete="complete" :valid="valid" :invalid="invalid" :focus="focus" :blur="blur"></credit-card-field>
     </div>
 
 </template>
@@ -67,14 +67,15 @@ export default {
                 cardCode: event.card.cvc
             }, (event) => {
                 if(event.messages.resultCode === 'Ok') {
-                    this.$set(this.form, 'token', event.opaqueData.dataValue);
                     this.$children[0].makeValid();
+                    this.$set(this.form, 'token', event.opaqueData.dataValue);
+                    this.$set(this.form, 'tokenDescriptor', event.opaqueData.dataDescriptor);
                     this.$dispatch.request('submit:enable');
                 }
                 else if(event.messages.resultCode === 'Error') {
                     this.$children[0].makeInvalid();
-                    this.$dispatch.request('submit:disable');
                     this.error = event.messages.message[0].text;
+                    this.$dispatch.request('submit:disable');
                 }
             });
 

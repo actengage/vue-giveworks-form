@@ -17,8 +17,6 @@ export default class AuthorizetNet extends Api {
     }
 
     createToken(card, callback) {
-        console.log(this.accept());
-
         return this.accept().dispatchData({
             cardData: card,
             authData: {

@@ -14651,7 +14651,7 @@ var CreditCardField = { render: function render() {
                     if (!('button' in $event) && _vm._k($event.keyCode, "delete", [8, 46], $event.key)) {
                         return null;
                     }_vm.focusPrevElement($event.target);
-                } } })]), _vm._v(" "), _c('div', { staticClass: "input-credit-card-icon" }, [_c('icon', { staticClass: "input-credit-card-icon", attrs: { "name": "cc-jcb", "data-brand": "jcb" } }), _vm._v(" "), _c('icon', { staticClass: "input-credit-card-icon", attrs: { "name": "cc-visa", "data-brand": "visa" } }), _vm._v(" "), _c('icon', { staticClass: "input-credit-card-icon", attrs: { "name": "cc-amex", "data-brand": "amex" } }), _vm._v(" "), _c('icon', { staticClass: "input-credit-card-icon", attrs: { "name": "credit-card", "data-brand": "unknown", "width": "20", "height": "18" } }), _vm._v(" "), _c('icon', { staticClass: "input-credit-card-icon", attrs: { "name": "cc-discover", "data-brand": "discover" } }), _vm._v(" "), _c('icon', { staticClass: "input-credit-card-icon", attrs: { "name": "cc-mastercard", "data-brand": "mastercard" } }), _vm._v(" "), _c('icon', { staticClass: "input-credit-card-icon", attrs: { "name": "cc-diners-club", "data-brand": "dinersclub" } })], 1), _vm._v(" "), _c('div', { staticClass: "input-credit-card-placeholder-mask" }, [_vm._v("Number")]), _vm._v(" "), _c('div', { staticClass: "input-credit-card-number-mask", domProps: { "innerHTML": _vm._s(_vm.card.number) } })]), _vm._v(" "), _vm.error ? _c('div', { staticClass: "invalid-feedback", domProps: { "innerHTML": _vm._s(_vm.error) } }) : _vm._e()]);
+                } } })]), _vm._v(" "), _c('div', { staticClass: "input-credit-card-icon-card" }, [_c('div', { staticClass: "input-credit-card-icon-front" }, [_c('icon', { staticClass: "input-credit-card-icon", attrs: { "name": "cc-jcb", "data-brand": "jcb" } }), _vm._v(" "), _c('icon', { staticClass: "input-credit-card-icon", attrs: { "name": "cc-visa", "data-brand": "visa" } }), _vm._v(" "), _c('icon', { staticClass: "input-credit-card-icon", attrs: { "name": "cc-amex", "data-brand": "amex" } }), _vm._v(" "), _c('icon', { staticClass: "input-credit-card-icon", attrs: { "name": "credit-card", "data-brand": "unknown", "width": "20", "height": "18" } }), _vm._v(" "), _c('icon', { staticClass: "input-credit-card-icon", attrs: { "name": "cc-discover", "data-brand": "discover" } }), _vm._v(" "), _c('icon', { staticClass: "input-credit-card-icon", attrs: { "name": "cc-mastercard", "data-brand": "mastercard" } }), _vm._v(" "), _c('icon', { staticClass: "input-credit-card-icon", attrs: { "name": "cc-diners-club", "data-brand": "dinersclub" } })], 1), _vm._v(" "), _c('div', { staticClass: "input-credit-card-icon-back" }, [_c('icon', { staticClass: "input-credit-card-icon", attrs: { "name": "credit-card-alt", "width": "23.33", "height": "20" } })], 1)]), _vm._v(" "), _c('div', { staticClass: "input-credit-card-placeholder-mask" }, [_vm._v("Number")]), _vm._v(" "), _c('div', { staticClass: "input-credit-card-number-mask", domProps: { "innerHTML": _vm._s(_vm.card.number) } })]), _vm._v(" "), _vm.error ? _c('div', { staticClass: "invalid-feedback", domProps: { "innerHTML": _vm._s(_vm.error) } }) : _vm._e()]);
     }, staticRenderFns: [],
 
     name: 'credit-card-field',
@@ -14757,7 +14757,7 @@ var CreditCardField = { render: function render() {
             this.removeErrorClass(el);
             el.classList.add('is-focused');
             this.addTransform(this.$el.querySelector('.input-credit-card-number'));
-            this.getCardField().classList.add('has-focus', this.getFocusClassName(el));
+            this.getCardField().classList.add('is-focused', this.getFocusClassName(el));
 
             if (showSecurityFields) {
                 this.showSecurityFields();
@@ -14767,7 +14767,7 @@ var CreditCardField = { render: function render() {
         },
         removeFocusClass: function removeFocusClass(el, method) {
             el.classList.remove('is-focused');
-            this.getCardField().classList.remove('has-focus', this.getFocusClassName(el));
+            this.getCardField().classList.remove('is-focused', this.getFocusClassName(el));
 
             if (this.shouldTransform()) {
                 this.addTransform(this.$el.querySelector('.input-credit-card-number'));
@@ -14852,7 +14852,7 @@ var CreditCardField = { render: function render() {
             return 'is-invalid-' + this.getClassName(el);
         },
         getFocusClassName: function getFocusClassName(el) {
-            return 'has-focus-' + this.getClassName(el);
+            return 'is-focused-' + this.getClassName(el);
         },
         focusNextElement: function focusNextElement(el) {
             if (el.classList.contains('is-focused')) {

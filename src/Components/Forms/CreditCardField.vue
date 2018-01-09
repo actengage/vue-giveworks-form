@@ -3,24 +3,27 @@
     <div class="input-credit-card-wrapper">
         <div class="form-control input-credit-card brand-unknown">
             <input type="text" class="input-credit-card-field input-credit-card-number" placeholder="Card number" maxlength="19" :value="card.number" @focus="addFocusClass($event.target, 'validateNumber'); removeTransform($event.target); hideSecurityFields();" @blur="removeFocusClass($event.target, 'validateNumber');" @keyup="updateModel($event, 'number', 'validateNumber');">
+
             <div class="input-credit-card-security-fields">
                 <input type="text" class="input-credit-card-field input-credit-card-expiration" placeholder="MM / YY" maxlength="7" :value="card.expiration" @focus="addFocusClass($event.target, 'validateExpiration', true);" @blur="removeFocusClass($event.target, 'validateExpiration')" @keyup="updateModel($event, 'expiration', 'validateExpiration')" @keydown.delete="focusPrevElement($event.target)">
                 <input type="text" class="input-credit-card-field input-credit-card-cvc" placeholder="CVC" maxlength="4" autocomplete="off" v-model="card.cvc" @focus="addFocusClass($event.target, 'validateCvc', true);" @blur="removeFocusClass($event.target, 'validateCvc')" @input="validateInput($event, 'validateCvc')" @keydown.delete="focusPrevElement($event.target)">
                 <input type="text" class="input-credit-card-field input-credit-card-postal" placeholder="Zip" maxlength="5" v-model="card.postalCode" @focus="addFocusClass($event.target, 'validatePostalCode', true);" @blur="removeFocusClass($event.target, 'validatePostalCode')" @input="validateInput($event, 'validatePostalCode')" @keydown.delete="focusPrevElement($event.target)">
             </div>
 
-            <div class="input-credit-card-icon-card">
-                <div class="input-credit-card-icon-front">
-                    <icon name="cc-jcb" data-brand="jcb" class="input-credit-card-icon"></icon>
-                    <icon name="cc-visa" data-brand="visa" class="input-credit-card-icon"></icon>
-                    <icon name="cc-amex" data-brand="amex" class="input-credit-card-icon"></icon>
-                    <icon name="credit-card" data-brand="unknown" class="input-credit-card-icon" width="20" height="18"></icon>
-                    <icon name="cc-discover" data-brand="discover" class="input-credit-card-icon"></icon>
-                    <icon name="cc-mastercard" data-brand="mastercard" class="input-credit-card-icon"></icon>
-                    <icon name="cc-diners-club" data-brand="dinersclub" class="input-credit-card-icon"></icon>
-                </div>
-                <div class="input-credit-card-icon-back">
-                    <icon name="credit-card-alt" class="input-credit-card-icon" width="23.33" height="20"></icon>
+            <div class="input-credit-card-icon-wrapper">
+                <div class="input-credit-card-icon-card">
+                    <div class="input-credit-card-icon-front">
+                        <icon name="cc-jcb" data-brand="jcb" class="input-credit-card-icon"></icon>
+                        <icon name="cc-visa" data-brand="visa" class="input-credit-card-icon"></icon>
+                        <icon name="cc-amex" data-brand="amex" class="input-credit-card-icon"></icon>
+                        <icon name="credit-card" data-brand="unknown" class="input-credit-card-icon" width="20" height="18"></icon>
+                        <icon name="cc-discover" data-brand="discover" class="input-credit-card-icon"></icon>
+                        <icon name="cc-mastercard" data-brand="mastercard" class="input-credit-card-icon"></icon>
+                        <icon name="cc-diners-club" data-brand="dinersclub" class="input-credit-card-icon"></icon>
+                    </div>
+                    <div class="input-credit-card-icon-back">
+                        <icon name="credit-card-alt" class="input-credit-card-icon" width="23.33" height="20"></icon>
+                    </div>
                 </div>
             </div>
 
@@ -29,7 +32,6 @@
         </div>
 
         <div class="invalid-feedback" v-if="error" v-html="error"></div>
-
     </div>
 
 </template>
@@ -480,14 +482,21 @@ export default {
             }
         }
 
+        & .input-credit-card-icon-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2.5rem;
+            height: 100%;
+            background: white;
+            z-index: 2;
+        }
+
         & .input-credit-card-icon-card {
             position: absolute;
             left: 0;
             top: .33rem;
             width: 2.5rem;
-            height: 1.75rem;
-            background: white;
-            z-index: 2;
             color: $gray-700;
             transition: 0.4s;
             transform-style: preserve-3d;
@@ -539,10 +548,10 @@ export default {
             }
         }
 
-        &:not(.brand-jcb):not(.brand-visa):not(.brand-amex):not(.brand-discover):not(.brand-mastercard):not(.brand-discover) svg[data-brand="unknown"],
         &.brand-jcb .input-credit-card-icon-card svg[data-brand="jcb"],
         &.brand-visa .input-credit-card-icon-card svg[data-brand=visa],
         &.brand-amex .input-credit-card-icon-card svg[data-brand="amex"],
+        &.brand-unknown .input-credit-card-icon-card svg[data-brand="unknown"],
         &.brand-discover .input-credit-card-icon-card svg[data-brand="discover"],
         &.brand-mastercard .input-credit-card-icon-card svg[data-brand="mastercard"],
         &.brand-dinersclub .input-credit-card-icon-card svg[data-brand="dinersclub"] {

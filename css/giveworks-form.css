@@ -4407,14 +4407,19 @@ template {
     transition: transform ease 0.25s; }
     .form-control.input-credit-card .input-credit-card-field.is-invalid {
       color: #b41327; }
+  .form-control.input-credit-card .input-credit-card-icon-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2.5rem;
+    height: 100%;
+    background: white;
+    z-index: 2; }
   .form-control.input-credit-card .input-credit-card-icon-card {
     position: absolute;
     left: 0;
     top: .33rem;
     width: 2.5rem;
-    height: 1.75rem;
-    background: white;
-    z-index: 2;
     color: #495057;
     transition: 0.4s;
     transform-style: preserve-3d;
@@ -4446,10 +4451,10 @@ template {
     display: block; }
   .form-control.input-credit-card.is-focused-cvc .input-credit-card-icon-front {
     display: none; }
-  .form-control.input-credit-card:not(.brand-jcb):not(.brand-visa):not(.brand-amex):not(.brand-discover):not(.brand-mastercard):not(.brand-discover) svg[data-brand="unknown"],
   .form-control.input-credit-card.brand-jcb .input-credit-card-icon-card svg[data-brand="jcb"],
   .form-control.input-credit-card.brand-visa .input-credit-card-icon-card svg[data-brand=visa],
   .form-control.input-credit-card.brand-amex .input-credit-card-icon-card svg[data-brand="amex"],
+  .form-control.input-credit-card.brand-unknown .input-credit-card-icon-card svg[data-brand="unknown"],
   .form-control.input-credit-card.brand-discover .input-credit-card-icon-card svg[data-brand="discover"],
   .form-control.input-credit-card.brand-mastercard .input-credit-card-icon-card svg[data-brand="mastercard"],
   .form-control.input-credit-card.brand-dinersclub .input-credit-card-icon-card svg[data-brand="dinersclub"] {

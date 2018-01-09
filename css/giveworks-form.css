@@ -4353,8 +4353,8 @@ template {
   overflow: hidden;
   position: relative;
   /*
-    &.has-focus-expiration,
-    &.is-invalid-expiration:not(.has-focus) {
+    &.is-focused-expiration,
+    &.is-invalid-expiration:not(.is-focused) {
         & .input-credit-card-expiration {
             transform: translateX(-4rem);
         }
@@ -4363,10 +4363,10 @@ template {
         }
     }
 
-    &.has-focus-cvc,
-    &.is-invalid-cvc:not(.has-focus),
-    &.has-focus-postal,
-    &.is-invalid-postal:not(.has-focus) {
+    &.is-focused-cvc,
+    &.is-invalid-cvc:not(.is-focused),
+    &.is-focused-postal,
+    &.is-invalid-postal:not(.is-focused) {
         & .input-credit-card-expiration {
             transform: translateX(-8rem);
         }
@@ -4407,26 +4407,53 @@ template {
     transition: transform ease 0.25s; }
     .form-control.input-credit-card .input-credit-card-field.is-invalid {
       color: #b41327; }
-  .form-control.input-credit-card .input-credit-card-icon {
+  .form-control.input-credit-card .input-credit-card-icon-card {
     position: absolute;
     left: 0;
-    top: 2.25px;
-    height: 1.75rem;
+    top: .33rem;
     width: 2.5rem;
-    padding: 0 .5rem;
+    height: 1.75rem;
     background: white;
     z-index: 2;
-    color: #495057; }
-    .form-control.input-credit-card .input-credit-card-icon svg {
+    color: #495057;
+    transition: 0.4s;
+    transform-style: preserve-3d;
+    /* hide back of pane during swap */ }
+    .form-control.input-credit-card .input-credit-card-icon-card .input-credit-card-icon {
+      height: 1.75rem;
+      width: 2.5rem;
+      padding: 0 .5rem; }
+    .form-control.input-credit-card .input-credit-card-icon-card .input-credit-card-icon-back,
+    .form-control.input-credit-card .input-credit-card-icon-card .input-credit-card-icon-front .input-credit-card-icon {
       display: none; }
+    .form-control.input-credit-card .input-credit-card-icon-card .input-credit-card-icon-front,
+    .form-control.input-credit-card .input-credit-card-icon-card .input-credit-card-icon-back {
+      backface-visibility: hidden;
+      position: absolute;
+      height: 1.75rem;
+      width: 2.5rem;
+      top: 0;
+      left: 0; }
+    .form-control.input-credit-card .input-credit-card-icon-card .input-credit-card-icon-front {
+      z-index: 3;
+      transform: rotateY(0deg); }
+    .form-control.input-credit-card .input-credit-card-icon-card .input-credit-card-icon-back {
+      transform: rotateY(180deg); }
+  .form-control.input-credit-card.is-focused-cvc .input-credit-card-icon-card {
+    perspective: 1000px;
+    transform: rotateY(180deg); }
+  .form-control.input-credit-card.is-focused-cvc .input-credit-card-icon-back {
+    display: block; }
+  .form-control.input-credit-card.is-focused-cvc .input-credit-card-icon-front {
+    display: none; }
   .form-control.input-credit-card:not(.brand-jcb):not(.brand-visa):not(.brand-amex):not(.brand-discover):not(.brand-mastercard):not(.brand-discover) svg[data-brand="unknown"],
-  .form-control.input-credit-card.brand-jcb svg[data-brand="jcb"],
-  .form-control.input-credit-card.brand-visa svg[data-brand=visa],
-  .form-control.input-credit-card.brand-amex svg[data-brand="amex"],
-  .form-control.input-credit-card.brand-discover svg[data-brand="discover"],
-  .form-control.input-credit-card.brand-mastercard svg[data-brand="mastercard"],
-  .form-control.input-credit-card.brand-dinersclub svg[data-brand="dinersclub"] {
-    display: inline-block; }
+  .form-control.input-credit-card.brand-jcb .input-credit-card-icon-card svg[data-brand="jcb"],
+  .form-control.input-credit-card.brand-visa .input-credit-card-icon-card svg[data-brand=visa],
+  .form-control.input-credit-card.brand-amex .input-credit-card-icon-card svg[data-brand="amex"],
+  .form-control.input-credit-card.brand-discover .input-credit-card-icon-card svg[data-brand="discover"],
+  .form-control.input-credit-card.brand-mastercard .input-credit-card-icon-card svg[data-brand="mastercard"],
+  .form-control.input-credit-card.brand-dinersclub .input-credit-card-icon-card svg[data-brand="dinersclub"] {
+    display: block; }
   .form-control.input-credit-card .input-credit-card-placeholder-mask,
   .form-control.input-credit-card .input-credit-card-number-mask {
     width: auto;
@@ -4461,7 +4488,7 @@ template {
     transform: translateX(-6.75rem); }
   .form-control.input-credit-card.show-security-fields .input-credit-card-postal {
     transform: translateX(-3.5rem); }
-  .form-control.input-credit-card.has-focus {
+  .form-control.input-credit-card.is-focused {
     outline: none;
     border-color: #96b9f6;
     box-shadow: 0 0 0 0.2rem rgba(150, 185, 246, 0.5); }
@@ -4477,9 +4504,9 @@ template {
     box-shadow: 0 0 0 0.2rem rgba(114, 175, 55, 0.25); }
     .form-control.input-credit-card.is-valid .input-credit-card-icon, .form-control.input-credit-card:valid .input-credit-card-icon {
       color: #72af37; }
-  .form-control.input-credit-card.has-focus:not(.has-focus-number) .input-credit-card-number.is-empty {
+  .form-control.input-credit-card.is-focused:not(.is-focused-number) .input-credit-card-number.is-empty {
     opacity: 0; }
-  .form-control.input-credit-card.has-focus:not(.has-focus-number) .input-credit-card-number.is-empty ~ .input-credit-card-placeholder-mask {
+  .form-control.input-credit-card.is-focused:not(.is-focused-number) .input-credit-card-number.is-empty ~ .input-credit-card-placeholder-mask {
     opacity: 1; }
 
 

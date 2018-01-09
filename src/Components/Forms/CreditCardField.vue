@@ -9,15 +9,19 @@
                 <input type="text" class="input-credit-card-field input-credit-card-postal" placeholder="Zip" maxlength="5" v-model="card.postalCode" @focus="addFocusClass($event.target, 'validatePostalCode', true);" @blur="removeFocusClass($event.target, 'validatePostalCode')" @input="validateInput($event, 'validatePostalCode')" @keydown.delete="focusPrevElement($event.target)">
             </div>
 
-            <div class="input-credit-card-icon">
-                <!-- <icon name="credit-card-alt" class="input-credit-card-icon" width="23.33" height="20"></icon> -->
-                <icon name="cc-jcb" data-brand="jcb" class="input-credit-card-icon"></icon>
-                <icon name="cc-visa" data-brand="visa" class="input-credit-card-icon"></icon>
-                <icon name="cc-amex" data-brand="amex" class="input-credit-card-icon"></icon>
-                <icon name="credit-card" data-brand="unknown" class="input-credit-card-icon" width="20" height="18"></icon>
-                <icon name="cc-discover" data-brand="discover" class="input-credit-card-icon"></icon>
-                <icon name="cc-mastercard" data-brand="mastercard" class="input-credit-card-icon"></icon>
-                <icon name="cc-diners-club" data-brand="dinersclub" class="input-credit-card-icon"></icon>
+            <div class="input-credit-card-icon-card">
+                <div class="input-credit-card-icon-front">
+                    <icon name="cc-jcb" data-brand="jcb" class="input-credit-card-icon"></icon>
+                    <icon name="cc-visa" data-brand="visa" class="input-credit-card-icon"></icon>
+                    <icon name="cc-amex" data-brand="amex" class="input-credit-card-icon"></icon>
+                    <icon name="credit-card" data-brand="unknown" class="input-credit-card-icon" width="20" height="18"></icon>
+                    <icon name="cc-discover" data-brand="discover" class="input-credit-card-icon"></icon>
+                    <icon name="cc-mastercard" data-brand="mastercard" class="input-credit-card-icon"></icon>
+                    <icon name="cc-diners-club" data-brand="dinersclub" class="input-credit-card-icon"></icon>
+                </div>
+                <div class="input-credit-card-icon-back">
+                    <icon name="credit-card-alt" class="input-credit-card-icon" width="23.33" height="20"></icon>
+                </div>
             </div>
 
             <div class="input-credit-card-placeholder-mask">Number</div>
@@ -181,7 +185,7 @@ export default {
             this.removeErrorClass(el);
             el.classList.add('is-focused');
             this.addTransform(this.$el.querySelector('.input-credit-card-number'));
-            this.getCardField().classList.add('has-focus', this.getFocusClassName(el));
+            this.getCardField().classList.add('is-focused', this.getFocusClassName(el));
 
             if(showSecurityFields) {
                 this.showSecurityFields();
@@ -192,7 +196,7 @@ export default {
 
         removeFocusClass(el, method) {
             el.classList.remove('is-focused');
-            this.getCardField().classList.remove('has-focus', this.getFocusClassName(el));
+            this.getCardField().classList.remove('is-focused', this.getFocusClassName(el));
 
             if(this.shouldTransform()) {
                 this.addTransform(this.$el.querySelector('.input-credit-card-number'));
@@ -294,7 +298,7 @@ export default {
         },
 
         getFocusClassName(el) {
-            return 'has-focus-' + this.getClassName(el);
+            return 'is-focused-' + this.getClassName(el);
         },
 
         focusNextElement(el) {
@@ -476,30 +480,73 @@ export default {
             }
         }
 
-        & .input-credit-card-icon {
+        & .input-credit-card-icon-card {
             position: absolute;
             left: 0;
-            top: 2.25px;
-            height: 1.75rem;
+            top: .33rem;
             width: 2.5rem;
-            padding: 0 .5rem;
+            height: 1.75rem;
             background: white;
             z-index: 2;
             color: $gray-700;
+            transition: 0.4s;
+            transform-style: preserve-3d;
 
-            & svg {
+            & .input-credit-card-icon {
+                height: 1.75rem;
+                width: 2.5rem;
+                padding: 0 .5rem;
+            }
+
+            & .input-credit-card-icon-back,
+            & .input-credit-card-icon-front .input-credit-card-icon {
+                display: none;
+            }
+
+            /* hide back of pane during swap */
+            & .input-credit-card-icon-front,
+            & .input-credit-card-icon-back {
+                backface-visibility: hidden;
+                position: absolute;
+                height: 1.75rem;
+                width: 2.5rem;
+                top: 0;
+                left: 0;
+            }
+
+            & .input-credit-card-icon-front {
+                z-index: 3;
+                transform: rotateY(0deg);
+            }
+
+            & .input-credit-card-icon-back {
+                transform: rotateY(180deg);
+            }
+        }
+
+        &.is-focused-cvc {
+            & .input-credit-card-icon-card {
+                perspective: 1000px;
+                transform: rotateY(180deg);
+            }
+
+            & .input-credit-card-icon-back {
+                display: block;
+            }
+
+            & .input-credit-card-icon-front {
                 display: none;
             }
         }
 
         &:not(.brand-jcb):not(.brand-visa):not(.brand-amex):not(.brand-discover):not(.brand-mastercard):not(.brand-discover) svg[data-brand="unknown"],
-        &.brand-jcb svg[data-brand="jcb"],
-        &.brand-visa svg[data-brand=visa],
-        &.brand-amex svg[data-brand="amex"],
-        &.brand-discover svg[data-brand="discover"],
-        &.brand-mastercard svg[data-brand="mastercard"],
-        &.brand-dinersclub svg[data-brand="dinersclub"] {
-            display: inline-block;
+        &.brand-jcb .input-credit-card-icon-card svg[data-brand="jcb"],
+        &.brand-visa .input-credit-card-icon-card svg[data-brand=visa],
+        &.brand-amex .input-credit-card-icon-card svg[data-brand="amex"],
+        &.brand-discover .input-credit-card-icon-card svg[data-brand="discover"],
+        &.brand-mastercard .input-credit-card-icon-card svg[data-brand="mastercard"],
+        &.brand-dinersclub .input-credit-card-icon-card svg[data-brand="dinersclub"] {
+            display: block;
         }
 
         & .input-credit-card-placeholder-mask,
@@ -554,7 +601,7 @@ export default {
             }
         }
 
-        &.has-focus {
+        &.is-focused {
             outline: none;
             border-color: $input-focus-border-color;
             box-shadow: $input-focus-box-shadow;
@@ -582,7 +629,7 @@ export default {
             }
         }
 
-        &.has-focus:not(.has-focus-number) {
+        &.is-focused:not(.is-focused-number) {
             & .input-credit-card-number.is-empty {
                 opacity: 0;
             }
@@ -592,8 +639,8 @@ export default {
         }
 
         /*
-        &.has-focus-expiration,
-        &.is-invalid-expiration:not(.has-focus) {
+        &.is-focused-expiration,
+        &.is-invalid-expiration:not(.is-focused) {
             & .input-credit-card-expiration {
                 transform: translateX(-4rem);
             }
@@ -602,10 +649,10 @@ export default {
             }
         }
 
-        &.has-focus-cvc,
-        &.is-invalid-cvc:not(.has-focus),
-        &.has-focus-postal,
-        &.is-invalid-postal:not(.has-focus) {
+        &.is-focused-cvc,
+        &.is-invalid-cvc:not(.is-focused),
+        &.is-focused-postal,
+        &.is-invalid-postal:not(.is-focused) {
             & .input-credit-card-expiration {
                 transform: translateX(-8rem);
             }

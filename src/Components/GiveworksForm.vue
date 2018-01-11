@@ -93,30 +93,8 @@ export default {
             this.$el.querySelector('[type=submit]').style.display = 'block';
         },
         submit: function(event) {
-            if(event) {
-                event.preventDefault();
-            }
-
-            if(!this.$submitting) {
-                this.showActivity();
-                this.$submitting = true;
-                this.$dispatch.emit('form:submit', this);
-
-                return Api.page.submit(this.page.id, this.form)
-                    .then((response) => {
-                        this.$dispatch.emit('form:submit:complete', true, response);
-                        this.$dispatch.emit('form:submit:success', response);
-                        window.location = this.redirect || this.page.next_page.url;
-                    }, (error) => {
-                        this.hideActivity();
-                        this.$submitting = false;
-                        this.$set(this, 'errors', error.response.data.errors || {});
-                        this.$dispatch.emit('form:submit:complete', false, error);
-                        this.$dispatch.emit('form:submit:error', error);
-
-                        throw error;
-                    });
-            }
+            this.$dispatch.request('form:submit');
+            event.preventDefault();
         }
     },
 
@@ -148,8 +126,8 @@ export default {
                 try {
                     resolve(this[method]());
                 }
-                catch(e) {
-                    reject();
+                catch(error) {
+                    reject(error);
                 }
             });
         });
@@ -158,18 +136,29 @@ export default {
             resolve(this);
         });
 
-        this.$dispatch.reply('form:submit', (resolve, reject, event) => {
-            const promise = this.submit(event);
+        this.$dispatch.reply('form:submit', (resolve, reject) => {
+            if(!this.$submitting) {
+                this.showActivity();
+                this.$submitting = true;
+                this.$dispatch.emit('form:submit', this.form, this);
 
-            if(promise) {
-                promise.then((response) => {
-                    resolve(response);
-                }, (error) => {
-                    reject(error);
-                });
+                return Api.page.submit(this.page.id, this.form)
+                    .then((response) => {
+                        this.$dispatch.emit('form:submit:complete', true, response, this);
+                        this.$dispatch.emit('form:submit:success', response, this);
+                        window.location = this.redirect || this.page.next_page.url;
+                    }, (error) => {
+                        this.hideActivity();
+                        this.$submitting = false;
+                        this.$set(this, 'errors', error.response.data.errors || {});
+                        this.$dispatch.emit('form:submit:complete', false, error, this);
+                        this.$dispatch.emit('form:submit:error', error, this);
+
+                        throw error;
+                    });
             }
             else {
-                reject(event);
+                reject(new Error('The form is already submitting'));
             }
         });
     },

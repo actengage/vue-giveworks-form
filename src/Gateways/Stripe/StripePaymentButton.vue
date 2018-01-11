@@ -132,7 +132,7 @@ export default {
             }
         });
 
-        this.$submitEvent = this.$dispatch.on('form:submit', () => {
+        this.$submitEvent = this.$dispatch.on('form:submit', (data) => {
             this.submitting = true;
         });
 
@@ -165,7 +165,7 @@ export default {
 
             this.$paymentRequestButton.on('click', (event) => {
                 if(this.form.token) {
-                    this.$dispatch.request('form:submit', event);
+                    this.$dispatch.request('form:submit');
                 }
             });
 

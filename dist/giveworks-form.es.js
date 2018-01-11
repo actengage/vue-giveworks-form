@@ -10884,8 +10884,29 @@ class Dispatcher {
         return !is(key, BroadcastEvent) ? new BroadcastEvent(key, callback) : key;
     }
 
-    createReply(key, callback) {
-        return !is(key, BroadcastReply) ? new BroadcastReply(key, callback) : key;
+    hasEvent(key) {
+        return !!this.getEvent(key);
+    }
+
+    getEvent(key) {
+        return this._events[key] || null;
+    }
+
+    setEvent(key, value) {
+        if(key instanceof BroadcastEvent) {
+            value = key;
+            key = value.key;
+        }
+
+        if(!value instanceof BroadcastEvent) {
+            throw new Error('The value argument must be an instance of BroadcastEvent');
+        }
+
+        return this._events[key] = value;
+    }
+
+    getEvents() {
+        return this._events;
     }
 
     on(key, callback) {
@@ -10929,6 +10950,35 @@ class Dispatcher {
                 }
             }
         }
+    }
+
+    createReply(key, callback) {
+        return !is(key, BroadcastReply) ? new BroadcastReply(key, callback) : key;
+    }
+
+    hasReply(key) {
+        return !!this.getReply(key);
+    }
+
+    getReply(key) {
+        return this._replies[key] || null;
+    }
+
+    setReply(key, value) {
+        if(key instanceof BroadcastReply) {
+            value = key;
+            key = value.key;
+        }
+
+        if(!value instanceof BroadcastReply) {
+            throw new Error('The value argument must be an instance of BroadcastReply');
+        }
+
+        return this._replies[key] = value;
+    }
+
+    getReplies() {
+        return this._replies;
     }
 
     request(reply, context) {
@@ -13328,6 +13378,130 @@ var App = {
 
 };
 
+Icon.register({"paypal":{"width":1536,"height":1792,"paths":[{"d":"M1519 646q18 84-4 204-87 444-565 444h-44q-25 0-44 16.5t-24 42.5l-4 19-55 346-2 15q-5 26-24.5 42.5t-44.5 16.5h-251q-21 0-33-15t-9-36q9-56 26.5-168t26.5-168 27-167.5 27-167.5q5-37 43-37h131q133 2 236-21 175-39 287-144 102-95 155-246 24-70 35-133 1-6 2.5-7.5t3.5-1 6 3.5q79 59 98 162zM1347 364q0 107-46 236-80 233-302 315-113 40-252 42 0 1-90 1l-90-1q-100 0-118 96-2 8-85 530-1 10-12 10h-295q-22 0-36.5-16.5t-11.5-38.5l232-1471q5-29 27.5-48t51.5-19h598q34 0 97.5 13t111.5 32q107 41 163.5 123t56.5 196z"}]}});
+
+var PayPal = function (_Api) {
+    inherits(PayPal, _Api);
+
+    function PayPal() {
+        classCallCheck(this, PayPal);
+        return possibleConstructorReturn(this, (PayPal.__proto__ || Object.getPrototypeOf(PayPal)).apply(this, arguments));
+    }
+
+    createClass(PayPal, [{
+        key: 'api',
+        value: function api() {
+            return 'App\\SiteApis\\Gateways\\PayPal';
+        }
+    }, {
+        key: 'buttons',
+        value: function buttons() {
+            return [{
+                icon: 'paypal',
+                label: 'PayPal',
+                component: 'paypal-payment-button'
+            }];
+        }
+    }, {
+        key: 'paypal',
+        value: function paypal() {
+            if (!this._paypal) {
+                this._paypal = window.paypal;
+            }
+
+            return this._paypal;
+        }
+    }, {
+        key: 'button',
+        value: function button(el, $dispatch) {
+            var button = this.paypal().Button.render({
+                // 'production' or 'sandbox'
+                env: 'sandbox',
+
+                locale: 'en_US',
+
+                client: {
+                    sandbox: this.options.client_id
+                },
+
+                style: {
+                    shape: 'rect',
+                    size: 'responsive'
+                },
+
+                commit: false,
+
+                validate: function validate(actions) {
+                    button.amount ? actions.enable() : actions.disable();
+
+                    $dispatch.reply('paypal:enable', function (resolve, reject) {
+                        actions.enable();
+                        resolve(actions);
+                    });
+
+                    $dispatch.reply('paypal:disable', function (resolve, reject) {
+                        actions.disable();
+                        resolve(actions);
+                    });
+
+                    $dispatch.emit('paypal:validate', actions);
+                },
+
+                payment: function payment(data, actions) {
+                    var payment = actions.payment.create({
+                        payment: {
+                            transactions: [{
+                                amount: {
+                                    total: button.amount,
+                                    currency: 'USD'
+                                }
+                            }]
+                        },
+                        experience: {
+                            input_fields: {
+                                no_shipping: 1
+                            }
+                        }
+                    });
+
+                    $dispatch.emit('paypal:payment', payment);
+
+                    return payment;
+                },
+
+                onRender: function onRender() {
+                    $dispatch.emit('paypal:render', this);
+                },
+
+                onClick: function onClick(data) {
+                    $dispatch.emit('paypal:click', this, data);
+                },
+
+                onCancel: function onCancel(data, actions) {
+                    $dispatch.emit('paypal:cancel', data, actions);
+                },
+
+                onError: function onError(error) {
+                    $dispatch.emit('paypal:error', error);
+                },
+
+                onAuthorize: function onAuthorize(data, actions) {
+                    $dispatch.emit('paypal:authorize', data, actions);
+                }
+
+            }, el);
+
+            return button;
+        }
+    }, {
+        key: 'script',
+        value: function script$$1(callback) {
+            script('https://www.paypalobjects.com/api/checkout.js', callback);
+        }
+    }]);
+    return PayPal;
+}(Gateway$1);
+
 var AuthorizetNet = function (_Api) {
     inherits(AuthorizetNet, _Api);
 
@@ -13384,6 +13558,7 @@ var AuthorizetNet = function (_Api) {
 }(Gateway$1);
 
 var Gateways = {
+    'PayPal': PayPal,
     'Stripe': Stripe,
     'Authorize.Net': AuthorizetNet
 };
@@ -13400,7 +13575,7 @@ var Gateway = function (key, options) {
         var Api = Gateways[key];
 
         if (!Api) {
-            throw new Error('The "' + key + '" is not supported!');
+            throw new Error('"' + key + '" is not in the list of supported gateways. Open /Gateways/Gateway.vue and add it to the list.');
         }
 
         instances[key] = new Api(options);
@@ -13441,7 +13616,7 @@ var StripeCreditCard = { render: function render() {
     created: function created() {
         var _this = this;
 
-        this.$submitEvent = this.$dispatch.on('form:submit', function (form) {
+        this.$submitEvent = this.$dispatch.on('form:submit', function (data) {
             _this.$card.blur();
         });
     },
@@ -13485,19 +13660,7 @@ var StripeCreditCard = { render: function render() {
     }
 };
 
-Icon.register({"cc-jcb":{"width":2304,"height":1792,"paths":[{"d":"M1951 998q0 26-15.5 44.5t-38.5 23.5q-8 2-18 2h-153v-140h153q10 0 18 2 23 5 38.5 23.5t15.5 44.5zM1933 785q0 25-15 42t-38 21q-3 1-15 1h-139v-129h139q3 0 8.5 0.5t6.5 0.5q23 4 38 21.5t15 42.5zM728 949v-308h-228v308q0 58-38 94.5t-105 36.5q-108 0-229-59v112q53 15 121 23t109 9l42 1q328 0 328-217zM1442 1133v-113q-99 52-200 59-108 8-169-41t-61-142 61-142 169-41q101 7 200 58v-112q-48-12-100-19.5t-80-9.5l-28-2q-127-6-218.5 14t-140.5 60-71 88-22 106 22 106 71 88 140.5 60 218.5 14q101-4 208-31zM2176 1018q0-54-43-88.5t-109-39.5v-3q57-8 89-41.5t32-79.5q0-55-41-88t-107-36q-3 0-12-0.5t-14-0.5h-455v510h491q74 0 121.5-36.5t47.5-96.5zM2304 256v1280q0 52-38 90t-90 38h-2048q-52 0-90-38t-38-90v-1280q0-52 38-90t90-38h2048q52 0 90 38t38 90z"}]}});
-
-Icon.register({"warning":{"width":1792,"height":1792,"paths":[{"d":"M1024 1375v-190q0-14-9.5-23.5t-22.5-9.5h-192q-13 0-22.5 9.5t-9.5 23.5v190q0 14 9.5 23.5t22.5 9.5h192q13 0 22.5-9.5t9.5-23.5zM1022 1001l18-459q0-12-10-19-13-11-24-11h-220q-11 0-24 11-10 7-10 21l17 457q0 10 10 16.5t24 6.5h185q14 0 23.5-6.5t10.5-16.5zM1008 67l768 1408q35 63-2 126-17 29-46.5 46t-63.5 17h-1536q-34 0-63.5-17t-46.5-46q-37-63-2-126l768-1408q17-31 47-49t65-18 65 18 47 49z"}]}});
-
-Icon.register({"cc-visa":{"width":2304,"height":1792,"paths":[{"d":"M1975 990h-138q14-37 66-179l3-9q4-10 10-26t9-26l12 55zM531 925l-58-295q-11-54-75-54h-268l-2 13q311 79 403 336zM710 576l-162 438-17-89q-26-70-85-129.5t-131-88.5l135 510h175l261-641h-176zM849 1218h166l104-642h-166zM1617 592q-69-27-149-27-123 0-201 59t-79 153q-1 102 145 174 48 23 67 41t19 39q0 30-30 46t-69 16q-86 0-156-33l-22-11-23 144q74 34 185 34 130 1 208.5-59t80.5-160q0-106-140-174-49-25-71-42t-22-38q0-22 24.5-38.5t70.5-16.5q70-1 124 24l15 8zM2042 576h-128q-65 0-87 54l-246 588h174l35-96h212q5 22 20 96h154zM2304 256v1280q0 52-38 90t-90 38h-2048q-52 0-90-38t-38-90v-1280q0-52 38-90t90-38h2048q52 0 90 38t38 90z"}]}});
-
-Icon.register({"cc-amex":{"width":2304,"height":1792,"paths":[{"d":"M119 682h89l-45-108zM740 1208l74-79-70-79h-163v49h142v55h-142v54h159zM898 1130l99 110v-217zM1186 1083q0-33-40-33h-84v69h83q41 0 41-36zM1475 1079q0-29-42-29h-82v61h81q43 0 43-32zM1197 613q0-29-42-29h-82v60h81q43 0 43-31zM1656 682h89l-44-108zM699 527v271h-66v-212l-94 212h-57l-94-212v212h-132l-25-60h-135l-25 60h-70l116-271h96l110 257v-257h106l85 184 77-184h108zM1255 1083q0 20-5.5 35t-14 25-22.5 16.5-26 10-31.5 4.5-31.5 1-32.5-0.5-29.5-0.5v91h-126l-80-90-83 90h-256v-271h260l80 89 82-89h207q109 0 109 89zM964 742v56h-217v-271h217v57h-152v49h148v55h-148v54h152zM2304 1301v229q0 55-38.5 94.5t-93.5 39.5h-2040q-55 0-93.5-39.5t-38.5-94.5v-678h111l25-61h55l25 61h218v-46l19 46h113l20-47v47h541v-99l10-1q10 0 10 14v86h279v-23q23 12 55 18t52.5 6.5 63-0.5 51.5-1l25-61h56l25 61h227v-58l34 58h182v-378h-180v44l-25-44h-185v44l-23-44h-249q-69 0-109 22v-22h-172v22q-24-22-73-22h-628l-43 97-43-97h-198v44l-22-44h-169l-78 179v-391q0-55 38.5-94.5t93.5-39.5h2040q55 0 93.5 39.5t38.5 94.5v678h-120q-51 0-81 22v-22h-177q-55 0-78 22v-22h-316v22q-31-22-87-22h-209v22q-23-22-91-22h-234l-54 58-50-58h-349v378h343l55-59 52 59h211v-89h21q59 0 90-13v102h174v-99h8q8 0 10 2t2 10v87h529q57 0 88-24v24h168q60 0 95-17zM1546 1067q0 23-12 43t-34 29q25 9 34 26t9 46v54h-65v-45q0-33-12-43.5t-46-10.5h-69v99h-65v-271h154q48 0 77 15t29 58zM1269 600q0 24-12.5 44t-33.5 29q26 9 34.5 25.5t8.5 46.5v53h-65q0-9 0.5-26.5t0-25-3-18.5-8.5-16-17.5-8.5-29.5-3.5h-70v98h-64v-271l153 1q49 0 78 14.5t29 57.5zM1798 1209v56h-216v-271h216v56h-151v49h148v55h-148v54zM1372 527v271h-66v-271h66zM2065 1179q0 86-102 86h-126v-58h126q34 0 34-25 0-16-17-21t-41.5-5-49.5-3.5-42-22.5-17-55q0-39 26-60t66-21h130v57h-119q-36 0-36 25 0 16 17.5 20.5t42 4 49 2.5 42 21.5 17.5 54.5zM2304 1129v101q-24 35-88 35h-125v-58h125q33 0 33-25 0-13-12.5-19t-31-5.5-40-2-40-8-31-24-12.5-48.5q0-39 26.5-60t66.5-21h129v57h-118q-36 0-36 25 0 20 29 22t68.5 5 56.5 26zM2139 528v270h-92l-122-203v203h-132l-26-60h-134l-25 60h-75q-129 0-129-133 0-138 133-138h63v59q-7 0-28-1t-28.5-0.5-23 2-21.5 6.5-14.5 13.5-11.5 23-3 33.5q0 38 13.5 58t49.5 20h29l92-213h97l109 256v-256h99l114 188v-188h66z"}]}});
-
-Icon.register({"cc-discover":{"width":2304,"height":1792,"paths":[{"d":"M313 777q0 51-36 84-29 26-89 26h-17v-220h17q61 0 89 27 36 31 36 83zM2089 712q0 52-64 52h-19v-101h20q63 0 63 49zM380 777q0-74-50-120.5t-129-46.5h-95v333h95q74 0 119-38 60-51 60-128zM410 943h65v-333h-65v333zM730 842q0-40-20.5-62t-75.5-42q-29-10-39.5-19t-10.5-23q0-16 13.5-26.5t34.5-10.5q29 0 53 27l34-44q-41-37-98-37-44 0-74 27.5t-30 67.5q0 35 18 55.5t64 36.5q37 13 45 19 19 12 19 34 0 20-14 33.5t-36 13.5q-48 0-71-44l-42 40q44 64 115 64 51 0 83-30.5t32-79.5zM1008 932v-77q-37 37-78 37-49 0-80.5-32.5t-31.5-82.5q0-48 31.5-81.5t77.5-33.5q43 0 81 38v-77q-40-20-80-20-74 0-125.5 50.5t-51.5 123.5 51 123.5 125 50.5q42 0 81-19zM2240 1536v-527q-65 40-144.5 84t-237.5 117-329.5 137.5-417.5 134.5-504 118h1569q26 0 45-19t19-45zM1389 779q0-75-53-128t-128-53-128 53-53 128 53 128 128 53 128-53 53-128zM1541 952l144-342h-71l-90 224-89-224h-71l142 342h35zM1714 943h184v-56h-119v-90h115v-56h-115v-74h119v-57h-184v333zM2105 943h80l-105-140q76-16 76-94 0-47-31-73t-87-26h-97v333h65v-133h9zM2304 262v1268q0 56-38.5 95t-93.5 39h-2040q-55 0-93.5-39t-38.5-95v-1268q0-56 38.5-95t93.5-39h2040q55 0 93.5 39t38.5 95z"}]}});
-
-Icon.register({"cc-mastercard":{"width":2304,"height":1792,"paths":[{"d":"M1119 341q-128-85-281-85-103 0-197.5 40.5t-162.5 108.5-108.5 162-40.5 197q0 104 40.5 198t108.5 162 162 108.5 198 40.5q153 0 281-85-131-107-178-265.5t0.5-316.5 177.5-265zM1152 365q-126 99-172 249.5t-0.5 300.5 172.5 249q127-99 172.5-249t-0.5-300.5-172-249.5zM1185 341q130 107 177.5 265.5t0.5 317-178 264.5q128 85 281 85 104 0 198-40.5t162-108.5 108.5-162 40.5-198q0-103-40.5-197t-108.5-162-162.5-108.5-197.5-40.5q-153 0-281 85zM1926 1063h7v-3h-17v3h7v17h3v-17zM1955 1080h4v-20h-5l-6 13-6-13h-5v20h3v-15l6 13h4l5-13v15zM1947 1520v2h-2-3v-3h3 2v1zM1947 1529h3l-4-5h2l1-1q1-1 1-3t-1-3l-1-1h-3-6v13h3v-5h1zM685 1461q0-19 11-31t30-12q18 0 29 12.5t11 30.5q0 19-11 31t-29 12q-19 0-30-12t-11-31zM1158 1417q30 0 35 32h-70q5-32 35-32zM1514 1461q0-19 11-31t29-12 29.5 12.5 11.5 30.5q0 19-11 31t-30 12q-18 0-29-12t-11-31zM1786 1461q0-18 11.5-30.5t29.5-12.5 29.5 12.5 11.5 30.5q0 19-11.5 31t-29.5 12-29.5-12.5-11.5-30.5zM1944 1533q-2 0-4-1-1 0-3-2t-2-3q-1-2-1-4 0-3 1-4 0-2 2-4l1-1q2 0 2-1 2-1 4-1 3 0 4 1l4 2 2 4v1q1 2 1 3l-1 1v3t-1 1l-1 2q-2 2-4 2-1 1-4 1zM599 1529h30v-85q0-24-14.5-38.5t-39.5-15.5q-32 0-47 24-14-24-45-24-24 0-39 20v-16h-30v135h30v-75q0-36 33-36 30 0 30 36v75h29v-75q0-36 33-36 30 0 30 36v75zM765 1529h29v-68-67h-29v16q-17-20-43-20-29 0-48 20t-19 51 19 51 48 20q28 0 43-20v17zM943 1488q0-34-47-40l-14-2q-23-4-23-14 0-15 25-15 23 0 43 11l12-24q-22-14-55-14-26 0-41 12t-15 32q0 33 47 39l13 2q24 4 24 14 0 17-31 17-25 0-45-14l-13 23q25 17 58 17 29 0 45.5-12t16.5-32zM1073 1522l-8-25q-13 7-26 7-19 0-19-22v-61h48v-27h-48v-41h-30v41h-28v27h28v61q0 50 47 50 21 0 36-10zM1159 1390q-29 0-48 20t-19 51q0 32 19.5 51.5t49.5 19.5q33 0 55-19l-14-22q-18 15-39 15-34 0-41-33h101v-12q0-32-18-51.5t-46-19.5zM1318 1390q-23 0-35 20v-16h-30v135h30v-76q0-35 29-35 10 0 18 4l9-28q-9-4-21-4zM1348 1461q0 31 19.5 51t52.5 20q29 0 48-16l-14-24q-18 13-35 12-18 0-29.5-12t-11.5-31 11.5-31 29.5-12q19 0 35 12l14-24q-20-16-48-16-33 0-52.5 20t-19.5 51zM1593 1529h30v-68-67h-30v16q-15-20-42-20-29 0-48.5 20t-19.5 51 19.5 51 48.5 20q28 0 42-20v17zM1726 1390q-23 0-35 20v-16h-29v135h29v-76q0-35 29-35 10 0 18 4l9-28q-8-4-21-4zM1866 1529h29v-68-122h-29v71q-15-20-43-20t-47.5 20.5-19.5 50.5 19.5 50.5 47.5 20.5q29 0 43-20v17zM1944 1509l-2 1h-3q-2 1-4 3-3 1-3 4-1 2-1 6 0 3 1 5 0 2 3 4 2 2 4 3t5 1q4 0 6-1 0-1 2-2l2-1q1-1 3-4 1-2 1-5 0-4-1-6-1-1-3-4 0-1-2-2l-2-1q-1 0-3-0.5t-3-0.5zM2304 256v1280q0 52-38 90t-90 38h-2048q-52 0-90-38t-38-90v-1280q0-52 38-90t90-38h2048q52 0 90 38t38 90z"}]}});
-
-Icon.register({"cc-diners-club":{"width":2304,"height":1792,"paths":[{"d":"M858 1241v-693q-106 41-172 135.5t-66 211.5 66 211.5 172 134.5zM1362 895q0-117-66-211.5t-172-135.5v694q106-41 172-135.5t66-211.5zM1577 895q0 159-78.5 294t-213.5 213.5-294 78.5q-119 0-227.5-46.5t-187-125-125-187-46.5-227.5q0-159 78.5-294t213.5-213.5 294-78.5 294 78.5 213.5 213.5 78.5 294zM1960 902q0-139-55.5-261.5t-147.5-205.5-213.5-131-252.5-48h-301q-176 0-323.5 81t-235 230-87.5 335q0 171 87 317.5t236 231.5 323 85h301q129 0 251.5-50.5t214.5-135 147.5-202.5 55.5-246zM2304 256v1280q0 52-38 90t-90 38h-2048q-52 0-90-38t-38-90v-1280q0-52 38-90t90-38h2048q52 0 90 38t38 90z"}]}});
+Icon.register({"check-circle":{"width":1536,"height":1792,"paths":[{"d":"M1284 734q0-28-18-46l-91-90q-19-19-45-19t-45 19l-408 407-226-226q-19-19-45-19t-45 19l-91 90q-18 18-18 46 0 27 18 45l362 362q19 19 45 19 27 0 46-19l543-543q18-18 18-45zM1536 896q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"}]}});
 
 var BaseType = { render: function render() {
         var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', { staticClass: "activity-indicator", class: _vm.classes }, _vm._l(_vm.nodes, function (i) {
@@ -13584,6 +13747,168 @@ var ActivityIndicator = { render: function render() {
 
 };
 
+var PaypalPaymentButton = { render: function render() {
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [!_vm.loaded || _vm.submitting ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : _c('div', [_vm.error ? _c('div', { staticClass: "alert alert-danger", domProps: { "innerHTML": _vm._s(_vm.error) } }) : _vm.form.payerId && _vm.form.paymentId ? _c('div', { staticClass: "alert alert-success" }, [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-sm-2" }, [_c('icon', { staticClass: "float-left", attrs: { "name": "check-circle", "scale": "3" } })], 1), _vm._v(" "), _c('div', { staticClass: "col-sm-10" }, [_vm._v(" Your PayPal payment information has been collected and is ready to be processed. "), _c('a', { attrs: { "href": "#" }, on: { "click": function click($event) {
+                    _vm.removePaymentInfo($event);
+                } } }, [_vm._v("Cancel Payment")])])])]) : _vm._e()]), _vm._v(" "), _c('div', { staticClass: "paypal-payment-button mt-2 mb-4", class: { 'disabled': _vm.disabled, 'd-none': _vm.submitting } })]);
+    }, staticRenderFns: [],
+
+    name: 'paypal-payment-button',
+
+    components: {
+        Icon: Icon,
+        ActivityIndicator: ActivityIndicator
+    },
+
+    props: {
+        page: {
+            type: Object,
+            required: true
+        },
+        form: {
+            type: Object,
+            required: true
+        },
+        errors: {
+            type: Object,
+            required: true
+        },
+        gateway: {
+            type: Object,
+            required: true
+        }
+    },
+
+    data: function data() {
+        return {
+            loaded: false,
+            submitting: false,
+            disabled: !this.form.amount
+        };
+    },
+
+
+    methods: {
+        hasError: function hasError() {
+            return this.errors.payerId || this.errors.paymentId;
+        },
+        shouldMountButton: function shouldMountButton() {
+            return this.$el.querySelector('.paypal-payment-button') && !this.$el.querySelector('.paypal-payment-button iframe');
+        },
+        hasPaymentInfo: function hasPaymentInfo() {
+            return this.form.payerId && this.form.paymentId;
+        },
+        removePaymentInfo: function removePaymentInfo(event) {
+            this.$set(this.form, 'payerId', null);
+            this.$set(this.form, 'paymentId', null);
+            this.$set(this.errors, 'payerId', null);
+            this.$set(this.errors, 'paymentId', null);
+            this.$dispatch.request('paypal:enable');
+            event.preventDefault();
+        }
+    },
+
+    computed: {
+        error: function error() {
+            var errors = [];
+
+            if (this.errors.payerId) {
+                errors.push(this.errors.payerId.join('<b>'));
+            }
+
+            if (this.errors.paymentId) {
+                errors.push(this.errors.paymentId.join('<b>'));
+            }
+
+            return errors.length ? errors.join('<br>') : false;
+        }
+    },
+
+    updated: function updated() {
+        var _this = this;
+
+        if (this.shouldMountButton()) {
+            var button = Gateway(this.gateway).button('.paypal-payment-button', this.$dispatch);
+
+            this.$dispatch.on('paypal:click', function (data) {
+                if (_this.hasPaymentInfo()) {
+                    _this.$dispatch.request('form:submit').then(function (response) {
+                        console.log('submit', response);
+                    });
+                }
+            });
+
+            this.$dispatch.on('paypal:validate', function (actions) {
+                if (_this.$unwatchAmount) {
+                    _this.$unwatchAmount();
+                }
+
+                _this.$unwatchAmount = _this.$watch('form.amount', function (value) {
+                    actions[value ? 'enable' : 'disable']();
+                    _this.disabled = !(button.amount = value);
+                });
+            });
+
+            this.$dispatch.on('paypal:authorize', function (data, actions) {
+                _this.form.payerId = data.payerID;
+                _this.form.paymentId = data.paymentID;
+                _this.$dispatch.request('form:submit');
+                _this.$dispatch.request('paypal:disable');
+            });
+        }
+    },
+    beforeCreate: function beforeCreate() {
+        var _this2 = this;
+
+        this.$prevFormSubmitReply = this.$dispatch.getReply('form:submit');
+
+        this.$dispatch.reply('form:submit', function (resolve, reject) {
+            if (_this2.form.payerId && _this2.form.paymentId) {
+                return _this2.$prevFormSubmitReply.handle(resolve, reject);
+            }
+        });
+
+        this.$submitEvent = this.$dispatch.on('form:submit', function (data) {
+            _this2.submitting = true;
+        });
+
+        this.$submitCompleteEvent = this.$dispatch.on('form:submit:complete', function (response) {
+            _this2.submitting = false;
+        });
+    },
+    mounted: function mounted() {
+        var _this3 = this;
+
+        this.$dispatch.request('submit:hide');
+
+        Gateway(this.gateway).script(function (event) {
+            _this3.loaded = true;
+        });
+    },
+    beforeDestroy: function beforeDestroy() {
+        this.$unwatchAmount();
+        this.$dispatch.request('submit:show');
+        this.$dispatch.off('paypal:authorize');
+        this.$dispatch.off(this.$submitEvent);
+        this.$dispatch.off(this.$submitCompleteEvent);
+        this.$dispatch.setReply(this.$prevFormSubmitReply);
+    }
+};
+
+Icon.register({"cc-jcb":{"width":2304,"height":1792,"paths":[{"d":"M1951 998q0 26-15.5 44.5t-38.5 23.5q-8 2-18 2h-153v-140h153q10 0 18 2 23 5 38.5 23.5t15.5 44.5zM1933 785q0 25-15 42t-38 21q-3 1-15 1h-139v-129h139q3 0 8.5 0.5t6.5 0.5q23 4 38 21.5t15 42.5zM728 949v-308h-228v308q0 58-38 94.5t-105 36.5q-108 0-229-59v112q53 15 121 23t109 9l42 1q328 0 328-217zM1442 1133v-113q-99 52-200 59-108 8-169-41t-61-142 61-142 169-41q101 7 200 58v-112q-48-12-100-19.5t-80-9.5l-28-2q-127-6-218.5 14t-140.5 60-71 88-22 106 22 106 71 88 140.5 60 218.5 14q101-4 208-31zM2176 1018q0-54-43-88.5t-109-39.5v-3q57-8 89-41.5t32-79.5q0-55-41-88t-107-36q-3 0-12-0.5t-14-0.5h-455v510h491q74 0 121.5-36.5t47.5-96.5zM2304 256v1280q0 52-38 90t-90 38h-2048q-52 0-90-38t-38-90v-1280q0-52 38-90t90-38h2048q52 0 90 38t38 90z"}]}});
+
+Icon.register({"warning":{"width":1792,"height":1792,"paths":[{"d":"M1024 1375v-190q0-14-9.5-23.5t-22.5-9.5h-192q-13 0-22.5 9.5t-9.5 23.5v190q0 14 9.5 23.5t22.5 9.5h192q13 0 22.5-9.5t9.5-23.5zM1022 1001l18-459q0-12-10-19-13-11-24-11h-220q-11 0-24 11-10 7-10 21l17 457q0 10 10 16.5t24 6.5h185q14 0 23.5-6.5t10.5-16.5zM1008 67l768 1408q35 63-2 126-17 29-46.5 46t-63.5 17h-1536q-34 0-63.5-17t-46.5-46q-37-63-2-126l768-1408q17-31 47-49t65-18 65 18 47 49z"}]}});
+
+Icon.register({"cc-visa":{"width":2304,"height":1792,"paths":[{"d":"M1975 990h-138q14-37 66-179l3-9q4-10 10-26t9-26l12 55zM531 925l-58-295q-11-54-75-54h-268l-2 13q311 79 403 336zM710 576l-162 438-17-89q-26-70-85-129.5t-131-88.5l135 510h175l261-641h-176zM849 1218h166l104-642h-166zM1617 592q-69-27-149-27-123 0-201 59t-79 153q-1 102 145 174 48 23 67 41t19 39q0 30-30 46t-69 16q-86 0-156-33l-22-11-23 144q74 34 185 34 130 1 208.5-59t80.5-160q0-106-140-174-49-25-71-42t-22-38q0-22 24.5-38.5t70.5-16.5q70-1 124 24l15 8zM2042 576h-128q-65 0-87 54l-246 588h174l35-96h212q5 22 20 96h154zM2304 256v1280q0 52-38 90t-90 38h-2048q-52 0-90-38t-38-90v-1280q0-52 38-90t90-38h2048q52 0 90 38t38 90z"}]}});
+
+Icon.register({"cc-amex":{"width":2304,"height":1792,"paths":[{"d":"M119 682h89l-45-108zM740 1208l74-79-70-79h-163v49h142v55h-142v54h159zM898 1130l99 110v-217zM1186 1083q0-33-40-33h-84v69h83q41 0 41-36zM1475 1079q0-29-42-29h-82v61h81q43 0 43-32zM1197 613q0-29-42-29h-82v60h81q43 0 43-31zM1656 682h89l-44-108zM699 527v271h-66v-212l-94 212h-57l-94-212v212h-132l-25-60h-135l-25 60h-70l116-271h96l110 257v-257h106l85 184 77-184h108zM1255 1083q0 20-5.5 35t-14 25-22.5 16.5-26 10-31.5 4.5-31.5 1-32.5-0.5-29.5-0.5v91h-126l-80-90-83 90h-256v-271h260l80 89 82-89h207q109 0 109 89zM964 742v56h-217v-271h217v57h-152v49h148v55h-148v54h152zM2304 1301v229q0 55-38.5 94.5t-93.5 39.5h-2040q-55 0-93.5-39.5t-38.5-94.5v-678h111l25-61h55l25 61h218v-46l19 46h113l20-47v47h541v-99l10-1q10 0 10 14v86h279v-23q23 12 55 18t52.5 6.5 63-0.5 51.5-1l25-61h56l25 61h227v-58l34 58h182v-378h-180v44l-25-44h-185v44l-23-44h-249q-69 0-109 22v-22h-172v22q-24-22-73-22h-628l-43 97-43-97h-198v44l-22-44h-169l-78 179v-391q0-55 38.5-94.5t93.5-39.5h2040q55 0 93.5 39.5t38.5 94.5v678h-120q-51 0-81 22v-22h-177q-55 0-78 22v-22h-316v22q-31-22-87-22h-209v22q-23-22-91-22h-234l-54 58-50-58h-349v378h343l55-59 52 59h211v-89h21q59 0 90-13v102h174v-99h8q8 0 10 2t2 10v87h529q57 0 88-24v24h168q60 0 95-17zM1546 1067q0 23-12 43t-34 29q25 9 34 26t9 46v54h-65v-45q0-33-12-43.5t-46-10.5h-69v99h-65v-271h154q48 0 77 15t29 58zM1269 600q0 24-12.5 44t-33.5 29q26 9 34.5 25.5t8.5 46.5v53h-65q0-9 0.5-26.5t0-25-3-18.5-8.5-16-17.5-8.5-29.5-3.5h-70v98h-64v-271l153 1q49 0 78 14.5t29 57.5zM1798 1209v56h-216v-271h216v56h-151v49h148v55h-148v54zM1372 527v271h-66v-271h66zM2065 1179q0 86-102 86h-126v-58h126q34 0 34-25 0-16-17-21t-41.5-5-49.5-3.5-42-22.5-17-55q0-39 26-60t66-21h130v57h-119q-36 0-36 25 0 16 17.5 20.5t42 4 49 2.5 42 21.5 17.5 54.5zM2304 1129v101q-24 35-88 35h-125v-58h125q33 0 33-25 0-13-12.5-19t-31-5.5-40-2-40-8-31-24-12.5-48.5q0-39 26.5-60t66.5-21h129v57h-118q-36 0-36 25 0 20 29 22t68.5 5 56.5 26zM2139 528v270h-92l-122-203v203h-132l-26-60h-134l-25 60h-75q-129 0-129-133 0-138 133-138h63v59q-7 0-28-1t-28.5-0.5-23 2-21.5 6.5-14.5 13.5-11.5 23-3 33.5q0 38 13.5 58t49.5 20h29l92-213h97l109 256v-256h99l114 188v-188h66z"}]}});
+
+Icon.register({"cc-discover":{"width":2304,"height":1792,"paths":[{"d":"M313 777q0 51-36 84-29 26-89 26h-17v-220h17q61 0 89 27 36 31 36 83zM2089 712q0 52-64 52h-19v-101h20q63 0 63 49zM380 777q0-74-50-120.5t-129-46.5h-95v333h95q74 0 119-38 60-51 60-128zM410 943h65v-333h-65v333zM730 842q0-40-20.5-62t-75.5-42q-29-10-39.5-19t-10.5-23q0-16 13.5-26.5t34.5-10.5q29 0 53 27l34-44q-41-37-98-37-44 0-74 27.5t-30 67.5q0 35 18 55.5t64 36.5q37 13 45 19 19 12 19 34 0 20-14 33.5t-36 13.5q-48 0-71-44l-42 40q44 64 115 64 51 0 83-30.5t32-79.5zM1008 932v-77q-37 37-78 37-49 0-80.5-32.5t-31.5-82.5q0-48 31.5-81.5t77.5-33.5q43 0 81 38v-77q-40-20-80-20-74 0-125.5 50.5t-51.5 123.5 51 123.5 125 50.5q42 0 81-19zM2240 1536v-527q-65 40-144.5 84t-237.5 117-329.5 137.5-417.5 134.5-504 118h1569q26 0 45-19t19-45zM1389 779q0-75-53-128t-128-53-128 53-53 128 53 128 128 53 128-53 53-128zM1541 952l144-342h-71l-90 224-89-224h-71l142 342h35zM1714 943h184v-56h-119v-90h115v-56h-115v-74h119v-57h-184v333zM2105 943h80l-105-140q76-16 76-94 0-47-31-73t-87-26h-97v333h65v-133h9zM2304 262v1268q0 56-38.5 95t-93.5 39h-2040q-55 0-93.5-39t-38.5-95v-1268q0-56 38.5-95t93.5-39h2040q55 0 93.5 39t38.5 95z"}]}});
+
+Icon.register({"cc-mastercard":{"width":2304,"height":1792,"paths":[{"d":"M1119 341q-128-85-281-85-103 0-197.5 40.5t-162.5 108.5-108.5 162-40.5 197q0 104 40.5 198t108.5 162 162 108.5 198 40.5q153 0 281-85-131-107-178-265.5t0.5-316.5 177.5-265zM1152 365q-126 99-172 249.5t-0.5 300.5 172.5 249q127-99 172.5-249t-0.5-300.5-172-249.5zM1185 341q130 107 177.5 265.5t0.5 317-178 264.5q128 85 281 85 104 0 198-40.5t162-108.5 108.5-162 40.5-198q0-103-40.5-197t-108.5-162-162.5-108.5-197.5-40.5q-153 0-281 85zM1926 1063h7v-3h-17v3h7v17h3v-17zM1955 1080h4v-20h-5l-6 13-6-13h-5v20h3v-15l6 13h4l5-13v15zM1947 1520v2h-2-3v-3h3 2v1zM1947 1529h3l-4-5h2l1-1q1-1 1-3t-1-3l-1-1h-3-6v13h3v-5h1zM685 1461q0-19 11-31t30-12q18 0 29 12.5t11 30.5q0 19-11 31t-29 12q-19 0-30-12t-11-31zM1158 1417q30 0 35 32h-70q5-32 35-32zM1514 1461q0-19 11-31t29-12 29.5 12.5 11.5 30.5q0 19-11 31t-30 12q-18 0-29-12t-11-31zM1786 1461q0-18 11.5-30.5t29.5-12.5 29.5 12.5 11.5 30.5q0 19-11.5 31t-29.5 12-29.5-12.5-11.5-30.5zM1944 1533q-2 0-4-1-1 0-3-2t-2-3q-1-2-1-4 0-3 1-4 0-2 2-4l1-1q2 0 2-1 2-1 4-1 3 0 4 1l4 2 2 4v1q1 2 1 3l-1 1v3t-1 1l-1 2q-2 2-4 2-1 1-4 1zM599 1529h30v-85q0-24-14.5-38.5t-39.5-15.5q-32 0-47 24-14-24-45-24-24 0-39 20v-16h-30v135h30v-75q0-36 33-36 30 0 30 36v75h29v-75q0-36 33-36 30 0 30 36v75zM765 1529h29v-68-67h-29v16q-17-20-43-20-29 0-48 20t-19 51 19 51 48 20q28 0 43-20v17zM943 1488q0-34-47-40l-14-2q-23-4-23-14 0-15 25-15 23 0 43 11l12-24q-22-14-55-14-26 0-41 12t-15 32q0 33 47 39l13 2q24 4 24 14 0 17-31 17-25 0-45-14l-13 23q25 17 58 17 29 0 45.5-12t16.5-32zM1073 1522l-8-25q-13 7-26 7-19 0-19-22v-61h48v-27h-48v-41h-30v41h-28v27h28v61q0 50 47 50 21 0 36-10zM1159 1390q-29 0-48 20t-19 51q0 32 19.5 51.5t49.5 19.5q33 0 55-19l-14-22q-18 15-39 15-34 0-41-33h101v-12q0-32-18-51.5t-46-19.5zM1318 1390q-23 0-35 20v-16h-30v135h30v-76q0-35 29-35 10 0 18 4l9-28q-9-4-21-4zM1348 1461q0 31 19.5 51t52.5 20q29 0 48-16l-14-24q-18 13-35 12-18 0-29.5-12t-11.5-31 11.5-31 29.5-12q19 0 35 12l14-24q-20-16-48-16-33 0-52.5 20t-19.5 51zM1593 1529h30v-68-67h-30v16q-15-20-42-20-29 0-48.5 20t-19.5 51 19.5 51 48.5 20q28 0 42-20v17zM1726 1390q-23 0-35 20v-16h-29v135h29v-76q0-35 29-35 10 0 18 4l9-28q-8-4-21-4zM1866 1529h29v-68-122h-29v71q-15-20-43-20t-47.5 20.5-19.5 50.5 19.5 50.5 47.5 20.5q29 0 43-20v17zM1944 1509l-2 1h-3q-2 1-4 3-3 1-3 4-1 2-1 6 0 3 1 5 0 2 3 4 2 2 4 3t5 1q4 0 6-1 0-1 2-2l2-1q1-1 3-4 1-2 1-5 0-4-1-6-1-1-3-4 0-1-2-2l-2-1q-1 0-3-0.5t-3-0.5zM2304 256v1280q0 52-38 90t-90 38h-2048q-52 0-90-38t-38-90v-1280q0-52 38-90t90-38h2048q52 0 90 38t38 90z"}]}});
+
+Icon.register({"cc-diners-club":{"width":2304,"height":1792,"paths":[{"d":"M858 1241v-693q-106 41-172 135.5t-66 211.5 66 211.5 172 134.5zM1362 895q0-117-66-211.5t-172-135.5v694q106-41 172-135.5t66-211.5zM1577 895q0 159-78.5 294t-213.5 213.5-294 78.5q-119 0-227.5-46.5t-187-125-125-187-46.5-227.5q0-159 78.5-294t213.5-213.5 294-78.5 294 78.5 213.5 213.5 78.5 294zM1960 902q0-139-55.5-261.5t-147.5-205.5-213.5-131-252.5-48h-301q-176 0-323.5 81t-235 230-87.5 335q0 171 87 317.5t236 231.5 323 85h301q129 0 251.5-50.5t214.5-135 147.5-202.5 55.5-246zM2304 256v1280q0 52-38 90t-90 38h-2048q-52 0-90-38t-38-90v-1280q0-52 38-90t90-38h2048q52 0 90 38t38 90z"}]}});
+
 var StripePaymentButton = { render: function render() {
         var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [!_vm.error ? _c('div', [_vm.card ? _c('div', { staticClass: "my-3" }, [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-xs-2" }, [_c('div', { staticClass: "mr-6" }, [_vm.card.brand === 'Visa' ? _c('icon', { attrs: { "name": "cc-visa", "scale": "3.5" } }) : _vm.card.brand === 'MasterCard' ? _c('icon', { attrs: { "name": "cc-mastercard", "scale": "3.5" } }) : _vm.card.brand === 'American Express' ? _c('icon', { attrs: { "name": "cc-amex", "scale": "3.5" } }) : _vm.card.brand === 'Discover' ? _c('icon', { attrs: { "name": "cc-discover", "scale": "3.5" } }) : _vm.card.brand === 'JCB' ? _c('icon', { attrs: { "name": "cc-jcb", "scale": "3.5" } }) : _vm.card.brand === 'Diners Club' ? _c('icon', { attrs: { "name": "cc-diners-club", "scale": "3.5" } }) : _c('icon', { attrs: { "name": "credit-card", "scale": "3.5" } })], 1)]), _vm._v(" "), _c('div', { staticClass: "col-xs-10" }, [_c('div', { staticClass: "pl-2" }, [_c('button', { staticClass: "btn btn-xs btn-warning float-right", attrs: { "type": "button", "disabled": _vm.submitting }, on: { "click": function click($event) {
                     _vm.changeCard($event);
@@ -13657,7 +13982,7 @@ var StripePaymentButton = { render: function render() {
             }
         });
 
-        this.$submitEvent = this.$dispatch.on('form:submit', function () {
+        this.$submitEvent = this.$dispatch.on('form:submit', function (data) {
             _this.submitting = true;
         });
 
@@ -13692,7 +14017,7 @@ var StripePaymentButton = { render: function render() {
 
             _this3.$paymentRequestButton.on('click', function (event) {
                 if (_this3.form.token) {
-                    _this3.$dispatch.request('form:submit', event);
+                    _this3.$dispatch.request('form:submit');
                 }
             });
 
@@ -15055,6 +15380,7 @@ var PaymentGateways = { render: function render() {
         Icon: Icon,
         StripeCreditCard: StripeCreditCard,
         StripePaymentButton: StripePaymentButton,
+        PaypalPaymentButton: PaypalPaymentButton,
         AuthorizeNetCreditCard: AuthorizeNetCreditCard
     },
 
@@ -15525,31 +15851,8 @@ var GiveworksForm = { render: function render() {
             this.$el.querySelector('[type=submit]').style.display = 'block';
         },
         submit: function submit(event) {
-            var _this = this;
-
-            if (event) {
-                event.preventDefault();
-            }
-
-            if (!this.$submitting) {
-                this.showActivity();
-                this.$submitting = true;
-                this.$dispatch.emit('form:submit', this);
-
-                return Api$1.page.submit(this.page.id, this.form).then(function (response) {
-                    _this.$dispatch.emit('form:submit:complete', true, response);
-                    _this.$dispatch.emit('form:submit:success', response);
-                    window.location = _this.redirect || _this.page.next_page.url;
-                }, function (error) {
-                    _this.hideActivity();
-                    _this.$submitting = false;
-                    _this.$set(_this, 'errors', error.response.data.errors || {});
-                    _this.$dispatch.emit('form:submit:complete', false, error);
-                    _this.$dispatch.emit('form:submit:error', error);
-
-                    throw error;
-                });
-            }
+            this.$dispatch.request('form:submit');
+            event.preventDefault();
         }
     },
 
@@ -15558,18 +15861,18 @@ var GiveworksForm = { render: function render() {
         HttpConfig.defaultRequestOptions.headers['Authorization'] = 'Bearer ' + this.apiKey;
     },
     mounted: function mounted() {
-        var _this2 = this;
+        var _this = this;
 
         if (!this.page.id) {
             Api$1.page.find(this.pageId).then(function (response) {
-                _this2.page = response.data;
+                _this.page = response.data;
             }).catch(function (error) {
-                _this2.error = error;
+                _this.error = error;
             });
         }
     },
     beforeCreate: function beforeCreate() {
-        var _this3 = this;
+        var _this2 = this;
 
         var replies = {
             'submit:show': 'show',
@@ -15579,30 +15882,40 @@ var GiveworksForm = { render: function render() {
         };
 
         each(replies, function (method, name) {
-            _this3.$dispatch.reply(name, function (resolve, reject) {
+            _this2.$dispatch.reply(name, function (resolve, reject) {
                 try {
-                    resolve(_this3[method]());
-                } catch (e) {
-                    reject();
+                    resolve(_this2[method]());
+                } catch (error) {
+                    reject(error);
                 }
             });
         });
 
         this.$dispatch.reply('form', function (resolve, reject) {
-            resolve(_this3);
+            resolve(_this2);
         });
 
-        this.$dispatch.reply('form:submit', function (resolve, reject, event) {
-            var promise = _this3.submit(event);
+        this.$dispatch.reply('form:submit', function (resolve, reject) {
+            if (!_this2.$submitting) {
+                _this2.showActivity();
+                _this2.$submitting = true;
+                _this2.$dispatch.emit('form:submit', _this2.form, _this2);
 
-            if (promise) {
-                promise.then(function (response) {
-                    resolve(response);
+                return Api$1.page.submit(_this2.page.id, _this2.form).then(function (response) {
+                    _this2.$dispatch.emit('form:submit:complete', true, response, _this2);
+                    _this2.$dispatch.emit('form:submit:success', response, _this2);
+                    window.location = _this2.redirect || _this2.page.next_page.url;
                 }, function (error) {
-                    reject(error);
+                    _this2.hideActivity();
+                    _this2.$submitting = false;
+                    _this2.$set(_this2, 'errors', error.response.data.errors || {});
+                    _this2.$dispatch.emit('form:submit:complete', false, error, _this2);
+                    _this2.$dispatch.emit('form:submit:error', error, _this2);
+
+                    throw error;
                 });
             } else {
-                reject(event);
+                reject(new Error('The form is already submitting'));
             }
         });
     },

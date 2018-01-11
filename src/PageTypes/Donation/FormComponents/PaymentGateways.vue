@@ -36,6 +36,7 @@ import Gateway from '/Gateways/Gateway';
 import BaseComponent from './BaseComponent';
 import Icon from 'vue-awesome/components/Icon';
 import StripeCreditCard from '/Gateways/Stripe/StripeCreditCard';
+import PaypalPaymentButton from '/Gateways/PayPal/PayPalPaymentButton';
 import StripePaymentButton from '/Gateways/Stripe/StripePaymentButton';
 import AuthorizeNetCreditCard from '/Gateways/AuthorizeNet/AuthorizeNetCreditCard';
 
@@ -49,7 +50,8 @@ export default {
         Icon,
         StripeCreditCard,
         StripePaymentButton,
-        AuthorizeNetCreditCard
+        PaypalPaymentButton,
+        AuthorizeNetCreditCard,
     },
 
     data() {

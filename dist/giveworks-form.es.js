@@ -13660,6 +13660,8 @@ var StripeCreditCard = { render: function render() {
     }
 };
 
+Icon.register({"warning":{"width":1792,"height":1792,"paths":[{"d":"M1024 1375v-190q0-14-9.5-23.5t-22.5-9.5h-192q-13 0-22.5 9.5t-9.5 23.5v190q0 14 9.5 23.5t22.5 9.5h192q13 0 22.5-9.5t9.5-23.5zM1022 1001l18-459q0-12-10-19-13-11-24-11h-220q-11 0-24 11-10 7-10 21l17 457q0 10 10 16.5t24 6.5h185q14 0 23.5-6.5t10.5-16.5zM1008 67l768 1408q35 63-2 126-17 29-46.5 46t-63.5 17h-1536q-34 0-63.5-17t-46.5-46q-37-63-2-126l768-1408q17-31 47-49t65-18 65 18 47 49z"}]}});
+
 Icon.register({"check-circle":{"width":1536,"height":1792,"paths":[{"d":"M1284 734q0-28-18-46l-91-90q-19-19-45-19t-45 19l-408 407-226-226q-19-19-45-19t-45 19l-91 90q-18 18-18 46 0 27 18 45l362 362q19 19 45 19 27 0 46-19l543-543q18-18 18-45zM1536 896q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"}]}});
 
 var BaseType = { render: function render() {
@@ -13748,7 +13750,7 @@ var ActivityIndicator = { render: function render() {
 };
 
 var PaypalPaymentButton = { render: function render() {
-        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [!_vm.loaded || _vm.submitting ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : _c('div', [_vm.error ? _c('div', { staticClass: "alert alert-danger", domProps: { "innerHTML": _vm._s(_vm.error) } }) : _vm.form.payerId && _vm.form.paymentId ? _c('div', { staticClass: "alert alert-success" }, [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-sm-2" }, [_c('icon', { staticClass: "float-left", attrs: { "name": "check-circle", "scale": "3" } })], 1), _vm._v(" "), _c('div', { staticClass: "col-sm-10" }, [_vm._v(" Your PayPal payment information has been collected and is ready to be processed. "), _c('a', { attrs: { "href": "#" }, on: { "click": function click($event) {
+        var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('div', [!_vm.loaded || _vm.submitting ? _c('div', { staticClass: "row my-5 py-1" }, [_c('div', { staticClass: "col-xs-12" }, [_c('activity-indicator', { attrs: { "size": "sm", "center": true } })], 1)]) : _c('div', [_vm.error ? _c('div', { staticClass: "alert alert-danger" }, [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-sm-2" }, [_c('icon', { staticClass: "float-left mt-2", attrs: { "name": "warning", "scale": "2.5" } })], 1), _vm._v(" "), _c('div', { staticClass: "col-sm-10", domProps: { "innerHTML": _vm._s(_vm.error) } })])]) : _vm.form.payerId && _vm.form.paymentId ? _c('div', { staticClass: "alert alert-success" }, [_c('div', { staticClass: "row" }, [_c('div', { staticClass: "col-sm-2" }, [_c('icon', { staticClass: "float-left mt-2", attrs: { "name": "check-circle", "scale": "2.5" } })], 1), _vm._v(" "), _c('div', { staticClass: "col-sm-10" }, [_vm._v(" Your PayPal payment information has been collected and is ready to be processed. "), _c('a', { attrs: { "href": "#" }, on: { "click": function click($event) {
                     _vm.removePaymentInfo($event);
                 } } }, [_vm._v("Cancel Payment")])])])]) : _vm._e()]), _vm._v(" "), _c('div', { staticClass: "paypal-payment-button mt-2 mb-4", class: { 'disabled': _vm.disabled, 'd-none': _vm.submitting } })]);
     }, staticRenderFns: [],
@@ -13796,7 +13798,7 @@ var PaypalPaymentButton = { render: function render() {
             return this.$el.querySelector('.paypal-payment-button') && !this.$el.querySelector('.paypal-payment-button iframe');
         },
         hasPaymentInfo: function hasPaymentInfo() {
-            return this.form.payerId && this.form.paymentId;
+            return this.form.amount && (this.form.recurring === 1 || this.form.payerId && this.form.paymentId);
         },
         removePaymentInfo: function removePaymentInfo(event) {
             this.$set(this.form, 'payerId', null);
@@ -13832,20 +13834,34 @@ var PaypalPaymentButton = { render: function render() {
 
             this.$dispatch.on('paypal:click', function (data) {
                 if (_this.hasPaymentInfo()) {
-                    _this.$dispatch.request('form:submit').then(function (response) {
-                        console.log('submit', response);
-                    });
+                    _this.$dispatch.request('form:submit');
                 }
             });
 
             this.$dispatch.on('paypal:validate', function (actions) {
+                if (_this.form.recurring) {
+                    actions.disable();
+                }
+
                 if (_this.$unwatchAmount) {
                     _this.$unwatchAmount();
                 }
 
                 _this.$unwatchAmount = _this.$watch('form.amount', function (value) {
-                    actions[value ? 'enable' : 'disable']();
                     _this.disabled = !(button.amount = value);
+                    actions[!_this.form.recurring && value ? 'enable' : 'disable']();
+                });
+
+                if (_this.$unwatchRecurring) {
+                    _this.$unwatchRecurrin();
+                }
+
+                _this.$unwatchRecurring = _this.$watch('form.recurring', function (value) {
+                    if (value) {
+                        actions.disable();
+                    } else if (_this.form.amount) {
+                        actions.enable();
+                    }
                 });
             });
 
@@ -13863,8 +13879,16 @@ var PaypalPaymentButton = { render: function render() {
         this.$prevFormSubmitReply = this.$dispatch.getReply('form:submit');
 
         this.$dispatch.reply('form:submit', function (resolve, reject) {
-            if (_this2.form.payerId && _this2.form.paymentId) {
-                return _this2.$prevFormSubmitReply.handle(resolve, reject);
+            if (_this2.hasPaymentInfo()) {
+                _this2.$prevFormSubmitReply.handle(function (response) {
+                    if (response.data.recur) {
+                        _this2.$dispatch.request('form:redirect', response.data.meta.redirect_url);
+                    } else {
+                        resolve(response);
+                    }
+                }, function (error) {
+                    reject(error);
+                });
             }
         });
 
@@ -13872,7 +13896,7 @@ var PaypalPaymentButton = { render: function render() {
             _this2.submitting = true;
         });
 
-        this.$submitCompleteEvent = this.$dispatch.on('form:submit:complete', function (response) {
+        this.$submitCompleteEvent = this.$dispatch.on('form:submit:error', function (response) {
             _this2.submitting = false;
         });
     },
@@ -13887,6 +13911,7 @@ var PaypalPaymentButton = { render: function render() {
     },
     beforeDestroy: function beforeDestroy() {
         this.$unwatchAmount();
+        this.$unwatchRecurring();
         this.$dispatch.request('submit:show');
         this.$dispatch.off('paypal:authorize');
         this.$dispatch.off(this.$submitEvent);
@@ -13896,8 +13921,6 @@ var PaypalPaymentButton = { render: function render() {
 };
 
 Icon.register({"cc-jcb":{"width":2304,"height":1792,"paths":[{"d":"M1951 998q0 26-15.5 44.5t-38.5 23.5q-8 2-18 2h-153v-140h153q10 0 18 2 23 5 38.5 23.5t15.5 44.5zM1933 785q0 25-15 42t-38 21q-3 1-15 1h-139v-129h139q3 0 8.5 0.5t6.5 0.5q23 4 38 21.5t15 42.5zM728 949v-308h-228v308q0 58-38 94.5t-105 36.5q-108 0-229-59v112q53 15 121 23t109 9l42 1q328 0 328-217zM1442 1133v-113q-99 52-200 59-108 8-169-41t-61-142 61-142 169-41q101 7 200 58v-112q-48-12-100-19.5t-80-9.5l-28-2q-127-6-218.5 14t-140.5 60-71 88-22 106 22 106 71 88 140.5 60 218.5 14q101-4 208-31zM2176 1018q0-54-43-88.5t-109-39.5v-3q57-8 89-41.5t32-79.5q0-55-41-88t-107-36q-3 0-12-0.5t-14-0.5h-455v510h491q74 0 121.5-36.5t47.5-96.5zM2304 256v1280q0 52-38 90t-90 38h-2048q-52 0-90-38t-38-90v-1280q0-52 38-90t90-38h2048q52 0 90 38t38 90z"}]}});
-
-Icon.register({"warning":{"width":1792,"height":1792,"paths":[{"d":"M1024 1375v-190q0-14-9.5-23.5t-22.5-9.5h-192q-13 0-22.5 9.5t-9.5 23.5v190q0 14 9.5 23.5t22.5 9.5h192q13 0 22.5-9.5t9.5-23.5zM1022 1001l18-459q0-12-10-19-13-11-24-11h-220q-11 0-24 11-10 7-10 21l17 457q0 10 10 16.5t24 6.5h185q14 0 23.5-6.5t10.5-16.5zM1008 67l768 1408q35 63-2 126-17 29-46.5 46t-63.5 17h-1536q-34 0-63.5-17t-46.5-46q-37-63-2-126l768-1408q17-31 47-49t65-18 65 18 47 49z"}]}});
 
 Icon.register({"cc-visa":{"width":2304,"height":1792,"paths":[{"d":"M1975 990h-138q14-37 66-179l3-9q4-10 10-26t9-26l12 55zM531 925l-58-295q-11-54-75-54h-268l-2 13q311 79 403 336zM710 576l-162 438-17-89q-26-70-85-129.5t-131-88.5l135 510h175l261-641h-176zM849 1218h166l104-642h-166zM1617 592q-69-27-149-27-123 0-201 59t-79 153q-1 102 145 174 48 23 67 41t19 39q0 30-30 46t-69 16q-86 0-156-33l-22-11-23 144q74 34 185 34 130 1 208.5-59t80.5-160q0-106-140-174-49-25-71-42t-22-38q0-22 24.5-38.5t70.5-16.5q70-1 124 24l15 8zM2042 576h-128q-65 0-87 54l-246 588h174l35-96h212q5 22 20 96h154zM2304 256v1280q0 52-38 90t-90 38h-2048q-52 0-90-38t-38-90v-1280q0-52 38-90t90-38h2048q52 0 90 38t38 90z"}]}});
 
@@ -15851,7 +15874,12 @@ var GiveworksForm = { render: function render() {
             this.$el.querySelector('[type=submit]').style.display = 'block';
         },
         submit: function submit(event) {
-            this.$dispatch.request('form:submit');
+            this.$dispatch.request('form:submit').then(function (response) {
+                console.log(response);
+            }, function (error) {
+                console.log(error);
+            });
+
             event.preventDefault();
         }
     },
@@ -15891,6 +15919,28 @@ var GiveworksForm = { render: function render() {
             });
         });
 
+        this.$dispatch.on('form:submit', function (data) {
+            var el = _this2.$el.querySelector(':focus');
+
+            if (el) {
+                el.blur();
+            }
+        });
+
+        this.$dispatch.reply('form:redirect', function (resolve, reject, url) {
+            try {
+                var location = url || _this2.redirect || _this2.page.next_page.url;
+
+                setTimeout(function () {
+                    window.location = location;
+                });
+
+                resolve(location);
+            } catch (e) {
+                reject(e);
+            }
+        });
+
         this.$dispatch.reply('form', function (resolve, reject) {
             resolve(_this2);
         });
@@ -15899,20 +15949,22 @@ var GiveworksForm = { render: function render() {
             if (!_this2.$submitting) {
                 _this2.showActivity();
                 _this2.$submitting = true;
+                _this2.$set(_this2, 'errors', {});
                 _this2.$dispatch.emit('form:submit', _this2.form, _this2);
 
                 return Api$1.page.submit(_this2.page.id, _this2.form).then(function (response) {
+                    _this2.$submitting = false;
                     _this2.$dispatch.emit('form:submit:complete', true, response, _this2);
                     _this2.$dispatch.emit('form:submit:success', response, _this2);
-                    window.location = _this2.redirect || _this2.page.next_page.url;
+                    _this2.$dispatch.request('form:redirect');
+                    resolve(response);
                 }, function (error) {
                     _this2.hideActivity();
                     _this2.$submitting = false;
                     _this2.$set(_this2, 'errors', error.response.data.errors || {});
                     _this2.$dispatch.emit('form:submit:complete', false, error, _this2);
                     _this2.$dispatch.emit('form:submit:error', error, _this2);
-
-                    throw error;
+                    reject(error);
                 });
             } else {
                 reject(new Error('The form is already submitting'));
@@ -15920,6 +15972,7 @@ var GiveworksForm = { render: function render() {
         });
     },
     beforeDestroy: function beforeDestroy() {
+        this.$dispatch.off('form:submit');
         this.$dispatch.stopReply('form:submit');
         this.$dispatch.stopReply('submit:enable');
         this.$dispatch.stopReply('submit:disable');

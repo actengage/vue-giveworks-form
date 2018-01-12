@@ -93,7 +93,12 @@ export default {
             this.$el.querySelector('[type=submit]').style.display = 'block';
         },
         submit: function(event) {
-            this.$dispatch.request('form:submit');
+            this.$dispatch.request('form:submit').then(response => {
+                console.log(response);
+            }, error => {
+                console.log(error);
+            });
+
             event.preventDefault();
         }
     },
@@ -132,6 +137,29 @@ export default {
             });
         });
 
+        this.$dispatch.on('form:submit', data => {
+            const el = this.$el.querySelector(':focus');
+
+            if(el) {
+                el.blur();
+            }
+        });
+
+        this.$dispatch.reply('form:redirect', (resolve, reject, url) => {
+            try {
+                const location = url || (this.redirect || this.page.next_page.url);
+
+                setTimeout(() => {
+                    window.location = location;
+                });
+
+                resolve(location);
+            }
+            catch(e) {
+                reject(e);
+            }
+        });
+
         this.$dispatch.reply('form', (resolve, reject) => {
             resolve(this);
         });
@@ -140,21 +168,23 @@ export default {
             if(!this.$submitting) {
                 this.showActivity();
                 this.$submitting = true;
+                this.$set(this, 'errors', {});
                 this.$dispatch.emit('form:submit', this.form, this);
 
                 return Api.page.submit(this.page.id, this.form)
                     .then((response) => {
+                        this.$submitting = false;
                         this.$dispatch.emit('form:submit:complete', true, response, this);
                         this.$dispatch.emit('form:submit:success', response, this);
-                        window.location = this.redirect || this.page.next_page.url;
+                        this.$dispatch.request('form:redirect');
+                        resolve(response);
                     }, (error) => {
                         this.hideActivity();
                         this.$submitting = false;
                         this.$set(this, 'errors', error.response.data.errors || {});
                         this.$dispatch.emit('form:submit:complete', false, error, this);
                         this.$dispatch.emit('form:submit:error', error, this);
-
-                        throw error;
+                        reject(error);
                     });
             }
             else {
@@ -164,6 +194,7 @@ export default {
     },
 
     beforeDestroy() {
+        this.$dispatch.off('form:submit');
         this.$dispatch.stopReply('form:submit');
         this.$dispatch.stopReply('submit:enable');
         this.$dispatch.stopReply('submit:disable');

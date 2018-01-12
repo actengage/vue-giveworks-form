@@ -7,11 +7,18 @@
             </div>
         </div>
         <div v-else>
-            <div v-if="error" class="alert alert-danger" v-html="error"></div>
+            <div v-if="error" class="alert alert-danger">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <icon name="warning" scale="2.5" class="float-left mt-2"></icon>
+                    </div>
+                    <div class="col-sm-10" v-html="error"></div>
+                </div>
+            </div>
             <div v-else-if="form.payerId && form.paymentId" class="alert alert-success">
                 <div class="row">
                     <div class="col-sm-2">
-                        <icon name="check-circle" scale="3" class="float-left"></icon>
+                        <icon name="check-circle" scale="2.5" class="float-left mt-2"></icon>
                     </div>
                     <div class="col-sm-10">
                         Your PayPal payment information has been collected and is ready to be processed. <a href="#" @click="removePaymentInfo($event)">Cancel Payment</a>
@@ -26,6 +33,7 @@
 </template>
 
 <script>
+import 'vue-awesome/icons/warning';
 import 'vue-awesome/icons/check-circle';
 import Gateway from '/Gateways/Gateway';
 import Icon from 'vue-awesome/components/Icon';
@@ -75,7 +83,7 @@ export default {
             return this.$el.querySelector('.paypal-payment-button') && !this.$el.querySelector('.paypal-payment-button iframe');
         },
         hasPaymentInfo() {
-            return this.form.payerId && this.form.paymentId;
+            return this.form.amount && (this.form.recurring === 1 || this.form.payerId && this.form.paymentId);
         },
         removePaymentInfo(event) {
             this.$set(this.form, 'payerId', null);
@@ -109,20 +117,35 @@ export default {
 
             this.$dispatch.on('paypal:click', data => {
                 if(this.hasPaymentInfo()) {
-                    this.$dispatch.request('form:submit').then(response => {
-                        console.log('submit', response);
-                    });
+                    this.$dispatch.request('form:submit');
                 }
             });
 
             this.$dispatch.on('paypal:validate', actions => {
+                if(this.form.recurring) {
+                    actions.disable();
+                }
+
                 if(this.$unwatchAmount) {
                     this.$unwatchAmount();
                 }
 
                 this.$unwatchAmount = this.$watch('form.amount', value => {
-                    actions[value ? 'enable' : 'disable']();
                     this.disabled = !(button.amount = value);
+                    actions[!this.form.recurring && value ? 'enable' : 'disable']();
+                });
+
+                if(this.$unwatchRecurring) {
+                    this.$unwatchRecurrin();
+                }
+
+                this.$unwatchRecurring = this.$watch('form.recurring', value => {
+                    if(value) {
+                        actions.disable();
+                    }
+                    else if(this.form.amount) {
+                        actions.enable();
+                    }
                 });
             });
 
@@ -139,8 +162,17 @@ export default {
         this.$prevFormSubmitReply = this.$dispatch.getReply('form:submit');
 
         this.$dispatch.reply('form:submit', (resolve, reject) => {
-            if(this.form.payerId && this.form.paymentId) {
-                return this.$prevFormSubmitReply.handle(resolve, reject);
+            if(this.hasPaymentInfo()) {
+                this.$prevFormSubmitReply.handle(response => {
+                    if(response.data.recur) {
+                        this.$dispatch.request('form:redirect', response.data.meta.redirect_url);
+                    }
+                    else {
+                        resolve(response);
+                    }
+                }, error => {
+                    reject(error);
+                });
             }
         });
 
@@ -148,7 +180,7 @@ export default {
             this.submitting = true;
         });
 
-        this.$submitCompleteEvent = this.$dispatch.on('form:submit:complete', response => {
+        this.$submitCompleteEvent = this.$dispatch.on('form:submit:error', response => {
             this.submitting = false;
         });
     },
@@ -163,6 +195,7 @@ export default {
 
     beforeDestroy() {
         this.$unwatchAmount();
+        this.$unwatchRecurring();
         this.$dispatch.request('submit:show');
         this.$dispatch.off('paypal:authorize');
         this.$dispatch.off(this.$submitEvent);

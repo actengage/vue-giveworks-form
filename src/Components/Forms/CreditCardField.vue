@@ -472,6 +472,7 @@ export default {
             top: $input-padding-y / 1.25;
             border: none;
             outline: 0;
+            padding: 0;
             background: none;
             box-shadow: none;
             line-height: 1rem;

@@ -4617,6 +4617,7 @@ template {
     top: 0.56rem;
     border: none;
     outline: 0;
+    padding: 0;
     background: none;
     box-shadow: none;
     line-height: 1rem;

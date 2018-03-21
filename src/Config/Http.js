@@ -2,7 +2,7 @@ import Page from '/Http/Endpoints/Page';
 
 export default {
 
-    baseUrl: 'https://giveworks.test/api/public/v1/',
+    baseUrl: '/api/public/v1/',
 
     endpoints: {
         page: Page

@@ -34,8 +34,9 @@ const plugins = [
         }
     }),
     babel({
-        exclude: 'node_modules/**',
-        presets: ['es2015-rollup']
+        plugins: ['lodash'],
+        presets: ['es2015-rollup'],
+        exclude: 'node_modules/**'
     })
 ];
 

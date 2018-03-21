@@ -19,10 +19,21 @@
 
         </div>
 
-        <hr>
-
-        <div v-for="button in buttons" v-if="button.active">
-            <component :is="button.component" :form="form" :page="page" :errors="errors" :gateway="button.gateway"></component>
+        <div v-if="!buttons || !buttons.length" class="alert alert-danger">
+            <div class="row">
+                <div class="col-xs-2 text-center">
+                    <icon name="warning" scale="2.25" class="mt-2"></icon>
+                </div>
+                <div class="col-xs-10">
+                    There are not payment gateways configured for this site!
+                </div>
+            </div>
+        </div>
+        <div v-else>
+            <hr>
+            <div v-if="button.active" v-for="button in buttons">
+                <component :is="button.component" :form="form" :page="page" :errors="errors" :gateway="button.gateway"></component>
+            </div>
         </div>
 
     </div>
@@ -30,8 +41,8 @@
 </template>
 
 <script>
-import { each } from 'lodash-es';
-import { merge } from 'lodash-es';
+import { each } from 'lodash';
+import { merge } from 'lodash';
 import Gateway from '/Gateways/Gateway';
 import BaseComponent from './BaseComponent';
 import Icon from 'vue-awesome/components/Icon';
@@ -95,11 +106,12 @@ export default {
     },
 
     mounted() {
-        if(!this.buttons || !this.buttons[0]) {
-            throw new Error('Every Gateway must have at least one button defined.');
+        if(this.buttons && this.buttons[0]) {
+            this.activate(this.buttons[0]);
         }
-
-        this.activate(this.buttons[0]);
+        else {
+            this.$dispatch.request('submit:hide');
+        }
     }
 
 }

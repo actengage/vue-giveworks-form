@@ -1,4 +1,4 @@
-import { trimEnd } from 'lodash-es';
+import { trimEnd } from 'lodash';
 
 export default class Endpoint {
 

@@ -1,7 +1,10 @@
 <template>
-    <div class="gw-alert">
-        <h1 class="gw-alert-header">{{ header }}</h1>
-        <div class="gw-alert-body">{{ error.message }}</div>
+    <div class="alert alert-danger" :style="{'width': width, 'min-width': minWidth, 'max-width': maxWidth}">
+        <h2 class="alert-header">{{ header }}</h2>
+        <div class="alert-body">
+            {{ error.message }}<br>
+            {{ error.response.data.message }}
+        </div>
     </div>
 </template>
 
@@ -11,6 +14,9 @@ export default {
     name: 'http-error-response',
 
     props: {
+        'width': String,
+        'min-width': String,
+        'max-width': String,
         'error': {
             type: Error,
             default() {

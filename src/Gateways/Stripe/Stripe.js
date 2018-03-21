@@ -1,6 +1,6 @@
 import Api from '../Api';
 import '/Icons/apple-pay';
-import { extend } from 'lodash-es';
+import { extend } from 'lodash';
 import Script from '/Helpers/Script';
 import 'vue-awesome/icons/credit-card';
 import 'vue-awesome/icons/google-wallet';
@@ -103,6 +103,10 @@ export default class Stripe extends Api {
     }
 
     stripe() {
+        if(!this.options.publishable_key) {
+            throw new Error('This site API was authenticated using an older version of Giveworks. To use new version of Giveworks you must setup your Stripe account again.');
+        }
+
         if(!this._stripe) {
             this._stripe = new window.Stripe(this.options.publishable_key);
         }

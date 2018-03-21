@@ -5,7 +5,11 @@
         </form>
     </div>
     <div v-else-if="error">
-        <http-error-response :error="error"></http-error-response>
+        <div class="center-wrapper">
+            <div class="center-content">
+                <http-error-response min-width="400px" :error="error"></http-error-response>
+            </div>
+        </div>
     </div>
     <div v-else>
         <activity-indicator :center="true" size="xl"></activity-indicator>
@@ -15,7 +19,7 @@
 <script>
 
 import Api from '/Http/Api';
-import { each } from 'lodash-es';
+import { each } from 'lodash';
 import HttpConfig from '/Config/Http';
 import PageType from '/PageTypes/PageType';
 import HttpErrorResponse from './HttpErrorResponse';
@@ -29,17 +33,6 @@ export default {
         PageType,
         ActivityIndicator,
         HttpErrorResponse
-    },
-
-    data() {
-        return {
-            page: this.data || {},
-            errors: {},
-            form: {
-                recurring: 0,
-                optin: 1
-            }
-        };
     },
 
     props: {
@@ -103,6 +96,18 @@ export default {
         }
     },
 
+    data() {
+        return {
+            page: this.data || {},
+            error: null,
+            errors: {},
+            form: {
+                recurring: 0,
+                optin: 1
+            }
+        };
+    },
+
     created() {
         HttpConfig.defaultRequestOptions || (HttpConfig.defaultRequestOptions = {});
         HttpConfig.defaultRequestOptions.headers['Authorization'] = 'Bearer ' + this.apiKey;
@@ -112,7 +117,7 @@ export default {
         if(!this.page.id) {
             Api.page.find(this.pageId).then((response) => {
                 this.page = response.data;
-            }).catch((error) => {
+            }, (error) => {
                 this.error = error;
             });
         }

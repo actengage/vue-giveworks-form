@@ -1,7 +1,7 @@
 <template>
     <div class="form-group" :class="{'was-validated': errors[name]}">
         <label class="text-bold" for="{{name}}">{{label}}</label>
-        <select class="custom-select form-control":name="name" :id="name || id" :class="{'is-invalid': errors[name]}" v-model="form[name]" :required="required">
+        <select class="custom-select form-control":name="name" :id="name || id" :class="{'is-invalid': errors[name]}" v-model="form[name]" :required="required" :disabled="disabled">
             <option :value="option.value || option" v-for="option in selectOptions">{{ option.label || option }}</option>
         </select>
         <div v-if="errors[name]" class="invalid-feedback" v-html="errors[name].join('<br>')"></div>
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { isArray } from 'lodash-es';
+import { isArray } from 'lodash';
 
 export default {
 
@@ -43,6 +43,10 @@ export default {
         'required': {
             type: Boolean,
             default: false
+        },
+        'disabled': {
+            type: Boolean,
+            default: false
         }
     },
 
@@ -51,7 +55,7 @@ export default {
             if(isArray(this.options)) {
                 return this.options;
             }
-            
+
             const options = [];
 
             for(let i in this.options) {

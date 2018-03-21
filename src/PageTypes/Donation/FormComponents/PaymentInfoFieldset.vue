@@ -2,7 +2,7 @@
 
     <fieldset>
 
-        <legend>Payment information</legend>
+        <legend>Payment Information</legend>
 
         <payment-gateways :form="form" :errors="errors" :page="page"></payment-gateways>
 

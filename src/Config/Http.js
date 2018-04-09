@@ -1,8 +1,8 @@
-import Page from '/Http/Endpoints/Page';
+import Page from '@/Http/Endpoints/Page';
 
 export default {
 
-    baseUrl: '/api/public/v1/',
+    baseUrl: 'https://giveworks.test/api/public/v1/',
 
     endpoints: {
         page: Page

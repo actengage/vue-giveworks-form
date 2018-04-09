@@ -1,89 +1,165 @@
 import fs from 'fs';
+import pkg from "./package.json";
+import { kebabCase } from 'lodash';
+import { camelCase } from 'lodash';
+import { upperFirst } from 'lodash';
 import vue from 'rollup-plugin-vue';
 import json from 'rollup-plugin-json';
+import alias from 'rollup-plugin-alias';
 import babel from 'rollup-plugin-babel';
 import serve from 'rollup-plugin-serve';
+import replace from 'rollup-plugin-replace';
+import progress from 'rollup-plugin-progress';
 import commonjs from 'rollup-plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
-import rootImport from 'rollup-plugin-root-import';
+import globals from 'rollup-plugin-node-globals';
+import builtins from 'rollup-plugin-node-builtins';
 
+//import postcss from 'rollup-plugin-postcss';
+
+// The type of package Rollup should create
+const PACKAGE_FORMAT = 'umd';
+
+// The directory of the package source code files
+const SRC = `${__dirname}/src/`;
+
+// The directory to ouput the compiled files
+const DIST = `${__dirname}/dist/`;
+
+// The main.js or entry point of your package
+const MAINJS = `${SRC}main.js`;
+
+// The base filename of the compiled files (no ex)
+const FILENAME = kebabCase(pkg.name);
+
+// This is global variable used in UMD packages
+const NAMESPACE = upperFirst(camelCase(pkg.name));
+
+// The node_modules directory path
+const NODE_MODULES = `${__dirname}/node_modules/**`;
+
+// The options for the serve() plugin
+const SERVE_OPTIONS = {
+    open: true,
+    port: 10001,
+    contentBase: './',
+    host: 'localhost',
+    historyApiFallback: true,
+    https: {
+        key: fs.readFileSync('./livereload.key'),
+        cert: fs.readFileSync('./livereload.crt'),
+        ca: fs.readFileSync("./livereload.pem")
+    }
+};
+
+// The options for the watch plugin
+const WATCH_OPTIONS = {
+    include: `${SRC}**`,
+    https: {
+        key: fs.readFileSync('./livereload.key'),
+        cert: fs.readFileSync('./livereload.crt'),
+        ca: fs.readFileSync("./livereload.pem")
+    }
+};
+
+// The options for the livereload plugin (undefined or object).
+const LIVERELOAD_OPTIONS = {
+    watch: SRC,
+    port: 35729,
+    https: {
+        key: fs.readFileSync('./livereload.key'),
+        cert: fs.readFileSync('./livereload.crt'),
+        ca: fs.readFileSync("./livereload.pem")
+    }
+};
+
+// Define the list of output globals
+const OUTPUT_GLOBALS = {
+    'vue': 'Vue',
+    'axios': 'axios',
+    'moment': 'moment',
+    'lodash': 'lodash'
+};
+
+// Define an array of external packages to not include in the bundle
+const EXTERNAL = [
+    'vue',
+    'axios',
+    'moment'
+];
+
+// Define the plugins used for the rollup process
 const plugins = [
-    json(),
-    rootImport({
-        // Will first look in `client/src/*` and then `common/src/*`.
-        root: `${__dirname}/src`,
-        // If we don't find the file verbatim, try adding these extensions
-        extensions: ['.js', '.vue']
+    progress(),
+    replace({
+        'process.env.NODE_ENV': JSON.stringify( process.env.ROLLUP_WATCH == 'true' ? 'development' : 'production' ),
+        'process.env.SERVE_OPTIONS': JSON.stringify(SERVE_OPTIONS),
+        'process.env.LIVERELOAD_OPTIONS': JSON.stringify(LIVERELOAD_OPTIONS)
     }),
-    commonjs({
-        include: 'node_modules/**'
+    json(),
+    alias({
+        resolve: ['.js', '.vue'],
+        '@': `${SRC}`
     }),
     resolve({
-        jsnext: true,
         main: true,
-        sourceMap: true,
-        extensions: [ '.js', '.scss', '.vue']
+        jsnext: true,
+        browser: true,
+        extensions: [ '.js', '.vue']
+    }),
+    commonjs({
+        include: NODE_MODULES,
+        namedExports: {
+            'node_modules/axios/index.js': 'axios'
+        }
     }),
     vue({
         scss: {
             indentedSyntax: false
         },
         css: function(style, styles, compiler) {
-            fs.writeFileSync('./css/giveworks-form.css', style);
+            fs.writeFileSync(`${DIST}${FILENAME}.css`, style);
         }
     }),
     babel({
-        plugins: ['lodash'],
-        presets: ['es2015-rollup'],
-        exclude: 'node_modules/**'
-    })
+        exclude: NODE_MODULES
+    }),
+    globals(),
+    builtins()
 ];
 
+// Add the serve/livereload plugins if watch argument has been passed
 if(process.env.ROLLUP_WATCH == 'true') {
     plugins.push([
-        serve({
-            contentBase: '',
-            https: {
-                key: fs.readFileSync('./livereload.key'),
-                cert: fs.readFileSync('./livereload.crt'),
-                ca: fs.readFileSync("./livereload.pem")
-            }
-        }),
-        livereload({
-            watch: './dist/giveworks-form.js',
-            https: {
-                key: fs.readFileSync('./livereload.key'),
-                cert: fs.readFileSync('./livereload.crt'),
-                ca: fs.readFileSync("./livereload.pem")
-            }
-        })
+        serve(SERVE_OPTIONS),
+        livereload(LIVERELOAD_OPTIONS)
     ]);
 }
 
-export default {
-    input: 'src/main.js',
+// Export the config object
+export default [{
+    input: MAINJS,
     output: {
-        file: 'dist/giveworks-form.js',
-        format: 'umd',
-        name: 'GiveworksForm'
+        name: NAMESPACE,
+        format: PACKAGE_FORMAT,
+        file: `${DIST}${FILENAME}.js`,
+        sourcemap: (process.env.ROLLUP_WATCH ? 'inline' : true),
+        globals: OUTPUT_GLOBALS
     },
-    external: [
-        'vue',
-        'axios',
-        'moment',
-        'lodash-es',
-    ],
-    globals: {
-        'vue': 'Vue',
-        'axios': 'axios',
-        'moment': 'moment',
-        'lodash-es': 'lodash-es'
-    },
-    sourcemap: true,
-    sourcemapFile: './dist/giveworks-form.js.map',
-    watch: {
-        include: './src/**'
-    },
+    watch: WATCH_OPTIONS,
+    external: EXTERNAL,
     plugins: plugins
-};
+}, {
+    input: MAINJS,
+    output: {
+        name: NAMESPACE,
+        format: 'es',
+        file: `${DIST}${FILENAME}.es.js`,
+        sourcemap: (process.env.ROLLUP_WATCH ? 'inline' : true),
+        globals: OUTPUT_GLOBALS
+    },
+    watch: WATCH_OPTIONS,
+    external: EXTERNAL,
+    plugins: plugins
+}];

@@ -1,64 +1,102 @@
 <template>
     <div v-if="page.id">
-        <form @submit="submit">
-            <page-type :orientation="orientation" :form="form" :errors="errors" :page="page"></page-type>
+        <form @submit="submit" novalidate="novalidate">
+            <component
+                :is="pageTypeComponent"
+                :orientation="orientation"
+                :submitting="submitting"
+                :form="form"
+                :errors="errors"
+                :page="page"
+            />
         </form>
     </div>
     <div v-else-if="error">
         <div class="center-wrapper">
             <div class="center-content">
-                <http-error-response min-width="400px" :error="error"></http-error-response>
+                <http-error-response min-width="400px" :error="error"/>
             </div>
         </div>
     </div>
     <div v-else>
-        <activity-indicator :center="true" size="xl"></activity-indicator>
+        <activity-indicator :center="true" size="xl"/>
     </div>
 </template>
 
 <script>
 
-import Api from '/Http/Api';
+import {
+    HorizontalDonationForm,
+    VerticalDonationForm,
+    HorizontalPetitionForm,
+    VerticalPetitionForm,
+    HorizontalSignupForm,
+    VerticalSignupForm,
+    HorizontalSurveyForm,
+    VerticalSurveyForm
+} from './PageTypes';
+import Api from '@/Http/Api';
 import { each } from 'lodash';
-import HttpConfig from '/Config/Http';
-import PageType from '/PageTypes/PageType';
+import HttpConfig from '@/Config/Http';
 import HttpErrorResponse from './HttpErrorResponse';
-import ActivityIndicator from './ActivityIndicators/ActivityIndicator';
 
 export default {
 
     name: 'giveworks-form',
 
     components: {
-        PageType,
-        ActivityIndicator,
+        HorizontalDonationForm,
+        VerticalDonationForm,
+        HorizontalPetitionForm,
+        VerticalPetitionForm,
+        HorizontalSignupForm,
+        VerticalSignupForm,
+        HorizontalSurveyForm,
+        VerticalSurveyForm,
         HttpErrorResponse
     },
 
     props: {
-        'api-key': {
+        data: [Boolean, Object],
+        redirect: [Boolean, String],
+        pageId: [Boolean, Number, String],
+        apiKey: {
             type: String,
             required: true
         },
-        'data': {
-            type: [Boolean, Object],
-            default: false
-        },
-        'page-id': {
-            type: [Boolean, Number, String],
-            default: false
-        },
-        'orientation': {
+        orientation: {
             type: String,
-            default: 'vertical'
-        },
-        'redirect': {
-            type: [Boolean, String],
-            default: false
+            default: 'vertical',
+            validator: value => {
+                return ['vertical', 'horizontal'].indexOf(value) !== -1;
+            }
+        }
+    },
+
+    computed: {
+        pageTypeComponent() {
+            return this.orientation + '-' + this.page.special + '-form';
         }
     },
 
     methods: {
+
+        hide: function() {
+            this.$el.querySelector('[type=submit]').style.display = 'none';
+        },
+
+        show: function() {
+            this.$el.querySelector('[type=submit]').style.display = 'block';
+        },
+
+        disable: function() {
+            this.$el.querySelector('[type=submit]').disabled = true;
+        },
+
+        enable: function() {
+            this.$el.querySelector('[type=submit]').disabled = false;
+        },
+
         showActivity: function() {
             const el = this.$el.querySelector('[type=submit]');
 
@@ -66,6 +104,7 @@ export default {
                 el.dispatchEvent(new Event('activity:show'));
             }
         },
+
         hideActivity: function() {
             const el = this.$el.querySelector('[type=submit]');
 
@@ -73,18 +112,7 @@ export default {
                 el.dispatchEvent(new Event('activity:hide'));
             }
         },
-        disable: function() {
-            this.$el.querySelector('[type=submit]').disabled = true;
-        },
-        enable: function() {
-            this.$el.querySelector('[type=submit]').disabled = false;
-        },
-        hide: function() {
-            this.$el.querySelector('[type=submit]').style.display = 'none';
-        },
-        show: function() {
-            this.$el.querySelector('[type=submit]').style.display = 'block';
-        },
+
         submit: function(event) {
             this.$dispatch.request('form:submit').then(response => {
                 console.log(response);
@@ -100,7 +128,10 @@ export default {
         return {
             page: this.data || {},
             error: null,
-            errors: {},
+            errors: {
+                field_684: ['test']
+            },
+            submitting: false,
             form: {
                 recurring: 0,
                 optin: 1
@@ -170,23 +201,23 @@ export default {
         });
 
         this.$dispatch.reply('form:submit', (resolve, reject) => {
-            if(!this.$submitting) {
+            if(!this.submitting) {
                 this.showActivity();
-                this.$submitting = true;
+                this.submitting = true;
                 this.$set(this, 'errors', {});
                 this.$dispatch.emit('form:submit', this.form, this);
 
                 return Api.page.submit(this.page.id, this.form)
                     .then((response) => {
-                        this.$submitting = false;
+                        this.submitting = false;
                         this.$dispatch.emit('form:submit:complete', true, response, this);
                         this.$dispatch.emit('form:submit:success', response, this);
                         this.$dispatch.request('form:redirect');
                         resolve(response);
                     }, (error) => {
                         this.hideActivity();
-                        this.$submitting = false;
-                        this.$set(this, 'errors', error.response.data.errors || {});
+                        this.submitting = false;
+                        this.errors = error.response.data.errors;
                         this.$dispatch.emit('form:submit:complete', false, error, this);
                         this.$dispatch.emit('form:submit:error', error, this);
                         reject(error);
@@ -210,6 +241,7 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style lang="scss">
+@import '../node_modules/vue-toolbox/dist/vue-toolbox.css';
 @import './node_modules/the-one-true-form/src/main.scss';
 </style>

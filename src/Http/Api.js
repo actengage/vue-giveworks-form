@@ -2,8 +2,8 @@ import { each } from 'lodash';
 import { extend } from 'lodash';
 import { trimEnd } from 'lodash';
 import axios from 'axios/dist/axios';
-import HttpConfig from '/Config/Http';
-import PageEndpoint from '/Http/Endpoints/Page';
+import HttpConfig from '@/Config/Http';
+import PageEndpoint from '@/Http/Endpoints/Page';
 
 class Api {
 

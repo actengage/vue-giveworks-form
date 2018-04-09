@@ -1,26 +1,21 @@
-import Vue from 'vue/dist/vue';
-import Broadcast from '@objectivehtml/broadcast';
-import GiveworksForm from './Components/GiveworksForm';
+import { script } from 'vue-toolbox';
+import VueToolbox from 'vue-toolbox';
+import GiveworksForm from '@/Components/GiveworksForm';
+import GiveworksFormPlugin from '@/Plugins/GiveworksForm';
 
-export default class GiveworksVueApp {
+Vue.use(VueToolbox);
+Vue.use(GiveworksFormPlugin);
 
-    constructor(el, data) {
-        this.setApp(el, data);
-    }
-
-    setApp(el, data) {
-        Vue.prototype.$broadcast = new Broadcast;
-        Vue.prototype.$dispatch = Vue.prototype.$broadcast.dispatch();
-
-        this.app = new Vue({
-            el: el,
-            data: function() {
-                return data;
-            },
-            components: {
-                GiveworksForm
-            }
-        });
-    }
-
+if(process.env.NODE_ENV === 'development') {
+    const domain = (location.host || 'localhost').split(':')[0];
+    const port = process.env.LIVERELOAD_OPTIONS && process.env.LIVERELOAD_OPTIONS.port;
+    script(`https://${domain}:${port}/livereload.js?snipver=1`);
 }
+
+export default Vue.extend({
+
+    components: {
+        GiveworksForm
+    }
+
+});

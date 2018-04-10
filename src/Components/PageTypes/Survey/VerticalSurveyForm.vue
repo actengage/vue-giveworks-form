@@ -4,8 +4,10 @@
 
         <div class="col-md-5 col-lg-4">
             <div v-for="question in page.questions">
-                <component v-model="form[`field_${question.id}`]"
-                    v-model="form[`field_${question.id}`]"
+                {{form}}
+
+                <component
+                    :value="form[`field_${question.id}`]"
                     :is="component(question.type)"
                     :name="`field_${question.id}`"
                     :page="page"

@@ -135,7 +135,8 @@ export default {
             submitting: false,
             form: {
                 recurring: 0,
-                optin: 1
+                optin: 1,
+                field_684: 'Yes'
             }
         };
     },
@@ -204,13 +205,15 @@ export default {
         });
 
         this.$dispatch.reply('form:submit', (resolve, reject) => {
+
             if(!this.submitting) {
                 this.showActivity();
                 this.submitting = true;
                 this.$set(this, 'errors', {});
                 this.$dispatch.emit('form:submit', this.form, this);
 
-                console.log('model.create');
+                this.model.initialize(this.form);
+                this.model.set('id', this.pageId);
 
                 return this.model.create(this.form)
                     .then(response => {

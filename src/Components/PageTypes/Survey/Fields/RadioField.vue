@@ -3,7 +3,8 @@
     <form-group :class="{'is-invalid': !!invalidFeedback}">
         <label v-html="question.question"/>
 
-        <radio-field v-for="(answer, key) in question.answers" :key="key" :value="answer" :name="name" :id="`${name}_${key}`" @change="updated">
+        <radio-field
+            v-for="(answer, key) in question.answers" :key="key" :value="answer" :name="name" :id="`${name}_${key}`" @change="updated">
             {{ answer }}<sup v-if="question.required">*</sup>
         </radio-field>
 
@@ -11,7 +12,7 @@
             Other:
         </radio-field>
 
-        <input type="text" class="form-control" :name="`${name}_other`" :id="`${name}_other`" @input="updated($event.target.value);">
+        <input type="text" class="form-control" :class="{'is-invalid': errors[name]}" :name="`${name}_other`" :id="`${name}_other`" @input="updated($event.target.value);">
 
         <slot name="feedback">
             <form-feedback v-if="validFeedback" v-html="validFeedback" valid />

@@ -14,7 +14,7 @@
             <label class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" v-model="form.optin" checked>
                 <span class="custom-control-indicator"></span>
-                <small v-html="optinMessage" class="custom-control-description text-muted form-text"></small>
+                <small v-html="optinMessage" class="custom-control-label text-muted form-text"></small>
             </label>
         </div>
 

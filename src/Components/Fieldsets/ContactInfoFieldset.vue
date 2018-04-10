@@ -59,7 +59,7 @@
                 <label class="custom-control custom-checkbox">
                     <input v-model="form.retired" type="checkbox" name="retired" value="1" class="custom-control-input" @change="setRetired($event.target.checked)">
                     <span class="custom-control-indicator"></span>
-                    <small class="custom-control-description text-muted form-text">I'm retired</small>
+                    <small class="custom-control-label text-muted form-text">I'm retired</small>
                 </label>
             </div>
 

@@ -1,6 +1,6 @@
 {
     "name": "vue-giveworks-form",
-    "version": "0.1.80",
+    "version": "0.1.81",
     "description": "A Vue.js component for building and submitting Giveworks form.",
     "main": "dist/giveworks-form.js",
     "author": "Justin Kimbrell",
@@ -12,9 +12,10 @@
         "lodash": "^4.17.4",
         "moment": "^2.21.0",
         "payment": "^2.3.0",
-        "the-one-true-form": "^1.1.9",
+        "the-one-true-form": "file:../the-one-true-form",
         "vue": "^2.5.16",
-        "vue-awesome": "^2.3.4"
+        "vue-awesome": "^2.3.4",
+        "vue-toolbox": "file:../vue-toolbox"
     },
     "devDependencies": {
         "@babel/cli": "^7.0.0-beta.44",
@@ -56,8 +57,7 @@
         "vue-jest": "^1.4.0",
         "vue-jest-utils": "^0.2.0",
         "vue-server-renderer": "^2.5.16",
-        "vue-template-compiler": "^2.5.16",
-        "vue-toolbox": "file:../vue-toolbox"
+        "vue-template-compiler": "^2.5.16"
     },
     "scripts": {
         "dev": "rollup -c --watch",

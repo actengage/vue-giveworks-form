@@ -4,6 +4,7 @@
         id="zip"
         name="zip"
         :label="question.question"
+        :errors="errors"
         placeholder="Zip Code (5 digits)"
         x_autocompletetype="postal-code"
         @input="updated"

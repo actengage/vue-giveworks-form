@@ -1,6 +1,6 @@
 <template>
     <div v-if="page.id">
-        <form @submit="submit" novalidate="novalidate">
+        <form @submit.prevent="submit" novalidate="novalidate">
             <component
                 :is="pageTypeComponent"
                 :orientation="orientation"
@@ -24,6 +24,12 @@
 </template>
 
 <script>
+import { Request } from 'vue-toolbox';
+import { RequestOptions } from 'vue-toolbox';
+import { each } from 'lodash';
+import Page from '@/Models/Page';
+import HttpConfig from '@/Config/Http';
+import HttpErrorResponse from './HttpErrorResponse';
 
 import {
     HorizontalDonationForm,
@@ -35,10 +41,6 @@ import {
     HorizontalSurveyForm,
     VerticalSurveyForm
 } from './PageTypes';
-import Api from '@/Http/Api';
-import { each } from 'lodash';
-import HttpConfig from '@/Config/Http';
-import HttpErrorResponse from './HttpErrorResponse';
 
 export default {
 
@@ -113,14 +115,12 @@ export default {
             }
         },
 
-        submit: function(event) {
+        submit: function() {
             this.$dispatch.request('form:submit').then(response => {
                 console.log(response);
             }, error => {
                 console.log(error);
             });
-
-            event.preventDefault();
         }
     },
 
@@ -128,9 +128,10 @@ export default {
         return {
             page: this.data || {},
             error: null,
-            errors: {
-                field_684: ['test']
-            },
+            errors: {},
+            model: new Page({
+                id: 2696
+            }),
             submitting: false,
             form: {
                 recurring: 0,
@@ -140,18 +141,20 @@ export default {
     },
 
     created() {
-        HttpConfig.defaultRequestOptions || (HttpConfig.defaultRequestOptions = {});
-        HttpConfig.defaultRequestOptions.headers['Authorization'] = 'Bearer ' + this.apiKey;
+        Request.option(HttpConfig);
+        Request.option({
+            headers: {
+                Authorization: 'Bearer ' + this.apiKey
+            }
+        });
     },
 
     mounted() {
-        if(!this.page.id) {
-            Api.page.find(this.pageId).then((response) => {
-                this.page = response.data;
-            }, (error) => {
-                this.error = error;
-            });
-        }
+        this.model.find(this.pageId).then(model => {
+            this.page = model.toJson();
+        }, error => {
+            this.error = error;
+        });
     },
 
     beforeCreate() {
@@ -207,19 +210,21 @@ export default {
                 this.$set(this, 'errors', {});
                 this.$dispatch.emit('form:submit', this.form, this);
 
-                return Api.page.submit(this.page.id, this.form)
-                    .then((response) => {
+                console.log('model.create');
+
+                return this.model.create(this.form)
+                    .then(response => {
                         this.submitting = false;
                         this.$dispatch.emit('form:submit:complete', true, response, this);
                         this.$dispatch.emit('form:submit:success', response, this);
                         this.$dispatch.request('form:redirect');
                         resolve(response);
-                    }, (error) => {
+                    }, error => {
                         this.hideActivity();
                         this.submitting = false;
-                        this.errors = error.response.data.errors;
-                        this.$dispatch.emit('form:submit:complete', false, error, this);
-                        this.$dispatch.emit('form:submit:error', error, this);
+                        this.errors = error.errors;
+                        this.$dispatch.emit('form:submit:complete', false, this.errors, this);
+                        this.$dispatch.emit('form:submit:error', this.errors, this);
                         reject(error);
                     });
             }

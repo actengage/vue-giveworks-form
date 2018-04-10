@@ -11,7 +11,7 @@
             Other:
         </checkbox-field>
 
-        <input type="text" class="form-control" :name="`${name}_other`" :id="`${name}_other`" @input="updated($event.target.value)">
+        <input type="text" class="form-control" :class="{'is-invalid': errors[name]}" :name="`${name}_other`" :id="`${name}_other`" @input="updated($event.target.value)">
 
         <slot name="feedback">
             <form-feedback v-if="validFeedback" v-html="validFeedback" valid />

@@ -14,7 +14,7 @@
                     <label class="custom-control custom-radio">
                         <input type="radio"class="custom-control-input" :value="value" :class="{'is-invalid': errors.amount}" v-model.number="form.amount">
                         <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">${{value}}</span>
+                        <span class="custom-control-label">${{value}}</span>
                     </label>
                 </div>
             </div>
@@ -23,7 +23,7 @@
                     <label class="custom-control custom-radio">
                         <input type="radio" class="custom-control-input" :value="value" :class="{'is-invalid': errors.amount}" v-model.number="form.amount">
                         <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">${{value}}</span>
+                        <span class="custom-control-label">${{value}}</span>
                     </label>
                 </div>
             </div>

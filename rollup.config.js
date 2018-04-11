@@ -104,7 +104,7 @@ const plugins = [
     }),
     resolve({
         main: true,
-        jsnext: true,
+        jsnext: false,
         browser: true,
         extensions: [ '.js', '.vue']
     }),
@@ -123,6 +123,7 @@ const plugins = [
         }
     }),
     babel({
+        include:
         exclude: NODE_MODULES
     }),
     globals(),

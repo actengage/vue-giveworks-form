@@ -79,7 +79,8 @@ const OUTPUT_GLOBALS = {
     'vue': 'Vue',
     'axios': 'axios',
     'moment': 'moment',
-    'lodash': 'lodash'
+    'lodash': 'lodash',
+    'vue-awesome/components/Icon': 'Icon'
 };
 
 // Define an array of external packages to not include in the bundle
@@ -102,18 +103,6 @@ const plugins = [
         resolve: ['.js', '.vue'],
         '@': `${SRC}`
     }),
-    resolve({
-        main: true,
-        jsnext: false,
-        browser: true,
-        extensions: [ '.js', '.vue']
-    }),
-    commonjs({
-        include: NODE_MODULES,
-        namedExports: {
-            'node_modules/axios/index.js': 'axios'
-        }
-    }),
     vue({
         scss: {
             indentedSyntax: false
@@ -124,6 +113,13 @@ const plugins = [
     }),
     babel({
         exclude: NODE_MODULES
+    }),
+    resolve({
+        main: true,
+        extensions: [ '.js', '.vue']
+    }),
+    commonjs({
+        include: NODE_MODULES,
     }),
     globals(),
     builtins()

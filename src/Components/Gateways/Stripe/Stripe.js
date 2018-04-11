@@ -4,7 +4,7 @@ import { extend } from 'lodash';
 import Script from '@/Helpers/Script';
 import 'vue-awesome/icons/credit-card';
 import 'vue-awesome/icons/google-wallet';
-import Icon from 'vue-awesome/components/Icon'
+import Icon from 'vue-awesome/components/Icon';
 
 export default class Stripe extends Api {
 

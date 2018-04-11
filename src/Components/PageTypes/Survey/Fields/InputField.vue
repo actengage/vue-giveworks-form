@@ -1,6 +1,12 @@
 <template>
 
-    <input-field :name="`field_${question.id}`" :id="question.id" :label="question.question" :errors="errors" @input="updated" />
+    <input-field
+        :name="name"
+        :value="value"
+        :id="question.id"
+        :label="question.question"
+        :errors="errors" @input="updated"
+    />
 
 </template>
 

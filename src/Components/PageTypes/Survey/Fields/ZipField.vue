@@ -3,6 +3,7 @@
     <input-field
         id="zip"
         name="zip"
+        :value="value"
         :label="question.question"
         :errors="errors"
         placeholder="Zip Code (5 digits)"

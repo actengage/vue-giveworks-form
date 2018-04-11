@@ -11,14 +11,18 @@
             <div v-for="(chunk, i) in questions" class="col-md-4">
 
                 <div v-for="question in chunk">
-                    <component v-model="form[`field_${question.id}`]"
-                        v-model="form[`field_${question.id}`]"
+
+                    {{name(question)}}
+                    <component
+                        v-model="form[name(question)]"
                         :is="component(question.type)"
-                        :name="`field_${question.id}`"
+                        :name="name(question)"
                         :page="page"
+                        :value="form[name(question)]"
                         :errors="errors"
                         :question="question"
                     />
+
                 </div>
 
                 <activity-button
@@ -44,9 +48,28 @@
 import { chunk } from 'lodash';
 import VerticalSurveyForm from './VerticalSurveyForm';
 
+const RESERVED_FIELDS = [
+    'email',
+    'phone',
+    'first',
+    'last',
+    'street',
+    'city',
+    'state',
+    'zip'
+];
+
 export default {
 
     extends: VerticalSurveyForm,
+
+    methods: {
+
+        name(question) {
+            return RESERVED_FIELDS.indexOf(question.type) !== -1 ? question.type : `field_${question.id}`;
+        }
+
+    },
 
     computed: {
 

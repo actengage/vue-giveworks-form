@@ -1,6 +1,13 @@
 <template>
 
-    <textarea-field :label="question.question" :name="`field_${question.id}`" :id="question.id" :errors="errors" @input="updated"/>
+    <textarea-field
+        :value="value"
+        :label="question.question"
+        :name="`field_${question.id}`"
+        :id="question.id"
+        :errors="errors"
+        @input="updated"
+    />
 
 </template>
 

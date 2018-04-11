@@ -2,7 +2,10 @@
 
     <form-group :class="{'is-invalid': !!invalidFeedback}">
 
-        <label>{{question.question}}<sup v-if="question.required">*</sup></label>
+        <label v-html="question.question">
+            {{question.question}}
+            <sup v-if="question.required">*</sup>
+        </label>
 
         <radio-field v-for="(answer, key) in question.answers" :key="key" :value="answer" :checkedValue="value" :name="name" :id="`${name}_${key}`" @change="updated">
             {{ answer }}

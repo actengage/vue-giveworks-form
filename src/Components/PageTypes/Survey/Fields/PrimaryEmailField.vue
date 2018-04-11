@@ -1,6 +1,15 @@
 <template>
 
-    <input-field type="email" name="email" placeholder="Email Address" id="email" :label="question.question" :errors="errors" @input="updated" />
+    <input-field
+        type="email"
+        name="email"
+        placeholder="Email Address"
+        id="email"
+        :value="value"
+        :label="question.question"
+        :errors="errors"
+        @input="updated"
+    />
 
 </template>
 

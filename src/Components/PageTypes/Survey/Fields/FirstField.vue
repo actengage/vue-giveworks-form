@@ -1,6 +1,14 @@
 <template>
 
-    <input-field id="first" name="first" placeholder="First Name" :label="question.question" :errors="errors" @input="updated" />
+    <input-field
+        id="first"
+        name="first"
+        placeholder="First Name"
+        :value="value"
+        :label="question.question"
+        :errors="errors"
+        @input="updated"
+    />
 
 </template>
 

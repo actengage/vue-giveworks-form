@@ -126,19 +126,14 @@ export default {
 
     data() {
         return {
+            form: {},
             page: this.data || {},
             error: null,
             errors: {},
-            model: new Page({
-                id: 2696
-            }),
             submitting: false,
-            form: {
-                recurring: 0,
-                optin: 1,
-                field_684: 'Yes',
-                field_703: ['No']
-            }
+            model: new Page({
+                id: this.page.id
+            })
         };
     },
 

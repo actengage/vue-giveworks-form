@@ -17,7 +17,7 @@
                     <label :for="question.id" v-html="question.question"/>
                     <input-group>
                         <input-group-prepend text>$</input-group-prepend>
-                        <input type="text" :name="`field_${question.id}`" class="form-control"/>
+                        <input type="text" :name="`field_${question.id}`" :value="value" class="form-control"/>
                     </input-group>
                 </div>
             </div>

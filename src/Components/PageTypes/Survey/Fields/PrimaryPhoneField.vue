@@ -1,6 +1,14 @@
 <template>
 
-    <input-field type="phone" name="phone" id="phone" :label="question.question" :errors="errors" @input="updated" />
+    <input-field
+        type="phone"
+        name="phone"
+        id="phone"
+        :value="value"
+        :label="question.question"
+        :errors="errors"
+        @input="updated"
+    />
 
 </template>
 

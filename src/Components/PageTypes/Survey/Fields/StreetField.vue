@@ -1,6 +1,14 @@
 <template>
 
-    <input-field :name="street" id="street" placeholder="Street Address" :label="question.question" :errors="errors" @input="updated" />
+    <input-field
+        id="street"
+        placeholder="Street Address"
+        :value="value"
+        :name="street"
+        :label="question.question"
+        :errors="errors"
+        @input="updated"
+    />
 
 </template>
 

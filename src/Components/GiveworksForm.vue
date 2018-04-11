@@ -136,7 +136,8 @@ export default {
             form: {
                 recurring: 0,
                 optin: 1,
-                field_684: 'Yes'
+                field_684: 'Yes',
+                field_703: ['No']
             }
         };
     },

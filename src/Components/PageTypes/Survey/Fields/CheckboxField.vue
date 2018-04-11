@@ -3,11 +3,11 @@
     <form-group :class="{'is-invalid': !!invalidFeedback}">
         <label v-html="question.question"/>
 
-        <checkbox-field v-for="(answer, key) in question.answers" :key="key" :value="answer" :name="name" :id="`${name}_${key}`" @change="updated">
+        <checkbox-field v-for="(answer, key) in question.answers" :key="key" :value="answer" :checkedValues="value" :name="name" :id="`${name}_${key}`" @change="updated">
             {{ answer }}<sup v-if="question.required">*</sup>
         </checkbox-field>
 
-        <checkbox-field v-changed value="other" :name="name" :id="`${name}_50`" @change="updated">
+        <checkbox-field v-changed value="other" :name="name" :id="`${name}_50`" :checkedValues="value" @change="updated">
             Other:
         </checkbox-field>
 
@@ -33,7 +33,13 @@ export default {
 
     mixins: [
         FormControl
-    ]
+    ],
+
+    methods: {
+        onChange(value) {
+            this.updated(value, 'change');
+        }
+    }
 
 }
 </script>

@@ -8,7 +8,7 @@
             {{ answer }}
         </radio-field>
 
-        <radio-field v-changed value="other" :name="name" :id="`${name}_50`" @change="updated(value);">
+        <radio-field v-changed value="other" :name="name" :id="`${name}_50`" :checkedValue="value" @change="updated">
             Other:
         </radio-field>
 

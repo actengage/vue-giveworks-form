@@ -123,7 +123,6 @@ const plugins = [
         }
     }),
     babel({
-        include:
         exclude: NODE_MODULES
     }),
     globals(),

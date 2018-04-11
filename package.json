@@ -1,6 +1,6 @@
 {
     "name": "vue-giveworks-form",
-    "version": "0.1.83",
+    "version": "0.1.84",
     "description": "A Vue.js component for building and submitting Giveworks form.",
     "main": "dist/giveworks-form.js",
     "author": "Justin Kimbrell",
@@ -67,9 +67,9 @@
         "release-major": "npm version major --no-git-tag-version; npm run release;",
         "release": "npm run build-library; npm run uglify; npm run commit; npm publish;",
         "build-vendor": "rollup -c rollup.vendor.js;",
-        "build-es2015": "rollup -c -f es -o dist/giveworks-form.es.js;",
+        "build-es2015": "rollup -c -f es -o dist/vue-giveworks-form.es.js;",
         "uglify": "npm run uglify-library;",
-        "uglify-library": "./node_modules/.bin/uglifyjs dist/giveworks-form.js -o dist/giveworks-form.min.js;",
-        "uglify-es2015": "./node_modules/.bin/uglifyjs dist/giveworks-form.es.js -o dist/giveworks-form.es.min.js;"
+        "uglify-library": "./node_modules/.bin/uglifyjs dist/vue-giveworks-form.js -o dist/vue-giveworks-form.min.js;",
+        "uglify-es2015": "./node_modules/.bin/uglifyjs dist/vue-giveworks-form.es.js -o dist/vue-giveworks-form.es.min.js;"
     }
 }

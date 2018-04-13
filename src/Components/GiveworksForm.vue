@@ -117,11 +117,7 @@ export default {
         },
 
         submit: function() {
-            this.$dispatch.request('form:submit').then(response => {
-                console.log(response);
-            }, error => {
-                console.log(error);
-            });
+            this.$dispatch.request('form:submit');
         }
     },
 
@@ -218,13 +214,13 @@ export default {
                         this.$dispatch.emit('form:submit:success', response, this);
                         this.$dispatch.request('form:redirect');
                         resolve(response);
-                    }, error => {
+                    }, response => {
                         this.hideActivity();
                         this.submitting = false;
-                        this.errors = error.data.errors;
+                        this.errors = response.data.errors;
                         this.$dispatch.emit('form:submit:complete', false, this.errors, this);
                         this.$dispatch.emit('form:submit:error', this.errors, this);
-                        reject(error);
+                        reject(response);
                     });
             }
             else {

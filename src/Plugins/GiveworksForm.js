@@ -1,5 +1,7 @@
+import each from 'lodash-es/each';
 import Broadcast from '@objectivehtml/broadcast';
 import GiveworksForm from '@/Components/GiveworksForm';
+import script from 'vue-interface/src/Helpers/Script';
 import ActivityButton from 'vue-interface/src/Components/ActivityButton';
 import InputField from 'vue-interface/src/Components/InputField';
 import InputGroup from 'vue-interface/src/Components/InputGroup';
@@ -48,7 +50,6 @@ export default function install(Vue, options) {
     });
 
     Vue.use(mergeClasses);
-    Vue.use(GiveworksFormPlugin);
     Vue.component('giveworks-form', GiveworksForm);
 
     livereload();

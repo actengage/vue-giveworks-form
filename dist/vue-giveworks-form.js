@@ -8359,9 +8359,6 @@
                           return parts.indexOf(part) !== -1;
                       }) !== -1 ? component.short_name : null;
                   })).join(' ');
-
-                  console.log(field, part);
-                  //this.form[field] = part;
               });
           },
 
@@ -12810,7 +12807,7 @@
 
   }
 
-  var CheckboxField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',{class:{'is-invalid': !!_vm.invalidFeedback}},[_c('label',{domProps:{"innerHTML":_vm._s(_vm.question.question)}},[_vm._v(" "+_vm._s(_vm.question.question)+" "),(_vm.question.required)?_c('sup',[_vm._v("*")]):_vm._e()]),_vm._v(" "),_vm._l((_vm.question.answers),function(answer,key){return _c('checkbox-field',{key:key,attrs:{"value":answer,"checkedValues":_vm.value || [],"name":_vm.name,"id":`${_vm.name}_${key}`},on:{"change":_vm.updated}},[_vm._v(" "+_vm._s(answer)+" ")])}),_vm._v(" "),_c('checkbox-field',{directives:[{name:"changed",rawName:"v-changed"}],attrs:{"value":"other","name":_vm.name,"id":`${_vm.name}_50`,"checkedValues":_vm.value || []},on:{"change":_vm.updated}},[_vm._v(" Other: ")]),_vm._v(" "),_c('input',{staticClass:"form-control",class:{'is-invalid': _vm.errors[_vm.name]},attrs:{"type":"text","name":`${_vm.name}_other`,"id":`${_vm.name}_other`},on:{"input":function($event){_vm.updated($event.target.value);}}}),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)},staticRenderFns: [],
+  var CheckboxField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',{class:{'is-invalid': !!_vm.invalidFeedback}},[_c('label',[_vm._v(" "+_vm._s(_vm.question.question)+" "),(_vm.question.required)?_c('sup',[_vm._v("*")]):_vm._e()]),_vm._v(" "),_vm._l((_vm.question.answers),function(answer,key){return _c('checkbox-field',{key:key,attrs:{"value":answer,"checkedValues":_vm.value || [],"name":_vm.name,"id":`${_vm.name}_${key}`},on:{"change":_vm.updated}},[_vm._v(" "+_vm._s(answer)+" ")])}),_vm._v(" "),_c('checkbox-field',{directives:[{name:"changed",rawName:"v-changed"}],attrs:{"value":"other","name":_vm.name,"id":`${_vm.name}_50`,"checkedValues":_vm.value || []},on:{"change":_vm.updated}},[_vm._v(" Other: ")]),_vm._v(" "),_c('input',{staticClass:"form-control",class:{'is-invalid': _vm.errors[_vm.name]},attrs:{"type":"text","name":`${_vm.name}_other`,"id":`${_vm.name}_other`},on:{"input":function($event){_vm.updated($event.target.value);}}}),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)},staticRenderFns: [],
 
       name: 'survey-checkbox-field',
 
@@ -12822,7 +12819,7 @@
 
   }
 
-  var CityField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{attrs:{"name":"city","id":"city","placeholder":"City","value":_vm.value,"label":_vm.question.question,"errors":_vm.errors},on:{"input":_vm.updated}})},staticRenderFns: [],
+  var CityField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{attrs:{"id":"city","name":"city","placeholder":"City","value":_vm.value,"label":_vm.question.question,"errors":_vm.errors},on:{"input":_vm.updated}})},staticRenderFns: [],
 
       name: 'survey-city-field',
 
@@ -12962,7 +12959,7 @@
 
   }
 
-  var RadioField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',{class:{'is-invalid': !!_vm.invalidFeedback}},[_c('label',{domProps:{"innerHTML":_vm._s(_vm.question.question)}},[_vm._v(" "+_vm._s(_vm.question.question)+" "),(_vm.question.required)?_c('sup',[_vm._v("*")]):_vm._e()]),_vm._v(" "),_vm._l((_vm.question.answers),function(answer,key){return _c('radio-field',{key:key,attrs:{"value":answer,"checkedValue":_vm.value,"name":_vm.name,"id":`${_vm.name}_${key}`},on:{"change":_vm.updated}},[_vm._v(" "+_vm._s(answer)+" ")])}),_vm._v(" "),_c('radio-field',{directives:[{name:"changed",rawName:"v-changed"}],attrs:{"value":"other","name":_vm.name,"id":`${_vm.name}_50`,"checkedValue":_vm.value},on:{"change":_vm.updated}},[_vm._v(" Other: ")]),_vm._v(" "),_c('input',{staticClass:"form-control",class:{'is-invalid': _vm.errors[_vm.name]},attrs:{"type":"text","name":`${_vm.name}_other`,"id":`${_vm.name}_other`},on:{"input":function($event){_vm.updated($event.target.value);}}}),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)},staticRenderFns: [],
+  var RadioField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',{class:{'is-invalid': !!_vm.invalidFeedback}},[_c('label',[_vm._v(" "+_vm._s(_vm.question.question)+" "),(_vm.question.required)?_c('sup',[_vm._v("*")]):_vm._e()]),_vm._v(" "),_vm._l((_vm.question.answers),function(answer,key){return _c('radio-field',{key:key,attrs:{"value":answer,"checkedValue":_vm.value,"name":_vm.name,"id":`${_vm.name}_${key}`},on:{"change":_vm.updated}},[_vm._v(" "+_vm._s(answer)+" ")])}),_vm._v(" "),_c('radio-field',{directives:[{name:"changed",rawName:"v-changed"}],attrs:{"value":"other","name":_vm.name,"id":`${_vm.name}_50`,"checkedValue":_vm.value},on:{"change":_vm.updated}},[_vm._v(" Other: ")]),_vm._v(" "),_c('input',{staticClass:"form-control",class:{'is-invalid': _vm.errors[_vm.name]},attrs:{"type":"text","name":`${_vm.name}_other`,"id":`${_vm.name}_other`},on:{"input":function($event){_vm.updated($event.target.value);}}}),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)},staticRenderFns: [],
 
       name: 'survey-radio-field',
 

@@ -7935,10 +7935,11 @@ class Model {
      * @return bool
      */
     create(data = {}, config = {}) {
+        this.fill(data);
+
         return new Promise((resolve, reject) => {
-            const request = this.constructor.request(this.uri(), assignIn({
-                data: !this.hasFiles() ? this.toJson() : this.toFormData()
-            }, config));
+            const request = this.constructor.request(this.uri(), assignIn({}, config));
+            const data = !this.hasFiles() ? this.toJson() : this.toFormData();
 
             request.post(data).then(response => {
                 resolve(this.fill(response));
@@ -7953,10 +7954,11 @@ class Model {
      * @return bool
      */
     update(data = {}, config = {}) {
+        this.fill(data);
+
         return new Promise((resolve, reject) => {
-            const request = this.constructor.request(this.uri(), assignIn({
-                data: !this.hasFiles() ? this.toJson() : this.toFormData()
-            }, config));
+            const request = this.constructor.request(this.uri(), config);
+            const data = !this.hasFiles() ? this.toJson() : this.toFormData();
 
             request[(this.hasFiles() ? 'post' : 'put')](data).then(response => {
                 resolve(this.fill(response));
@@ -7970,13 +7972,13 @@ class Model {
      * @param data object
      * @return bool
      */
-    delete(data = {}, config = {}) {
+    delete(config = {}) {
         return new Promise((resolve, reject) => {
             if(!this.exists()) {
                 reject(new Error('The model must have a primary key before it can be delete.'));
             }
 
-            this.constructor.request(this.uri(), config).delete();
+            const request = this.constructor.request(this.uri(), config);
 
             request.delete().then(response => {
                 resolve(this.fill(response));
@@ -8049,11 +8051,9 @@ class Model {
         }
 
         return new Promise((resolve, reject) => {
-            const request = this.request(uri, assignIn({
-                params: params
-            }, config));
+            const request = this.request(uri, config);
 
-            request.get().then(response => {
+            request.get(params).then(response => {
                 resolve(map(response.data, data => {
                     return new this(data);
                 }));
@@ -17778,8 +17778,12 @@ var Sizeable = {
 
     computed: {
 
+        sizeableClassPrefix() {
+            return this.$options.name;
+        },
+
         sizeableClass() {
-            return prefix(this.size, this.$options.name);
+            return prefix(this.size, this.sizeableClassPrefix);
         }
 
     }

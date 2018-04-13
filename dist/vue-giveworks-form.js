@@ -885,6 +885,245 @@
       });
   }
 
+  function is(instance, proto) {
+      return instance instanceof proto;
+  }
+
+  function isFunction$1(subject) {
+      return subject !== null && typeof subject === "function";
+  }
+
+  class BroadcastEvent {
+
+      constructor(key, callback) {
+          this.key = key;
+          this.allowMultipleEmits = true;
+
+          if(isFunction$1(callback)) {
+              this.handle = callback;
+          }
+      }
+
+      allowsMultipleEmits() {
+          return !!this.allowMultipleEmits;
+      }
+
+      once() {
+          this.allowMultipleEmits = false;
+
+          return this;
+      }
+
+      handle() {
+          //
+      }
+
+  }
+
+  class BroadcastReply {
+
+      constructor(key, callback) {
+          this.key = key;
+          this.allowMultipleRequests = false;
+
+          if(typeof callback === "function") {
+              this.handle = callback;
+          }
+      }
+
+      allowsMultipleRequests() {
+          return !!this.allowMultipleRequests;
+      }
+
+      once() {
+          this.allowMultipleRequests = true;
+
+          return this;
+      }
+
+      handle() {
+          //
+      }
+
+  }
+
+  class Dispatcher {
+
+      constructor(channel) {
+          this.channel = channel;
+          this._events = [];
+          this._replies = [];
+      }
+
+      createEvent(key, callback) {
+          return !is(key, BroadcastEvent) ? new BroadcastEvent(key, callback) : key;
+      }
+
+      hasEvent(key) {
+          return !!this.getEvent(key);
+      }
+
+      getEvent(key) {
+          return this._events[key] || null;
+      }
+
+      setEvent(key, value) {
+          if(key instanceof BroadcastEvent) {
+              value = key;
+              key = value.key;
+          }
+
+          if(!value instanceof BroadcastEvent) {
+              throw new Error('The value argument must be an instance of BroadcastEvent');
+          }
+
+          return this._events[key] = value;
+      }
+
+      getEvents() {
+          return this._events;
+      }
+
+      on(key, callback) {
+          const event = this.createEvent(key, callback);
+
+          this._events.push(event);
+
+          return event;
+      }
+
+      once(key, callback) {
+          const event = this.createEvent(key, callback);
+
+          this.on(event.once());
+
+          return event;
+      }
+
+      off(key) {
+          const removed = [];
+
+          for(let i in this._events) {
+              if(is(key, BroadcastEvent) && key == this._events[i] || key === this._events[i].key) {
+                  removed.push(this._events[i]);
+                  delete this._events[i];
+              }
+          }
+
+          return removed;
+      }
+
+      emit(event) {
+          const args = [].slice.call(arguments).slice(1);
+
+          for(let i in this._events) {
+              if(this._events[i].key === (event.key || event)) {
+                  this._events[i].handle.apply(this, args);
+
+                  if(!this._events[i].allowsMultipleEmits()) {
+                      delete this._events[i];
+                  }
+              }
+          }
+      }
+
+      createReply(key, callback) {
+          return !is(key, BroadcastReply) ? new BroadcastReply(key, callback) : key;
+      }
+
+      hasReply(key) {
+          return !!this.getReply(key);
+      }
+
+      getReply(key) {
+          return this._replies[key] || null;
+      }
+
+      setReply(key, value) {
+          if(key instanceof BroadcastReply) {
+              value = key;
+              key = value.key;
+          }
+
+          if(!value instanceof BroadcastReply) {
+              throw new Error('The value argument must be an instance of BroadcastReply');
+          }
+
+          return this._replies[key] = value;
+      }
+
+      getReplies() {
+          return this._replies;
+      }
+
+      request(reply, context) {
+          const args = [].slice.call(arguments).slice(1);
+
+          if(!this._replies[reply.key || reply]) {
+              throw new Error('No BroadcastReply exists by the name "'+(reply.key || reply)+'"!');
+          }
+
+          const handle = this._replies[reply.key || reply].handle;
+
+          return new Promise(function(resolve, reject) {
+              handle.apply(this, [resolve, reject].concat(args));
+          });
+      }
+
+      reply(key, callback) {
+          const reply = this.createReply(key, callback);
+
+          return this._replies[reply.key] = reply;
+      }
+
+      stopReply(key) {
+          delete this._replies[reply.key || reply];
+      }
+
+  }
+
+  //import 'es6-promise/auto';
+
+  class BroadcastManager {
+
+      constructor(channel) {
+          this._dispatchers = {};
+          this.defaultChannel = 'app';
+          this.dispatch(channel || this.defaultChannel);
+      }
+
+      dispatch(channel) {
+          channel || (channel = this.defaultChannel);
+
+          if(this.doesDispatchExist(channel)) {
+              return this._dispatchers[channel];
+          }
+
+          return this.registerDispatch(new Dispatcher(channel));
+      }
+
+      doesDispatchExist(instance) {
+          return !!this._dispatchers[instance.channel || instance];
+      }
+
+      registerDispatch(instance) {
+          if(!is(instance, Dispatcher)) {
+              throw new Error('The argument must be an instance of Broadcast/BroadcastDispatch!');
+          }
+
+          if(this.doesDispatchExist(instance.channel)) {
+              throw new Error('There is already a Broadcast/BroadcastDispatch instance assigned to "'+instance.channel+'"!');
+          }
+
+          return this._dispatchers[instance.channel] = instance;
+      }
+
+      unregisterDispatch(dispatch) {
+          unset(this._dispatchers[dispatch.channel || dispatch]);
+      }
+
+  }
+
   /**
    * A specialized version of `_.map` for arrays without support for iteratee
    * shorthands.
@@ -12852,7 +13091,7 @@
 
   }
 
-  var GiveworksForm = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.page.id)?_c('div',[_c('form',{attrs:{"novalidate":"novalidate"},on:{"submit":function($event){$event.preventDefault();return _vm.submit($event)}}},[_c(_vm.pageTypeComponent,{tag:"component",attrs:{"orientation":_vm.orientation,"submitting":_vm.submitting,"form":_vm.form,"errors":_vm.errors,"page":_vm.page}})],1)]):(_vm.error)?_c('div',[_c('div',{staticClass:"center-wrapper"},[_c('div',{staticClass:"center-content"},[_c('http-error-response',{attrs:{"min-width":"400px","error":_vm.error}})],1)])]):_c('div',[_c('activity-indicator',{attrs:{"center":true,"size":"xl"}})],1)},staticRenderFns: [],
+  var GiveworksForm$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.page.id)?_c('div',[_c('form',{attrs:{"novalidate":"novalidate"},on:{"submit":function($event){$event.preventDefault();return _vm.submit($event)}}},[_c(_vm.pageTypeComponent,{tag:"component",attrs:{"orientation":_vm.orientation,"submitting":_vm.submitting,"form":_vm.form,"errors":_vm.errors,"page":_vm.page}})],1)]):(_vm.error)?_c('div',[_c('div',{staticClass:"center-wrapper"},[_c('div',{staticClass:"center-content"},[_c('http-error-response',{attrs:{"min-width":"400px","error":_vm.error}})],1)])]):_c('div',[_c('activity-indicator',{attrs:{"center":true,"size":"xl"}})],1)},staticRenderFns: [],
 
       name: 'giveworks-form',
 
@@ -13052,250 +13291,6 @@
           this.$dispatch.stopReply('submit:hide');
       }
 
-  }
-
-  function is(instance, proto) {
-      return instance instanceof proto;
-  }
-
-  function isFunction$1(subject) {
-      return subject !== null && typeof subject === "function";
-  }
-
-  class BroadcastEvent {
-
-      constructor(key, callback) {
-          this.key = key;
-          this.allowMultipleEmits = true;
-
-          if(isFunction$1(callback)) {
-              this.handle = callback;
-          }
-      }
-
-      allowsMultipleEmits() {
-          return !!this.allowMultipleEmits;
-      }
-
-      once() {
-          this.allowMultipleEmits = false;
-
-          return this;
-      }
-
-      handle() {
-          //
-      }
-
-  }
-
-  class BroadcastReply {
-
-      constructor(key, callback) {
-          this.key = key;
-          this.allowMultipleRequests = false;
-
-          if(typeof callback === "function") {
-              this.handle = callback;
-          }
-      }
-
-      allowsMultipleRequests() {
-          return !!this.allowMultipleRequests;
-      }
-
-      once() {
-          this.allowMultipleRequests = true;
-
-          return this;
-      }
-
-      handle() {
-          //
-      }
-
-  }
-
-  class Dispatcher {
-
-      constructor(channel) {
-          this.channel = channel;
-          this._events = [];
-          this._replies = [];
-      }
-
-      createEvent(key, callback) {
-          return !is(key, BroadcastEvent) ? new BroadcastEvent(key, callback) : key;
-      }
-
-      hasEvent(key) {
-          return !!this.getEvent(key);
-      }
-
-      getEvent(key) {
-          return this._events[key] || null;
-      }
-
-      setEvent(key, value) {
-          if(key instanceof BroadcastEvent) {
-              value = key;
-              key = value.key;
-          }
-
-          if(!value instanceof BroadcastEvent) {
-              throw new Error('The value argument must be an instance of BroadcastEvent');
-          }
-
-          return this._events[key] = value;
-      }
-
-      getEvents() {
-          return this._events;
-      }
-
-      on(key, callback) {
-          const event = this.createEvent(key, callback);
-
-          this._events.push(event);
-
-          return event;
-      }
-
-      once(key, callback) {
-          const event = this.createEvent(key, callback);
-
-          this.on(event.once());
-
-          return event;
-      }
-
-      off(key) {
-          const removed = [];
-
-          for(let i in this._events) {
-              if(is(key, BroadcastEvent) && key == this._events[i] || key === this._events[i].key) {
-                  removed.push(this._events[i]);
-                  delete this._events[i];
-              }
-          }
-
-          return removed;
-      }
-
-      emit(event) {
-          const args = [].slice.call(arguments).slice(1);
-
-          for(let i in this._events) {
-              if(this._events[i].key === (event.key || event)) {
-                  this._events[i].handle.apply(this, args);
-
-                  if(!this._events[i].allowsMultipleEmits()) {
-                      delete this._events[i];
-                  }
-              }
-          }
-      }
-
-      createReply(key, callback) {
-          return !is(key, BroadcastReply) ? new BroadcastReply(key, callback) : key;
-      }
-
-      hasReply(key) {
-          return !!this.getReply(key);
-      }
-
-      getReply(key) {
-          return this._replies[key] || null;
-      }
-
-      setReply(key, value) {
-          if(key instanceof BroadcastReply) {
-              value = key;
-              key = value.key;
-          }
-
-          if(!value instanceof BroadcastReply) {
-              throw new Error('The value argument must be an instance of BroadcastReply');
-          }
-
-          return this._replies[key] = value;
-      }
-
-      getReplies() {
-          return this._replies;
-      }
-
-      request(reply, context) {
-          const args = [].slice.call(arguments).slice(1);
-
-          if(!this._replies[reply.key || reply]) {
-              throw new Error('No BroadcastReply exists by the name "'+(reply.key || reply)+'"!');
-          }
-
-          const handle = this._replies[reply.key || reply].handle;
-
-          return new Promise(function(resolve, reject) {
-              handle.apply(this, [resolve, reject].concat(args));
-          });
-      }
-
-      reply(key, callback) {
-          const reply = this.createReply(key, callback);
-
-          return this._replies[reply.key] = reply;
-      }
-
-      stopReply(key) {
-          delete this._replies[reply.key || reply];
-      }
-
-  }
-
-  //import 'es6-promise/auto';
-
-  class BroadcastManager {
-
-      constructor(channel) {
-          this._dispatchers = {};
-          this.defaultChannel = 'app';
-          this.dispatch(channel || this.defaultChannel);
-      }
-
-      dispatch(channel) {
-          channel || (channel = this.defaultChannel);
-
-          if(this.doesDispatchExist(channel)) {
-              return this._dispatchers[channel];
-          }
-
-          return this.registerDispatch(new Dispatcher(channel));
-      }
-
-      doesDispatchExist(instance) {
-          return !!this._dispatchers[instance.channel || instance];
-      }
-
-      registerDispatch(instance) {
-          if(!is(instance, Dispatcher)) {
-              throw new Error('The argument must be an instance of Broadcast/BroadcastDispatch!');
-          }
-
-          if(this.doesDispatchExist(instance.channel)) {
-              throw new Error('There is already a Broadcast/BroadcastDispatch instance assigned to "'+instance.channel+'"!');
-          }
-
-          return this._dispatchers[instance.channel] = instance;
-      }
-
-      unregisterDispatch(dispatch) {
-          unset(this._dispatchers[dispatch.channel || dispatch]);
-      }
-
-  }
-
-  function install(Vue, options) {
-      Vue.prototype.$broadcast = new BroadcastManager;
-      Vue.prototype.$dispatch = Vue.prototype.$broadcast.dispatch();
   }
 
   const VueInstaller = {
@@ -14335,11 +14330,21 @@
       TextareaField: TextareaField$1
   };
 
-  forEach(components$1, (component, key) => {
-      Vue.component(key, component);
-  });
+  function install(Vue, options) {
+      Vue.prototype.$broadcast = new BroadcastManager;
+      Vue.prototype.$dispatch = Vue.prototype.$broadcast.dispatch();
 
-  Vue.use(MergeClasses);
+      each(components$1, (component, key) => {
+          Vue.component(key, component);
+      });
+
+      Vue.use(MergeClasses);
+      Vue.use(GiveworksFormPlugin);
+      Vue.component('giveworks-form', GiveworksForm$1);
+
+      console.log('install');
+  }
+
   Vue.use(install);
 
   var main = Vue.extend({

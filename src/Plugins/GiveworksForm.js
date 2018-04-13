@@ -31,7 +31,7 @@ const components = {
     TextareaField
 };
 
-livereload() {
+function livereload() {
     if(process.env.NODE_ENV === 'development') {
         const domain = (location.host || 'localhost').split(':')[0];
         const port = process.env.LIVERELOAD_OPTIONS && process.env.LIVERELOAD_OPTIONS.port;
@@ -52,6 +52,6 @@ export default function install(Vue, options) {
     Vue.component('giveworks-form', GiveworksForm);
 
     livereload();
-    
+
     console.log('install');
 }

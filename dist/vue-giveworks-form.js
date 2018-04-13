@@ -13136,13 +13136,18 @@
       },
 
       props: {
+
           data: [Boolean, Object],
+
           redirect: [Boolean, String],
-          pageId: [Boolean, Number, String],
+
+          pageId: [Number, String],
+
           apiKey: {
               type: String,
               required: true
           },
+
           orientation: {
               type: String,
               default: 'vertical',
@@ -13218,9 +13223,9 @@
       },
 
       mounted() {
-          if(!this.page) {
+          if(!this.page.id) {
               Page.find(this.pageId).then(model => {
-                  this.page = this.model.toJson();
+                  this.page = model.toJson();
                   this.model = new Page({
                       id: this.page.id
                   });

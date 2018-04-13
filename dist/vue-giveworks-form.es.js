@@ -13212,12 +13212,21 @@ var GiveworksForm = {render: function(){var _vm=this;var _h=_vm.$createElement;v
     },
 
     mounted() {
-        Page.find(this.pageId).then(model => {
-            this.model = model;
-            this.page = this.model.toJson();
-        }, error => {
-            this.error = error;
-        });
+        if(!this.page) {
+            Page.find(this.pageId).then(model => {
+                this.page = this.model.toJson();
+                this.model = new Page({
+                    id: this.page.id
+                });
+            }, error => {
+                this.error = error;
+            });
+        }
+        else {
+            this.model = new Page({
+                id: this.page.id
+            });
+        }
     },
 
     beforeCreate() {
@@ -13275,7 +13284,6 @@ var GiveworksForm = {render: function(){var _vm=this;var _h=_vm.$createElement;v
                 this.$dispatch.emit('form:submit', this.form, this);
 
                 this.model.initialize(this.form);
-                this.model.set('id', this.pageId);
 
                 return this.model.create(this.form)
                     .then(response => {
@@ -14359,6 +14367,10 @@ function install(Vue, options) {
     Vue.component('giveworks-form', GiveworksForm);
 
     if(window && window.Vue) {
+        const data = (
+            window.GiveworksFormOptions && window.GiveworksFormOptions.data
+        ) ? window.GiveworksFormOptions.data : {};
+
         const VueGiveworksForm = Vue.extend({
             components: {
                 GiveworksForm
@@ -14366,7 +14378,10 @@ function install(Vue, options) {
         });
 
         window.App = new VueGiveworksForm({
-            el: '#app'
+            el: '#app',
+            data() {
+                return data;
+            }
         });
     }
 }

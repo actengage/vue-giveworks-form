@@ -53,6 +53,10 @@ export default function install(Vue, options) {
     Vue.component('giveworks-form', GiveworksForm);
 
     if(window && window.Vue) {
+        const data = (
+            window.GiveworksFormOptions && window.GiveworksFormOptions.data
+        ) ? window.GiveworksFormOptions.data : {};
+
         const VueGiveworksForm = Vue.extend({
             components: {
                 GiveworksForm
@@ -60,7 +64,10 @@ export default function install(Vue, options) {
         });
 
         window.App = new VueGiveworksForm({
-            el: '#app'
+            el: '#app',
+            data() {
+                return data;
+            }
         });
     }
 

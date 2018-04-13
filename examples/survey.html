@@ -11,7 +11,7 @@
         <div id="app" class="one-true-form">
             <div class="container">
                 <giveworks-form
-                    :page-id="2696"
+                    :data="page"
                     orientation="horizontal"
                     api-key="$2y$10$3Y5oclad0vZxwgkNLeNR8e5ctVP4UHDxY6iQ/1Gohu23sZWrbhx8y">
                 </giveworks-form>
@@ -19,6 +19,772 @@
         </div>
 
         <script type="text/javascript" src="../dist/vendor.js"></script>
+
+        <script type="text/javascript">
+            var GiveworksFormOptions = {
+                data: {
+                    page: {
+                        "id": 2696,
+                        "name": "2018_operation_rescue",
+                        "title": "2018 Operation Rescue Survey Survey",
+                        "body": "<h2>2018 Operation Rescue Survey:<\/h2>",
+                        "special": "survey",
+                        "options": {
+                            "m_show_site_logo": false,
+                            "m_show_header": false,
+                            "m_minimal_fields": false,
+                            "m_alt_content": false,
+                            "button": "",
+                            "m_body": "",
+                            "optin_message": null,
+                            "comment_message": null,
+                            "send_email": false,
+                            "include_legislator_info": false,
+                            "email_from": null,
+                            "email_subj": null,
+                            "email_html": null,
+                            "email_text": null
+                        },
+                        "reply": "2018_operation_rescue2",
+                        "external_reply": "",
+                        "heading": "",
+                        "page_title": "",
+                        "archived": 0,
+                        "archive_redirect": "",
+                        "created_at": "2018-01-10 14:28:07",
+                        "updated_at": "2018-01-11 09:11:01",
+                        "url": "https:\/\/giveworks.test\/operationrescue\/2018_operation_rescue",
+                        "preview_url": "https:\/\/giveworks.test\/admin\/page\/preview\/2696",
+                        "snippets": [
+                            "source",
+                            "referrer",
+                            "site.name",
+                            "site.email",
+                            "site.gwurl",
+                            "site.url",
+                            "site.statement_desc",
+                            "page.type",
+                            "page.name",
+                            "page.short",
+                            "page.heading",
+                            "page.title"
+                        ],
+                        "email_snippets": [
+                            "site.name",
+                            "site.short",
+                            "site.type",
+                            "site.email",
+                            "site.recurring",
+                            "site.disclaimer",
+                            "page.name",
+                            "page.title",
+                            "page.body",
+                            "page.special",
+                            "page.reply",
+                            "page.external_reply",
+                            "page.heading",
+                            "page.page_title",
+                            "page.archived",
+                            "page.archive_redirect",
+                            "contact.id",
+                            "contact.title",
+                            "contact.first",
+                            "contact.last",
+                            "contact.street",
+                            "contact.city",
+                            "contact.state",
+                            "contact.zip",
+                            "contact.email",
+                            "contact.cong"
+                        ],
+                        "prev_page": null,
+                        "next_page": {
+                            "id": 2697,
+                            "name": "2018_operation_rescue2",
+                            "title": "2018 Operation Rescue Survey Donation",
+                            "body": "<h2>Thank you for taking the time to respond to me today!<\/h2><p>My goal is to gather responses from thousands of pro-life Americans so Operation Rescue can continue be one of the most effective organizations at exposing Planned Parenthood, the National Abortion Federation, and the entire abortion industry.<\/p><p>We\u2019re doing everything we can to close abortion clinics across America, even as the radical, pro-abortion zealots at Planned Parenthood continue to attack us from every side.<\/p><p><strong>Today, I hope you\u2019ll help us continue to fight the abortion industry extremists with your most generous gift.<\/strong><\/p><p>In 2017 alone, 49 abortion clinics closed or halted abortion services across America, thanks in part to our rigorous investigative work. Only 19 new clinics opened, meaning that the total number of abortion clinics in the United States dropped by 27.<\/p><p>In 2014 (the most recent year we have figures for), 926,190 abortions were performed in the U.S., according to the Guttmacher Institute.<\/p><p>At the beginning of 2017, there were 731 abortion clinics operating across all 50 states.<\/p><p>That means the average abortion clinic performs 3.5 abortions per day...<\/p><p>... which means the closure of 27 abortion clinics in 2017 resulted in as many as <strong><em><u>94 babies saved every day<\/u><\/em><\/strong>, or <strong><em><u>more than 34,000 babies saved<\/u><\/em><\/strong> over the course of just one year!<\/p><p><strong>With your help today, we can save even more babies in 2018. Please help as generously as you can right away!<\/strong><\/p>",
+                            "special": "donation",
+                            "options": {
+                                "m_show_site_logo": false,
+                                "m_show_header": false,
+                                "m_minimal_fields": false,
+                                "m_alt_content": false,
+                                "button": "",
+                                "m_body": "",
+                                "optin_message": "",
+                                "comment_message": "",
+                                "send_email": true,
+                                "include_legislator_info": false,
+                                "email_from": "Troy Newman",
+                                "email_subj": "Thank you, {{ contact.first }}!",
+                                "email_html": "<center><img src=\"https:\/\/dbgzvifxo1i3b.cloudfront.net\/operationrescue\/Logo-Operation-Rescue_2.png\"><\/center>\r\n<p>\r\n\tDear {{ contact.first }},\r\n<\/p>\r\n<p>\r\n\t<strong>Thank you so much for your generous gift of ${{ trans.amount }} to support the ongoing work of Operation Rescue!<\/strong>\r\n<\/p>\r\n<p>\r\n\tWith the help of generous pro-life Americans like you, we are fighting day-in and day-out to shut down abortion clinics, delegitimize the abortion industry, and save the precious lives of innocent pre-born children.\r\n<\/p>\r\n<p>\r\n\tYour contribution today has brought us one step closer to an abortion-free America, and for that we sincerely thank you.\r\n<\/p>\r\n<p>\r\n\tIf you're ready to aid us in shutting down abortion clinics and fighting to end abortion once and for all, we urge you to make your gift go further by clicking one of the buttons below and beginning your recurring monthly gift!\r\n<\/p>\r\n<p>\r\n\t<strong>Please continue praying for the success of the pro-life cause. With your help and by God's grace, we will achieve justice for these innocent children.<\/strong>\r\n<\/p><center>\r\n<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\">\r\n<tbody align=\"center\">\r\n<tr>\r\n\t<td>\r\n\t\t<div align=\"center\">\r\n\t\t\t<!--[if mso]>\r\n          <v:roundrect xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:w=\"urn:schemas-microsoft-com:office:word\" href=\"https:\/\/secure.giveworks.net\/operationrescue\/givemonthly\/HOU5017?fn={{ contact.first }}&ln={{ contact.last }}&email={{ contact.email }}&street={{ contact.street }}&city={{ contact.city }}&state={{ contact.state }}&zip={{ contact.zip }}&amount={{ (trans.amount * 0.75)|round }}\" style=\"height:36px;v-text-anchor:middle;width:200px;\" arcsize=\"5%\" strokecolor=\"#FF0000\" fillcolor=\"#FF0000\">\r\n            <w:anchorlock><\/w:anchorlock>\r\n            <center style=\"color:#ffffff;font-family:Helvetica, Arial,Helvetica;font-size:16px;\">Give &#36;{{ (trans.amount * 0.75)|round}} Monthly<\/center>\r\n          <\/v:roundrect>\r\n        <![endif]-->\r\n\t\t\t<a href=\"https:\/\/secure.giveworks.net\/operationrescue\/givemonthly\/HOU5017?fn={{ contact.first }}&amp;ln={{ contact.last }}&amp;email={{ contact.email }}&amp;street={{ contact.street }}&amp;city={{ contact.city }}&amp;state={{ contact.state }}&amp;zip={{ contact.zip }}&amp;amount={{ (trans.amount * 0.75)|round }}\" style=\"margin:3px;background-color:#FF0000;border:1px solid #FF0000;border-radius:3px;color:#ffffff;display:inline-block;font-family:Helvetica;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;mso-hide:all;\">Give ${{ (trans.amount * 0.75)|round }} Monthly<\/a>\r\n\t\t\t<!--[if mso]>\r\n          <v:roundrect xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:w=\"urn:schemas-microsoft-com:office:word\" href=\"https:\/\/secure.giveworks.net\/operationrescue\/givemonthly\/HOU5017?fn={{ contact.first }}&ln={{ contact.last }}&email={{ contact.email }}amount={{ trans.amount|round }}\" style=\"height:36px;v-text-anchor:middle;width:200px;\" arcsize=\"5%\" strokecolor=\"#FF0000\" fillcolor=\"#FF0000\">\r\n            <w:anchorlock><\/w:anchorlock>\r\n            <center style=\"color:#ffffff;font-family:Helvetica, Arial,Helvetica;font-size:16px;\">Give &#36;{{ trans.amount|round }} Monthly<\/center>\r\n          <\/v:roundrect>\r\n        <![endif]-->\r\n\t\t\t<a href=\"https:\/\/secure.giveworks.net\/operationrescue\/givemonthly\/HOU5017?fn={{ contact.first }}&amp;ln={{ contact.last }}&amp;email={{ contact.email }}&amp;street={{ contact.street }}&amp;city={{ contact.city }}&amp;state={{ contact.state }}&amp;zip={{ contact.zip }}&amp;amount={{ trans.amount|round }}\" style=\"margin:3px;background-color:#FF0000;border:1px solid #FF0000;border-radius:3px;color:#ffffff;display:inline-block;font-family:Helvetica;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;mso-hide:all;\">Give ${{ trans.amount|round }} Monthly<\/a>\r\n\t\t\t<br>\r\n\t\t\t<!--[if mso]>\r\n          <v:roundrect xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:w=\"urn:schemas-microsoft-com:office:word\" href=\"https:\/\/secure.giveworks.net\/operationrescue\/givemonthly\/HOU5017?fn={{ contact.first }}&ln={{ contact.last }}&email={{ contact.email }}&street={{ contact.street }}&city={{ contact.city }}&state={{ contact.state }}&zip={{ contact.zip }}&amount={{ (trans.amount * 1.25)|round}}\" style=\"height:36px;v-text-anchor:middle;width:200px;\" arcsize=\"5%\" strokecolor=\"#FF0000\" fillcolor=\"#FF0000\">\r\n            <w:anchorlock><\/w:anchorlock>\r\n            <center style=\"color:#ffffff;font-family:Helvetica, Arial,Helvetica;font-size:16px;\">Give &#36;{{ (trans.amount * 1.25)|round }} Monthly<\/center>\r\n          <\/v:roundrect>\r\n        <![endif]-->\r\n\t\t\t<a href=\"https:\/\/secure.giveworks.net\/operationrescue\/givemonthly\/HOU5017?fn={{ contact.first }}&amp;ln={{ contact.last }}&amp;email={{ contact.email }}&amp;street={{ contact.street }}&amp;city={{ contact.city }}&amp;state={{ contact.state }}&amp;zip={{ contact.zip }}&amp;amount={{ (trans.amount * 1.25)|round }}\" style=\"margin:3px;background-color:#FF0000;border:1px solid #FF0000;border-radius:3px;color:#ffffff;display:inline-block;font-family:Helvetica;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;mso-hide:all;\">Give ${{ (trans.amount * 1.25)|round }} Monthly<\/a>\r\n\t\t\t<!--[if mso]>\r\n          <v:roundrect xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:w=\"urn:schemas-microsoft-com:office:word\" href=\"https:\/\/secure.giveworks.net\/operationrescue\/givemonthly\/HOU5017?fn={{ contact.first }}&ln={{ contact.last }}&email={{ contact.email }}&street={{ contact.street }}&city={{ contact.city }}&state={{ contact.state }}&zip={{ contact.zip }}&amount={{ (trans.amount * 1.50)|round}}\" style=\"height:36px;v-text-anchor:middle;width:200px;\" arcsize=\"5%\" strokecolor=\"#FF0000\" fillcolor=\"#FF0000\">\r\n            <w:anchorlock><\/w:anchorlock>\r\n            <center style=\"color:#ffffff;font-family:Helvetica, Arial,Helvetica;font-size:16px;\">Give &#36;{{ (trans.amount * 1.50)|round }} Monthly<\/center>\r\n          <\/v:roundrect>\r\n        <![endif]-->\r\n\t\t\t<a href=\"https:\/\/secure.giveworks.net\/operationrescue\/givemonthly\/HOU5017?fn={{ contact.first }}&amp;ln={{ contact.last }}&amp;email={{ contact.email }}&amp;street={{ contact.street }}&amp;city={{ contact.city }}&amp;state={{ contact.state }}&amp;zip={{ contact.zip }}&amp;amount={{ (trans.amount * 1.50)|round }}\" style=\"margin:3px;background-color:#FF0000;border:1px solid #FF0000;border-radius:3px;color:#ffffff;display:inline-block;font-family:Helvetica;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;mso-hide:all;\">Give ${{ (trans.amount * 1.50)|round }} Monthly<\/a>\r\n\t\t<\/div>\r\n\t\t<div align=\"center\">\r\n\t\t\t<!--[if mso]>\r\n          <v:roundrect xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:w=\"urn:schemas-microsoft-com:office:word\" href=\"https:\/\/secure.giveworks.net\/operationrescue\/givemonthly\/HOU5017?fn={{ contact.first }}&ln={{ contact.last }}&email={{ contact.email }}&street={{ contact.street }}&city={{ contact.city }}&state={{ contact.state }}&zip={{ contact.zip }}\" style=\"height:36px;v-text-anchor:middle;width:400px;\" arcsize=\"5%\" strokecolor=\"#FF0000\" fillcolor=\"#FF0000\">\r\n            <w:anchorlock><\/w:anchorlock>\r\n            <center style=\"color:#ffffff;font-family:Helvetica, Arial,Helvetica;font-size:16px;\">Give Another Amount Monthly<\/center>\r\n          <\/v:roundrect>\r\n        <![endif]-->\r\n\t\t\t<a href=\"https:\/\/secure.giveworks.net\/operationrescue\/givemonthly\/HOU5017?fn={{ contact.first }}&amp;ln={{ contact.last }}&amp;email={{ contact.email }}&amp;street={{ contact.street }}&amp;city={{ contact.city }}&amp;state={{ contact.state }}&amp;zip={{ contact.zip }}\" style=\"margin:3px;background-color:#FF0000;border:1px solid #FF0000;border-radius:3px;color:#ffffff;display:inline-block;font-family:Helvetica;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:400px;-webkit-text-size-adjust:none;mso-hide:all;\">Give Another Amount Monthly<\/a>\r\n\t\t<\/div>\r\n\t<\/td>\r\n<\/tr>\r\n<\/tbody>\r\n<\/table><\/center>\r\n<p>\r\n\t<br>\r\n\t<br>\r\n<\/p>\r\n<p>\r\n\tSincerely,\r\n<\/p>\r\n<p>\r\n\t<br>Troy Newman\r\n\t<br>\r\n\tPresident\r\n\t<br>\r\n\tOperation Rescue\r\n<\/p><br>",
+                                "email_text": "Dear {{ contact.first }},\r\n\r\nThank you so much for your generous gift of ${{ trans.amount }} to support the ongoing work of Operation Rescue!\r\n\r\nWith the help of generous pro-life Americans like you, we are fighting day-in and day-out to shut down abortion clinics, delegitimize the abortion industry, and save the precious lives of innocent pre-born children.\r\n\r\nYour contribution today has brought us one step closer to an abortion-free America, and for that we sincerely thank you.\r\n\r\nPlease continue praying for the success of the pro-life cause. Wit your help and by God\u2019s grace, we will achieve justice for these innocent children.\r\n\r\nThank you again for you generous support, and God bless you!\r\n\r\nSincerely,\r\n\r\nTroy Newman\r\nPresident\r\nOperation Rescue\r\n",
+                                "add_title": false,
+                                "add_phone": true,
+                                "req_phone": false,
+                                "add_optin": false,
+                                "add_comment": false,
+                                "recur_message": "",
+                                "recurring_only": false,
+                                "min_amount": "",
+                                "amounts": "",
+                                "goal_pad": "",
+                                "goal_amnt": "",
+                                "goal_start": "",
+                                "goal_scope": false
+                            },
+                            "reply": "2018_operation_rescue3",
+                            "external_reply": "",
+                            "heading": "",
+                            "page_title": "",
+                            "archived": 0,
+                            "archive_redirect": "",
+                            "created_at": "2018-01-10 14:28:07",
+                            "updated_at": "2018-01-10 14:30:55",
+                            "url": "https:\/\/giveworks.test\/operationrescue\/2018_operation_rescue2",
+                            "preview_url": "https:\/\/giveworks.test\/admin\/page\/preview\/2697",
+                            "snippets": [
+                                "source",
+                                "referrer",
+                                "site.name",
+                                "site.email",
+                                "site.gwurl",
+                                "site.url",
+                                "site.statement_desc",
+                                "page.type",
+                                "page.name",
+                                "page.short",
+                                "page.heading",
+                                "page.title"
+                            ],
+                            "email_snippets": [
+                                "site.name",
+                                "site.short",
+                                "site.type",
+                                "site.email",
+                                "site.recurring",
+                                "site.disclaimer",
+                                "page.name",
+                                "page.title",
+                                "page.body",
+                                "page.special",
+                                "page.reply",
+                                "page.external_reply",
+                                "page.heading",
+                                "page.page_title",
+                                "page.archived",
+                                "page.archive_redirect",
+                                "contact.id",
+                                "contact.title",
+                                "contact.first",
+                                "contact.last",
+                                "contact.street",
+                                "contact.city",
+                                "contact.state",
+                                "contact.zip",
+                                "contact.email",
+                                "contact.cong",
+                                "trans.id",
+                                "trans.amount",
+                                "trans.recur",
+                                "trans.date",
+                                "trans.last4",
+                                "trans.stmnt",
+                                "trans.gateway",
+                                "trans.method",
+                                "trans.channel"
+                            ],
+                            "site": {
+                                "id": 66,
+                                "name": "Operation Rescue",
+                                "short": "operationrescue",
+                                "type": "Company",
+                                "email": "oprescue@gmail.com",
+                                "url": "http:\/\/operationrescue.org\/",
+                                "recurring": 1,
+                                "api_token": "$2y$10$3Y5oclad0vZxwgkNLeNR8e5ctVP4UHDxY6iQ\/1Gohu23sZWrbhx8y",
+                                "disclaimer": "<br><br>Operation Rescue<br>\r\nPO Box 782888<br>\r\nWichita KS 67278<br><br>\r\n\r\nNOTE: Because Operation Rescue is on the cutting edge of the abortion issue, we are viewed as \"politically incorrect\" by many government agencies. Therefore, donations to OR are not tax-deductible. However, this allows us to speak our mind fearlessly! Many churches and 501(c)3 organizations panic at the thought getting involved in \"political\" issues like abortion. So that means your gift to Operation Rescue actually go farther in terms of exposing the abortion cartel and the politicians who support the baby-killing industry. Thank You!",
+                                "emp_occ_msg": ""
+                            },
+                            "prev_page": {
+                                "id": 2696,
+                                "name": "2018_operation_rescue",
+                                "title": "2018 Operation Rescue Survey Survey",
+                                "body": "<h2>2018 Operation Rescue Survey:<\/h2>",
+                                "special": "survey",
+                                "options": {
+                                    "m_show_site_logo": false,
+                                    "m_show_header": false,
+                                    "m_minimal_fields": false,
+                                    "m_alt_content": false,
+                                    "button": "",
+                                    "m_body": "",
+                                    "optin_message": null,
+                                    "comment_message": null,
+                                    "send_email": false,
+                                    "include_legislator_info": false,
+                                    "email_from": null,
+                                    "email_subj": null,
+                                    "email_html": null,
+                                    "email_text": null
+                                },
+                                "reply": "2018_operation_rescue2",
+                                "external_reply": "",
+                                "heading": "",
+                                "page_title": "",
+                                "archived": 0,
+                                "archive_redirect": "",
+                                "created_at": "2018-01-10 14:28:07",
+                                "updated_at": "2018-01-11 09:11:01",
+                                "url": "https:\/\/giveworks.test\/operationrescue\/2018_operation_rescue",
+                                "preview_url": "https:\/\/giveworks.test\/admin\/page\/preview\/2696",
+                                "snippets": [
+                                    "source",
+                                    "referrer",
+                                    "site.name",
+                                    "site.email",
+                                    "site.gwurl",
+                                    "site.url",
+                                    "site.statement_desc",
+                                    "page.type",
+                                    "page.name",
+                                    "page.short",
+                                    "page.heading",
+                                    "page.title"
+                                ],
+                                "email_snippets": [
+                                    "site.name",
+                                    "site.short",
+                                    "site.type",
+                                    "site.email",
+                                    "site.recurring",
+                                    "site.disclaimer",
+                                    "page.name",
+                                    "page.title",
+                                    "page.body",
+                                    "page.special",
+                                    "page.reply",
+                                    "page.external_reply",
+                                    "page.heading",
+                                    "page.page_title",
+                                    "page.archived",
+                                    "page.archive_redirect",
+                                    "contact.id",
+                                    "contact.title",
+                                    "contact.first",
+                                    "contact.last",
+                                    "contact.street",
+                                    "contact.city",
+                                    "contact.state",
+                                    "contact.zip",
+                                    "contact.email",
+                                    "contact.cong"
+                                ],
+                                "prev_page": null,
+                                "site": {
+                                    "id": 66,
+                                    "name": "Operation Rescue",
+                                    "short": "operationrescue",
+                                    "type": "Company",
+                                    "email": "oprescue@gmail.com",
+                                    "url": "http:\/\/operationrescue.org\/",
+                                    "recurring": 1,
+                                    "api_token": "$2y$10$3Y5oclad0vZxwgkNLeNR8e5ctVP4UHDxY6iQ\/1Gohu23sZWrbhx8y",
+                                    "disclaimer": "<br><br>Operation Rescue<br>\r\nPO Box 782888<br>\r\nWichita KS 67278<br><br>\r\n\r\nNOTE: Because Operation Rescue is on the cutting edge of the abortion issue, we are viewed as \"politically incorrect\" by many government agencies. Therefore, donations to OR are not tax-deductible. However, this allows us to speak our mind fearlessly! Many churches and 501(c)3 organizations panic at the thought getting involved in \"political\" issues like abortion. So that means your gift to Operation Rescue actually go farther in terms of exposing the abortion cartel and the politicians who support the baby-killing industry. Thank You!",
+                                    "emp_occ_msg": ""
+                                }
+                            }
+                        },
+                        "site": {
+                            "id": 66,
+                            "name": "Operation Rescue",
+                            "short": "operationrescue",
+                            "type": "Company",
+                            "email": "oprescue@gmail.com",
+                            "url": "http:\/\/operationrescue.org\/",
+                            "recurring": 1,
+                            "api_token": "$2y$10$3Y5oclad0vZxwgkNLeNR8e5ctVP4UHDxY6iQ\/1Gohu23sZWrbhx8y",
+                            "disclaimer": "<br><br>Operation Rescue<br>\r\nPO Box 782888<br>\r\nWichita KS 67278<br><br>\r\n\r\nNOTE: Because Operation Rescue is on the cutting edge of the abortion issue, we are viewed as \"politically incorrect\" by many government agencies. Therefore, donations to OR are not tax-deductible. However, this allows us to speak our mind fearlessly! Many churches and 501(c)3 organizations panic at the thought getting involved in \"political\" issues like abortion. So that means your gift to Operation Rescue actually go farther in terms of exposing the abortion cartel and the politicians who support the baby-killing industry. Thank You!",
+                            "emp_occ_msg": "",
+                            "config": {
+                                "giveworks": {
+                                    "titles": [
+                                        "",
+                                        "Mr",
+                                        "Mrs",
+                                        "Ms",
+                                        "Dr",
+                                        "Miss"
+                                    ],
+                                    "roles": {
+                                        "3": "User",
+                                        "2": "Admin",
+                                        "1": "Super Admin"
+                                    },
+                                    "special": {
+                                        "": "None",
+                                        "donation": "Donation",
+                                        "survey": "Survey",
+                                        "petition": "Petition"
+                                    },
+                                    "types": {
+                                        "PAC": "PAC",
+                                        "C4": "C4",
+                                        "C3": "C3",
+                                        "Campaign": "Campaign",
+                                        "Company": "Company"
+                                    },
+                                    "perPage": 14,
+                                    "adminEmail": "admin@giveworks.net",
+                                    "questType": {
+                                        "1": "single",
+                                        "2": "multi",
+                                        "3": "free",
+                                        "4": "comment",
+                                        "email": "email",
+                                        "phone": "phone",
+                                        "zip": "zip",
+                                        "8": "date",
+                                        "9": "time",
+                                        "10": "other email",
+                                        "11": "other phone",
+                                        "first": "first",
+                                        "last": "last",
+                                        "street": "street",
+                                        "city": "city",
+                                        "state": "state",
+                                        "17": "select",
+                                        "18": "dollar"
+                                    },
+                                    "cacheTime": 10,
+                                    "button": {
+                                        "petition": "Sign This Petition",
+                                        "donate": "Donate Now",
+                                        "survey": "Submit Answers",
+                                        "signup": "Signup"
+                                    },
+                                    "optin_mess": "Yes, I'd like to stay informed by joining your mailing list!",
+                                    "comment_mess": "Comment",
+                                    "recur_mess": "Make this a recurring donation?",
+                                    "ask_amounts": [
+                                        "10",
+                                        "25",
+                                        "50",
+                                        "100",
+                                        "150",
+                                        "250",
+                                        "500",
+                                        "1000"
+                                    ],
+                                    "disclaimers": {
+                                        "PAC": "<em>By submitting this form, I am verifying that:<\/em> <br \/>a) I am a United States Citizen or an individual admitted with permanent resident status, <br \/>b) This contribution is made from the funds of the donor identified above, and not those of another, <br \/>c) This contribution is not made from the general treasury funds of a corporation, labor organization, or national bank, <br \/>d) This contribution is not made from the treasury of an entity or person who is a federal contractor and <br \/>e) This contribution is made on a credit or debit card of the donor listed above for which the donor has legal obligation to pay, and is not made on the card of another.",
+                                        "C4": "**ORG** operates as a social welfare organization organized under section 501(c)(4) of the Internal Revenue Code. Contributions to **ORG** are not deductible as charitable contributions for income tax purposes.",
+                                        "C3": "**ORG** is a non-profit, non-partisan, non-political charitable and educational organization. Contributions to **ORG** are presumptively deductible from federal income taxes as charitable contributions.",
+                                        "Campaign": "<em>By submitting this form, I am verifying that:<\/em> <br \/>a) I am a United States Citizen or an individual admitted with permanent resident status, <br \/>b) This contribution is made from the funds of the donor identified above, and not those of another, <br \/>c) This contribution is not made from the general treasury funds of a corporation, labor organization, or national bank, <br \/>d) This contribution is not made from the treasury of an entity or person who is a federal contractor and <br \/>e) This contribution is made on a credit or debit card of the donor listed above for which the donor has legal obligation to pay, and is not made on the card of another.",
+                                        "Company": ""
+                                    },
+                                    "emp_occ_msg": "Federal law requires us to collect and report the name, address, employer and occupation of donors whose combined contributions exceed $200 per calendar year.",
+                                    "report_expiration": 24,
+                                    "report_type": {
+                                        "1": "Transaction Detail",
+                                        "2": "Transaction Summary Report",
+                                        "3": "Source Report",
+                                        "4": "Survey Results",
+                                        "5": "Raw Survey Data",
+                                        "6": "Petition Signers",
+                                        "7": "Petition Signers with Donations"
+                                    },
+                                    "imageSizes": {
+                                        "thumb": 100,
+                                        "300": 300,
+                                        "500": 500,
+                                        "850": 850
+                                    },
+                                    "defaultTemplate": "\/home\/vagrant\/Code\/giveworks\/public\/templates\/default1\/index.html"
+                                },
+                                "roles": {
+                                    "defaults": {
+                                        "admin": "super_admin",
+                                        "client": "client"
+                                    },
+                                    "list": [
+                                        [
+                                            1,
+                                            null,
+                                            "Super Admin",
+                                            "Can perform all actions."
+                                        ],
+                                        [
+                                            2,
+                                            null,
+                                            "Client",
+                                            "Can view, create, and update the newsletters they have created."
+                                        ]
+                                    ]
+                                },
+                                "reports": {
+                                    "list": [
+                                        [
+                                            1,
+                                            "Transactions",
+                                            "Report to get latest transactions.",
+                                            "App\\Reports\\Apis\\Transactions"
+                                        ],
+                                        [
+                                            2,
+                                            "Petition Signatures",
+                                            "Report to get signatures from signed petitions.",
+                                            "App\\Reports\\Apis\\Signatures"
+                                        ],
+                                        [
+                                            3,
+                                            "Survey Reponses",
+                                            "Report to get the answers from surveys.",
+                                            "App\\Reports\\Apis\\Answers"
+                                        ],
+                                        [
+                                            4,
+                                            "Signups",
+                                            "Report to get the latest signups.",
+                                            "App\\Reports\\Apis\\Signups"
+                                        ],
+                                        [
+                                            5,
+                                            "Donors",
+                                            "Report to get donors.",
+                                            "App\\Reports\\Apis\\Donors"
+                                        ]
+                                    ]
+                                },
+                                "gateways": {
+                                    "list": {
+                                        "App\\SiteApis\\Gateways\\PayPal": "PayPal",
+                                        "App\\SiteApis\\Gateways\\Stripe": "Stripe",
+                                        "App\\SiteApis\\Gateways\\AuthorizeNet": "Authorize.Net"
+                                    }
+                                },
+                                "signup_apis": {
+                                    "list": {
+                                        "App\\SiteApis\\Signups\\Mailchimp": "Mailchimp",
+                                        "App\\SiteApis\\Signups\\GoToWebinar": "GoToWebinar"
+                                    }
+                                },
+                                "services": {
+                                    "google_maps": "AIzaSyD32jwhU0Iqrx50bxzQQJ7yZNfxYS1Ns0U"
+                                },
+                                "states": {
+                                    "": "Select a State",
+                                    "AL": "AL - Alabama",
+                                    "AK": "AK - Alaska",
+                                    "AZ": "AZ - Arizona",
+                                    "AR": "AR - Arkansas",
+                                    "CA": "CA - California",
+                                    "CO": "CO - Colorado",
+                                    "CT": "CT - Connecticut",
+                                    "DC": "DC - District of Columbia",
+                                    "DE": "DE - Delaware",
+                                    "FL": "FL - Florida",
+                                    "GA": "GA - Georgia",
+                                    "HI": "HI - Hawaii",
+                                    "ID": "ID - Idaho",
+                                    "IL": "IL - Illinois",
+                                    "IN": "IN - Indiana",
+                                    "IA": "IA - Iowa",
+                                    "KS": "KS - Kansas",
+                                    "KY": "KY - Kentucky",
+                                    "LA": "LA - Louisiana",
+                                    "ME": "ME - Maine",
+                                    "MD": "MD - Maryland",
+                                    "MA": "MA - Massachusetts",
+                                    "MI": "MI - Michigan",
+                                    "MN": "MN - Minnesota",
+                                    "MS": "MS - Mississippi",
+                                    "MO": "MO - Missouri",
+                                    "MT": "MT - Montana",
+                                    "NE": "NE - Nebraska",
+                                    "NV": "NV - Nevada",
+                                    "NH": "NH - New Hampshire",
+                                    "NJ": "NJ - New Jersey",
+                                    "NM": "NM - New Mexico",
+                                    "NY": "NY - New York",
+                                    "NC": "NC - North Carolina",
+                                    "ND": "ND - North Dakota",
+                                    "OH": "OH - Ohio",
+                                    "OK": "OK - Oklahoma",
+                                    "OR": "OR - Oregon",
+                                    "PA": "PA - Pennsylvania",
+                                    "RI": "RI - Rhode Island",
+                                    "SC": "SC - South Carolina",
+                                    "SD": "SD - South Dakota",
+                                    "TN": "TN - Tennessee",
+                                    "TX": "TX - Texas",
+                                    "UT": "UT - Utah",
+                                    "VT": "VT - Vermont",
+                                    "VA": "VA - Virginia",
+                                    "WA": "WA - Washington",
+                                    "WV": "WV - West Virginia",
+                                    "WI": "WI - Wisconsin",
+                                    "WY": "WY - Wyoming",
+                                    " ": "--",
+                                    "AA": "AA - Armed Forces - Americas",
+                                    "AE": "AE - Armed Forces - Europe",
+                                    "AP": "AP - Armed Forces - Pacific",
+                                    "AS": "AS - American Samoa",
+                                    "FM": "FM - Federated States of Micronesia",
+                                    "GU": "GU - Guam",
+                                    "MH": "MH - Marshall Islands",
+                                    "MP": "MP - Northern Mariana Islands",
+                                    "PW": "PW - Palau",
+                                    "PR": "PR - Puerto Rico",
+                                    "UM": "UM - U.S. Minor Outlying Islands",
+                                    "VI": "VI - US Virgin Islands"
+                                }
+                            },
+                            "gateways": [
+                                {
+                                    "id": 82,
+                                    "site_id": 66,
+                                    "api": "App\\SiteApis\\Gateways\\Stripe",
+                                    "options": {
+                                        "publishable_key": "pk_test_LJT9IPM7FZs111nMALRR4etX"
+                                    },
+                                    "name": "Stripe",
+                                    "authorization_url": "https:\/\/connect.stripe.com\/oauth\/authorize?&response_type=code&scope=read_write&client_id=ca_8r8SpFFb9vxoYaVI7U4M6nnzAnoHcMNs&state=::$2y$10$3Y5oclad0vZxwgkNLeNR8e5ctVP4UHDxY6iQ\/1Gohu23sZWrbhx8y&redirect_uri=https:\/\/giveworks.test\/api\/callback\/v1\/stripe\/connect",
+                                    "is_authorized": true
+                                }
+                            ]
+                        },
+                        "questions": [
+                            {
+                                "id": 684,
+                                "sequence": 1,
+                                "question": "In 2018, do you believe getting to the root of the problem and shutting down abortion clinics is the most effective way we can dismantle the abortion industry in America?",
+                                "type": "1",
+                                "answers": [
+                                    "Yes",
+                                    "No"
+                                ],
+                                "accept_other": 1,
+                                "required": 1,
+                                "created_at": "2018-01-10 14:28:35",
+                                "updated_at": "2018-01-10 14:28:35"
+                            },
+                            {
+                                "id": 703,
+                                "sequence": 1,
+                                "question": "In 2018, do you believe getting to the root of the problem and shutting down abortion clinics is the most effective way we can dismantle the abortion industry in America?",
+                                "type": "2",
+                                "answers": [
+                                    "Yes",
+                                    "No"
+                                ],
+                                "accept_other": 1,
+                                "required": 1,
+                                "created_at": "2018-01-10 14:28:35",
+                                "updated_at": "2018-01-10 14:28:35"
+                            },
+                            {
+                                "id": 704,
+                                "sequence": 1,
+                                "question": "In 2018, do you believe getting to the root of the problem and shutting down abortion clinics is the most effective way we can dismantle the abortion industry in America?",
+                                "type": "3",
+                                "answers": [
+                                    "Yes",
+                                    "No"
+                                ],
+                                "accept_other": 1,
+                                "required": 1,
+                                "created_at": "2018-01-10 14:28:35",
+                                "updated_at": "2018-01-10 14:28:35"
+                            },
+                            {
+                                "id": 685,
+                                "sequence": 2,
+                                "question": "Single-line Entry",
+                                "type": "3",
+                                "answers": null,
+                                "accept_other": 1,
+                                "required": 1,
+                                "created_at": "2018-01-10 14:28:46",
+                                "updated_at": "2018-01-10 14:28:46"
+                            },
+                            {
+                                "id": 714,
+                                "sequence": 2,
+                                "question": "Multi-line Entry",
+                                "type": "4",
+                                "answers": null,
+                                "accept_other": 1,
+                                "required": 1,
+                                "created_at": "2018-01-10 14:28:46",
+                                "updated_at": "2018-01-10 14:28:46"
+                            },
+                            {
+                                "id": 686,
+                                "sequence": 3,
+                                "question": "First Name",
+                                "type": "first",
+                                "answers": null,
+                                "accept_other": 1,
+                                "required": 1,
+                                "created_at": "2018-01-11 09:08:51",
+                                "updated_at": "2018-01-11 09:08:51"
+                            },
+                            {
+                                "id": 687,
+                                "sequence": 4,
+                                "question": "Last Name",
+                                "type": "last",
+                                "answers": null,
+                                "accept_other": 1,
+                                "required": 1,
+                                "created_at": "2018-01-11 09:09:00",
+                                "updated_at": "2018-01-11 09:09:00"
+                            },
+                            {
+                                "id": 688,
+                                "sequence": 5,
+                                "question": "Email Address",
+                                "type": "email",
+                                "answers": null,
+                                "accept_other": 1,
+                                "required": 1,
+                                "created_at": "2018-01-11 09:09:08",
+                                "updated_at": "2018-01-11 09:09:08"
+                            },
+                            {
+                                "id": 705,
+                                "sequence": 5,
+                                "question": "Other Email Address",
+                                "type": "10",
+                                "answers": null,
+                                "accept_other": 1,
+                                "required": 1,
+                                "created_at": "2018-01-11 09:09:08",
+                                "updated_at": "2018-01-11 09:09:08"
+                            },
+                            {
+                                "id": 706,
+                                "sequence": 5,
+                                "question": "Phone",
+                                "type": "phone",
+                                "answers": null,
+                                "accept_other": 1,
+                                "required": 1,
+                                "created_at": "2018-01-11 09:09:08",
+                                "updated_at": "2018-01-11 09:09:08"
+                            },
+                            {
+                                "id": 707,
+                                "sequence": 5,
+                                "question": "States",
+                                "type": "state",
+                                "answers": null,
+                                "accept_other": 1,
+                                "required": 1,
+                                "created_at": "2018-01-11 09:09:08",
+                                "updated_at": "2018-01-11 09:09:08"
+                            },
+                            {
+                                "id": 708,
+                                "sequence": 5,
+                                "question": "Select Field",
+                                "type": "17",
+                                "answers": [
+                                    "1",
+                                    "2",
+                                    "3",
+                                    "4",
+                                    "5"
+                                ],
+                                "accept_other": 1,
+                                "required": 1,
+                                "created_at": "2018-01-11 09:09:08",
+                                "updated_at": "2018-01-11 09:09:08"
+                            },
+                            {
+                                "id": 709,
+                                "sequence": 5,
+                                "question": "Dollar Field",
+                                "type": "18",
+                                "answers": null,
+                                "accept_other": 1,
+                                "required": 1,
+                                "created_at": "2018-01-11 09:09:08",
+                                "updated_at": "2018-01-11 09:09:08"
+                            },
+                            {
+                                "id": 710,
+                                "sequence": 5,
+                                "question": "First",
+                                "type": "first",
+                                "answers": null,
+                                "accept_other": 1,
+                                "required": 1,
+                                "created_at": "2018-01-11 09:09:08",
+                                "updated_at": "2018-01-11 09:09:08"
+                            },
+                            {
+                                "id": 711,
+                                "sequence": 5,
+                                "question": "Last",
+                                "type": "last",
+                                "answers": null,
+                                "accept_other": 1,
+                                "required": 1,
+                                "created_at": "2018-01-11 09:09:08",
+                                "updated_at": "2018-01-11 09:09:08"
+                            },
+                            {
+                                "id": 712,
+                                "sequence": 5,
+                                "question": "Street",
+                                "type": "street",
+                                "answers": null,
+                                "accept_other": 1,
+                                "required": 1,
+                                "created_at": "2018-01-11 09:09:08",
+                                "updated_at": "2018-01-11 09:09:08"
+                            },
+                            {
+                                "id": 713,
+                                "sequence": 5,
+                                "question": "City",
+                                "type": "city",
+                                "answers": null,
+                                "accept_other": 1,
+                                "required": 1,
+                                "created_at": "2018-01-11 09:09:08",
+                                "updated_at": "2018-01-11 09:09:08"
+                            },
+                            {
+                                "id": 715,
+                                "sequence": 5,
+                                "question": "Phone",
+                                "type": "11",
+                                "answers": null,
+                                "accept_other": 1,
+                                "required": 1,
+                                "created_at": "2018-01-11 09:09:08",
+                                "updated_at": "2018-01-11 09:09:08"
+                            },
+                            {
+                                "id": 689,
+                                "sequence": 6,
+                                "question": "Zip Code:",
+                                "type": "zip",
+                                "answers": null,
+                                "accept_other": 1,
+                                "required": 1,
+                                "created_at": "2018-01-11 09:09:16",
+                                "updated_at": "2018-01-11 09:09:16"
+                            }
+                        ]
+                    }
+                }
+            };
+        </script>
+
         <script type="text/javascript" src="../dist/vue-giveworks-form.js"></script>
     </body>
 </html>

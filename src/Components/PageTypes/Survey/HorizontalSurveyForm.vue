@@ -12,7 +12,6 @@
 
                 <div v-for="question in chunk">
 
-                    {{name(question)}}
                     <component
                         v-model="form[name(question)]"
                         :is="component(question.type)"
@@ -45,7 +44,7 @@
 </template>
 
 <script>
-import { chunk } from 'lodash';
+import chunk from 'lodash-es/chunk';
 import VerticalSurveyForm from './VerticalSurveyForm';
 
 const RESERVED_FIELDS = [

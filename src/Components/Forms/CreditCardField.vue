@@ -38,15 +38,15 @@
 
 <script>
 import Payment from 'payment';
-import 'vue-awesome/icons/cc-jcb';
-import 'vue-awesome/icons/warning';
-import 'vue-awesome/icons/cc-visa';
-import 'vue-awesome/icons/cc-amex';
+import 'vue-awesome/icons/exclamation-triangle';
 import 'vue-awesome/icons/credit-card';
-import 'vue-awesome/icons/cc-discover';
-import 'vue-awesome/icons/cc-mastercard';
-import 'vue-awesome/icons/cc-diners-club';
-import 'vue-awesome/icons/credit-card-alt';
+import 'vue-awesome/icons/brands/cc-jcb';
+import 'vue-awesome/icons/brands/cc-visa';
+import 'vue-awesome/icons/brands/cc-amex';
+import 'vue-awesome/icons/brands/cc-discover';
+import 'vue-awesome/icons/brands/cc-mastercard';
+import 'vue-awesome/icons/brands/cc-diners-club';
+import 'vue-awesome/icons/regular/credit-card';
 import Icon from 'vue-awesome/components/Icon';
 
 const AVAILABLE_EVENTS = [
@@ -472,7 +472,7 @@ export default {
             top: $input-padding-y / 1.25;
             border: none;
             outline: 0;
-            padding: 0;    
+            padding: 0;
             margin: 0;
             height: 1rem;
             font-size: 1rem;

@@ -52,14 +52,14 @@
 </template>
 
 <script>
-import 'vue-awesome/icons/cc-jcb';
-import 'vue-awesome/icons/warning';
-import 'vue-awesome/icons/cc-visa';
-import 'vue-awesome/icons/cc-amex';
 import 'vue-awesome/icons/credit-card';
-import 'vue-awesome/icons/cc-discover';
-import 'vue-awesome/icons/cc-mastercard';
-import 'vue-awesome/icons/cc-diners-club';
+import 'vue-awesome/icons/brands/cc-jcb';
+import 'vue-awesome/icons/brands/cc-visa';
+import 'vue-awesome/icons/brands/cc-amex';
+import 'vue-awesome/icons/brands/cc-discover';
+import 'vue-awesome/icons/brands/cc-mastercard';
+import 'vue-awesome/icons/exclamation-triangle';
+import 'vue-awesome/icons/brands/cc-diners-club';
 import Gateway from '@/Components/Gateways/Gateway';
 import Icon from 'vue-awesome/components/Icon';
 //import ActivityIndicator from '@/Components/ActivityIndicators/ActivityIndicator';

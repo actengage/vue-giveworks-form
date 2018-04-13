@@ -8,8 +8,10 @@
     "dependencies": {
         "@objectivehtml/broadcast": "^0.2.4",
         "axios": "^0.18.0",
+        "bootstrap": "^4.0.0",
         "imask": "^2.2.0",
         "lodash": "^4.17.4",
+        "lodash-es": "^4.17.8",
         "moment": "^2.21.0",
         "payment": "^2.3.0",
         "the-one-true-form": "file:../the-one-true-form",
@@ -53,6 +55,7 @@
         "rollup-plugin-replace": "^2.0.0",
         "rollup-plugin-root-import": "^0.2.2",
         "rollup-plugin-serve": "^0.4.2",
+        "rollup-plugin-uglify-es": "0.0.1",
         "rollup-plugin-vue": "^3.0.0",
         "vue-jest": "^1.4.0",
         "vue-jest-utils": "^0.2.0",
@@ -66,11 +69,9 @@
         "release-patch": "npm version patch --no-git-tag-version; npm run release;",
         "release-minor": "npm version minor --no-git-tag-version; npm run release;",
         "release-major": "npm version major --no-git-tag-version; npm run release;",
-        "release": "npm run build; npm run uglify; npm run commit; npm publish;",
+        "release": "npm run build; npm run build-es6; npm run uglify; npm run commit; npm publish;",
         "build-vendor": "rollup -c rollup.vendor.js;",
-        "build-es2015": "rollup -c -f es -o dist/vue-giveworks-form.es.js;",
-        "uglify": "npm run uglify-library;",
-        "uglify-library": "./node_modules/.bin/uglifyjs dist/vue-giveworks-form.js -o dist/vue-giveworks-form.min.js;",
-        "uglify-es2015": "./node_modules/.bin/uglifyjs dist/vue-giveworks-form.es.js -o dist/vue-giveworks-form.es.min.js;"
+        "build-es6": "rollup -c -f es -o dist/vue-giveworks-form.es.js;",
+        "uglify": "rollup -c rollup.uglify.js"
     }
 }

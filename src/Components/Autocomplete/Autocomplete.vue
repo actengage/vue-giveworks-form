@@ -8,10 +8,10 @@
 </template>
 
 <script>
-import { each } from 'lodash';
-import { omitBy } from 'lodash';
-import { isEmpty } from 'lodash';
-import script from '@/Helpers/Script';
+import each from 'lodash-es/each';
+import omitBy from 'lodash-es/omitBy';
+import isEmpty from 'lodash-es/isEmpty';
+import script from 'vue-toolbox/src/Helpers/Script';
 import GoogleAutocompleteList from './AutocompleteList';
 
 const KEYCODE = {

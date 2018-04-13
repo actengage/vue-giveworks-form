@@ -28,7 +28,7 @@
 
 <script>
 import SurveyField from './SurveyField';
-import { FormControl } from 'vue-toolbox';
+import FormControl from 'vue-toolbox/src/Mixins/FormControl';
 
 export default {
 

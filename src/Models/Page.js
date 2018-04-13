@@ -1,14 +1,10 @@
-import { Model } from 'vue-toolbox';
-import { Request } from 'vue-toolbox';
+import Model from 'vue-toolbox/src/Http/Model';
+import Request from 'vue-toolbox/src/Http/Request';
 
 export default class Page extends Model {
 
     endpoint() {
         return 'page'
-    }
-
-    uri(method) {
-        return `${this.endpoint()}/${this.get('id')}`;
     }
 
 }

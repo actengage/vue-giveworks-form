@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import { each } from 'lodash';
-import { merge } from 'lodash';
+import each from 'lodash-es/each';
+import merge from 'lodash-es/merge';
 import Gateway from '@/Components/Gateways/Gateway';
 import FormComponent from '@/Mixins/FormComponent';
 import Icon from 'vue-awesome/components/Icon';

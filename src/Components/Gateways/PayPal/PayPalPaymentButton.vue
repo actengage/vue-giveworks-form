@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import 'vue-awesome/icons/warning';
+import 'vue-awesome/icons/exclamation-triangle';
 import 'vue-awesome/icons/check-circle';
 import Gateway from '@/Components/Gateways/Gateway';
 import Icon from 'vue-awesome/components/Icon';

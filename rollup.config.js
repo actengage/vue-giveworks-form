@@ -1,5 +1,6 @@
 import fs from 'fs';
 import pkg from "./package.json";
+//import { merge } from 'lodash';
 import { kebabCase } from 'lodash';
 import { camelCase } from 'lodash';
 import { upperFirst } from 'lodash';
@@ -79,8 +80,7 @@ const OUTPUT_GLOBALS = {
     'vue': 'Vue',
     'axios': 'axios',
     'moment': 'moment',
-    'lodash': 'lodash',
-    'vue-awesome/components/Icon': 'Icon'
+    '_': 'lodash'
 };
 
 // Define an array of external packages to not include in the bundle
@@ -112,14 +112,17 @@ const plugins = [
         }
     }),
     babel({
-        exclude: NODE_MODULES
+        exclude: NODE_MODULES,
+        include: [
+            "node_modules/vue-toolbox"
+        ]
     }),
     resolve({
         main: true,
         extensions: [ '.js', '.vue']
     }),
     commonjs({
-        include: NODE_MODULES,
+        include: NODE_MODULES
     }),
     globals(),
     builtins()
@@ -140,18 +143,6 @@ export default [{
         name: NAMESPACE,
         format: PACKAGE_FORMAT,
         file: `${DIST}${FILENAME}.js`,
-        sourcemap: (process.env.ROLLUP_WATCH ? 'inline' : true),
-        globals: OUTPUT_GLOBALS
-    },
-    watch: WATCH_OPTIONS,
-    external: EXTERNAL,
-    plugins: plugins
-}, {
-    input: MAINJS,
-    output: {
-        name: NAMESPACE,
-        format: 'es',
-        file: `${DIST}${FILENAME}.es.js`,
         sourcemap: (process.env.ROLLUP_WATCH ? 'inline' : true),
         globals: OUTPUT_GLOBALS
     },

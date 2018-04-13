@@ -70,11 +70,11 @@
 </template>
 
 <script>
-import { map } from 'lodash';
-import { each } from 'lodash';
-import { filter } from 'lodash';
-import { compact } from 'lodash';
-import { findIndex } from 'lodash';
+import map from 'lodash-es/map';
+import each from 'lodash-es/each';
+import filter from 'lodash-es/filter';
+import compact from 'lodash-es/compact';
+import findIndex from 'lodash-es/findIndex';
 import States from '@/Config/States';
 import FormComponent from '@/Mixins/FormComponent';
 import GoogleAutocompleteField from '@/Components/Autocomplete/Autocomplete';

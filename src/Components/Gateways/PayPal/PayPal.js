@@ -1,7 +1,7 @@
 import Api from '../Api';
 import App from '@/Config/App';
-import 'vue-awesome/icons/paypal';
-import Script from '@/Helpers/Script';
+import 'vue-awesome/icons/brands/paypal';
+import script from 'vue-toolbox/src/Helpers/Script';
 
 export default class PayPal extends Api {
 

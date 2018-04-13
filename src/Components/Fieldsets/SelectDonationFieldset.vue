@@ -69,7 +69,7 @@
 <script>
 
 // Icons that are used on this page
-import 'vue-awesome/icons/warning';
+import 'vue-awesome/icons/exclamation-triangle';
 
 import IMask from 'imask';
 import moment from 'moment';

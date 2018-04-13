@@ -24,12 +24,12 @@
 </template>
 
 <script>
-import { Request } from 'vue-toolbox';
-import { RequestOptions } from 'vue-toolbox';
-import { each } from 'lodash';
+import each from 'lodash-es/each';
 import Page from '@/Models/Page';
 import HttpConfig from '@/Config/Http';
 import HttpErrorResponse from './HttpErrorResponse';
+import Request from 'vue-toolbox/src/Http/Request/Request';
+import ActivityIndicator from 'vue-toolbox/src/Components/ActivityIndicator/ActivityIndicator';
 
 import {
     HorizontalDonationForm,
@@ -47,6 +47,7 @@ export default {
     name: 'giveworks-form',
 
     components: {
+        ActivityIndicator,
         HorizontalDonationForm,
         VerticalDonationForm,
         HorizontalPetitionForm,
@@ -127,13 +128,11 @@ export default {
     data() {
         return {
             form: {},
-            page: this.data || {},
-            error: null,
             errors: {},
+            error: null,
+            model: false,
             submitting: false,
-            model: new Page({
-                id: this.page.id
-            })
+            page: this.data || {}
         };
     },
 
@@ -147,8 +146,9 @@ export default {
     },
 
     mounted() {
-        this.model.find(this.pageId).then(model => {
-            this.page = model.toJson();
+        Page.find(this.pageId).then(model => {
+            this.model = model;
+            this.page = this.model.toJson();
         }, error => {
             this.error = error;
         });
@@ -204,8 +204,8 @@ export default {
 
             if(!this.submitting) {
                 this.showActivity();
+                this.errors = {};
                 this.submitting = true;
-                this.$set(this, 'errors', {});
                 this.$dispatch.emit('form:submit', this.form, this);
 
                 this.model.initialize(this.form);
@@ -221,7 +221,7 @@ export default {
                     }, error => {
                         this.hideActivity();
                         this.submitting = false;
-                        this.errors = error.errors;
+                        this.errors = error.data.errors;
                         this.$dispatch.emit('form:submit:complete', false, this.errors, this);
                         this.$dispatch.emit('form:submit:error', this.errors, this);
                         reject(error);

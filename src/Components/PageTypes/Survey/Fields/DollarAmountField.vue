@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { chunk } from 'lodash';
+import chunk from 'lodash-es/chunk';
 import SurveyField from './SurveyField';
 
 export default {

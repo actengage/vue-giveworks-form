@@ -1,6 +1,6 @@
 import Api from '../Api';
 import App from '@/Config/App';
-import Script from '@/Helpers/Script';
+import script from 'vue-toolbox/src/Helpers/Script';
 
 export default class AuthorizetNet extends Api {
 

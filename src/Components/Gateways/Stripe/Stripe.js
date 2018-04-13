@@ -1,9 +1,9 @@
 import Api from '../Api';
 import '@/Icons/apple-pay';
-import { extend } from 'lodash';
-import Script from '@/Helpers/Script';
+import extend from 'lodash-es/extend';
+import script from 'vue-toolbox/src/Helpers/Script';
 import 'vue-awesome/icons/credit-card';
-import 'vue-awesome/icons/google-wallet';
+import 'vue-awesome/icons/brands/google-wallet';
 import Icon from 'vue-awesome/components/Icon';
 
 export default class Stripe extends Api {

@@ -6,11 +6,11 @@
             <sup v-if="question.required">*</sup>
         </label>
 
-        <checkbox-field v-for="(answer, key) in question.answers" :key="key" :value="answer" :checkedValues="value" :name="name" :id="`${name}_${key}`" @change="updated">
+        <checkbox-field v-for="(answer, key) in question.answers" :key="key" :value="answer" :checkedValues="value || []" :name="name" :id="`${name}_${key}`" @change="updated">
             {{ answer }}
         </checkbox-field>
 
-        <checkbox-field v-changed value="other" :name="name" :id="`${name}_50`" :checkedValues="value" @change="updated">
+        <checkbox-field v-changed value="other" :name="name" :id="`${name}_50`" :checkedValues="value || []" @change="updated">
             Other:
         </checkbox-field>
 
@@ -26,7 +26,7 @@
 
 <script>
 import SurveyField from './SurveyField';
-import { FormControl } from 'vue-toolbox';
+import FormControl from 'vue-toolbox/src/Mixins/FormControl';
 
 export default {
 

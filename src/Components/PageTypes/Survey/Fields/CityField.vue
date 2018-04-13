@@ -1,8 +1,8 @@
 <template>
 
     <input-field
-        name="city"
         id="city"
+        name="city"
         placeholder="City"
         :value="value"
         :label="question.question"

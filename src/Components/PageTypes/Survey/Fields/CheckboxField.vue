@@ -1,7 +1,8 @@
 <template>
 
     <form-group :class="{'is-invalid': !!invalidFeedback}">
-        <label v-html="question.question">
+
+        <label>
             {{question.question}}
             <sup v-if="question.required">*</sup>
         </label>
@@ -20,6 +21,7 @@
             <form-feedback v-if="validFeedback" v-html="validFeedback" valid />
             <form-feedback v-if="invalidFeedback" v-html="invalidFeedback" invalid />
         </slot>
+        
     </form-group>
 
 </template>

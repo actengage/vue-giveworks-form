@@ -146,9 +146,6 @@ export default {
                         return parts.indexOf(part) !== -1;
                     }) !== -1 ? component.short_name : null;
                 })).join(' ');
-
-                console.log(field, part);
-                //this.form[field] = part;
             });
         },
 

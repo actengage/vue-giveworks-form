@@ -2,7 +2,7 @@
 
     <form-group :class="{'is-invalid': !!invalidFeedback}">
 
-        <label v-html="question.question">
+        <label>
             {{question.question}}
             <sup v-if="question.required">*</sup>
         </label>

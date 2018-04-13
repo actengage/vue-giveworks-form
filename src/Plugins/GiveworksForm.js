@@ -52,7 +52,17 @@ export default function install(Vue, options) {
     Vue.use(mergeClasses);
     Vue.component('giveworks-form', GiveworksForm);
 
-    livereload();
+    if(window && window.Vue) {
+        const VueGiveworksForm = Vue.extend({
+            components: {
+                GiveworksForm
+            }
+        });
 
-    console.log('install');
+        window.App = new VueGiveworksForm({
+            el: '#app'
+        });
+    }
+
+    livereload();
 }

@@ -840,43 +840,243 @@ function forEach(collection, iteratee) {
   return func(collection, castFunction(iteratee));
 }
 
-const loaded = {};
-
-function element(url) {
-    const script = document.createElement('script');
-    script.setAttribute('src', url);
-    script.setAttribute('type', 'text/javascript');
-    script.setAttribute('charset', 'utf-8');
-    return script;
+function is(instance, proto) {
+    return instance instanceof proto;
 }
 
-function append(script) {
-    if(document.querySelector('head')) {
-        document.querySelector('head').appendChild(script);
-    }
-    else {
-        document.querySelector('body').appendChild(script);
-    }
-
-    return script;
+function isFunction$1(subject) {
+    return subject !== null && typeof subject === "function";
 }
 
-function script(url) {
-    return new Promise((resolve, reject) => {
-        try {
-            if(!loaded[url]) {
-                append(element(url)).addEventListener('load', e => {
-                    resolve(loaded[url] = e);
-                });
-            }
-            else {
-                resolve(loaded[url]);
+class BroadcastEvent {
+
+    constructor(key, callback) {
+        this.key = key;
+        this.allowMultipleEmits = true;
+
+        if(isFunction$1(callback)) {
+            this.handle = callback;
+        }
+    }
+
+    allowsMultipleEmits() {
+        return !!this.allowMultipleEmits;
+    }
+
+    once() {
+        this.allowMultipleEmits = false;
+
+        return this;
+    }
+
+    handle() {
+        //
+    }
+
+}
+
+class BroadcastReply {
+
+    constructor(key, callback) {
+        this.key = key;
+        this.allowMultipleRequests = false;
+
+        if(typeof callback === "function") {
+            this.handle = callback;
+        }
+    }
+
+    allowsMultipleRequests() {
+        return !!this.allowMultipleRequests;
+    }
+
+    once() {
+        this.allowMultipleRequests = true;
+
+        return this;
+    }
+
+    handle() {
+        //
+    }
+
+}
+
+class Dispatcher {
+
+    constructor(channel) {
+        this.channel = channel;
+        this._events = [];
+        this._replies = [];
+    }
+
+    createEvent(key, callback) {
+        return !is(key, BroadcastEvent) ? new BroadcastEvent(key, callback) : key;
+    }
+
+    hasEvent(key) {
+        return !!this.getEvent(key);
+    }
+
+    getEvent(key) {
+        return this._events[key] || null;
+    }
+
+    setEvent(key, value) {
+        if(key instanceof BroadcastEvent) {
+            value = key;
+            key = value.key;
+        }
+
+        if(!value instanceof BroadcastEvent) {
+            throw new Error('The value argument must be an instance of BroadcastEvent');
+        }
+
+        return this._events[key] = value;
+    }
+
+    getEvents() {
+        return this._events;
+    }
+
+    on(key, callback) {
+        const event = this.createEvent(key, callback);
+
+        this._events.push(event);
+
+        return event;
+    }
+
+    once(key, callback) {
+        const event = this.createEvent(key, callback);
+
+        this.on(event.once());
+
+        return event;
+    }
+
+    off(key) {
+        const removed = [];
+
+        for(let i in this._events) {
+            if(is(key, BroadcastEvent) && key == this._events[i] || key === this._events[i].key) {
+                removed.push(this._events[i]);
+                delete this._events[i];
             }
         }
-        catch(e) {
-            reject(e);
+
+        return removed;
+    }
+
+    emit(event) {
+        const args = [].slice.call(arguments).slice(1);
+
+        for(let i in this._events) {
+            if(this._events[i].key === (event.key || event)) {
+                this._events[i].handle.apply(this, args);
+
+                if(!this._events[i].allowsMultipleEmits()) {
+                    delete this._events[i];
+                }
+            }
         }
-    });
+    }
+
+    createReply(key, callback) {
+        return !is(key, BroadcastReply) ? new BroadcastReply(key, callback) : key;
+    }
+
+    hasReply(key) {
+        return !!this.getReply(key);
+    }
+
+    getReply(key) {
+        return this._replies[key] || null;
+    }
+
+    setReply(key, value) {
+        if(key instanceof BroadcastReply) {
+            value = key;
+            key = value.key;
+        }
+
+        if(!value instanceof BroadcastReply) {
+            throw new Error('The value argument must be an instance of BroadcastReply');
+        }
+
+        return this._replies[key] = value;
+    }
+
+    getReplies() {
+        return this._replies;
+    }
+
+    request(reply, context) {
+        const args = [].slice.call(arguments).slice(1);
+
+        if(!this._replies[reply.key || reply]) {
+            throw new Error('No BroadcastReply exists by the name "'+(reply.key || reply)+'"!');
+        }
+
+        const handle = this._replies[reply.key || reply].handle;
+
+        return new Promise(function(resolve, reject) {
+            handle.apply(this, [resolve, reject].concat(args));
+        });
+    }
+
+    reply(key, callback) {
+        const reply = this.createReply(key, callback);
+
+        return this._replies[reply.key] = reply;
+    }
+
+    stopReply(key) {
+        delete this._replies[reply.key || reply];
+    }
+
+}
+
+//import 'es6-promise/auto';
+
+class BroadcastManager {
+
+    constructor(channel) {
+        this._dispatchers = {};
+        this.defaultChannel = 'app';
+        this.dispatch(channel || this.defaultChannel);
+    }
+
+    dispatch(channel) {
+        channel || (channel = this.defaultChannel);
+
+        if(this.doesDispatchExist(channel)) {
+            return this._dispatchers[channel];
+        }
+
+        return this.registerDispatch(new Dispatcher(channel));
+    }
+
+    doesDispatchExist(instance) {
+        return !!this._dispatchers[instance.channel || instance];
+    }
+
+    registerDispatch(instance) {
+        if(!is(instance, Dispatcher)) {
+            throw new Error('The argument must be an instance of Broadcast/BroadcastDispatch!');
+        }
+
+        if(this.doesDispatchExist(instance.channel)) {
+            throw new Error('There is already a Broadcast/BroadcastDispatch instance assigned to "'+instance.channel+'"!');
+        }
+
+        return this._dispatchers[instance.channel] = instance;
+    }
+
+    unregisterDispatch(dispatch) {
+        unset(this._dispatchers[dispatch.channel || dispatch]);
+    }
+
 }
 
 function styleInject(css, ref) {
@@ -7740,6 +7940,45 @@ function isEmpty(value) {
   return true;
 }
 
+const loaded = {};
+
+function element(url) {
+    const script = document.createElement('script');
+    script.setAttribute('src', url);
+    script.setAttribute('type', 'text/javascript');
+    script.setAttribute('charset', 'utf-8');
+    return script;
+}
+
+function append(script) {
+    if(document.querySelector('head')) {
+        document.querySelector('head').appendChild(script);
+    }
+    else {
+        document.querySelector('body').appendChild(script);
+    }
+
+    return script;
+}
+
+function script(url) {
+    return new Promise((resolve, reject) => {
+        try {
+            if(!loaded[url]) {
+                append(element(url)).addEventListener('load', e => {
+                    resolve(loaded[url] = e);
+                });
+            }
+            else {
+                resolve(loaded[url]);
+            }
+        }
+        catch(e) {
+            reject(e);
+        }
+    });
+}
+
 var GoogleAutocompleteList = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"autocomplete-list-wrapper"},[_c('ul',{staticClass:"autocomplete-list"},_vm._l((_vm.items),function(item){return _c('li',{staticClass:"autocomplete-list-item",on:{"mouseenter":function($event){_vm.focus($event);},"mouseleave":function($event){_vm.blur($event);}}},[_c('a',{attrs:{"href":"#"},on:{"click":function($event){$event.preventDefault();_vm.select($event, item);}}},[_c('span',{staticClass:"autocomplete-list-item-icon"}),_vm._v(" "),_c('span',{staticClass:"autocomplete-list-item-label",domProps:{"innerHTML":_vm._s(item[_vm.display])}})])])}))])},staticRenderFns: [],
 
     name: 'google-autocomplete-field',
@@ -13074,245 +13313,6 @@ var GiveworksForm = {render: function(){var _vm=this;var _h=_vm.$createElement;v
 
 }
 
-function is(instance, proto) {
-    return instance instanceof proto;
-}
-
-function isFunction$1(subject) {
-    return subject !== null && typeof subject === "function";
-}
-
-class BroadcastEvent {
-
-    constructor(key, callback) {
-        this.key = key;
-        this.allowMultipleEmits = true;
-
-        if(isFunction$1(callback)) {
-            this.handle = callback;
-        }
-    }
-
-    allowsMultipleEmits() {
-        return !!this.allowMultipleEmits;
-    }
-
-    once() {
-        this.allowMultipleEmits = false;
-
-        return this;
-    }
-
-    handle() {
-        //
-    }
-
-}
-
-class BroadcastReply {
-
-    constructor(key, callback) {
-        this.key = key;
-        this.allowMultipleRequests = false;
-
-        if(typeof callback === "function") {
-            this.handle = callback;
-        }
-    }
-
-    allowsMultipleRequests() {
-        return !!this.allowMultipleRequests;
-    }
-
-    once() {
-        this.allowMultipleRequests = true;
-
-        return this;
-    }
-
-    handle() {
-        //
-    }
-
-}
-
-class Dispatcher {
-
-    constructor(channel) {
-        this.channel = channel;
-        this._events = [];
-        this._replies = [];
-    }
-
-    createEvent(key, callback) {
-        return !is(key, BroadcastEvent) ? new BroadcastEvent(key, callback) : key;
-    }
-
-    hasEvent(key) {
-        return !!this.getEvent(key);
-    }
-
-    getEvent(key) {
-        return this._events[key] || null;
-    }
-
-    setEvent(key, value) {
-        if(key instanceof BroadcastEvent) {
-            value = key;
-            key = value.key;
-        }
-
-        if(!value instanceof BroadcastEvent) {
-            throw new Error('The value argument must be an instance of BroadcastEvent');
-        }
-
-        return this._events[key] = value;
-    }
-
-    getEvents() {
-        return this._events;
-    }
-
-    on(key, callback) {
-        const event = this.createEvent(key, callback);
-
-        this._events.push(event);
-
-        return event;
-    }
-
-    once(key, callback) {
-        const event = this.createEvent(key, callback);
-
-        this.on(event.once());
-
-        return event;
-    }
-
-    off(key) {
-        const removed = [];
-
-        for(let i in this._events) {
-            if(is(key, BroadcastEvent) && key == this._events[i] || key === this._events[i].key) {
-                removed.push(this._events[i]);
-                delete this._events[i];
-            }
-        }
-
-        return removed;
-    }
-
-    emit(event) {
-        const args = [].slice.call(arguments).slice(1);
-
-        for(let i in this._events) {
-            if(this._events[i].key === (event.key || event)) {
-                this._events[i].handle.apply(this, args);
-
-                if(!this._events[i].allowsMultipleEmits()) {
-                    delete this._events[i];
-                }
-            }
-        }
-    }
-
-    createReply(key, callback) {
-        return !is(key, BroadcastReply) ? new BroadcastReply(key, callback) : key;
-    }
-
-    hasReply(key) {
-        return !!this.getReply(key);
-    }
-
-    getReply(key) {
-        return this._replies[key] || null;
-    }
-
-    setReply(key, value) {
-        if(key instanceof BroadcastReply) {
-            value = key;
-            key = value.key;
-        }
-
-        if(!value instanceof BroadcastReply) {
-            throw new Error('The value argument must be an instance of BroadcastReply');
-        }
-
-        return this._replies[key] = value;
-    }
-
-    getReplies() {
-        return this._replies;
-    }
-
-    request(reply, context) {
-        const args = [].slice.call(arguments).slice(1);
-
-        if(!this._replies[reply.key || reply]) {
-            throw new Error('No BroadcastReply exists by the name "'+(reply.key || reply)+'"!');
-        }
-
-        const handle = this._replies[reply.key || reply].handle;
-
-        return new Promise(function(resolve, reject) {
-            handle.apply(this, [resolve, reject].concat(args));
-        });
-    }
-
-    reply(key, callback) {
-        const reply = this.createReply(key, callback);
-
-        return this._replies[reply.key] = reply;
-    }
-
-    stopReply(key) {
-        delete this._replies[reply.key || reply];
-    }
-
-}
-
-//import 'es6-promise/auto';
-
-class BroadcastManager {
-
-    constructor(channel) {
-        this._dispatchers = {};
-        this.defaultChannel = 'app';
-        this.dispatch(channel || this.defaultChannel);
-    }
-
-    dispatch(channel) {
-        channel || (channel = this.defaultChannel);
-
-        if(this.doesDispatchExist(channel)) {
-            return this._dispatchers[channel];
-        }
-
-        return this.registerDispatch(new Dispatcher(channel));
-    }
-
-    doesDispatchExist(instance) {
-        return !!this._dispatchers[instance.channel || instance];
-    }
-
-    registerDispatch(instance) {
-        if(!is(instance, Dispatcher)) {
-            throw new Error('The argument must be an instance of Broadcast/BroadcastDispatch!');
-        }
-
-        if(this.doesDispatchExist(instance.channel)) {
-            throw new Error('There is already a Broadcast/BroadcastDispatch instance assigned to "'+instance.channel+'"!');
-        }
-
-        return this._dispatchers[instance.channel] = instance;
-    }
-
-    unregisterDispatch(dispatch) {
-        unset(this._dispatchers[dispatch.channel || dispatch]);
-    }
-
-}
-
 const VueInstaller = {
     use,
     script,
@@ -14361,18 +14361,22 @@ function install(Vue, options) {
     Vue.use(MergeClasses);
     Vue.component('giveworks-form', GiveworksForm);
 
-    console.log('install');
+    if(window && window.Vue) {
+        const VueGiveworksForm = Vue.extend({
+            components: {
+                GiveworksForm
+            }
+        });
+
+        window.App = new VueGiveworksForm({
+            el: '#app'
+        });
+    }
 }
 
-Vue.use(install);
+if(window && window.Vue) {
+    Vue.use(install);
+}
 
-var main = Vue.extend({
-
-    components: {
-        GiveworksForm
-    }
-
-});
-
-export default main;
+export default install;
 //# sourceMappingURL=vue-giveworks-form.es.js.map

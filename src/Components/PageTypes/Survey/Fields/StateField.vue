@@ -8,7 +8,7 @@
 
 <script>
 import SurveyField from './SurveyField';
-import FormControl from 'vue-toolbox/src/Mixins/FormControl';
+import FormControl from 'vue-interface/src/Mixins/FormControl';
 
 export default {
 

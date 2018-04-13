@@ -28,8 +28,8 @@ import each from 'lodash-es/each';
 import Page from '@/Models/Page';
 import HttpConfig from '@/Config/Http';
 import HttpErrorResponse from './HttpErrorResponse';
-import Request from 'vue-toolbox/src/Http/Request/Request';
-import ActivityIndicator from 'vue-toolbox/src/Components/ActivityIndicator/ActivityIndicator';
+import Request from 'vue-interface/src/Http/Request/Request';
+import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator/ActivityIndicator';
 
 import {
     HorizontalDonationForm,
@@ -246,6 +246,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../node_modules/vue-toolbox/dist/vue-toolbox.css';
+@import '../node_modules/vue-interface/dist/vue-interface.css';
 @import './node_modules/the-one-true-form/src/main.scss';
 </style>

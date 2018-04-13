@@ -11,7 +11,7 @@
 import each from 'lodash-es/each';
 import omitBy from 'lodash-es/omitBy';
 import isEmpty from 'lodash-es/isEmpty';
-import script from 'vue-toolbox/src/Helpers/Script';
+import script from 'vue-interface/src/Helpers/Script';
 import GoogleAutocompleteList from './AutocompleteList';
 
 const KEYCODE = {

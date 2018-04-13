@@ -1,7 +1,7 @@
 import Api from '../Api';
 import '@/Icons/apple-pay';
 import extend from 'lodash-es/extend';
-import script from 'vue-toolbox/src/Helpers/Script';
+import script from 'vue-interface/src/Helpers/Script';
 import 'vue-awesome/icons/credit-card';
 import 'vue-awesome/icons/brands/google-wallet';
 import Icon from 'vue-awesome/components/Icon';

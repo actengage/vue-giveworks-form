@@ -17,7 +17,7 @@ import livereload from 'rollup-plugin-livereload';
 import globals from 'rollup-plugin-node-globals';
 import builtins from 'rollup-plugin-node-builtins';
 
-//import postcss from 'rollup-plugin-postcss';
+import postcss from 'rollup-plugin-postcss';
 
 // The type of package Rollup should create
 const PACKAGE_FORMAT = 'umd';
@@ -124,6 +124,7 @@ const plugins = [
     commonjs({
         include: NODE_MODULES
     }),
+    postcss(),
     globals(),
     builtins()
 ];

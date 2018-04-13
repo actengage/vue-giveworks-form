@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import 'vue-interface/dist/vue-interface.css';
 import each from 'lodash-es/each';
 import Page from '@/Models/Page';
 import HttpConfig from '@/Config/Http';
@@ -242,6 +243,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../node_modules/vue-interface/dist/vue-interface.css';
 @import './node_modules/the-one-true-form/src/main.scss';
 </style>

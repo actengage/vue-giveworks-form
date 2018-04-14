@@ -8727,7 +8727,7 @@
       }
 
       script(callback) {
-          Script('https://js.stripe.com/v3/', callback);
+          script('https://js.stripe.com/v3/', callback);
       }
 
   }

@@ -1,9 +1,9 @@
 import Api from '../Api';
 import '@/Icons/apple-pay';
 import extend from 'lodash-es/extend';
-import script from 'vue-interface/src/Helpers/Script';
 import 'vue-awesome/icons/credit-card';
 import 'vue-awesome/icons/brands/google-wallet';
+import script from 'vue-interface/src/Helpers/Script';
 import Icon from 'vue-awesome/components/Icon';
 
 export default class Stripe extends Api {
@@ -22,7 +22,7 @@ export default class Stripe extends Api {
             iconScale: 3,
             component: 'stripe-payment-button'
         },{
-            icon: 'google-wallet',
+            icon: 'brands/google-wallet',
             iconScale: 1.5,
             label: 'Wallet',
             component: 'stripe-payment-button'
@@ -115,7 +115,7 @@ export default class Stripe extends Api {
     }
 
     script(callback) {
-        script('https://js.stripe.com/v3/', callback);
+        script('https://js.stripe.com/v3/').then(callback);
     }
 
 }

@@ -16,7 +16,7 @@
 
             <input-field v-if="page.options.add_phone" v-model="form.phone" name="phone" label="Phone Number" :errors="errors"/>
 
-            <input-field v-if="showAddress || page.options.add_street" v-model="form.address" name="street" label="Address" :errors="errors"/>
+            <input-field v-if="showAddress || page.options.add_street" v-model="form.street" name="street" label="Address" :errors="errors"/>
 
             <!--
             <input-field v-if="page.options.add_phone" name="phone" label="Phone Number" mask="(000) 000-0000" :errors="errors"/>
@@ -32,7 +32,9 @@
                 </div>
             </div>
 
-            <select-field v-if="showAddress || page.options.add_state" v-model="form.state" name="state" label="State" :options="states" :errors="errors"/>
+            <select-field v-if="showAddress || page.options.add_state" v-model="form.state" name="state" label="State" :errors="errors">
+                <option v-for="(label, value) in states" value="value" v-html="label"/>
+            </select-field>
 
             <input-field v-if="page.options.add_phone" v-model="form.phone" name="phone" label="Phone Number" :errors="errors"/>
 
@@ -117,16 +119,7 @@ export default {
         },
 
         states() {
-            const states = [];
-
-            for(let i in States) {
-                states.push({
-                    value: i,
-                    label: States[i]
-                });
-            }
-
-            return states;
+            return States;
         }
     },
 

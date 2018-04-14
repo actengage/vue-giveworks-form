@@ -15,9 +15,8 @@
             <div class="row">
                 <div class="col-md-6">
                     <label :for="question.id" v-html="question.question"/>
-                    <input-group>
-                        <input-group-prepend text>$</input-group-prepend>
-                        <input type="text" :name="`field_${question.id}`" :value="value" class="form-control"/>
+                    <input-group prepend="$">
+                        <input type="text" :name="`field_${question.id}`" :value="value" class="form-control" :class="{'is-invalid': !!invalidFeedback}"/>
                     </input-group>
                 </div>
             </div>

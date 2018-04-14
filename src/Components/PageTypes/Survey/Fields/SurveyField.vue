@@ -1,7 +1,12 @@
 <script>
 import isFunction from 'lodash-es/isFunction';
+import FormControl from 'vue-interface/src/Mixins/FormControl';
 
 export default {
+
+    mixins: [
+        FormControl
+    ],
 
     props: {
 

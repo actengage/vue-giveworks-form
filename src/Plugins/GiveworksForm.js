@@ -2,6 +2,7 @@ import each from 'lodash-es/each';
 import Broadcast from '@objectivehtml/broadcast';
 import GiveworksForm from '@/Components/GiveworksForm';
 import script from 'vue-interface/src/Helpers/Script';
+import Alert from 'vue-interface/src/Components/Alert';
 import ActivityButton from 'vue-interface/src/Components/ActivityButton';
 import InputField from 'vue-interface/src/Components/InputField';
 import InputGroup from 'vue-interface/src/Components/InputGroup';
@@ -18,6 +19,7 @@ import TextareaField from 'vue-interface/src/Components/TextareaField';
 import mergeClasses from 'vue-interface/src/Plugins/MergeClasses';
 
 const components = {
+    Alert,
     ActivityButton,
     CheckboxField,
     FormControl,

@@ -8286,7 +8286,7 @@ var GoogleAutocompleteField = {render: function(){var _vm=this;var _h=_vm.$creat
 
 }
 
-var ContactInfoFieldset = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('fieldset',{staticClass:"mb-4"},[_c('legend',[_vm._v("Your information")]),_vm._v(" "),(_vm.page.options.add_title)?_c('select-field',{attrs:{"name":"title","label":"Title","options":_vm.titles,"errors":_vm.errors},model:{value:(_vm.form.title),callback:function ($$v) {_vm.$set(_vm.form, "title", $$v);},expression:"form.title"}}):_vm._e(),_vm._v(" "),_c('input-field',{attrs:{"name":"first","label":"First Name","errors":_vm.errors},model:{value:(_vm.form.first),callback:function ($$v) {_vm.$set(_vm.form, "first", $$v);},expression:"form.first"}}),_vm._v(" "),_c('input-field',{attrs:{"name":"last","label":"Last Name","errors":_vm.errors},model:{value:(_vm.form.last),callback:function ($$v) {_vm.$set(_vm.form, "last", $$v);},expression:"form.last"}}),_vm._v(" "),_c('input-field',{attrs:{"type":"email","name":"email","label":"Email","placeholder":"you@example.com","error":_vm.errors.email && _vm.errors.email.join('<br>')},model:{value:(_vm.form.email),callback:function ($$v) {_vm.$set(_vm.form, "email", $$v);},expression:"form.email"}}),_vm._v(" "),(_vm.page.options.add_phone)?_c('input-field',{attrs:{"name":"phone","label":"Phone Number","errors":_vm.errors},model:{value:(_vm.form.phone),callback:function ($$v) {_vm.$set(_vm.form, "phone", $$v);},expression:"form.phone"}}):_vm._e(),_vm._v(" "),(_vm.showAddress || _vm.page.options.add_street)?_c('input-field',{attrs:{"name":"street","label":"Address","errors":_vm.errors},model:{value:(_vm.form.address),callback:function ($$v) {_vm.$set(_vm.form, "address", $$v);},expression:"form.address"}}):_vm._e(),_vm._v(" "),(_vm.showAddress || _vm.page.options.add_city || _vm.page.options.add_zip)?_c('div',{staticClass:"row"},[(_vm.showAddress || _vm.page.options.add_city)?_c('div',{staticClass:"col-sm-8"},[_c('input-field',{attrs:{"name":"city","label":"City","errors":_vm.errors},model:{value:(_vm.form.city),callback:function ($$v) {_vm.$set(_vm.form, "city", $$v);},expression:"form.city"}})],1):_vm._e(),_vm._v(" "),(_vm.showAddress || _vm.page.options.add_zip)?_c('div',{class:{'col-sm-4': _vm.showAddress || _vm.page.options.add_city, 'col-sm-12': !_vm.page.options.add_city}},[_c('input-field',{attrs:{"name":"zip","label":"Zip","errors":_vm.errors},model:{value:(_vm.form.zip),callback:function ($$v) {_vm.$set(_vm.form, "zip", $$v);},expression:"form.zip"}})],1):_vm._e()]):_vm._e(),_vm._v(" "),(_vm.showAddress || _vm.page.options.add_state)?_c('select-field',{attrs:{"name":"state","label":"State","options":_vm.states,"errors":_vm.errors},model:{value:(_vm.form.state),callback:function ($$v) {_vm.$set(_vm.form, "state", $$v);},expression:"form.state"}}):_vm._e(),_vm._v(" "),(_vm.page.options.add_phone)?_c('input-field',{attrs:{"name":"phone","label":"Phone Number","errors":_vm.errors},model:{value:(_vm.form.phone),callback:function ($$v) {_vm.$set(_vm.form, "phone", $$v);},expression:"form.phone"}}):_vm._e()],1),_vm._v(" "),(_vm.shouldShowEmployment)?_c('fieldset',[_c('legend',[_vm._v("Employment Information")]),_vm._v(" "),(!_vm.recurring)?_c('p',[_c('small',{staticClass:"text-muted",domProps:{"innerHTML":_vm._s(_vm.employmentOccurMessage)}})]):_vm._e(),_vm._v(" "),(!_vm.isRetired)?_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-md-6"},[_c('input-field',{attrs:{"id":"employer","name":"employer","label":"Employer","errors":_vm.errors},model:{value:(_vm.form.employer),callback:function ($$v) {_vm.$set(_vm.form, "employer", $$v);},expression:"form.employer"}})],1),_vm._v(" "),_c('div',{staticClass:"col-md-6"},[_c('input-field',{attrs:{"id":"occupation","name":"occupation","label":"Occupation","errors":_vm.errors},model:{value:(_vm.form.occupation),callback:function ($$v) {_vm.$set(_vm.form, "occupation", $$v);},expression:"form.occupation"}})],1)]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"custom-control custom-checkbox"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.form.retired),expression:"form.retired"}],staticClass:"custom-control-input",attrs:{"type":"checkbox","name":"retired","value":"1"},domProps:{"checked":Array.isArray(_vm.form.retired)?_vm._i(_vm.form.retired,"1")>-1:(_vm.form.retired)},on:{"change":[function($event){var $$a=_vm.form.retired,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v="1",$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.$set(_vm.form, "retired", $$a.concat([$$v])));}else{$$i>-1&&(_vm.$set(_vm.form, "retired", $$a.slice(0,$$i).concat($$a.slice($$i+1))));}}else{_vm.$set(_vm.form, "retired", $$c);}},function($event){_vm.setRetired($event.target.checked);}]}}),_vm._v(" "),_c('span',{staticClass:"custom-control-indicator"}),_vm._v(" "),_c('small',{staticClass:"custom-control-label text-muted form-text"},[_vm._v("I'm retired")])])])]):_vm._e()])},staticRenderFns: [],
+var ContactInfoFieldset = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('fieldset',{staticClass:"mb-4"},[_c('legend',[_vm._v("Your information")]),_vm._v(" "),(_vm.page.options.add_title)?_c('select-field',{attrs:{"name":"title","label":"Title","options":_vm.titles,"errors":_vm.errors},model:{value:(_vm.form.title),callback:function ($$v) {_vm.$set(_vm.form, "title", $$v);},expression:"form.title"}}):_vm._e(),_vm._v(" "),_c('input-field',{attrs:{"name":"first","label":"First Name","errors":_vm.errors},model:{value:(_vm.form.first),callback:function ($$v) {_vm.$set(_vm.form, "first", $$v);},expression:"form.first"}}),_vm._v(" "),_c('input-field',{attrs:{"name":"last","label":"Last Name","errors":_vm.errors},model:{value:(_vm.form.last),callback:function ($$v) {_vm.$set(_vm.form, "last", $$v);},expression:"form.last"}}),_vm._v(" "),_c('input-field',{attrs:{"type":"email","name":"email","label":"Email","placeholder":"you@example.com","error":_vm.errors.email && _vm.errors.email.join('<br>')},model:{value:(_vm.form.email),callback:function ($$v) {_vm.$set(_vm.form, "email", $$v);},expression:"form.email"}}),_vm._v(" "),(_vm.page.options.add_phone)?_c('input-field',{attrs:{"name":"phone","label":"Phone Number","errors":_vm.errors},model:{value:(_vm.form.phone),callback:function ($$v) {_vm.$set(_vm.form, "phone", $$v);},expression:"form.phone"}}):_vm._e(),_vm._v(" "),(_vm.showAddress || _vm.page.options.add_street)?_c('input-field',{attrs:{"name":"street","label":"Address","errors":_vm.errors},model:{value:(_vm.form.street),callback:function ($$v) {_vm.$set(_vm.form, "street", $$v);},expression:"form.street"}}):_vm._e(),_vm._v(" "),(_vm.showAddress || _vm.page.options.add_city || _vm.page.options.add_zip)?_c('div',{staticClass:"row"},[(_vm.showAddress || _vm.page.options.add_city)?_c('div',{staticClass:"col-sm-8"},[_c('input-field',{attrs:{"name":"city","label":"City","errors":_vm.errors},model:{value:(_vm.form.city),callback:function ($$v) {_vm.$set(_vm.form, "city", $$v);},expression:"form.city"}})],1):_vm._e(),_vm._v(" "),(_vm.showAddress || _vm.page.options.add_zip)?_c('div',{class:{'col-sm-4': _vm.showAddress || _vm.page.options.add_city, 'col-sm-12': !_vm.page.options.add_city}},[_c('input-field',{attrs:{"name":"zip","label":"Zip","errors":_vm.errors},model:{value:(_vm.form.zip),callback:function ($$v) {_vm.$set(_vm.form, "zip", $$v);},expression:"form.zip"}})],1):_vm._e()]):_vm._e(),_vm._v(" "),(_vm.showAddress || _vm.page.options.add_state)?_c('select-field',{attrs:{"name":"state","label":"State","errors":_vm.errors},model:{value:(_vm.form.state),callback:function ($$v) {_vm.$set(_vm.form, "state", $$v);},expression:"form.state"}},_vm._l((_vm.states),function(label,value){return _c('option',{attrs:{"value":"value"},domProps:{"innerHTML":_vm._s(label)}})})):_vm._e(),_vm._v(" "),(_vm.page.options.add_phone)?_c('input-field',{attrs:{"name":"phone","label":"Phone Number","errors":_vm.errors},model:{value:(_vm.form.phone),callback:function ($$v) {_vm.$set(_vm.form, "phone", $$v);},expression:"form.phone"}}):_vm._e()],1),_vm._v(" "),(_vm.shouldShowEmployment)?_c('fieldset',[_c('legend',[_vm._v("Employment Information")]),_vm._v(" "),(!_vm.recurring)?_c('p',[_c('small',{staticClass:"text-muted",domProps:{"innerHTML":_vm._s(_vm.employmentOccurMessage)}})]):_vm._e(),_vm._v(" "),(!_vm.isRetired)?_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-md-6"},[_c('input-field',{attrs:{"id":"employer","name":"employer","label":"Employer","errors":_vm.errors},model:{value:(_vm.form.employer),callback:function ($$v) {_vm.$set(_vm.form, "employer", $$v);},expression:"form.employer"}})],1),_vm._v(" "),_c('div',{staticClass:"col-md-6"},[_c('input-field',{attrs:{"id":"occupation","name":"occupation","label":"Occupation","errors":_vm.errors},model:{value:(_vm.form.occupation),callback:function ($$v) {_vm.$set(_vm.form, "occupation", $$v);},expression:"form.occupation"}})],1)]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"form-group"},[_c('label',{staticClass:"custom-control custom-checkbox"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.form.retired),expression:"form.retired"}],staticClass:"custom-control-input",attrs:{"type":"checkbox","name":"retired","value":"1"},domProps:{"checked":Array.isArray(_vm.form.retired)?_vm._i(_vm.form.retired,"1")>-1:(_vm.form.retired)},on:{"change":[function($event){var $$a=_vm.form.retired,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v="1",$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.$set(_vm.form, "retired", $$a.concat([$$v])));}else{$$i>-1&&(_vm.$set(_vm.form, "retired", $$a.slice(0,$$i).concat($$a.slice($$i+1))));}}else{_vm.$set(_vm.form, "retired", $$c);}},function($event){_vm.setRetired($event.target.checked);}]}}),_vm._v(" "),_c('span',{staticClass:"custom-control-indicator"}),_vm._v(" "),_c('small',{staticClass:"custom-control-label text-muted form-text"},[_vm._v("I'm retired")])])])]):_vm._e()])},staticRenderFns: [],
 
     name: 'contact-info-fieldset',
 
@@ -8324,16 +8324,7 @@ var ContactInfoFieldset = {render: function(){var _vm=this;var _h=_vm.$createEle
         },
 
         states() {
-            const states = [];
-
-            for(let i in States) {
-                states.push({
-                    value: i,
-                    label: States[i]
-                });
-            }
-
-            return states;
+            return States;
         }
     },
 
@@ -8628,7 +8619,7 @@ class Stripe extends Gateway {
             iconScale: 3,
             component: 'stripe-payment-button'
         },{
-            icon: 'google-wallet',
+            icon: 'brands/google-wallet',
             iconScale: 1.5,
             label: 'Wallet',
             component: 'stripe-payment-button'
@@ -8721,7 +8712,7 @@ class Stripe extends Gateway {
     }
 
     script(callback) {
-        script('https://js.stripe.com/v3/', callback);
+        script('https://js.stripe.com/v3/').then(callback);
     }
 
 }
@@ -12431,41 +12422,6 @@ var HorizontalSignupForm = {render: function(){var _vm=this;var _h=_vm.$createEl
 
 }
 
-var SurveyField = {
-
-    props: {
-
-        page: {
-            type: Object,
-            required: true
-        },
-
-        question: {
-            type: Object,
-            required: true
-        },
-
-        errors: {
-            type: Object,
-            required: true
-        }
-
-    },
-
-    directives: {
-
-        changed(el, binding, vnode) {
-            el.addEventListener('change', event => {
-                if(event.target.checked && isFunction(binding.value)) {
-                    binding.value(el);
-                }
-            });
-        }
-
-    }
-
-}
-
 /**
  * The opposite of `_.mapValues`; this method creates an object with the
  * same values as `object` and keys generated by running each own enumerable
@@ -12777,6 +12733,45 @@ var FormControl = {
 
 }
 
+var SurveyField = {
+
+    mixins: [
+        FormControl
+    ],
+
+    props: {
+
+        page: {
+            type: Object,
+            required: true
+        },
+
+        question: {
+            type: Object,
+            required: true
+        },
+
+        errors: {
+            type: Object,
+            required: true
+        }
+
+    },
+
+    directives: {
+
+        changed(el, binding, vnode) {
+            el.addEventListener('change', event => {
+                if(event.target.checked && isFunction(binding.value)) {
+                    binding.value(el);
+                }
+            });
+        }
+
+    }
+
+}
+
 var AltEmailField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{attrs:{"type":"email","placeholder":"Email Address","name":_vm.name,"value":_vm.value,"id":_vm.question.id,"label":_vm.question.question,"errors":_vm.errors},on:{"input":_vm.updated}})},staticRenderFns: [],
 
     name: 'survey-alt-email-field',
@@ -12870,7 +12865,7 @@ function chunk(array, size, guard) {
   return result;
 }
 
-var DollarAmountField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',[_c('fieldset',[_c('legend',[_vm._v("Select an amount")]),_vm._v(" "),_vm._l((_vm.amounts),function(chunk$$1){return _c('div',{staticClass:"row"},_vm._l((chunk$$1),function(amount){return _c('div',{staticClass:"col-sm-6"},[_c('radio-field',{attrs:{"name":"donation","value":amount}},[_vm._v("$"+_vm._s(amount))])],1)}))}),_vm._v(" "),_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-md-6"},[_c('label',{attrs:{"for":_vm.question.id},domProps:{"innerHTML":_vm._s(_vm.question.question)}}),_vm._v(" "),_c('input-group',[_c('input-group-prepend',{attrs:{"text":""}},[_vm._v("$")]),_vm._v(" "),_c('input',{staticClass:"form-control",attrs:{"type":"text","name":`field_${_vm.question.id}`},domProps:{"value":_vm.value}})],1)],1)])],2)])},staticRenderFns: [],
+var DollarAmountField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',[_c('fieldset',[_c('legend',[_vm._v("Select an amount")]),_vm._v(" "),_vm._l((_vm.amounts),function(chunk$$1){return _c('div',{staticClass:"row"},_vm._l((chunk$$1),function(amount){return _c('div',{staticClass:"col-sm-6"},[_c('radio-field',{attrs:{"name":"donation","value":amount}},[_vm._v("$"+_vm._s(amount))])],1)}))}),_vm._v(" "),_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-md-6"},[_c('label',{attrs:{"for":_vm.question.id},domProps:{"innerHTML":_vm._s(_vm.question.question)}}),_vm._v(" "),_c('input-group',{attrs:{"prepend":"$"}},[_c('input',{staticClass:"form-control",class:{'is-invalid': !!_vm.invalidFeedback},attrs:{"type":"text","name":`field_${_vm.question.id}`},domProps:{"value":_vm.value}})])],1)])],2)])},staticRenderFns: [],
 
     name: 'survey-dollar-amount-field',
 
@@ -13323,6 +13318,165 @@ var GiveworksForm = {render: function(){var _vm=this;var _h=_vm.$createElement;v
 
 }
 
+var Variant = {
+
+    props: {
+
+        /**
+         * The variant attribute
+         *
+         * @property String
+         */
+        variant: {
+            type: String,
+            default: 'primary'
+        }
+
+    },
+
+    computed: {
+
+        variantClassPrefix() {
+            return this.$options.name;
+        },
+
+        variantClass() {
+            return prefix(this.variant, this.variantClassPrefix);
+        }
+
+    }
+
+}
+
+function duration(el) {
+    const duration = getComputedStyle(el).transitionDuration;
+    const numeric = parseFloat(duration, 10) || 0;
+    const unit = duration.match(/m?s/);
+
+    switch (unit[0]) {
+        case 's':
+            return numeric * 1000;
+        case 'ms':
+            return numeric;
+    }
+}
+
+function transition(el) {
+    return new Promise((resolve, reject) => {
+        try {
+            const delay = duration(el);
+            setTimeout(() => resolve(delay), delay);
+        }
+        catch(e) {
+            reject(e);
+        }
+    });
+}
+
+var Alert = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"alert",class:_vm.$mergeClasses(_vm.variantClass, {show: _vm.isVisible, fade: _vm.fade}),attrs:{"role":"alert"}},[_vm._t("default"),_vm._v(" "),(_vm.dismissible)?_c('alert-close',{on:{"click":function($event){_vm.dismiss();}}}):_vm._e(),_vm._v(" "),(typeof _vm.show === 'number')?_c('progress-bar',{staticClass:"my-3",attrs:{"variant":_vm.variant,"height":5,"value":_vm.dismissCount,"max":_vm.show}}):_vm._e()],2)},staticRenderFns: [],
+
+    name: 'alert',
+
+    mixins: [
+        Variant
+    ],
+
+    props: {
+
+        /**
+         * Is the alert dismissible
+         *
+         * @property Boolean
+         */
+        dismissible: Boolean,
+
+        /**
+         * Should the alert fade when hidden
+         *
+         * @property Boolean
+         */
+        fade: {
+            type: Boolean,
+            default: true
+        },
+
+        /**
+         * Should the alert be visible by default. If passed a number, alert
+         * will be shown for the number of seconds that are passed.
+         *
+         * @property Boolean
+         */
+        show: {
+            type: [Number, Boolean],
+            default: true
+        }
+
+    },
+
+    methods: {
+
+        dismiss() {
+            transition(this.$el).then(delay => {
+                this.$emit('dismissed');
+            });
+
+            this.$emit('update:visible', this.isVisible = false);
+        }
+
+    },
+
+    mounted() {
+        if(typeof this.show === 'number') {
+            const el = this.$el.querySelector('.progress-bar');
+
+            this.$emit('dismiss-countdown', this.dismissCount = this.show);
+
+            const interval = setInterval(() => {
+                this.$emit('dismiss-countdown', this.dismissCount -= 1);
+
+                if(!this.dismissCount) {
+                    clearInterval(interval);
+                    transition(el).then(delay => this.dismiss());
+                }
+            }, 1000);
+        }
+    },
+
+    data() {
+        return {
+            dismissCount: this.show,
+            isVisible: this.show
+        }
+    }
+
+}
+
+var AlertLink = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a',{staticClass:"alert-link"},[_vm._t("default")],2)},staticRenderFns: [],
+
+    name: 'alert-link'
+
+}
+
+var AlertClose = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"close",attrs:{"type":"button","data-dismiss":"alert","aria-label":"Close"},on:{"click":_vm.onClick}},[_c('span',{attrs:{"aria-hidden":"true"}},[_vm._v("×")])])},staticRenderFns: [],
+
+    name: 'alert-close',
+
+    methods: {
+
+        onClick(event) {
+            this.$emit('click', event);
+        }
+        
+    }
+
+}
+
+var AlertHeading = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('h4',{staticClass:"alert-heading"},[_vm._t("default")],2)},staticRenderFns: [],
+
+    name: 'alert-heading'
+
+}
+
 const VueInstaller = {
     use,
     script,
@@ -13397,6 +13551,19 @@ function directives(Vue, directives) {
 }
 
 const plugin$1 = VueInstaller.use({
+
+    install(Vue, options) {
+        VueInstaller.components({
+            Alert,
+            AlertLink,
+            AlertClose,
+            AlertHeading
+        });
+    }
+
+});
+
+const plugin$2 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -13627,7 +13794,7 @@ var ActivityButton = {render: function(){var _vm=this;var _h=_vm.$createElement;
 
 }
 
-const plugin$2 = VueInstaller.use({
+const plugin$3 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -13748,7 +13915,7 @@ var InputField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;va
 
 }
 
-const plugin$3 = VueInstaller.use({
+const plugin$4 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -13899,7 +14066,7 @@ var InputGroupText = {render: function(){var _vm=this;var _h=_vm.$createElement;
 
 }
 
-const plugin$4 = VueInstaller.use({
+const plugin$5 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -13944,7 +14111,7 @@ var FormControl$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;v
 
 }
 
-const plugin$5 = VueInstaller.use({
+const plugin$6 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -13989,7 +14156,7 @@ var FormFeedback = {render: function(){var _vm=this;var _h=_vm.$createElement;va
 
 }
 
-const plugin$6 = VueInstaller.use({
+const plugin$7 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -14005,7 +14172,7 @@ var FormGroup = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
     
 }
 
-const plugin$7 = VueInstaller.use({
+const plugin$8 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -14063,7 +14230,7 @@ var FormLabel = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
 
 }
 
-const plugin$8 = VueInstaller.use({
+const plugin$9 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -14171,7 +14338,7 @@ var RadioField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;va
 
 }
 
-const plugin$9 = VueInstaller.use({
+const plugin$10 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -14227,7 +14394,7 @@ var CheckboxField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement
     }
 }
 
-const plugin$10 = VueInstaller.use({
+const plugin$11 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -14279,7 +14446,7 @@ var SelectField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;v
 
 }
 
-const plugin$11 = VueInstaller.use({
+const plugin$12 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -14312,7 +14479,7 @@ var TextareaField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement
 
 }
 
-const plugin$12 = VueInstaller.use({
+const plugin$13 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -14345,6 +14512,7 @@ function MergeClasses(Vue, options) {
 }
 
 const components$1 = {
+    Alert,
     ActivityButton,
     CheckboxField: CheckboxField$1,
     FormControl: FormControl$1,

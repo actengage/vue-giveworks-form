@@ -12388,17 +12388,29 @@ var HorizontalPetitionForm = {render: function(){var _vm=this;var _h=_vm.$create
 
 }
 
-var GoToWebinar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('fieldset',[_c('legend',[_vm._v("Your information")]),_vm._v(" "),_vm._m(0),_vm._v(" "),_c('input-field',{attrs:{"id":"first","label":"First Name*","errors":_vm.errors},model:{value:(_vm.form.first),callback:function ($$v) {_vm.$set(_vm.form, "first", $$v);},expression:"form.first"}}),_vm._v(" "),_c('input-field',{attrs:{"id":"last","label":"Last Name*","errors":_vm.errors},model:{value:(_vm.form.last),callback:function ($$v) {_vm.$set(_vm.form, "last", $$v);},expression:"form.last"}}),_vm._v(" "),_c('input-field',{attrs:{"id":"email","label":"Email*","errors":_vm.errors},model:{value:(_vm.form.email),callback:function ($$v) {_vm.$set(_vm.form, "email", $$v);},expression:"form.email"}}),_vm._v(" "),(_vm.page.options.show_source)?_c('input-field',{attrs:{"id":"source","label":"Source","errors":_vm.errors},model:{value:(_vm.form.source),callback:function ($$v) {_vm.$set(_vm.form, "source", $$v);},expression:"form.source"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_address)?_c('input-field',{attrs:{"id":"address","label":"Address","errors":_vm.errors},model:{value:(_vm.form.address),callback:function ($$v) {_vm.$set(_vm.form, "address", $$v);},expression:"form.address"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_state)?_c('input-field',{attrs:{"id":"state","label":"State","errors":_vm.errors},model:{value:(_vm.form.state),callback:function ($$v) {_vm.$set(_vm.form, "state", $$v);},expression:"form.state"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_zip)?_c('input-field',{attrs:{"id":"zip_code","label":"Zip Code","errors":_vm.errors},model:{value:(_vm.form.zip_code),callback:function ($$v) {_vm.$set(_vm.form, "zip_code", $$v);},expression:"form.zip_code"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_country)?_c('input-field',{attrs:{"id":"country","label":"Country","errors":_vm.errors},model:{value:(_vm.form.country),callback:function ($$v) {_vm.$set(_vm.form, "country", $$v);},expression:"form.country"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_phone)?_c('input-field',{attrs:{"id":"phone","label":"Phone","errors":_vm.errors},model:{value:(_vm.form.phone),callback:function ($$v) {_vm.$set(_vm.form, "phone", $$v);},expression:"form.phone"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_organization)?_c('input-field',{attrs:{"id":"organization","label":"Organization","errors":_vm.errors},model:{value:(_vm.form.organization),callback:function ($$v) {_vm.$set(_vm.form, "organization", $$v);},expression:"form.organization"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_job_title)?_c('input-field',{attrs:{"id":"job_title","label":"Job Title","errors":_vm.errors},model:{value:(_vm.form.job_title),callback:function ($$v) {_vm.$set(_vm.form, "job_title", $$v);},expression:"form.job_title"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_questions)?_c('textarea-field',{attrs:{"id":"questions_comments","label":"Questions and Comments","errors":_vm.errors},model:{value:(_vm.form.questions_comments),callback:function ($$v) {_vm.$set(_vm.form, "questions_comments", $$v);},expression:"form.questions_comments"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_industry)?_c('input-field',{attrs:{"id":"industry","label":"Industry","errors":_vm.errors},model:{value:(_vm.form.industry),callback:function ($$v) {_vm.$set(_vm.form, "industry", $$v);},expression:"form.industry"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_employees)?_c('input-field',{attrs:{"id":"number_employees","label":"Number of Employees","errors":_vm.errors},model:{value:(_vm.form.number_employees),callback:function ($$v) {_vm.$set(_vm.form, "number_employees", $$v);},expression:"form.number_employees"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_timeframe)?_c('input-field',{attrs:{"id":"purchasing_timeframe","label":"Purchasing Timeframe","errors":_vm.errors},model:{value:(_vm.form.purchasing_timeframe),callback:function ($$v) {_vm.$set(_vm.form, "purchasing_timeframe", $$v);},expression:"form.purchasing_timeframe"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_role)?_c('input-field',{attrs:{"id":"purchasing_role","label":"Purchasing Role","errors":_vm.errors},model:{value:(_vm.form.purchasing_role),callback:function ($$v) {_vm.$set(_vm.form, "purchasing_role", $$v);},expression:"form.purchasing_role"}}):_vm._e()],1)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('p',[_c('em',[_vm._v("* Indicates required fields")])])}],
+var GoToWebinar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('fieldset',[_c('legend',[_vm._v("Your information")]),_vm._v(" "),_vm._m(0),_vm._v(" "),(_vm.orientation === 'horizontal')?[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-sm-4"},[_c('input-field',{attrs:{"id":"first","label":"First Name*","errors":_vm.errors},model:{value:(_vm.form.first),callback:function ($$v) {_vm.$set(_vm.form, "first", $$v);},expression:"form.first"}}),_vm._v(" "),_c('input-field',{attrs:{"id":"last","label":"Last Name*","errors":_vm.errors},model:{value:(_vm.form.last),callback:function ($$v) {_vm.$set(_vm.form, "last", $$v);},expression:"form.last"}}),_vm._v(" "),_c('input-field',{attrs:{"id":"email","label":"Email*","errors":_vm.errors},model:{value:(_vm.form.email),callback:function ($$v) {_vm.$set(_vm.form, "email", $$v);},expression:"form.email"}}),_vm._v(" "),(_vm.page.options.show_source)?_c('input-field',{attrs:{"id":"source","label":"Source","errors":_vm.errors},model:{value:(_vm.form.source),callback:function ($$v) {_vm.$set(_vm.form, "source", $$v);},expression:"form.source"}}):_vm._e()],1),_vm._v(" "),_c('div',{staticClass:"col-sm-4"},[(_vm.page.options.show_address)?_c('input-field',{attrs:{"id":"address","label":"Address","errors":_vm.errors},model:{value:(_vm.form.address),callback:function ($$v) {_vm.$set(_vm.form, "address", $$v);},expression:"form.address"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_state)?_c('input-field',{attrs:{"id":"state","label":"State","errors":_vm.errors},model:{value:(_vm.form.state),callback:function ($$v) {_vm.$set(_vm.form, "state", $$v);},expression:"form.state"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_zip)?_c('input-field',{attrs:{"id":"zip_code","label":"Zip Code","errors":_vm.errors},model:{value:(_vm.form.zip_code),callback:function ($$v) {_vm.$set(_vm.form, "zip_code", $$v);},expression:"form.zip_code"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_country)?_c('input-field',{attrs:{"id":"country","label":"Country","errors":_vm.errors},model:{value:(_vm.form.country),callback:function ($$v) {_vm.$set(_vm.form, "country", $$v);},expression:"form.country"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_phone)?_c('input-field',{attrs:{"id":"phone","label":"Phone","errors":_vm.errors},model:{value:(_vm.form.phone),callback:function ($$v) {_vm.$set(_vm.form, "phone", $$v);},expression:"form.phone"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_organization)?_c('input-field',{attrs:{"id":"organization","label":"Organization","errors":_vm.errors},model:{value:(_vm.form.organization),callback:function ($$v) {_vm.$set(_vm.form, "organization", $$v);},expression:"form.organization"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_job_title)?_c('input-field',{attrs:{"id":"job_title","label":"Job Title","errors":_vm.errors},model:{value:(_vm.form.job_title),callback:function ($$v) {_vm.$set(_vm.form, "job_title", $$v);},expression:"form.job_title"}}):_vm._e()],1),_vm._v(" "),_c('div',{staticClass:"col-sm-4"},[(_vm.page.options.show_questions)?_c('textarea-field',{attrs:{"id":"questions_comments","label":"Questions and Comments","errors":_vm.errors},model:{value:(_vm.form.questions_comments),callback:function ($$v) {_vm.$set(_vm.form, "questions_comments", $$v);},expression:"form.questions_comments"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_industry)?_c('input-field',{attrs:{"id":"industry","label":"Industry","errors":_vm.errors},model:{value:(_vm.form.industry),callback:function ($$v) {_vm.$set(_vm.form, "industry", $$v);},expression:"form.industry"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_employees)?_c('input-field',{attrs:{"id":"number_employees","label":"Number of Employees","errors":_vm.errors},model:{value:(_vm.form.number_employees),callback:function ($$v) {_vm.$set(_vm.form, "number_employees", $$v);},expression:"form.number_employees"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_timeframe)?_c('input-field',{attrs:{"id":"purchasing_timeframe","label":"Purchasing Timeframe","errors":_vm.errors},model:{value:(_vm.form.purchasing_timeframe),callback:function ($$v) {_vm.$set(_vm.form, "purchasing_timeframe", $$v);},expression:"form.purchasing_timeframe"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_role)?_c('input-field',{attrs:{"id":"purchasing_role","label":"Purchasing Role","errors":_vm.errors},model:{value:(_vm.form.purchasing_role),callback:function ($$v) {_vm.$set(_vm.form, "purchasing_role", $$v);},expression:"form.purchasing_role"}}):_vm._e(),_vm._v(" "),_c('activity-button',{attrs:{"size":"lg","type":"submit","orientation":"right","activity":_vm.submitting,"block":true,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.signup}})],1)])]:[_c('input-field',{attrs:{"id":"first","label":"First Name*","errors":_vm.errors},model:{value:(_vm.form.first),callback:function ($$v) {_vm.$set(_vm.form, "first", $$v);},expression:"form.first"}}),_vm._v(" "),_c('input-field',{attrs:{"id":"last","label":"Last Name*","errors":_vm.errors},model:{value:(_vm.form.last),callback:function ($$v) {_vm.$set(_vm.form, "last", $$v);},expression:"form.last"}}),_vm._v(" "),_c('input-field',{attrs:{"id":"email","label":"Email*","errors":_vm.errors},model:{value:(_vm.form.email),callback:function ($$v) {_vm.$set(_vm.form, "email", $$v);},expression:"form.email"}}),_vm._v(" "),(_vm.page.options.show_source)?_c('input-field',{attrs:{"id":"source","label":"Source","errors":_vm.errors},model:{value:(_vm.form.source),callback:function ($$v) {_vm.$set(_vm.form, "source", $$v);},expression:"form.source"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_address)?_c('input-field',{attrs:{"id":"address","label":"Address","errors":_vm.errors},model:{value:(_vm.form.address),callback:function ($$v) {_vm.$set(_vm.form, "address", $$v);},expression:"form.address"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_state)?_c('input-field',{attrs:{"id":"state","label":"State","errors":_vm.errors},model:{value:(_vm.form.state),callback:function ($$v) {_vm.$set(_vm.form, "state", $$v);},expression:"form.state"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_zip)?_c('input-field',{attrs:{"id":"zip_code","label":"Zip Code","errors":_vm.errors},model:{value:(_vm.form.zip_code),callback:function ($$v) {_vm.$set(_vm.form, "zip_code", $$v);},expression:"form.zip_code"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_country)?_c('input-field',{attrs:{"id":"country","label":"Country","errors":_vm.errors},model:{value:(_vm.form.country),callback:function ($$v) {_vm.$set(_vm.form, "country", $$v);},expression:"form.country"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_phone)?_c('input-field',{attrs:{"id":"phone","label":"Phone","errors":_vm.errors},model:{value:(_vm.form.phone),callback:function ($$v) {_vm.$set(_vm.form, "phone", $$v);},expression:"form.phone"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_organization)?_c('input-field',{attrs:{"id":"organization","label":"Organization","errors":_vm.errors},model:{value:(_vm.form.organization),callback:function ($$v) {_vm.$set(_vm.form, "organization", $$v);},expression:"form.organization"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_job_title)?_c('input-field',{attrs:{"id":"job_title","label":"Job Title","errors":_vm.errors},model:{value:(_vm.form.job_title),callback:function ($$v) {_vm.$set(_vm.form, "job_title", $$v);},expression:"form.job_title"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_questions)?_c('textarea-field',{attrs:{"id":"questions_comments","label":"Questions and Comments","errors":_vm.errors},model:{value:(_vm.form.questions_comments),callback:function ($$v) {_vm.$set(_vm.form, "questions_comments", $$v);},expression:"form.questions_comments"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_industry)?_c('input-field',{attrs:{"id":"industry","label":"Industry","errors":_vm.errors},model:{value:(_vm.form.industry),callback:function ($$v) {_vm.$set(_vm.form, "industry", $$v);},expression:"form.industry"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_employees)?_c('input-field',{attrs:{"id":"number_employees","label":"Number of Employees","errors":_vm.errors},model:{value:(_vm.form.number_employees),callback:function ($$v) {_vm.$set(_vm.form, "number_employees", $$v);},expression:"form.number_employees"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_timeframe)?_c('input-field',{attrs:{"id":"purchasing_timeframe","label":"Purchasing Timeframe","errors":_vm.errors},model:{value:(_vm.form.purchasing_timeframe),callback:function ($$v) {_vm.$set(_vm.form, "purchasing_timeframe", $$v);},expression:"form.purchasing_timeframe"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_role)?_c('input-field',{attrs:{"id":"purchasing_role","label":"Purchasing Role","errors":_vm.errors},model:{value:(_vm.form.purchasing_role),callback:function ($$v) {_vm.$set(_vm.form, "purchasing_role", $$v);},expression:"form.purchasing_role"}}):_vm._e(),_vm._v(" "),_c('activity-button',{attrs:{"size":"lg","type":"submit","orientation":"right","activity":_vm.submitting,"block":true,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.signup}})]],2)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('p',[_c('em',[_vm._v("* Indicates required fields")])])}],
 
     name: 'go-to-webinar',
 
     mixins: [
         FormComponent
-    ]
+    ],
+
+    props: {
+        submitting: Boolean
+    },
+
+    computed: {
+
+        orientation() {
+            return this.$parent.$parent.orientation;
+        }
+
+    }
 
 }
 
-var VerticalSignupForm = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"row"},[_c('div',{staticClass:"col-md-5 col-lg-4"},[_c(_vm.page.options.service,{tag:"component",attrs:{"page":_vm.page,"form":_vm.form,"errors":_vm.errors}}),_vm._v(" "),_c('activity-button',{attrs:{"size":"lg","type":"submit","orientation":"right","activity":_vm.submitting,"block":true,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.signup}})],1),_vm._v(" "),_c('div',{staticClass:"col-md-7 col-lg-8",domProps:{"innerHTML":_vm._s(_vm.page.body)}})])},staticRenderFns: [],
+var VerticalSignupForm = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"row"},[_c('div',{staticClass:"col-md-5 col-lg-4"},[_c(_vm.page.options.service,{tag:"component",attrs:{"submitting":_vm.submitting,"page":_vm.page,"form":_vm.form,"errors":_vm.errors}})],1),_vm._v(" "),_c('div',{staticClass:"col-md-7 col-lg-8",domProps:{"innerHTML":_vm._s(_vm.page.body)}})])},staticRenderFns: [],
 
     components: {
         GoToWebinar
@@ -12410,7 +12422,54 @@ var VerticalSignupForm = {render: function(){var _vm=this;var _h=_vm.$createElem
 
 }
 
-var HorizontalSignupForm = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"row"},[_c('div',{staticClass:"col-md-5 col-lg-4"},[_vm._v(" "+_vm._s(_vm.page.options.service)+" ")]),_vm._v(" "),_c('div',{staticClass:"col-md-7 col-lg-8",domProps:{"innerHTML":_vm._s(_vm.page.body)}})])},staticRenderFns: [],
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeCeil = Math.ceil,
+    nativeMax$5 = Math.max;
+
+/**
+ * Creates an array of elements split into groups the length of `size`.
+ * If `array` can't be split evenly, the final chunk will be the remaining
+ * elements.
+ *
+ * @static
+ * @memberOf _
+ * @since 3.0.0
+ * @category Array
+ * @param {Array} array The array to process.
+ * @param {number} [size=1] The length of each chunk
+ * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+ * @returns {Array} Returns the new array of chunks.
+ * @example
+ *
+ * _.chunk(['a', 'b', 'c', 'd'], 2);
+ * // => [['a', 'b'], ['c', 'd']]
+ *
+ * _.chunk(['a', 'b', 'c', 'd'], 3);
+ * // => [['a', 'b', 'c'], ['d']]
+ */
+function chunk(array, size, guard) {
+  if ((guard ? isIterateeCall(array, size, guard) : size === undefined)) {
+    size = 1;
+  } else {
+    size = nativeMax$5(toInteger(size), 0);
+  }
+  var length = array == null ? 0 : array.length;
+  if (!length || size < 1) {
+    return [];
+  }
+  var index = 0,
+      resIndex = 0,
+      result = Array(nativeCeil(length / size));
+
+  while (index < length) {
+    result[resIndex++] = baseSlice(array, index, (index += size));
+  }
+  return result;
+}
+
+var HorizontalSignupForm = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-sm-12",domProps:{"innerHTML":_vm._s(_vm.page.body)}})]),_vm._v(" "),_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-sm-12"},[_c(_vm.page.options.service,{tag:"component",attrs:{"submitting":_vm.submitting,"page":_vm.page,"form":_vm.form,"errors":_vm.errors}})],1)])])},staticRenderFns: [],
+
+    extends: VerticalSignupForm,
 
     components: {
         GoToWebinar
@@ -12820,51 +12879,6 @@ var CityField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
 
 }
 
-/* Built-in method references for those with the same name as other `lodash` methods. */
-var nativeCeil = Math.ceil,
-    nativeMax$5 = Math.max;
-
-/**
- * Creates an array of elements split into groups the length of `size`.
- * If `array` can't be split evenly, the final chunk will be the remaining
- * elements.
- *
- * @static
- * @memberOf _
- * @since 3.0.0
- * @category Array
- * @param {Array} array The array to process.
- * @param {number} [size=1] The length of each chunk
- * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
- * @returns {Array} Returns the new array of chunks.
- * @example
- *
- * _.chunk(['a', 'b', 'c', 'd'], 2);
- * // => [['a', 'b'], ['c', 'd']]
- *
- * _.chunk(['a', 'b', 'c', 'd'], 3);
- * // => [['a', 'b', 'c'], ['d']]
- */
-function chunk(array, size, guard) {
-  if ((guard ? isIterateeCall(array, size, guard) : size === undefined)) {
-    size = 1;
-  } else {
-    size = nativeMax$5(toInteger(size), 0);
-  }
-  var length = array == null ? 0 : array.length;
-  if (!length || size < 1) {
-    return [];
-  }
-  var index = 0,
-      resIndex = 0,
-      result = Array(nativeCeil(length / size));
-
-  while (index < length) {
-    result[resIndex++] = baseSlice(array, index, (index += size));
-  }
-  return result;
-}
-
 var DollarAmountField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',[_c('fieldset',[_c('legend',[_vm._v("Select an amount")]),_vm._v(" "),_vm._l((_vm.amounts),function(chunk$$1){return _c('div',{staticClass:"row"},_vm._l((chunk$$1),function(amount){return _c('div',{staticClass:"col-sm-6"},[_c('radio-field',{attrs:{"name":"donation","value":amount}},[_vm._v("$"+_vm._s(amount))])],1)}))}),_vm._v(" "),_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-md-6"},[_c('label',{attrs:{"for":_vm.question.id},domProps:{"innerHTML":_vm._s(_vm.question.question)}}),_vm._v(" "),_c('input-group',{attrs:{"prepend":"$"}},[_c('input',{staticClass:"form-control",class:{'is-invalid': !!_vm.invalidFeedback},attrs:{"type":"text","name":`field_${_vm.question.id}`},domProps:{"value":_vm.value}})])],1)])],2)])},staticRenderFns: [],
 
     name: 'survey-dollar-amount-field',
@@ -13128,9 +13142,9 @@ var GiveworksForm = {render: function(){var _vm=this;var _h=_vm.$createElement;v
 
         data: [Boolean, Object],
 
-        redirect: [Boolean, String],
-
         pageId: [Number, String],
+
+        redirect: [Boolean, String],
 
         apiKey: {
             type: String,

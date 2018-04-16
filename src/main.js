@@ -1,7 +1,7 @@
-import GiveworksFormPlugin from '@/Plugins/GiveworksForm';
+import GiveworksForm from '@/Plugins/GiveworksForm';
 
 if(window && window.Vue) {
-    Vue.use(GiveworksFormPlugin);
+    Vue.use(GiveworksForm);
 }
 
-export default GiveworksFormPlugin;
+export default GiveworksForm;

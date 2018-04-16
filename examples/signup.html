@@ -12,18 +12,18 @@
             <div class="container">
                 <giveworks-form
                     page-id="1907"
-                    orientation="vertical"
                     api-key="$2y$10$2JjGDddYy0n940PkjwsjMuy1oCI.AYrtFsYKzJvrGuxB.WIwhctZu">
                 </giveworks-form>
             </div>
         </div>
 
-        <script type="text/javascript" src="../dist/vendor.js"></script>
+        <!-- VueGiveworksForm dependencies -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue-giveworks-form/dist/vue-giveworks-form.css">
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios@0.18.0/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/moment@2.22.0/min/moment.min.js"></script>
+
+        <!-- VueGiveworksForm Library -->
         <script type="text/javascript" src="../dist/vue-giveworks-form.js"></script>
-        <script type="text/javascript">
-            var vue = new VueGiveworksForm({
-                el: '#app'
-            });
-        </script>
     </body>
 </html>

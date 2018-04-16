@@ -64,9 +64,9 @@ export default {
 
         data: [Boolean, Object],
 
-        redirect: [Boolean, String],
-
         pageId: [Number, String],
+
+        redirect: [Boolean, String],
 
         apiKey: {
             type: String,

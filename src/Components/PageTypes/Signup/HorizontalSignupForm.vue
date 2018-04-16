@@ -1,24 +1,33 @@
 <template>
 
-    <div class="row">
-
-        <div class="col-md-5 col-lg-4">
-
-            {{ page.options.service }}
-
+    <div>
+        <div class="row">
+            <div class="col-sm-12" v-html="page.body"/>
         </div>
 
-        <div class="col-md-7 col-lg-8" v-html="page.body"/>
+        <div class="row">
+
+            <div class="col-sm-12">
+
+                <component :is="page.options.service" :submitting="submitting" :page="page" :form="form" :errors="errors" />
+
+            </div>
+
+        </div>
 
     </div>
 
 </template>
 
 <script>
-import FormComponent from '@/Mixins/FormComponent';
+import chunk from 'lodash-es/chunk';
 import GoToWebinar from './Apis/GoToWebinar';
+import FormComponent from '@/Mixins/FormComponent';
+import VerticalSignupForm from './VerticalSignupForm';
 
 export default {
+
+    extends: VerticalSignupForm,
 
     components: {
         GoToWebinar

@@ -9,10 +9,9 @@ export default [{
     },
     globals: {
         'vue': 'Vue',
-        'axios': 'axios',
-        'moment': 'moment',
         '_': 'lodash-es',
-        'vue-awesome': 'vue-awesome'
+        'axios': 'axios',
+        'moment': 'moment'
     },
     plugins: [
         resolve(),

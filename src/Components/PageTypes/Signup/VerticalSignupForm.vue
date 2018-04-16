@@ -4,16 +4,7 @@
 
         <div class="col-md-5 col-lg-4">
 
-            <component :is="page.options.service" :page="page" :form="form" :errors="errors" />
-
-            <activity-button
-                size="lg"
-                type="submit"
-                orientation="right"
-                :activity="submitting"
-                :block="true"
-                :label="buttonLabel || page.site.config.giveworks.button.signup"
-            />
+            <component :is="page.options.service" :submitting="submitting" :page="page" :form="form" :errors="errors" />
 
         </div>
 

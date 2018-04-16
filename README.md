@@ -2,8 +2,6 @@
 
 This plugin provides Vue.js component for the open [http://giveworks.net](Giveworks Platform).
 
----
-
 ## Dependencies
 
 This component requires the following dependencies.
@@ -12,8 +10,6 @@ This component requires the following dependencies.
 - [Lodash.js](https://lodash.com)
 - [Moment.js](https://momentjs.com)
 - [Axios.js](https://github.com/axios/axios)
-
----
 
 ## Installation
 
@@ -48,7 +44,6 @@ Since the library may change over time, it may be desired to update manually so 
 
     <script src="https://cdn.jsdelivr.net/npm/vue-giveworks-form@0.1.104/dist/vue-giveworks-form.min.js"></script>
 
----
 
 ### Basic Usage
 

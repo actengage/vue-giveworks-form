@@ -45,7 +45,7 @@ Since the library may change over time, it may be desired to update manually so 
     <script src="https://cdn.jsdelivr.net/npm/vue-giveworks-form@0.1.104/dist/vue-giveworks-form.min.js"></script>
 
 
-### Basic Usage
+## Basic Usage
 
 To load the page data asynchronously given a page ID...
 

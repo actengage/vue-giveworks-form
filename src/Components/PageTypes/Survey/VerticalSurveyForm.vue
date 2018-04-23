@@ -1,7 +1,7 @@
 <template>
 
     <div class="row">
-        
+
         <div class="col-md-5 col-lg-4">
             <div v-for="question in page.questions">
                 <component
@@ -9,6 +9,7 @@
                     :is="component(question.type)"
                     :name="`field_${question.id}`"
                     :page="page"
+                    :form="form"
                     :errors="errors"
                     :question="question"
                 />

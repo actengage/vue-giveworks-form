@@ -1,12 +1,17 @@
 <template>
 
-    <input-field
-        id="street"
-        placeholder="Street Address"
-        :value="value"
-        :name="street"
-        :label="question.question"
+    <place-autocomplete-field
+        v-model="value"
         :errors="errors"
+        :label="question.question"
+        id="street"
+        name="street"
+        placeholder="Street Address"
+        api-key="AIzaSyAhSv9zWvisiTXRPRw6K8AE0DCmrRMpQcU"
+        v-place-autofill.street="form.street"
+        v-place-autofill.city="form.city"
+        v-place-autofill.state="form.state"
+        v-place-autofill.zip="form.zip"
         @input="updated"
     />
 

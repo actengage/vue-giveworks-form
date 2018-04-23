@@ -256,5 +256,6 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../node_modules/vue-place-autocomplete/dist/vue-place-autocomplete.css';
 @import './node_modules/the-one-true-form/src/main.scss';
 </style>

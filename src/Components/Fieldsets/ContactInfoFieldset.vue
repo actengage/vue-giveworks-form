@@ -16,12 +16,18 @@
 
             <input-field v-if="page.options.add_phone" v-model="form.phone" name="phone" label="Phone Number" :errors="errors"/>
 
-            <input-field v-if="showAddress || page.options.add_street" v-model="form.street" name="street" label="Address" :errors="errors"/>
-
-            <!--
-            <input-field v-if="page.options.add_phone" name="phone" label="Phone Number" mask="(000) 000-0000" :errors="errors"/>
-            <google-autocomplete-field name="street" label="Address" :api-key="page.site.config.services.google_maps" :types="['address']" :errors="errors" @autofill="onAutofill"></google-autocomplete-field>
-            -->
+            <place-autocomplete-field
+                v-if="showAddress || page.options.add_street"
+                v-model="form.street"
+                name="street"
+                label="Address"
+                :errors="errors"
+                api-key="AIzaSyAhSv9zWvisiTXRPRw6K8AE0DCmrRMpQcU"
+                v-place-autofill.street="form.street"
+                v-place-autofill.city="form.city"
+                v-place-autofill.state="form.state"
+                v-place-autofill.zip="form.zip"
+            />
 
             <div v-if="showAddress || page.options.add_city || page.options.add_zip" class="row">
                 <div v-if="showAddress || page.options.add_city" class="col-sm-8">
@@ -79,15 +85,10 @@ import compact from 'lodash-es/compact';
 import findIndex from 'lodash-es/findIndex';
 import States from '@/Config/States';
 import FormComponent from '@/Mixins/FormComponent';
-import GoogleAutocompleteField from '@/Components/Autocomplete/Autocomplete';
 
 export default {
 
     name: 'contact-info-fieldset',
-
-    components: {
-        GoogleAutocompleteField
-    },
 
     mixins: [
         FormComponent

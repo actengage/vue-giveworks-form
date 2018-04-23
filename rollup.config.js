@@ -56,7 +56,7 @@ const SERVE_OPTIONS = {
 
 // The options for the watch plugin
 const WATCH_OPTIONS = {
-    include: `${SRC}**`,
+    include: `${SRC}**/*`,
     https: {
         key: fs.readFileSync('./livereload.key'),
         cert: fs.readFileSync('./livereload.crt'),
@@ -144,6 +144,18 @@ export default [{
         name: NAMESPACE,
         format: PACKAGE_FORMAT,
         file: `${DIST}${FILENAME}.js`,
+        sourcemap: (process.env.ROLLUP_WATCH ? 'inline' : true),
+        globals: OUTPUT_GLOBALS
+    },
+    watch: WATCH_OPTIONS,
+    external: EXTERNAL,
+    plugins: plugins
+},{
+    input: MAINJS,
+    output: {
+        name: NAMESPACE,
+        format: 'es',
+        file: `${DIST}${FILENAME}.es.js`,
         sourcemap: (process.env.ROLLUP_WATCH ? 'inline' : true),
         globals: OUTPUT_GLOBALS
     },

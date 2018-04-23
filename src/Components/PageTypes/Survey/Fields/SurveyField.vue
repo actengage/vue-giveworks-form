@@ -10,6 +10,11 @@ export default {
 
     props: {
 
+        form: {
+            type: Object,
+            required: true
+        },
+
         page: {
             type: Object,
             required: true

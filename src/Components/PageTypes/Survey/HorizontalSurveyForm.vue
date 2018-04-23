@@ -11,12 +11,13 @@
             <div v-for="(chunk, i) in questions" class="col-md-4">
 
                 <div v-for="question in chunk">
-
+                    
                     <component
                         v-model="form[name(question)]"
                         :is="component(question.type)"
                         :name="name(question)"
                         :page="page"
+                        :form="form"
                         :value="form[name(question)]"
                         :errors="errors"
                         :question="question"

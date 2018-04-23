@@ -17,6 +17,7 @@ import CheckboxField from 'vue-interface/src/Components/CheckboxField';
 import SelectField from 'vue-interface/src/Components/SelectField';
 import TextareaField from 'vue-interface/src/Components/TextareaField';
 import mergeClasses from 'vue-interface/src/Plugins/MergeClasses';
+import VuePlaceAutocomplete from 'vue-place-autocomplete';
 
 const components = {
     Alert,
@@ -52,6 +53,7 @@ export default function install(Vue, options) {
     });
 
     Vue.use(mergeClasses);
+    Vue.use(VuePlaceAutocomplete);
     Vue.component('giveworks-form', GiveworksForm);
 
     if(window && window.Vue) {

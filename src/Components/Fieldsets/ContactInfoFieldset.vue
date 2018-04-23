@@ -12,7 +12,7 @@
 
             <input-field v-model="form.last" name="last" label="Last Name" :errors="errors"/>
 
-            <input-field v-model="form.email" type="email" name="email" label="Email" placeholder="you@example.com" :error="errors.email && errors.email.join('<br>')"/>
+            <input-field v-model="form.email" type="email" name="email" label="Email" placeholder="you@example.com" :errors="errors"/>
 
             <input-field v-if="page.options.add_phone" v-model="form.phone" name="phone" label="Phone Number" :errors="errors"/>
 

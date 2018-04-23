@@ -1,9 +1,9 @@
 {
     "name": "vue-giveworks-form",
-    "version": "0.1.113",
+    "version": "0.1.114",
     "description": "A Vue.js component for building and submitting Giveworks form.",
-    "main": "dist/vue-giveworks-form.js",
-    "module": "dist/vue-giveworks-form.es.js",
+    "main": "./dist/vue-giveworks-form.js",
+    "module": "./dist/vue-giveworks-form.es.js",
     "author": "Justin Kimbrell",
     "license": "MIT",
     "dependencies": {

@@ -73,7 +73,6 @@
         "release-major": "npm version major --no-git-tag-version; npm run release;",
         "release": "npm run build; npm run build-es6; npm run uglify; npm run commit; npm publish; git push;",
         "build-vendor": "rollup -c rollup.vendor.js;",
-        "build-es6": "rollup -c -f es -o dist/vue-giveworks-form.es.js;",
         "uglify": "rollup -c rollup.uglify.js"
     }
 }

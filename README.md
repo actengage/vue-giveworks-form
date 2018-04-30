@@ -82,6 +82,4 @@ You can skip loading the page asynchronously if the page JSON payload is already
             }
         }
     </script>
-
-    // Load the vue-giveworks-form script after the script...
     <script src="https://cdn.jsdelivr.net/npm/vue-giveworks-form@0.1.104/dist/vue-giveworks-form.min.js"></script>

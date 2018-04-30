@@ -7506,18 +7506,16 @@
 
   let domain;
 
-  console.log('http config', domain);
-
   switch(window.location.hostname) {
-      case 'localhost':
-      case 'giveworks.test':
-          domain = 'https://giveworks.test';
-          break;
       case 'dev5.giveworks.net':
           domain = 'https://dev5.giveworks.net';
           break;
-      default:
+      case 'giveworks.net':
+      case 'secure.giveworks.net':
           domain = 'https://secure.giveworks.net';
+          break;
+      default:
+          domain = 'https://giveworks.test';
   }
 
   var HttpConfig = {

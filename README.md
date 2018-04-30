@@ -7,7 +7,6 @@ This plugin provides Vue.js component for the open [http://giveworks.net](Givewo
 This component requires the following dependencies.
 
 - [Vue.js](https://vuejs.org)
-- [Lodash.js](https://lodash.com)
 - [Moment.js](https://momentjs.com)
 - [Axios.js](https://github.com/axios/axios)
 

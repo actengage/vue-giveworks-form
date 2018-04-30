@@ -7,8 +7,8 @@ This plugin provides Vue.js component for the open [http://giveworks.net](Givewo
 This component requires the following dependencies.
 
 - [Vue.js](https://vuejs.org)
-- [Moment.js](https://momentjs.com)
 - [Axios.js](https://github.com/axios/axios)
+- [Moment.js](https://momentjs.com)
 
 ## Installation
 
@@ -81,4 +81,4 @@ You can skip loading the page asynchronously if the page JSON payload is already
             }
         }
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/vue-giveworks-form@0.1.104/dist/vue-giveworks-form.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-giveworks-form/dist/vue-giveworks-form.min.js"></script>

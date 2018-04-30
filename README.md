@@ -68,8 +68,14 @@ You can skip loading the page asynchronously if the page JSON payload is already
 
 *IMPORTANT - You must assign the global variable `GiveworksFormOptions` to the  `window` namespace BEFORE you load the `vue-giveworks-form.js` script.*
 
+    <giveworks-form
+        :data="page"
+        api-key="YOU_API_KEY">
+    </giveworks-form>
+
     <script type="text/javascript">
-        var PAGE_JSON = {}; // Insert your page JSON here...
+        // Insert your page JSON here... If coming from a Twig template, this
+        var PAGE_JSON = {{ page.toJson() }};
         var GiveworksFormOptions = {
             data: {
                 page: PAGE_JSON
@@ -77,5 +83,5 @@ You can skip loading the page asynchronously if the page JSON payload is already
         }
     </script>
 
-    // Load the vue-givewors-form script after the script...
+    // Load the vue-giveworks-form script after the script...
     <script src="https://cdn.jsdelivr.net/npm/vue-giveworks-form@0.1.104/dist/vue-giveworks-form.min.js"></script>

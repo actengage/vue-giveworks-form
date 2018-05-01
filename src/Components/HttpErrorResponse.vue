@@ -1,32 +1,57 @@
 <template>
-    <div class="alert alert-danger" :style="{'width': width, 'min-width': minWidth, 'max-width': maxWidth}">
-        <h2 class="alert-header">{{ header }}</h2>
-        <div class="alert-body">
-            {{ error.message }}<br>
-            {{ error.data.errors || error.response.data.message }}
-        </div>
-    </div>
+    <alert variant="danger" :heading="status" :style="{'width': widthUnit, 'min-width': minWidthUnit, 'max-width': maxWidthUnit}">
+        {{ formattedMessage }}
+    </alert>
 </template>
 
 <script>
+import unit from 'vue-interface/src/Helpers/Unit';
+
 export default {
 
     name: 'http-error-response',
 
     props: {
-        width: String,
+
         minWidth: String,
+
         maxWidth: String,
-        'error': {
-            type: [Object, Error],
-            default() {
-                return {};
-            }
-        },
-        'header': {
-            type: String,
-            default: 'Error!'
+
+        width: String,
+
+        error: {
+            type: Error,
+            required: true
         }
+
+    },
+
+    computed: {
+
+        widthUnit() {
+            return unit(this.width);
+        },
+
+        minWidthUnit() {
+            return unit(this.minWidth);
+        },
+
+        maxWidthUnit() {
+            return unit(this.maxWidth);
+        },
+
+        status() {
+            return this.error.status || 400;
+        },
+
+        formattedMessage() {
+            if(this.error.data && this.error.data.message) {
+                return this.error.data.message;
+            }
+
+            return this.error.data;
+        }
+
     }
 
 }

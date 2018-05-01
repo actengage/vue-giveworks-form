@@ -1,5 +1,6 @@
 import axios from 'axios';
 import moment from 'moment';
+import unit from 'vue-interface/src/Helpers/Unit';
 
 function styleInject(css, ref) {
   if ( ref === void 0 ) ref = {};
@@ -7493,7 +7494,7 @@ class Model {
 class Page extends Model {
 
     endpoint() {
-        return 'page'
+        return 'page';
     }
 
 }
@@ -7518,24 +7519,51 @@ var HttpConfig = {
 
 }
 
-var HttpErrorResponse = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"alert alert-danger",style:({'width': _vm.width, 'min-width': _vm.minWidth, 'max-width': _vm.maxWidth})},[_c('h2',{staticClass:"alert-header"},[_vm._v(_vm._s(_vm.header))]),_vm._v(" "),_c('div',{staticClass:"alert-body"},[_vm._v(" "+_vm._s(_vm.error.message)),_c('br'),_vm._v(" "+_vm._s(_vm.error.data.errors || _vm.error.response.data.message)+" ")])])},staticRenderFns: [],
+var HttpErrorResponse = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('alert',{style:({'width': _vm.widthUnit, 'min-width': _vm.minWidthUnit, 'max-width': _vm.maxWidthUnit}),attrs:{"variant":"danger","heading":_vm.status}},[_vm._v(" "+_vm._s(_vm.formattedMessage)+" ")])},staticRenderFns: [],
 
     name: 'http-error-response',
 
     props: {
-        width: String,
+
         minWidth: String,
+
         maxWidth: String,
-        'error': {
-            type: [Object, Error],
-            default() {
-                return {};
-            }
-        },
-        'header': {
-            type: String,
-            default: 'Error!'
+
+        width: String,
+
+        error: {
+            type: Error,
+            required: true
         }
+
+    },
+
+    computed: {
+
+        widthUnit() {
+            return unit(this.width);
+        },
+
+        minWidthUnit() {
+            return unit(this.minWidth);
+        },
+
+        maxWidthUnit() {
+            return unit(this.maxWidth);
+        },
+
+        status() {
+            return this.error.status || 400;
+        },
+
+        formattedMessage() {
+            if(this.error.data && this.error.data.message) {
+                return this.error.data.message;
+            }
+
+            return this.error.data;
+        }
+
     }
 
 }
@@ -12843,12 +12871,8 @@ var GiveworksForm = {render: function(){var _vm=this;var _h=_vm.$createElement;v
             });
         });
 
-        this.$dispatch.on('form:submit', data => {
-            const el = this.$el.querySelector(':focus');
-
-            if(el) {
-                el.blur();
-            }
+        this.$dispatch.reply('form', (resolve, reject) => {
+            resolve(this);
         });
 
         this.$dispatch.reply('form:redirect', (resolve, reject, url) => {
@@ -12866,21 +12890,14 @@ var GiveworksForm = {render: function(){var _vm=this;var _h=_vm.$createElement;v
             }
         });
 
-        this.$dispatch.reply('form', (resolve, reject) => {
-            resolve(this);
-        });
-
         this.$dispatch.reply('form:submit', (resolve, reject) => {
-
             if(!this.submitting) {
                 this.showActivity();
                 this.errors = {};
                 this.submitting = true;
                 this.$dispatch.emit('form:submit', this.form, this);
 
-                this.model.initialize(this.form);
-
-                return this.model.create(this.form)
+                return this.model.fill(this.form).create(this.form)
                     .then(response => {
                         this.submitting = false;
                         this.$dispatch.emit('form:submit:complete', true, response, this);
@@ -12900,11 +12917,18 @@ var GiveworksForm = {render: function(){var _vm=this;var _h=_vm.$createElement;v
                 reject(new Error('The form is already submitting'));
             }
         });
+
+        this.$dispatch.on('form:submit', data => {
+            if(this.$el.querySelector(':focus')) {
+                this.$el.querySelector(':focus').blur();
+            }
+        });
     },
 
     beforeDestroy() {
         this.$dispatch.off('form:submit');
         this.$dispatch.stopReply('form:submit');
+        this.$dispatch.stopReply('form:redirect');
         this.$dispatch.stopReply('submit:enable');
         this.$dispatch.stopReply('submit:disable');
         this.$dispatch.stopReply('submit:show');
@@ -12946,9 +12970,9 @@ var Variant = {
 function duration(el) {
     const duration = getComputedStyle(el).transitionDuration;
     const numeric = parseFloat(duration, 10) || 0;
-    const unit = duration.match(/m?s/);
+    const unit$$1 = duration.match(/m?s/);
 
-    switch (unit[0]) {
+    switch (unit$$1[0]) {
         case 's':
             return numeric * 1000;
         case 'ms':
@@ -13171,11 +13195,11 @@ const plugin$2 = VueInstaller.use({
 const convertAnimationDelayToInt = function(delay) {
     const num = parseFloat(delay, 10);
     const matches = delay.match(/m?s/);
-    const unit = matches ? matches[0] : false;
+    const unit$$1 = matches ? matches[0] : false;
 
     let milliseconds;
 
-    switch (unit) {
+    switch (unit$$1) {
         case "s": // seconds
             milliseconds = num * 1000;
             break;
@@ -19415,7 +19439,7 @@ var ActivityIndicatorSpinner$1 = {
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeIsFinite = root$1.isFinite;
 
-function unit(height) {
+function unit$1(height) {
     return isFinite(height) ? height + 'px' : height;
 }
 
@@ -19450,7 +19474,7 @@ var ActivityIndicator$1 = {render: function(){var _vm=this;var _h=_vm.$createEle
     computed: {
 
         computedMinHeight() {
-            return unit(this.minHeight);
+            return unit$1(this.minHeight);
         },
 
         component() {

@@ -1,11 +1,12 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('axios'), require('moment')) :
-  typeof define === 'function' && define.amd ? define(['axios', 'moment'], factory) :
-  (global.VueGiveworksForm = factory(global.axios,global.moment));
-}(this, (function (axios,moment) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('axios'), require('moment'), require('vue-interface/src/Helpers/Unit')) :
+  typeof define === 'function' && define.amd ? define(['axios', 'moment', 'vue-interface/src/Helpers/Unit'], factory) :
+  (global.VueGiveworksForm = factory(global.axios,global.moment,global.unit));
+}(this, (function (axios,moment,unit) { 'use strict';
 
   axios = axios && axios.hasOwnProperty('default') ? axios['default'] : axios;
   moment = moment && moment.hasOwnProperty('default') ? moment['default'] : moment;
+  unit = unit && unit.hasOwnProperty('default') ? unit['default'] : unit;
 
   function styleInject(css, ref) {
     if ( ref === void 0 ) ref = {};
@@ -7499,7 +7500,7 @@
   class Page extends Model {
 
       endpoint() {
-          return 'page'
+          return 'page';
       }
 
   }
@@ -7524,24 +7525,51 @@
 
   }
 
-  var HttpErrorResponse = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"alert alert-danger",style:({'width': _vm.width, 'min-width': _vm.minWidth, 'max-width': _vm.maxWidth})},[_c('h2',{staticClass:"alert-header"},[_vm._v(_vm._s(_vm.header))]),_vm._v(" "),_c('div',{staticClass:"alert-body"},[_vm._v(" "+_vm._s(_vm.error.message)),_c('br'),_vm._v(" "+_vm._s(_vm.error.data.errors || _vm.error.response.data.message)+" ")])])},staticRenderFns: [],
+  var HttpErrorResponse = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('alert',{style:({'width': _vm.widthUnit, 'min-width': _vm.minWidthUnit, 'max-width': _vm.maxWidthUnit}),attrs:{"variant":"danger","heading":_vm.status}},[_vm._v(" "+_vm._s(_vm.formattedMessage)+" ")])},staticRenderFns: [],
 
       name: 'http-error-response',
 
       props: {
-          width: String,
+
           minWidth: String,
+
           maxWidth: String,
-          'error': {
-              type: [Object, Error],
-              default() {
-                  return {};
-              }
-          },
-          'header': {
-              type: String,
-              default: 'Error!'
+
+          width: String,
+
+          error: {
+              type: Error,
+              required: true
           }
+
+      },
+
+      computed: {
+
+          widthUnit() {
+              return unit(this.width);
+          },
+
+          minWidthUnit() {
+              return unit(this.minWidth);
+          },
+
+          maxWidthUnit() {
+              return unit(this.maxWidth);
+          },
+
+          status() {
+              return this.error.status || 400;
+          },
+
+          formattedMessage() {
+              if(this.error.data && this.error.data.message) {
+                  return this.error.data.message;
+              }
+
+              return this.error.data;
+          }
+
       }
 
   }
@@ -12849,12 +12877,8 @@
               });
           });
 
-          this.$dispatch.on('form:submit', data => {
-              const el = this.$el.querySelector(':focus');
-
-              if(el) {
-                  el.blur();
-              }
+          this.$dispatch.reply('form', (resolve, reject) => {
+              resolve(this);
           });
 
           this.$dispatch.reply('form:redirect', (resolve, reject, url) => {
@@ -12872,21 +12896,14 @@
               }
           });
 
-          this.$dispatch.reply('form', (resolve, reject) => {
-              resolve(this);
-          });
-
           this.$dispatch.reply('form:submit', (resolve, reject) => {
-
               if(!this.submitting) {
                   this.showActivity();
                   this.errors = {};
                   this.submitting = true;
                   this.$dispatch.emit('form:submit', this.form, this);
 
-                  this.model.initialize(this.form);
-
-                  return this.model.create(this.form)
+                  return this.model.fill(this.form).create(this.form)
                       .then(response => {
                           this.submitting = false;
                           this.$dispatch.emit('form:submit:complete', true, response, this);
@@ -12906,11 +12923,18 @@
                   reject(new Error('The form is already submitting'));
               }
           });
+
+          this.$dispatch.on('form:submit', data => {
+              if(this.$el.querySelector(':focus')) {
+                  this.$el.querySelector(':focus').blur();
+              }
+          });
       },
 
       beforeDestroy() {
           this.$dispatch.off('form:submit');
           this.$dispatch.stopReply('form:submit');
+          this.$dispatch.stopReply('form:redirect');
           this.$dispatch.stopReply('submit:enable');
           this.$dispatch.stopReply('submit:disable');
           this.$dispatch.stopReply('submit:show');
@@ -12952,9 +12976,9 @@
   function duration(el) {
       const duration = getComputedStyle(el).transitionDuration;
       const numeric = parseFloat(duration, 10) || 0;
-      const unit = duration.match(/m?s/);
+      const unit$$1 = duration.match(/m?s/);
 
-      switch (unit[0]) {
+      switch (unit$$1[0]) {
           case 's':
               return numeric * 1000;
           case 'ms':
@@ -13177,11 +13201,11 @@
   const convertAnimationDelayToInt = function(delay) {
       const num = parseFloat(delay, 10);
       const matches = delay.match(/m?s/);
-      const unit = matches ? matches[0] : false;
+      const unit$$1 = matches ? matches[0] : false;
 
       let milliseconds;
 
-      switch (unit) {
+      switch (unit$$1) {
           case "s": // seconds
               milliseconds = num * 1000;
               break;
@@ -19421,7 +19445,7 @@
   /* Built-in method references for those with the same name as other `lodash` methods. */
   var nativeIsFinite = root$1.isFinite;
 
-  function unit(height) {
+  function unit$1(height) {
       return isFinite(height) ? height + 'px' : height;
   }
 
@@ -19456,7 +19480,7 @@
       computed: {
 
           computedMinHeight() {
-              return unit(this.minHeight);
+              return unit$1(this.minHeight);
           },
 
           component() {

@@ -14,7 +14,7 @@
     <div v-else-if="error">
         <div class="center-wrapper">
             <div class="center-content">
-                <http-error-response min-width="400px" :error="error"/>
+                <http-error-response min-width="400px" :error="error" />
             </div>
         </div>
     </div>
@@ -184,12 +184,8 @@ export default {
             });
         });
 
-        this.$dispatch.on('form:submit', data => {
-            const el = this.$el.querySelector(':focus');
-
-            if(el) {
-                el.blur();
-            }
+        this.$dispatch.reply('form', (resolve, reject) => {
+            resolve(this);
         });
 
         this.$dispatch.reply('form:redirect', (resolve, reject, url) => {
@@ -207,21 +203,14 @@ export default {
             }
         });
 
-        this.$dispatch.reply('form', (resolve, reject) => {
-            resolve(this);
-        });
-
         this.$dispatch.reply('form:submit', (resolve, reject) => {
-
             if(!this.submitting) {
                 this.showActivity();
                 this.errors = {};
                 this.submitting = true;
                 this.$dispatch.emit('form:submit', this.form, this);
 
-                this.model.initialize(this.form);
-
-                return this.model.create(this.form)
+                return this.model.fill(this.form).create(this.form)
                     .then(response => {
                         this.submitting = false;
                         this.$dispatch.emit('form:submit:complete', true, response, this);
@@ -241,11 +230,18 @@ export default {
                 reject(new Error('The form is already submitting'));
             }
         });
+
+        this.$dispatch.on('form:submit', data => {
+            if(this.$el.querySelector(':focus')) {
+                this.$el.querySelector(':focus').blur();
+            }
+        });
     },
 
     beforeDestroy() {
         this.$dispatch.off('form:submit');
         this.$dispatch.stopReply('form:submit');
+        this.$dispatch.stopReply('form:redirect');
         this.$dispatch.stopReply('submit:enable');
         this.$dispatch.stopReply('submit:disable');
         this.$dispatch.stopReply('submit:show');

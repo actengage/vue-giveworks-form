@@ -1,6 +1,6 @@
 {
     "name": "vue-giveworks-form",
-    "version": "0.1.117",
+    "version": "0.1.118",
     "description": "A Vue.js component for building and submitting Giveworks form.",
     "main": "./dist/vue-giveworks-form.js",
     "module": "./dist/vue-giveworks-form.es.js",
@@ -17,7 +17,7 @@
         "the-one-true-form": "^1.1.12",
         "vue": "^2.5.16",
         "vue-awesome": "^3.0.0",
-        "vue-interface": "^0.1.2",
+        "vue-interface": "^0.1.21",
         "vue-place-autocomplete": "0.0.7"
     },
     "devDependencies": {

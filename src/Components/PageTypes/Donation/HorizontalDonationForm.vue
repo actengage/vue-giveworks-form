@@ -12,7 +12,7 @@
             </div>
 
             <div class="col-md-4">
-                <contact-info-fieldset :form="form" :errors="errors"  :page="page"/>
+                <contact-info-fieldset address :form="form" :errors="errors"  :page="page"/>
             </div>
 
             <div class="col-md-4">

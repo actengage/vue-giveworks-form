@@ -57,6 +57,7 @@ const SERVE_OPTIONS = {
 // The options for the watch plugin
 const WATCH_OPTIONS = {
     include: `${SRC}**/*`,
+    extensions: ['.js', '.scss', '.vue'],
     https: {
         key: fs.readFileSync('./livereload.key'),
         cert: fs.readFileSync('./livereload.crt'),

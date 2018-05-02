@@ -1,5 +1,12 @@
 <template>
-    <div v-if="page.id">
+    <div v-if="error">
+        <div class="center-wrapper">
+            <div class="center-content">
+                <http-error-response min-width="400px" :error="error" />
+            </div>
+        </div>
+    </div>
+    <div v-else-if="page.id">
         <form @submit.prevent="submit" novalidate="novalidate">
             <component
                 :is="pageTypeComponent"
@@ -10,13 +17,6 @@
                 :page="page"
             />
         </form>
-    </div>
-    <div v-else-if="error">
-        <div class="center-wrapper">
-            <div class="center-content">
-                <http-error-response min-width="400px" :error="error" />
-            </div>
-        </div>
     </div>
     <div v-else>
         <activity-indicator :center="true" size="xl"/>
@@ -127,17 +127,6 @@ export default {
         }
     },
 
-    data() {
-        return {
-            form: {},
-            errors: {},
-            error: null,
-            model: false,
-            submitting: false,
-            page: this.data || {}
-        };
-    },
-
     created() {
         Request.option(HttpConfig);
         Request.option({
@@ -231,6 +220,10 @@ export default {
             }
         });
 
+        this.$dispatch.on('error', error => {
+            this.error = error;
+        });
+
         this.$dispatch.on('form:submit', data => {
             if(this.$el.querySelector(':focus')) {
                 this.$el.querySelector(':focus').blur();
@@ -239,6 +232,7 @@ export default {
     },
 
     beforeDestroy() {
+        this.$dispatch.off('error');
         this.$dispatch.off('form:submit');
         this.$dispatch.stopReply('form:submit');
         this.$dispatch.stopReply('form:redirect');
@@ -246,6 +240,17 @@ export default {
         this.$dispatch.stopReply('submit:disable');
         this.$dispatch.stopReply('submit:show');
         this.$dispatch.stopReply('submit:hide');
+    },
+
+    data() {
+        return {
+            form: {},
+            errors: {},
+            error: null,
+            model: false,
+            submitting: false,
+            page: this.data || {}
+        };
     }
 
 }

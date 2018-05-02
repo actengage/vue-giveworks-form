@@ -6,7 +6,7 @@
 
             <select-donation-fieldset :form="form" :errors="errors" :page="page"/>
 
-            <contact-info-fieldset :form="form" :errors="errors" :page="page"/>
+            <contact-info-fieldset address :form="form" :errors="errors" :page="page"/>
 
             <payment-info-fieldset :form="form" :errors="errors" :page="page"/>
 

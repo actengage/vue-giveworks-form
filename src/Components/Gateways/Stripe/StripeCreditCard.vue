@@ -58,12 +58,19 @@ export default {
         this.$dispatch.request('submit:disable');
 
         gateway.script((event) => {
-            this.$card = gateway.card({
-                hidePostalCode: this.hidePostalCode,
-                value: {
-                    postalCode: this.form.zip
-                }
-            });
+            try {
+                this.$card = gateway.card({
+                    hidePostalCode: this.hidePostalCode,
+                    value: {
+                        postalCode: this.form.zip
+                    }
+                });
+            }
+            catch(e) {
+                this.$dispatch.emit('error', e);
+
+                throw e;
+            }
 
             this.$card.addEventListener('change', (event) => {
                 this.errors.token = event.error ? [event.error.message] : null;

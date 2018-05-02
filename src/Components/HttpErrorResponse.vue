@@ -1,7 +1,9 @@
 <template>
-    <alert variant="danger" :heading="status" :style="{'width': widthUnit, 'min-width': minWidthUnit, 'max-width': maxWidthUnit}">
-        {{ formattedMessage }}
-    </alert>
+    <div class="error">
+        <alert variant="danger" :heading="`Error: ${status}`" :style="{'width': widthUnit, 'min-width': minWidthUnit, 'max-width': maxWidthUnit}">
+            {{ formattedMessage }}
+        </alert>
+    </div>
 </template>
 
 <script>
@@ -49,10 +51,17 @@ export default {
                 return this.error.data.message;
             }
 
-            return this.error.data;
+            return this.error.message;
         }
 
     }
 
 }
 </script>
+
+<style lang="scss" scoped>
+.error {
+    max-width: 50%;
+    margin: 0 auto;
+}
+</style>

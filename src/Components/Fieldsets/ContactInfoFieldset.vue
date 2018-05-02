@@ -17,7 +17,7 @@
             <input-field v-if="page.options.add_phone" v-model="form.phone" name="phone" label="Phone Number" :errors="errors"/>
 
             <place-autocomplete-field
-                v-if="showAddress || page.options.add_street"
+                v-if="address || page.options.add_street"
                 v-model="form.street"
                 name="street"
                 label="Address"
@@ -29,16 +29,16 @@
                 v-place-autofill.zip="form.zip"
             />
 
-            <div v-if="showAddress || page.options.add_city || page.options.add_zip" class="row">
-                <div v-if="showAddress || page.options.add_city" class="col-sm-8">
+            <div v-if="address || page.options.add_city || page.options.add_zip" class="row">
+                <div v-if="address || page.options.add_city" class="col-sm-8">
                     <input-field v-model="form.city" name="city" label="City" :errors="errors"/>
                 </div>
-                <div v-if="showAddress || page.options.add_zip" :class="{'col-sm-4': showAddress || page.options.add_city, 'col-sm-12': !page.options.add_city}">
+                <div v-if="address || page.options.add_zip" :class="{'col-sm-4': address || page.options.add_city, 'col-sm-12': !address && !page.options.add_city}">
                     <input-field v-model="form.zip" name="zip" label="Zip" :errors="errors"/>
                 </div>
             </div>
 
-            <select-field v-if="showAddress || page.options.add_state" v-model="form.state" name="state" label="State" :errors="errors">
+            <select-field v-if="address || page.options.add_state" v-model="form.state" name="state" label="State" :errors="errors">
                 <option v-for="(label, value) in states" value="value" v-html="label"/>
             </select-field>
 
@@ -95,7 +95,7 @@ export default {
     ],
 
     props: {
-        showAddress: Boolean
+        address: Boolean
     },
 
     computed: {

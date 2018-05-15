@@ -7,7 +7,7 @@
 
         <div class="col-md-5 col-lg-4">
 
-            <component :is="page.options.service" :submitting="submitting" :page="page" :form="form" :errors="errors" />
+            <component :is="page.options.service.split('\\').pop()" :submitting="submitting" :page="page" :form="form" :errors="errors" />
 
         </div>
 

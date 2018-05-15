@@ -5,7 +5,8 @@
         :name="name"
         :value="value"
         :id="question.id"
-        :label="question.question"
+        :label="`${question.question}${question.required ? '*' : ''}`"
+        :required="question.required"
         :errors="errors"
         @input="updated"
     />

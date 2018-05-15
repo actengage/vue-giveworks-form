@@ -5,7 +5,8 @@
         name="city"
         placeholder="City"
         :value="value"
-        :label="question.question"
+        :label="`${question.question}${question.required ? '*' : ''}`"
+        :required="question.required"
         :errors="errors"
         @input="updated"
     />

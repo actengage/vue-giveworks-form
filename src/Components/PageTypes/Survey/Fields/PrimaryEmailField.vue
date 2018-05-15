@@ -5,8 +5,9 @@
         name="email"
         placeholder="Email Address"
         id="email"
+        :label="`${question.question}${question.required ? '*' : ''}`"
+        :required="question.required"
         :value="value"
-        :label="question.question"
         :errors="errors"
         @input="updated"
     />

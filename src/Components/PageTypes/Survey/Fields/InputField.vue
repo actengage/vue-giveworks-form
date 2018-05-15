@@ -2,11 +2,12 @@
 
     <input-field
         :name="name"
-        :value="value"
         :id="question.id"
-        :label="question.question"
-        :errors="errors" @input="updated"
-    />
+        :label="`${question.question}${question.required ? '*' : ''}`"
+        :required="question.required"
+        :value="value"
+        :errors="errors"
+        @input="updated"/>
 
 </template>
 

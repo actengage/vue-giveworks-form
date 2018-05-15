@@ -4,11 +4,11 @@
         id="first"
         name="first"
         placeholder="First Name"
+        :label="`${question.question}${question.required ? '*' : ''}`"
+        :required="question.required"
         :value="value"
-        :label="question.question"
         :errors="errors"
-        @input="updated"
-    />
+        @input="updated"/>
 
 </template>
 

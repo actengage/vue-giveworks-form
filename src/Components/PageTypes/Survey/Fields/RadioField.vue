@@ -7,9 +7,7 @@
             <sup v-if="question.required">*</sup>
         </label>
 
-        <radio-field v-for="(answer, key) in question.answers" :key="key" :value="answer" :checkedValue="value" :name="name" :id="`${name}_${key}`" @change="updated">
-            {{ answer }}
-        </radio-field>
+        <radio-field v-for="(answer, key) in question.answers" :key="key" :label="answer" :value="answer" :checkedValue="value" :name="name" :id="`${name}_${key}`" @change="updated"/>
 
         <template v-if="question.accept_other">
             <radio-field v-changed value="other" label="Other:" :name="name" :id="`${name}_50`" :checkedValue="value" @change="updated"/>

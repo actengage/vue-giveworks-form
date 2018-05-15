@@ -3,7 +3,8 @@
     <place-autocomplete-field
         v-model="value"
         :errors="errors"
-        :label="question.question"
+        :label="`${question.question}${question.required ? '*' : ''}`"
+        :required="question.required"
         id="street"
         name="street"
         placeholder="Street Address"

@@ -6,6 +6,7 @@
         :value="value"
         :label="question.question"
         :errors="errors"
+        maxlength="9"
         placeholder="Zip Code (5 digits)"
         x_autocompletetype="postal-code"
         @input="updated"

@@ -2,9 +2,9 @@
 
     <textarea-field
         v-autogrow
-        :value="value"
+        v-model="form[name]"
         :label="`${question.question}${question.required ? '*' : ''}`"
-        :name="`field_${question.id}`"
+        :name="name"
         :required="question.required"
         :id="question.id"
         :errors="errors"

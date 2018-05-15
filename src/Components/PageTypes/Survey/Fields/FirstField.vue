@@ -1,12 +1,12 @@
 <template>
 
     <input-field
+        v-model="form.first"
         id="first"
         name="first"
         placeholder="First Name"
         :label="`${question.question}${question.required ? '*' : ''}`"
         :required="question.required"
-        :value="value"
         :errors="errors"
         @input="updated"/>
 

@@ -1,12 +1,12 @@
 <template>
 
     <input-field
+        v-model="form.phone"
         type="phone"
         name="phone"
         id="phone"
         :label="`${question.question}${question.required ? '*' : ''}`"
         :required="question.required"
-        :value="value"
         :errors="errors"
         @input="updated"
     />

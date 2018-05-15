@@ -1,6 +1,13 @@
 <template>
 
-    <select-field name="state" :value="value" :id="question.id" :label="`${question.question}${question.required ? '*' : ''}`" :required="question.required" :errors="errors" @input="updated">
+    <select-field
+        v-model="form.state"
+        name="state"
+        :id="question.id"
+        :label="`${question.question}${question.required ? '*' : ''}`"
+        :required="question.required"
+        :errors="errors"
+        @input="updated">
         <option v-for="(label, value) in page.site.config.states" :value="value" v-html="label"/>
     </select-field>
 

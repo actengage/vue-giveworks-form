@@ -1,9 +1,9 @@
 <template>
 
     <input-field
+        v-model="form[name]"
         type="phone"
         :name="name"
-        :value="value"
         :id="question.id"
         :label="`${question.question}${question.required ? '*' : ''}`"
         :required="question.required"

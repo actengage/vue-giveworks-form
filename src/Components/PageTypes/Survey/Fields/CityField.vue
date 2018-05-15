@@ -1,10 +1,10 @@
 <template>
 
     <input-field
+        v-model="form.city"
         id="city"
         name="city"
         placeholder="City"
-        :value="value"
         :label="`${question.question}${question.required ? '*' : ''}`"
         :required="question.required"
         :errors="errors"

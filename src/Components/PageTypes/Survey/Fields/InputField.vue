@@ -1,11 +1,11 @@
 <template>
 
     <input-field
+        v-model="form[name]"
         :name="name"
         :id="question.id"
         :label="`${question.question}${question.required ? '*' : ''}`"
         :required="question.required"
-        :value="value"
         :errors="errors"
         @input="updated"/>
 

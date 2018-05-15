@@ -8,7 +8,7 @@
 
             <div v-for="chunk in amounts" class="row">
                 <div v-for="amount in chunk" class="col-sm-6">
-                    <radio-field name="donation" :value="amount">${{ amount }}</radio-field>
+                    <radio-field v-model="form.donation" name="donation" :label="amount" :value="amount"/>
                 </div>
             </div>
 
@@ -16,7 +16,13 @@
                 <div class="col-md-6">
                     <label :for="question.id" v-html="question.question"/>
                     <input-group prepend="$">
-                        <input type="text" :name="`field_${question.id}`" :value="value" class="form-control" :class="{'is-invalid': !!invalidFeedback}" :required="question.required"/>
+                        <input
+                            type="text"
+                            class="form-control"
+                            :name="name"
+                            :value="value"
+                            :class="{'is-invalid': !!invalidFeedback}"
+                            :required="question.required"/>
                     </input-group>
                 </div>
             </div>

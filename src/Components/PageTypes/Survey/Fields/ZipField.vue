@@ -1,9 +1,9 @@
 <template>
 
     <input-field
+        v-model="form.zip"
         id="zip"
         name="zip"
-        :value="value"
         :label="`${question.question}${question.required ? '*' : ''}`"
         :required="question.required"
         :errors="errors"

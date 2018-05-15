@@ -3,6 +3,7 @@
     <div>
         <div class="row">
             <div class="col-sm-12" v-html="page.body"/>
+            <!-- <div v-if="!!page.options.m_body" class="d-md-none" v-html="page.options.m_body"/> -->
         </div>
 
         <div class="row">

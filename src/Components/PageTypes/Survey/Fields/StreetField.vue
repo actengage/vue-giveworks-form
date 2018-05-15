@@ -1,14 +1,14 @@
 <template>
 
     <place-autocomplete-field
-        v-model="value"
-        :errors="errors"
-        :label="`${question.question}${question.required ? '*' : ''}`"
-        :required="question.required"
+        v-model="form.street"
         id="street"
         name="street"
         placeholder="Street Address"
         api-key="AIzaSyAhSv9zWvisiTXRPRw6K8AE0DCmrRMpQcU"
+        :errors="errors"
+        :label="`${question.question}${question.required ? '*' : ''}`"
+        :required="question.required"
         v-place-autofill:street="form.street"
         v-place-autofill:city="form.city"
         v-place-autofill:state="form.state"

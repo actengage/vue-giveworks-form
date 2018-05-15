@@ -1,16 +1,18 @@
 <template>
 
     <input-field
+        v-model="form[name]"
         type="email"
         placeholder="Email Address"
         :name="name"
-        :value="value"
         :id="question.id"
         :label="`${question.question}${question.required ? '*' : ''}`"
         :required="question.required"
         :errors="errors"
         @input="updated"
     />
+    
+</div>
 
 </template>
 

@@ -47,7 +47,20 @@
             <input-field v-model="form.email" id="email" label="Email*" :errors="errors"/>
             <input-field v-if="page.options.show_source" v-model="form.source" id="source" label="Source" :errors="errors"/>
 
-            <input-field v-if="page.options.show_address" v-model="form.address" id="address" label="Address" :errors="errors"/>
+            <place-autocomplete-field
+                v-if="address || page.options.show_address"
+                v-model="form.address"
+                name="address"
+                label="Address"
+                api-key="AIzaSyAhSv9zWvisiTXRPRw6K8AE0DCmrRMpQcU"
+                :errors="errors"
+                v-place-autofill:street.query="form.address"
+                v-place-autofill:city="form.city"
+                v-place-autofill:state.short="form.state"
+                v-place-autofill:zip="form.zip_code"
+            />
+
+            <input-field v-if="page.options.show_city" v-model="form.city" id="city" label="City" :errors="errors"/>
             <input-field v-if="page.options.show_state" v-model="form.state" id="state" label="State" :errors="errors"/>
             <input-field v-if="page.options.show_zip" v-model="form.zip_code" id="zip_code" label="Zip Code" :errors="errors"/>
             <input-field v-if="page.options.show_country" v-model="form.country" id="country" label="Country" :errors="errors"/>

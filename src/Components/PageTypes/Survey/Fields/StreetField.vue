@@ -8,10 +8,10 @@
         name="street"
         placeholder="Street Address"
         api-key="AIzaSyAhSv9zWvisiTXRPRw6K8AE0DCmrRMpQcU"
-        v-place-autofill.street="form.street"
-        v-place-autofill.city="form.city"
-        v-place-autofill.state="form.state"
-        v-place-autofill.zip="form.zip"
+        v-place-autofill:street="form.street"
+        v-place-autofill:city="form.city"
+        v-place-autofill:state="form.state"
+        v-place-autofill:zip="form.zip"
         @input="updated"
     />
 

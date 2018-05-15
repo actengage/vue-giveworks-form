@@ -23,10 +23,10 @@
                 label="Address"
                 :errors="errors"
                 api-key="AIzaSyAhSv9zWvisiTXRPRw6K8AE0DCmrRMpQcU"
-                v-place-autofill.street="form.street"
-                v-place-autofill.city="form.city"
-                v-place-autofill.state="form.state"
-                v-place-autofill.zip="form.zip"
+                v-place-autofill:street.query="form.street"
+                v-place-autofill:city="form.city"
+                v-place-autofill:state.short="form.state"
+                v-place-autofill:zip="form.zip"
             />
 
             <div v-if="address || page.options.add_city || page.options.add_zip" class="row">
@@ -39,7 +39,7 @@
             </div>
 
             <select-field v-if="address || page.options.add_state" v-model="form.state" name="state" label="State" :errors="errors">
-                <option v-for="(label, value) in states" value="value" v-html="label"/>
+                <option v-for="(label, value) in states" :value="value" v-html="label"/>
             </select-field>
 
             <input-field v-if="page.options.add_phone" v-model="form.phone" name="phone" label="Phone Number" :errors="errors"/>

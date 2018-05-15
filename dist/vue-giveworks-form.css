@@ -4678,10 +4678,6 @@ select.form-control:not([size]):not([multiple]) {
 .btn-link .activity-indicator-spinner > div:before {
   background-color: #0275d8; }
 
-.error[data-v-6df5d261] {
-  max-width: 50%;
-  margin: 0 auto; }
-
 .center-wrapper {
   position: absolute;
   top: 0;

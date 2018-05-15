@@ -1,6 +1,12 @@
 <template>
 
     <div>
+        <!--
+    	<div v-if="page.options.m_show_header" class="d-md-none">
+    		<h1 v-html="page.site.name"/>
+    	</div>
+        -->
+
         <div class="row">
             <div class="col-sm-12" v-html="page.body"/>
             <!-- <div v-if="!!page.options.m_body" class="d-md-none" v-html="page.options.m_body"/> -->

@@ -24,7 +24,7 @@
                     <input-field v-if="page.options.show_job_title" v-model="form.job_title" id="job_title" label="Job Title" :errors="errors"/>
                 </div>
                 <div class="col-sm-4">
-                    <textarea-field v-if="page.options.show_questions" v-model="form.questions_comments" id="questions_comments" label="Questions and Comments" :errors="errors"/>
+                    <textarea-field v-if="page.options.show_questions" v-autogrow v-model="form.questions_comments" id="questions_comments" label="Questions and Comments" :errors="errors"/>
                     <input-field v-if="page.options.show_industry" v-model="form.industry" id="industry" label="Industry" :errors="errors"/>
                     <input-field v-if="page.options.show_employees" v-model="form.number_employees" id="number_employees" label="Number of Employees" :errors="errors"/>
                     <input-field v-if="page.options.show_timeframe" v-model="form.purchasing_timeframe" id="purchasing_timeframe" label="Purchasing Timeframe" :errors="errors"/>
@@ -55,7 +55,7 @@
             <input-field v-if="page.options.show_organization" v-model="form.organization" id="organization" label="Organization" :errors="errors"/>
             <input-field v-if="page.options.show_job_title" v-model="form.job_title" id="job_title" label="Job Title" :errors="errors"/>
 
-            <textarea-field v-if="page.options.show_questions" v-model="form.questions_comments" id="questions_comments" label="Questions and Comments" :errors="errors"/>
+            <textarea-field v-if="page.options.show_questions" v-autogrow v-model="form.questions_comments" id="questions_comments" label="Questions and Comments" :errors="errors"/>
             <input-field v-if="page.options.show_industry" v-model="form.industry" id="industry" label="Industry" :errors="errors"/>
             <input-field v-if="page.options.show_employees" v-model="form.number_employees" id="number_employees" label="Number of Employees" :errors="errors"/>
             <input-field v-if="page.options.show_timeframe" v-model="form.purchasing_timeframe" id="purchasing_timeframe" label="Purchasing Timeframe" :errors="errors"/>

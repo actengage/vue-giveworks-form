@@ -3,15 +3,16 @@
     <div>
         <div class="row">
             <div class="col-sm-12" v-html="page.body"/>
+            <!-- <div v-if="!!page.options.m_body" class="d-md-none" v-html="page.options.m_body"/> -->
         </div>
 
         <div class="row">
 
             <div class="col-md-6">
 
-                <contact-info-fieldset :page="page" :form="form" :errors="errors"/>
+                <contact-info-fieldset :legends="false" :page="page" :form="form" :errors="errors"/>
 
-                <textarea-field v-if="page.options.add_comment" v-model="form.comment" id="comment" :label="commentMessage"/>
+                <textarea-field v-if="page.options.add_comment" v-autogrow v-model="form.comment" id="comment" :label="commentMessage"/>
 
                 <activity-button
                     size="lg"

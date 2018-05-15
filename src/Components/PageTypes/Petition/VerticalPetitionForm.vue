@@ -1,12 +1,15 @@
 <template>
 
     <div class="row">
+        <div class="col-md-7 col-lg-8 order-sm-1 order-md-2">
+            <div v-html="page.body"/>
+            <!-- <div v-if="!!page.options.m_body" class="d-md-none" v-html="page.options.m_body"/> -->
+        </div>
 
-        <div class="col-md-5 col-lg-4">
+        <div class="col-md-5 col-lg-4 order-sm-2 order-md-1">
+            <contact-info-fieldset :legends="false" :form="form" :errors="errors" :page="page"/>
 
-            <contact-info-fieldset :form="form" :errors="errors" :page="page"/>
-
-            <textarea-field v-if="page.options.add_comment" v-model="form.comment" id="comment" :label="commentMessage"/>
+            <textarea-field v-if="page.options.add_comment" v-autogrow v-model="form.comment" id="comment" :label="commentMessage"/>
 
             <activity-button
                 size="lg"
@@ -23,11 +26,7 @@
                     <small v-html="optinMessage" class="custom-control-label text-muted form-text"></small>
                 </label>
             </div>
-
         </div>
-
-        <div class="col-md-7 col-lg-8" v-html="page.body"/>
-
     </div>
 
 </template>

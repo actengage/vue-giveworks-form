@@ -2,6 +2,9 @@
 
     <div class="row">
 
+        <div class="col-md-7 col-lg-8" v-html="page.body"/>
+        <!-- <div v-if="!!page.options.m_body" class="d-md-none" v-html="page.options.m_body"/> -->
+
         <div class="col-md-5 col-lg-4">
             <div v-for="question in page.questions">
                 <component
@@ -25,8 +28,6 @@
             />
 
         </div>
-
-        <div class="col-md-7 col-lg-8" v-html="page.body"/>
 
     </div>
 

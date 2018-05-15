@@ -1,6 +1,7 @@
 <template>
 
     <textarea-field
+        v-autogrow
         :value="value"
         :label="question.question"
         :name="`field_${question.id}`"

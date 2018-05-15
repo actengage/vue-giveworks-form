@@ -3,6 +3,7 @@ import Broadcast from '@objectivehtml/broadcast';
 import GiveworksForm from '@/Components/GiveworksForm';
 import script from 'vue-interface/src/Helpers/Script';
 import Alert from 'vue-interface/src/Components/Alert';
+import Autogrow from 'vue-interface/src/Directives/Autogrow';
 import ActivityButton from 'vue-interface/src/Components/ActivityButton';
 import InputField from 'vue-interface/src/Components/InputField';
 import InputGroup from 'vue-interface/src/Components/InputGroup';
@@ -55,7 +56,8 @@ export default function install(Vue, options) {
     Vue.use(mergeClasses);
     Vue.use(VuePlaceAutocomplete);
     Vue.component('giveworks-form', GiveworksForm);
-
+    Vue.use(Autogrow);
+    
     if(window && window.Vue) {
         const data = (
             window.GiveworksFormOptions && window.GiveworksFormOptions.data

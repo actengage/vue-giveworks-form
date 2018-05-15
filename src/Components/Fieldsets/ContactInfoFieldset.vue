@@ -2,11 +2,13 @@
 
     <div>
 
-        <fieldset class="mb-4">
+        <fieldset>
 
-            <legend>Your information</legend>
+            <legend v-if="legends">Your information</legend>
 
-            <select-field v-if="page.options.add_title" v-model="form.title" name="title" label="Title" :options="titles" :errors="errors"/>
+            <select-field v-if="page.options.add_title" v-model="form.title" name="title" label="Title" :errors="errors">
+                <option v-for="value in titles" :value="value" v-html="value"/>
+            </select-field>
 
             <input-field v-model="form.first" name="first" label="First Name" :errors="errors"/>
 
@@ -42,13 +44,11 @@
                 <option v-for="(label, value) in states" :value="value" v-html="label"/>
             </select-field>
 
-            <input-field v-if="page.options.add_phone" v-model="form.phone" name="phone" label="Phone Number" :errors="errors"/>
-
         </fieldset>
 
-    	<fieldset v-if="shouldShowEmployment">
+    	<fieldset v-if="shouldShowEmployment" class="mt-4">
 
-    		<legend>Employment Information</legend>
+    		<legend v-if="legends">Employment Information</legend>
 
 			<p v-if="!recurring">
                 <small class="text-muted" v-html="employmentOccurMessage"></small>
@@ -95,7 +95,8 @@ export default {
     ],
 
     props: {
-        address: Boolean
+        address: Boolean,
+        legends: Boolean
     },
 
     computed: {

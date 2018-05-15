@@ -6,7 +6,7 @@
 
         <payment-gateways :form="form" :errors="errors" :page="page"></payment-gateways>
 
-        <textarea-field v-if="page.options.add_comment" v-model="form.comment" id="comment" :label="commentMessage"/>
+        <textarea-field v-if="page.options.add_comment" v-autogrow v-model="form.comment" id="comment" :label="commentMessage"/>
 
         <activity-button type="submit" size="lg" orientation="right" :activity="submitting" :block="true" :label="buttonLabel || page.site.config.giveworks.button.donate"/>
 

@@ -29,8 +29,8 @@ import each from 'lodash-es/each';
 import Page from '@/Models/Page';
 import HttpConfig from '@/Config/Http';
 import HttpErrorResponse from './HttpErrorResponse';
-import Request from 'vue-interface/src/Http/Request/Request';
-import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator/ActivityIndicator';
+import Request from 'vue-interface/src/Http/Request';
+import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
 
 import {
     HorizontalDonationForm,

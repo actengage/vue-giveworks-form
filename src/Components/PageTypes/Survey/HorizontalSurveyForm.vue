@@ -3,7 +3,10 @@
     <div>
 
         <div class="row">
-            <div class="col-sm-12" v-html="page.body"/>
+            <div class="col-sm-12">
+                <div v-html="page.body"/>
+                <!-- <div v-if="!!page.options.m_body" class="d-md-none" v-html="page.options.m_body"/> -->
+            </div>
         </div>
 
         <div class="row">
@@ -11,7 +14,6 @@
             <div v-for="(chunk, i) in questions" class="col-md-4">
 
                 <div v-for="question in chunk">
-                    
                     <component
                         v-model="form[name(question)]"
                         :is="component(question.type)"
@@ -20,9 +22,7 @@
                         :form="form"
                         :value="form[name(question)]"
                         :errors="errors"
-                        :question="question"
-                    />
-
+                        :question="question"/>
                 </div>
 
                 <activity-button
@@ -32,9 +32,7 @@
                     :block="true"
                     orientation="right"
                     :activity="submitting"
-                    :label="buttonLabel || page.site.config.giveworks.button.survey"
-                />
-
+                    :label="buttonLabel || page.site.config.giveworks.button.survey"/>
 
             </div>
 

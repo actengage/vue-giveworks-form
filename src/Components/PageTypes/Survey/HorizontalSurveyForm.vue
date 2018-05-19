@@ -2,47 +2,30 @@
 
     <div>
 
-        <!--
-    	<div v-if="page.options.m_show_header" class="d-md-none">
-    		<h1 v-html="page.site.name"/>
-    	</div>
-        -->
+        <template v-for="(chunk, i) in questions">
 
-        <div class="row">
-            <div class="col-sm-12">
-                <div v-html="page.body"/>
-                <!-- <div v-if="!!page.options.m_body" class="d-md-none" v-html="page.options.m_body"/> -->
-            </div>
-        </div>
-
-        <div class="row">
-
-            <div v-for="(chunk, i) in questions" class="col-md-4">
-
-                <div v-for="question in chunk">
-                    <component
-                        v-model="form[name(question)]"
-                        :is="component(question.type)"
-                        :name="name(question)"
-                        :page="page"
-                        :form="form"
-                        :value="form[name(question)]"
-                        :errors="errors"
-                        :question="question"/>
-                </div>
-
-                <activity-button
-                    v-if="i === 2"
-                    size="lg"
-                    type="submit"
-                    :block="true"
-                    orientation="right"
-                    :activity="submitting"
-                    :label="buttonLabel || page.site.config.giveworks.button.survey"/>
-
+            <div v-for="question in chunk">
+                <component
+                    v-model="form[name(question)]"
+                    :is="component(question.type)"
+                    :name="name(question)"
+                    :page="page"
+                    :form="form"
+                    :value="form[name(question)]"
+                    :errors="errors"
+                    :question="question"/>
             </div>
 
-        </div>
+            <activity-button
+                v-if="i === 2"
+                size="lg"
+                type="submit"
+                :block="true"
+                orientation="right"
+                :activity="submitting"
+                :label="buttonLabel || page.site.config.giveworks.button.survey"/>
+
+        </template>
 
     </div>
 

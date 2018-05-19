@@ -1,29 +1,12 @@
 <template>
 
-
     <div>
 
-        <!--
-    	<div v-if="page.options.m_show_header" class="d-md-none">
-    		<h1 v-html="page.site.name"/>
-    	</div>
-        -->
+        <select-donation-fieldset :form="form" :errors="errors" :page="page"/>
 
-        <div class="row">
+        <contact-info-fieldset address :form="form" :errors="errors" :page="page"/>
 
-            <div class="col-md-5 col-lg-4">
-
-                <select-donation-fieldset :form="form" :errors="errors" :page="page"/>
-
-                <contact-info-fieldset address :form="form" :errors="errors" :page="page"/>
-
-                <payment-info-fieldset :form="form" :errors="errors" :page="page"/>
-
-            </div>
-
-            <div class="col-md-7 col-lg-8" v-html="page.body"/>
-
-        </div>
+        <payment-info-fieldset :form="form" :errors="errors" :page="page"/>
 
     </div>
 

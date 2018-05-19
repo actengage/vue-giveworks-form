@@ -1,44 +1,27 @@
 <template>
 
+
     <div>
-        <!--
-    	<div v-if="page.options.m_show_header" class="d-md-none">
-    		<h1 v-html="page.site.name"/>
-    	</div>
-        -->
 
-        <div class="row">
-            <div class="col-sm-12" v-html="page.body"/>
-            <!-- <div v-if="!!page.options.m_body" class="d-md-none" v-html="page.options.m_body"/> -->
-        </div>
+        <contact-info-fieldset :legends="false" :page="page" :form="form" :errors="errors"/>
 
-        <div class="row">
+        <textarea-field v-if="page.options.add_comment" v-autogrow v-model="form.comment" id="comment" :label="commentMessage"/>
 
-            <div class="col-md-6">
+        <activity-button
+            size="lg"
+            type="submit"
+            orientation="right"
+            :activity="submitting"
+            :block="true"
+            :label="buttonLabel || page.site.config.giveworks.button.petition"
+        />
 
-                <contact-info-fieldset :legends="false" :page="page" :form="form" :errors="errors"/>
-
-                <textarea-field v-if="page.options.add_comment" v-autogrow v-model="form.comment" id="comment" :label="commentMessage"/>
-
-                <activity-button
-                    size="lg"
-                    type="submit"
-                    orientation="right"
-                    :activity="submitting"
-                    :block="true"
-                    :label="buttonLabel || page.site.config.giveworks.button.petition"
-                />
-
-                <div v-if="page.options.add_optin">
-                    <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" v-model="form.optin" checked>
-                        <span class="custom-control-indicator"></span>
-                        <small v-html="optinMessage" class="custom-control-label text-muted form-text"></small>
-                    </label>
-                </div>
-
-            </div>
-
+        <div v-if="page.options.add_optin">
+            <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" v-model="form.optin" checked>
+                <span class="custom-control-indicator"></span>
+                <small v-html="optinMessage" class="custom-control-label text-muted form-text"></small>
+            </label>
         </div>
 
     </div>

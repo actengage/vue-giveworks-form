@@ -1,6 +1,6 @@
 {
     "name": "vue-giveworks-form",
-    "version": "0.1.121",
+    "version": "0.1.122",
     "description": "A Vue.js component for building and submitting Giveworks form.",
     "main": "./dist/vue-giveworks-form.js",
     "module": "./dist/vue-giveworks-form.es.js",

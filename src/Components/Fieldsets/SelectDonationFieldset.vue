@@ -47,10 +47,9 @@
         <div class="form-group mt-3" v-if="page.site.recurring && !page.options.recurring_only">
             <label v-html="recurringMessage"></label>
             <div class="btn-group">
-                <button type="button" class="btn" :class="{'btn-success': !form.recurring, 'btn-secondary': !!form.recurring}" @click="form.recurring = 0">One-Time</button>
-                <button type="button" class="btn" :class="{'btn-success': !!form.recurring, 'btn-secondary': !form.recurring}" @click="form.recurring = 1">Monthly</button>
+                <button type="button" class="btn" :class="{'btn-success': !form.recurring, 'btn-secondary': !!form.recurring}" @click="setRecurring(0)">One-Time</button>
+                <button type="button" class="btn" :class="{'btn-success': !!form.recurring, 'btn-secondary': !form.recurring}" @click="setRecurring(1)">Monthly</button>
             </div>
-
             <small v-if="!recurring" class="text-muted form-text">You are making a single donation of the amount entered above. Click the 'monthly' button to make your gift go further as an automatic monthly donation.</small>
             <small v-if="!!recurring" class="text-muted form-text">This amount will be charged automatically once each month, on or about the {{ chargeDate }}. You may cancel your donation at any time by contacting us.</small>
         </div>
@@ -87,6 +86,12 @@ export default {
     mixins: [
         FormComponent
     ],
+
+    methods: {
+        setRecurring(value) {
+            this.$set(this.form, 'recurring', value);
+        }
+    },
 
     computed: {
 

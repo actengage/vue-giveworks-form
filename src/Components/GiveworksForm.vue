@@ -2,7 +2,7 @@
     <div v-if="error">
         <div class="center-wrapper">
             <div class="center-content">
-                <http-error-response min-width="400px" :error="error" />
+                <http-error-response :error="error" />
             </div>
         </div>
     </div>

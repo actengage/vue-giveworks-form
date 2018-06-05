@@ -7,6 +7,7 @@
         </div>
     </div>
     <div v-else-if="page.id">
+        {{form}}
         <form @submit.prevent="submit" novalidate="novalidate">
             <component
                 :is="pageTypeComponent"
@@ -194,7 +195,7 @@ export default {
 
         this.$dispatch.reply('form:submit', (resolve, reject) => {
             console.log('submit');
-            
+
             if(!this.submitting) {
                 this.showActivity();
                 this.errors = {};
@@ -246,7 +247,9 @@ export default {
 
     data() {
         return {
-            form: {},
+            form: {
+                recurring: 0
+            },
             errors: {},
             error: null,
             model: false,

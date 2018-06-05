@@ -7,7 +7,7 @@
 
         <textarea-field v-if="page.options.add_comment" v-autogrow v-model="form.comment" id="comment" :label="commentMessage"/>
 
-        <activity-button
+        <btn-activity
             size="lg"
             type="submit"
             orientation="right"

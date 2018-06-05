@@ -30,7 +30,7 @@
                     <input-field v-if="page.options.show_timeframe" v-model="form.purchasing_timeframe" id="purchasing_timeframe" label="Purchasing Timeframe" :errors="errors"/>
                     <input-field v-if="page.options.show_role" v-model="form.purchasing_role" id="purchasing_role" label="Purchasing Role" :errors="errors"/>
 
-                    <activity-button
+                    <btn-activity
                         size="lg"
                         type="submit"
                         orientation="right"
@@ -74,7 +74,7 @@
             <input-field v-if="page.options.show_timeframe" v-model="form.purchasing_timeframe" id="purchasing_timeframe" label="Purchasing Timeframe" :errors="errors"/>
             <input-field v-if="page.options.show_role" v-model="form.purchasing_role" id="purchasing_role" label="Purchasing Role" :errors="errors"/>
 
-            <activity-button
+            <btn-activity
                 size="lg"
                 type="submit"
                 orientation="right"

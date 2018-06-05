@@ -4,7 +4,7 @@ import GiveworksForm from '@/Components/GiveworksForm';
 import script from 'vue-interface/src/Helpers/Script';
 import Alert from 'vue-interface/src/Components/Alert';
 import Autogrow from 'vue-interface/src/Directives/Autogrow';
-import ActivityButton from 'vue-interface/src/Components/ActivityButton';
+import BtnActivity from 'vue-interface/src/Components/BtnActivity';
 import InputField from 'vue-interface/src/Components/InputField';
 import InputGroup from 'vue-interface/src/Components/InputGroup';
 import InputGroupPrepend from 'vue-interface/src/Components/InputGroup/InputGroupPrepend';
@@ -22,7 +22,7 @@ import VuePlaceAutocomplete from 'vue-place-autocomplete';
 
 const components = {
     Alert,
-    ActivityButton,
+    BtnActivity,
     CheckboxField,
     FormControl,
     FormFeedback,
@@ -57,7 +57,7 @@ export default function install(Vue, options) {
     Vue.use(VuePlaceAutocomplete);
     Vue.component('giveworks-form', GiveworksForm);
     Vue.use(Autogrow);
-    
+
     if(window && window.Vue) {
         const data = (
             window.GiveworksFormOptions && window.GiveworksFormOptions.data

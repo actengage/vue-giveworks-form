@@ -8,7 +8,7 @@
 
         <textarea-field v-if="page.options.add_comment" v-autogrow v-model="form.comment" id="comment" :label="commentMessage"/>
 
-        <activity-button type="submit" size="lg" orientation="right" :activity="submitting" :block="true" :label="buttonLabel || page.site.config.giveworks.button.donate"/>
+        <btn-activity type="submit" size="lg" orientation="right" :activity="submitting" :block="true" :label="buttonLabel || page.site.config.giveworks.button.donate"/>
 
         <div v-if="page.options.add_optin">
             <label class="custom-control custom-checkbox">
@@ -28,14 +28,12 @@
 
 import FormComponent from '@/Mixins/FormComponent';
 import PaymentGateways from './PaymentGateways';
-//import ActivityButton from '@/Components/ActivityIndicators/ActivityButton';
 
 export default {
 
     name: 'payment-info-fieldset',
 
     components: {
-        //ActivityButton,
         PaymentGateways
     },
 

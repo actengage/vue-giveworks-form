@@ -408,6 +408,7 @@ small, .small {
     width: 1170px; } }
 
 .row, .row .row {
+  width: auto;
   margin-left: -15px;
   margin-right: -15px; }
 
@@ -2455,7 +2456,7 @@ label {
   display: inline-block;
   margin-bottom: .5em; }
 
-legend {
+fieldset legend {
   margin-bottom: 18px;
   font-size: 18px;
   font-weight: bold;
@@ -2466,12 +2467,14 @@ legend {
 .form-group {
   margin-bottom: 1rem; }
 
-.form-control {
+.form-control,
+input.form-control,
+textarea.form-control,
+select.form-control {
   margin: 0;
   width: 100%;
   height: auto;
   display: block;
-  background-image: none;
   background-clip: padding-box;
   line-height: 1.5;
   background-color: white;
@@ -2480,39 +2483,72 @@ legend {
   font-size: 1rem;
   box-shadow: inset 0 1px 2px rgba(41, 43, 44, 0.075);
   border-radius: 0.25rem; }
-  .form-control:focus {
+  .form-control:focus,
+  input.form-control:focus,
+  textarea.form-control:focus,
+  select.form-control:focus {
     outline: none;
     border-color: #96b9f6;
     box-shadow: 0 0 0 0.2rem rgba(150, 185, 246, 0.5); }
-  .form-control.form-control-xs {
+  .form-control.form-control-xs,
+  input.form-control.form-control-xs,
+  textarea.form-control.form-control-xs,
+  select.form-control.form-control-xs {
     font-size: 0.7rem;
     border-radius: 0.175rem;
     padding: 0.2625rem 0.525rem; }
-  .form-control.form-control-xs:not([size]):not([multiple]) {
+  .form-control.form-control-xs:not([size]):not([multiple]),
+  input.form-control.form-control-xs:not([size]):not([multiple]),
+  textarea.form-control.form-control-xs:not([size]):not([multiple]),
+  select.form-control.form-control-xs:not([size]):not([multiple]) {
     height: 1.6625rem; }
-  .form-control.form-control-sm {
+  .form-control.form-control-sm,
+  input.form-control.form-control-sm,
+  textarea.form-control.form-control-sm,
+  select.form-control.form-control-sm {
     font-size: 0.8rem;
     border-radius: 0.2rem;
     padding: 0.3rem 0.6rem; }
-  .form-control.form-control-sm:not([size]):not([multiple]) {
+  .form-control.form-control-sm:not([size]):not([multiple]),
+  input.form-control.form-control-sm:not([size]):not([multiple]),
+  textarea.form-control.form-control-sm:not([size]):not([multiple]),
+  select.form-control.form-control-sm:not([size]):not([multiple]) {
     height: 1.9rem; }
-  .form-control.form-control-md {
+  .form-control.form-control-md,
+  input.form-control.form-control-md,
+  textarea.form-control.form-control-md,
+  select.form-control.form-control-md {
     font-size: 1rem;
     border-radius: 0.25rem;
     padding: 0.375rem 0.75rem; }
-  .form-control.form-control-md:not([size]):not([multiple]) {
+  .form-control.form-control-md:not([size]):not([multiple]),
+  input.form-control.form-control-md:not([size]):not([multiple]),
+  textarea.form-control.form-control-md:not([size]):not([multiple]),
+  select.form-control.form-control-md:not([size]):not([multiple]) {
     height: 2.375rem; }
-  .form-control.form-control-lg {
+  .form-control.form-control-lg,
+  input.form-control.form-control-lg,
+  textarea.form-control.form-control-lg,
+  select.form-control.form-control-lg {
     font-size: 1.25rem;
     border-radius: 0.3125rem;
     padding: 0.46875rem 0.9375rem; }
-  .form-control.form-control-lg:not([size]):not([multiple]) {
+  .form-control.form-control-lg:not([size]):not([multiple]),
+  input.form-control.form-control-lg:not([size]):not([multiple]),
+  textarea.form-control.form-control-lg:not([size]):not([multiple]),
+  select.form-control.form-control-lg:not([size]):not([multiple]) {
     height: 2.96875rem; }
-  .form-control.form-control-xl {
+  .form-control.form-control-xl,
+  input.form-control.form-control-xl,
+  textarea.form-control.form-control-xl,
+  select.form-control.form-control-xl {
     font-size: 1.5rem;
     border-radius: 0.375rem;
     padding: 0.5625rem 1.125rem; }
-  .form-control.form-control-xl:not([size]):not([multiple]) {
+  .form-control.form-control-xl:not([size]):not([multiple]),
+  input.form-control.form-control-xl:not([size]):not([multiple]),
+  textarea.form-control.form-control-xl:not([size]):not([multiple]),
+  select.form-control.form-control-xl:not([size]):not([multiple]) {
     height: 3.5625rem; }
 
 .col-form-label {
@@ -2590,6 +2626,8 @@ select.form-control:not([size]):not([multiple]) {
     border: none;
     box-shadow: none;
     padding: 0;
+    margin: 0;
+    height: auto;
     /*
         position: relative;
         -webkit-box-flex: 1;
@@ -3095,8 +3133,8 @@ select.form-control:not([size]):not([multiple]) {
   padding: 0.7rem 1rem;
   border-radius: 0.25rem;
   font-size: 1rem;
-  line-height: 1rem;
-  border: 1px solid #adb5bd; }
+  border: 1px solid #adb5bd;
+  line-height: 1.25em; }
   .btn:focus {
     outline: none; }
   .btn.disabled, .btn:disabled {

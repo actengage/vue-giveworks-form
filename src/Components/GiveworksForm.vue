@@ -7,7 +7,6 @@
         </div>
     </div>
     <div v-else-if="page.id">
-        {{form}}
         <form @submit.prevent="submit" novalidate="novalidate">
             <component
                 :is="pageTypeComponent"

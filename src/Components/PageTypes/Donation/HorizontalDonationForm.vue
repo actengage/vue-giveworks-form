@@ -1,7 +1,6 @@
 <template>
 
     <div>
-
         <div class="row">
             <div class="col-md-4">
                 <select-donation-fieldset :form="form" :errors="errors" :page="page"/>
@@ -12,7 +11,7 @@
             </div>
 
             <div class="col-md-4">
-                <payment-info-fieldset :form="form" :errors="errors"  :page="page"/>
+                <payment-info-fieldset :form="form" :errors="errors" :page="page" :submitting="submitting"/>
             </div>
         </div>
 

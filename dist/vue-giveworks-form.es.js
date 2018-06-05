@@ -1,6 +1,5 @@
 import axios from 'axios';
 import moment from 'moment';
-import ActivityButton from 'vue-interface/src/Components/ActivityButton';
 
 function styleInject(css, ref) {
   if ( ref === void 0 ) ref = {};
@@ -21842,14 +21841,11 @@ var PaymentGateways = {render: function(){var _vm=this;var _h=_vm.$createElement
 
 }
 
-//import ActivityButton from '@/Components/ActivityIndicators/ActivityButton';
-
-var PaymentInfoFieldset = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('fieldset',[_c('legend',[_vm._v("Payment Information")]),_vm._v(" "),_c('payment-gateways',{attrs:{"form":_vm.form,"errors":_vm.errors,"page":_vm.page}}),_vm._v(" "),(_vm.page.options.add_comment)?_c('textarea-field',{directives:[{name:"autogrow",rawName:"v-autogrow"}],attrs:{"id":"comment","label":_vm.commentMessage},model:{value:(_vm.form.comment),callback:function ($$v) {_vm.$set(_vm.form, "comment", $$v);},expression:"form.comment"}}):_vm._e(),_vm._v(" "),_c('activity-button',{attrs:{"type":"submit","size":"lg","orientation":"right","activity":_vm.submitting,"block":true,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.donate}}),_vm._v(" "),(_vm.page.options.add_optin)?_c('div',[_c('label',{staticClass:"custom-control custom-checkbox"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.form.optin),expression:"form.optin"}],staticClass:"custom-control-input",attrs:{"type":"checkbox","checked":"checked"},domProps:{"checked":Array.isArray(_vm.form.optin)?_vm._i(_vm.form.optin,null)>-1:(_vm.form.optin)},on:{"change":function($event){var $$a=_vm.form.optin,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.$set(_vm.form, "optin", $$a.concat([$$v])));}else{$$i>-1&&(_vm.$set(_vm.form, "optin", $$a.slice(0,$$i).concat($$a.slice($$i+1))));}}else{_vm.$set(_vm.form, "optin", $$c);}}}}),_vm._v(" "),_c('span',{staticClass:"custom-control-indicator"}),_vm._v(" "),_c('small',{staticClass:"custom-control-label text-muted form-text",domProps:{"innerHTML":_vm._s(_vm.optinMessage)}})])]):_vm._e(),_vm._v(" "),(_vm.page.site.disclaimer)?_c('div',{staticClass:"mt-3"},[_c('small',{staticClass:"text-muted",domProps:{"innerHTML":_vm._s(_vm.page.site.disclaimer)}})]):_vm._e()],1)},staticRenderFns: [],
+var PaymentInfoFieldset = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('fieldset',[_c('legend',[_vm._v("Payment Information")]),_vm._v(" "),_c('payment-gateways',{attrs:{"form":_vm.form,"errors":_vm.errors,"page":_vm.page}}),_vm._v(" "),(_vm.page.options.add_comment)?_c('textarea-field',{directives:[{name:"autogrow",rawName:"v-autogrow"}],attrs:{"id":"comment","label":_vm.commentMessage},model:{value:(_vm.form.comment),callback:function ($$v) {_vm.$set(_vm.form, "comment", $$v);},expression:"form.comment"}}):_vm._e(),_vm._v(" "),_c('btn-activity',{attrs:{"type":"submit","size":"lg","orientation":"right","activity":_vm.submitting,"block":true,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.donate}}),_vm._v(" "),(_vm.page.options.add_optin)?_c('div',[_c('label',{staticClass:"custom-control custom-checkbox"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.form.optin),expression:"form.optin"}],staticClass:"custom-control-input",attrs:{"type":"checkbox","checked":"checked"},domProps:{"checked":Array.isArray(_vm.form.optin)?_vm._i(_vm.form.optin,null)>-1:(_vm.form.optin)},on:{"change":function($event){var $$a=_vm.form.optin,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.$set(_vm.form, "optin", $$a.concat([$$v])));}else{$$i>-1&&(_vm.$set(_vm.form, "optin", $$a.slice(0,$$i).concat($$a.slice($$i+1))));}}else{_vm.$set(_vm.form, "optin", $$c);}}}}),_vm._v(" "),_c('span',{staticClass:"custom-control-indicator"}),_vm._v(" "),_c('small',{staticClass:"custom-control-label text-muted form-text",domProps:{"innerHTML":_vm._s(_vm.optinMessage)}})])]):_vm._e(),_vm._v(" "),(_vm.page.site.disclaimer)?_c('div',{staticClass:"mt-3"},[_c('small',{staticClass:"text-muted",domProps:{"innerHTML":_vm._s(_vm.page.site.disclaimer)}})]):_vm._e()],1)},staticRenderFns: [],
 
     name: 'payment-info-fieldset',
 
     components: {
-        //ActivityButton,
         PaymentGateways
     },
 
@@ -23507,7 +23503,7 @@ var HorizontalDonationForm = {render: function(){var _vm=this;var _h=_vm.$create
 
 }
 
-var VerticalPetitionForm = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('contact-info-fieldset',{attrs:{"legends":false,"form":_vm.form,"errors":_vm.errors,"page":_vm.page}}),_vm._v(" "),(_vm.page.options.add_comment)?_c('textarea-field',{directives:[{name:"autogrow",rawName:"v-autogrow"}],attrs:{"id":"comment","label":_vm.commentMessage},model:{value:(_vm.form.comment),callback:function ($$v) {_vm.$set(_vm.form, "comment", $$v);},expression:"form.comment"}}):_vm._e(),_vm._v(" "),_c('activity-button',{attrs:{"size":"lg","type":"submit","orientation":"right","activity":_vm.submitting,"block":true,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.petition}}),_vm._v(" "),(_vm.page.options.add_optin)?_c('div',[_c('label',{staticClass:"custom-control custom-checkbox"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.form.optin),expression:"form.optin"}],staticClass:"custom-control-input",attrs:{"type":"checkbox","checked":"checked"},domProps:{"checked":Array.isArray(_vm.form.optin)?_vm._i(_vm.form.optin,null)>-1:(_vm.form.optin)},on:{"change":function($event){var $$a=_vm.form.optin,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.$set(_vm.form, "optin", $$a.concat([$$v])));}else{$$i>-1&&(_vm.$set(_vm.form, "optin", $$a.slice(0,$$i).concat($$a.slice($$i+1))));}}else{_vm.$set(_vm.form, "optin", $$c);}}}}),_vm._v(" "),_c('span',{staticClass:"custom-control-indicator"}),_vm._v(" "),_c('small',{staticClass:"custom-control-label text-muted form-text",domProps:{"innerHTML":_vm._s(_vm.optinMessage)}})])]):_vm._e()],1)},staticRenderFns: [],
+var VerticalPetitionForm = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('contact-info-fieldset',{attrs:{"legends":false,"form":_vm.form,"errors":_vm.errors,"page":_vm.page}}),_vm._v(" "),(_vm.page.options.add_comment)?_c('textarea-field',{directives:[{name:"autogrow",rawName:"v-autogrow"}],attrs:{"id":"comment","label":_vm.commentMessage},model:{value:(_vm.form.comment),callback:function ($$v) {_vm.$set(_vm.form, "comment", $$v);},expression:"form.comment"}}):_vm._e(),_vm._v(" "),_c('btn-activity',{attrs:{"size":"lg","type":"submit","orientation":"right","activity":_vm.submitting,"block":true,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.petition}}),_vm._v(" "),(_vm.page.options.add_optin)?_c('div',[_c('label',{staticClass:"custom-control custom-checkbox"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.form.optin),expression:"form.optin"}],staticClass:"custom-control-input",attrs:{"type":"checkbox","checked":"checked"},domProps:{"checked":Array.isArray(_vm.form.optin)?_vm._i(_vm.form.optin,null)>-1:(_vm.form.optin)},on:{"change":function($event){var $$a=_vm.form.optin,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.$set(_vm.form, "optin", $$a.concat([$$v])));}else{$$i>-1&&(_vm.$set(_vm.form, "optin", $$a.slice(0,$$i).concat($$a.slice($$i+1))));}}else{_vm.$set(_vm.form, "optin", $$c);}}}}),_vm._v(" "),_c('span',{staticClass:"custom-control-indicator"}),_vm._v(" "),_c('small',{staticClass:"custom-control-label text-muted form-text",domProps:{"innerHTML":_vm._s(_vm.optinMessage)}})])]):_vm._e()],1)},staticRenderFns: [],
 
     components: {
         ContactInfoFieldset,
@@ -23520,7 +23516,7 @@ var VerticalPetitionForm = {render: function(){var _vm=this;var _h=_vm.$createEl
 
 }
 
-var HorizontalPetitionForm = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('contact-info-fieldset',{attrs:{"legends":false,"page":_vm.page,"form":_vm.form,"errors":_vm.errors}}),_vm._v(" "),(_vm.page.options.add_comment)?_c('textarea-field',{directives:[{name:"autogrow",rawName:"v-autogrow"}],attrs:{"id":"comment","label":_vm.commentMessage},model:{value:(_vm.form.comment),callback:function ($$v) {_vm.$set(_vm.form, "comment", $$v);},expression:"form.comment"}}):_vm._e(),_vm._v(" "),_c('activity-button',{attrs:{"size":"lg","type":"submit","orientation":"right","activity":_vm.submitting,"block":true,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.petition}}),_vm._v(" "),(_vm.page.options.add_optin)?_c('div',[_c('label',{staticClass:"custom-control custom-checkbox"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.form.optin),expression:"form.optin"}],staticClass:"custom-control-input",attrs:{"type":"checkbox","checked":"checked"},domProps:{"checked":Array.isArray(_vm.form.optin)?_vm._i(_vm.form.optin,null)>-1:(_vm.form.optin)},on:{"change":function($event){var $$a=_vm.form.optin,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.$set(_vm.form, "optin", $$a.concat([$$v])));}else{$$i>-1&&(_vm.$set(_vm.form, "optin", $$a.slice(0,$$i).concat($$a.slice($$i+1))));}}else{_vm.$set(_vm.form, "optin", $$c);}}}}),_vm._v(" "),_c('span',{staticClass:"custom-control-indicator"}),_vm._v(" "),_c('small',{staticClass:"custom-control-label text-muted form-text",domProps:{"innerHTML":_vm._s(_vm.optinMessage)}})])]):_vm._e()],1)},staticRenderFns: [],
+var HorizontalPetitionForm = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('contact-info-fieldset',{attrs:{"legends":false,"page":_vm.page,"form":_vm.form,"errors":_vm.errors}}),_vm._v(" "),(_vm.page.options.add_comment)?_c('textarea-field',{directives:[{name:"autogrow",rawName:"v-autogrow"}],attrs:{"id":"comment","label":_vm.commentMessage},model:{value:(_vm.form.comment),callback:function ($$v) {_vm.$set(_vm.form, "comment", $$v);},expression:"form.comment"}}):_vm._e(),_vm._v(" "),_c('btn-activity',{attrs:{"size":"lg","type":"submit","orientation":"right","activity":_vm.submitting,"block":true,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.petition}}),_vm._v(" "),(_vm.page.options.add_optin)?_c('div',[_c('label',{staticClass:"custom-control custom-checkbox"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.form.optin),expression:"form.optin"}],staticClass:"custom-control-input",attrs:{"type":"checkbox","checked":"checked"},domProps:{"checked":Array.isArray(_vm.form.optin)?_vm._i(_vm.form.optin,null)>-1:(_vm.form.optin)},on:{"change":function($event){var $$a=_vm.form.optin,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.$set(_vm.form, "optin", $$a.concat([$$v])));}else{$$i>-1&&(_vm.$set(_vm.form, "optin", $$a.slice(0,$$i).concat($$a.slice($$i+1))));}}else{_vm.$set(_vm.form, "optin", $$c);}}}}),_vm._v(" "),_c('span',{staticClass:"custom-control-indicator"}),_vm._v(" "),_c('small',{staticClass:"custom-control-label text-muted form-text",domProps:{"innerHTML":_vm._s(_vm.optinMessage)}})])]):_vm._e()],1)},staticRenderFns: [],
 
     components: {
         ContactInfoFieldset,
@@ -23533,7 +23529,7 @@ var HorizontalPetitionForm = {render: function(){var _vm=this;var _h=_vm.$create
 
 }
 
-var GoToWebinar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('fieldset',[_c('legend',[_vm._v("Your information")]),_vm._v(" "),_vm._m(0),_vm._v(" "),(_vm.orientation === 'horizontal')?[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-sm-4"},[_c('input-field',{attrs:{"id":"first","label":"First Name*","errors":_vm.errors},model:{value:(_vm.form.first),callback:function ($$v) {_vm.$set(_vm.form, "first", $$v);},expression:"form.first"}}),_vm._v(" "),_c('input-field',{attrs:{"id":"last","label":"Last Name*","errors":_vm.errors},model:{value:(_vm.form.last),callback:function ($$v) {_vm.$set(_vm.form, "last", $$v);},expression:"form.last"}}),_vm._v(" "),_c('input-field',{attrs:{"id":"email","label":"Email*","errors":_vm.errors},model:{value:(_vm.form.email),callback:function ($$v) {_vm.$set(_vm.form, "email", $$v);},expression:"form.email"}}),_vm._v(" "),(_vm.page.options.show_source)?_c('input-field',{attrs:{"id":"source","label":"Source","errors":_vm.errors},model:{value:(_vm.form.source),callback:function ($$v) {_vm.$set(_vm.form, "source", $$v);},expression:"form.source"}}):_vm._e()],1),_vm._v(" "),_c('div',{staticClass:"col-sm-4"},[(_vm.page.options.show_address)?_c('input-field',{attrs:{"id":"address","label":"Address","errors":_vm.errors},model:{value:(_vm.form.address),callback:function ($$v) {_vm.$set(_vm.form, "address", $$v);},expression:"form.address"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_state)?_c('input-field',{attrs:{"id":"state","label":"State","errors":_vm.errors},model:{value:(_vm.form.state),callback:function ($$v) {_vm.$set(_vm.form, "state", $$v);},expression:"form.state"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_zip)?_c('input-field',{attrs:{"id":"zip_code","label":"Zip Code","errors":_vm.errors},model:{value:(_vm.form.zip_code),callback:function ($$v) {_vm.$set(_vm.form, "zip_code", $$v);},expression:"form.zip_code"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_country)?_c('input-field',{attrs:{"id":"country","label":"Country","errors":_vm.errors},model:{value:(_vm.form.country),callback:function ($$v) {_vm.$set(_vm.form, "country", $$v);},expression:"form.country"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_phone)?_c('input-field',{attrs:{"id":"phone","label":"Phone","errors":_vm.errors},model:{value:(_vm.form.phone),callback:function ($$v) {_vm.$set(_vm.form, "phone", $$v);},expression:"form.phone"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_organization)?_c('input-field',{attrs:{"id":"organization","label":"Organization","errors":_vm.errors},model:{value:(_vm.form.organization),callback:function ($$v) {_vm.$set(_vm.form, "organization", $$v);},expression:"form.organization"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_job_title)?_c('input-field',{attrs:{"id":"job_title","label":"Job Title","errors":_vm.errors},model:{value:(_vm.form.job_title),callback:function ($$v) {_vm.$set(_vm.form, "job_title", $$v);},expression:"form.job_title"}}):_vm._e()],1),_vm._v(" "),_c('div',{staticClass:"col-sm-4"},[(_vm.page.options.show_questions)?_c('textarea-field',{directives:[{name:"autogrow",rawName:"v-autogrow"}],attrs:{"id":"questions_comments","label":"Questions and Comments","errors":_vm.errors},model:{value:(_vm.form.questions_comments),callback:function ($$v) {_vm.$set(_vm.form, "questions_comments", $$v);},expression:"form.questions_comments"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_industry)?_c('input-field',{attrs:{"id":"industry","label":"Industry","errors":_vm.errors},model:{value:(_vm.form.industry),callback:function ($$v) {_vm.$set(_vm.form, "industry", $$v);},expression:"form.industry"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_employees)?_c('input-field',{attrs:{"id":"number_employees","label":"Number of Employees","errors":_vm.errors},model:{value:(_vm.form.number_employees),callback:function ($$v) {_vm.$set(_vm.form, "number_employees", $$v);},expression:"form.number_employees"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_timeframe)?_c('input-field',{attrs:{"id":"purchasing_timeframe","label":"Purchasing Timeframe","errors":_vm.errors},model:{value:(_vm.form.purchasing_timeframe),callback:function ($$v) {_vm.$set(_vm.form, "purchasing_timeframe", $$v);},expression:"form.purchasing_timeframe"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_role)?_c('input-field',{attrs:{"id":"purchasing_role","label":"Purchasing Role","errors":_vm.errors},model:{value:(_vm.form.purchasing_role),callback:function ($$v) {_vm.$set(_vm.form, "purchasing_role", $$v);},expression:"form.purchasing_role"}}):_vm._e(),_vm._v(" "),_c('activity-button',{attrs:{"size":"lg","type":"submit","orientation":"right","activity":_vm.submitting,"block":true,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.signup}})],1)])]:[_c('input-field',{attrs:{"id":"first","label":"First Name*","errors":_vm.errors},model:{value:(_vm.form.first),callback:function ($$v) {_vm.$set(_vm.form, "first", $$v);},expression:"form.first"}}),_vm._v(" "),_c('input-field',{attrs:{"id":"last","label":"Last Name*","errors":_vm.errors},model:{value:(_vm.form.last),callback:function ($$v) {_vm.$set(_vm.form, "last", $$v);},expression:"form.last"}}),_vm._v(" "),_c('input-field',{attrs:{"id":"email","label":"Email*","errors":_vm.errors},model:{value:(_vm.form.email),callback:function ($$v) {_vm.$set(_vm.form, "email", $$v);},expression:"form.email"}}),_vm._v(" "),(_vm.page.options.show_source)?_c('input-field',{attrs:{"id":"source","label":"Source","errors":_vm.errors},model:{value:(_vm.form.source),callback:function ($$v) {_vm.$set(_vm.form, "source", $$v);},expression:"form.source"}}):_vm._e(),_vm._v(" "),(_vm.address || _vm.page.options.show_address)?_c('place-autocomplete-field',{directives:[{name:"place-autofill",rawName:"v-place-autofill:street.query",value:(_vm.form.address),expression:"form.address",arg:"street",modifiers:{"query":true}},{name:"place-autofill",rawName:"v-place-autofill:city",value:(_vm.form.city),expression:"form.city",arg:"city"},{name:"place-autofill",rawName:"v-place-autofill:state.short",value:(_vm.form.state),expression:"form.state",arg:"state",modifiers:{"short":true}},{name:"place-autofill",rawName:"v-place-autofill:zip",value:(_vm.form.zip_code),expression:"form.zip_code",arg:"zip"}],attrs:{"name":"address","label":"Address","api-key":"AIzaSyAhSv9zWvisiTXRPRw6K8AE0DCmrRMpQcU","errors":_vm.errors},model:{value:(_vm.form.address),callback:function ($$v) {_vm.$set(_vm.form, "address", $$v);},expression:"form.address"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_city)?_c('input-field',{attrs:{"id":"city","label":"City","errors":_vm.errors},model:{value:(_vm.form.city),callback:function ($$v) {_vm.$set(_vm.form, "city", $$v);},expression:"form.city"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_state)?_c('input-field',{attrs:{"id":"state","label":"State","errors":_vm.errors},model:{value:(_vm.form.state),callback:function ($$v) {_vm.$set(_vm.form, "state", $$v);},expression:"form.state"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_zip)?_c('input-field',{attrs:{"id":"zip_code","label":"Zip Code","errors":_vm.errors},model:{value:(_vm.form.zip_code),callback:function ($$v) {_vm.$set(_vm.form, "zip_code", $$v);},expression:"form.zip_code"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_country)?_c('input-field',{attrs:{"id":"country","label":"Country","errors":_vm.errors},model:{value:(_vm.form.country),callback:function ($$v) {_vm.$set(_vm.form, "country", $$v);},expression:"form.country"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_phone)?_c('input-field',{attrs:{"id":"phone","label":"Phone","errors":_vm.errors},model:{value:(_vm.form.phone),callback:function ($$v) {_vm.$set(_vm.form, "phone", $$v);},expression:"form.phone"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_organization)?_c('input-field',{attrs:{"id":"organization","label":"Organization","errors":_vm.errors},model:{value:(_vm.form.organization),callback:function ($$v) {_vm.$set(_vm.form, "organization", $$v);},expression:"form.organization"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_job_title)?_c('input-field',{attrs:{"id":"job_title","label":"Job Title","errors":_vm.errors},model:{value:(_vm.form.job_title),callback:function ($$v) {_vm.$set(_vm.form, "job_title", $$v);},expression:"form.job_title"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_questions)?_c('textarea-field',{directives:[{name:"autogrow",rawName:"v-autogrow"}],attrs:{"id":"questions_comments","label":"Questions and Comments","errors":_vm.errors},model:{value:(_vm.form.questions_comments),callback:function ($$v) {_vm.$set(_vm.form, "questions_comments", $$v);},expression:"form.questions_comments"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_industry)?_c('input-field',{attrs:{"id":"industry","label":"Industry","errors":_vm.errors},model:{value:(_vm.form.industry),callback:function ($$v) {_vm.$set(_vm.form, "industry", $$v);},expression:"form.industry"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_employees)?_c('input-field',{attrs:{"id":"number_employees","label":"Number of Employees","errors":_vm.errors},model:{value:(_vm.form.number_employees),callback:function ($$v) {_vm.$set(_vm.form, "number_employees", $$v);},expression:"form.number_employees"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_timeframe)?_c('input-field',{attrs:{"id":"purchasing_timeframe","label":"Purchasing Timeframe","errors":_vm.errors},model:{value:(_vm.form.purchasing_timeframe),callback:function ($$v) {_vm.$set(_vm.form, "purchasing_timeframe", $$v);},expression:"form.purchasing_timeframe"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_role)?_c('input-field',{attrs:{"id":"purchasing_role","label":"Purchasing Role","errors":_vm.errors},model:{value:(_vm.form.purchasing_role),callback:function ($$v) {_vm.$set(_vm.form, "purchasing_role", $$v);},expression:"form.purchasing_role"}}):_vm._e(),_vm._v(" "),_c('activity-button',{attrs:{"size":"lg","type":"submit","orientation":"right","activity":_vm.submitting,"block":true,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.signup}})]],2)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('p',[_c('em',[_vm._v("* Indicates required fields")])])}],
+var GoToWebinar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('fieldset',[_c('legend',[_vm._v("Your information")]),_vm._v(" "),_vm._m(0),_vm._v(" "),(_vm.orientation === 'horizontal')?[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-sm-4"},[_c('input-field',{attrs:{"id":"first","label":"First Name*","errors":_vm.errors},model:{value:(_vm.form.first),callback:function ($$v) {_vm.$set(_vm.form, "first", $$v);},expression:"form.first"}}),_vm._v(" "),_c('input-field',{attrs:{"id":"last","label":"Last Name*","errors":_vm.errors},model:{value:(_vm.form.last),callback:function ($$v) {_vm.$set(_vm.form, "last", $$v);},expression:"form.last"}}),_vm._v(" "),_c('input-field',{attrs:{"id":"email","label":"Email*","errors":_vm.errors},model:{value:(_vm.form.email),callback:function ($$v) {_vm.$set(_vm.form, "email", $$v);},expression:"form.email"}}),_vm._v(" "),(_vm.page.options.show_source)?_c('input-field',{attrs:{"id":"source","label":"Source","errors":_vm.errors},model:{value:(_vm.form.source),callback:function ($$v) {_vm.$set(_vm.form, "source", $$v);},expression:"form.source"}}):_vm._e()],1),_vm._v(" "),_c('div',{staticClass:"col-sm-4"},[(_vm.page.options.show_address)?_c('input-field',{attrs:{"id":"address","label":"Address","errors":_vm.errors},model:{value:(_vm.form.address),callback:function ($$v) {_vm.$set(_vm.form, "address", $$v);},expression:"form.address"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_state)?_c('input-field',{attrs:{"id":"state","label":"State","errors":_vm.errors},model:{value:(_vm.form.state),callback:function ($$v) {_vm.$set(_vm.form, "state", $$v);},expression:"form.state"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_zip)?_c('input-field',{attrs:{"id":"zip_code","label":"Zip Code","errors":_vm.errors},model:{value:(_vm.form.zip_code),callback:function ($$v) {_vm.$set(_vm.form, "zip_code", $$v);},expression:"form.zip_code"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_country)?_c('input-field',{attrs:{"id":"country","label":"Country","errors":_vm.errors},model:{value:(_vm.form.country),callback:function ($$v) {_vm.$set(_vm.form, "country", $$v);},expression:"form.country"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_phone)?_c('input-field',{attrs:{"id":"phone","label":"Phone","errors":_vm.errors},model:{value:(_vm.form.phone),callback:function ($$v) {_vm.$set(_vm.form, "phone", $$v);},expression:"form.phone"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_organization)?_c('input-field',{attrs:{"id":"organization","label":"Organization","errors":_vm.errors},model:{value:(_vm.form.organization),callback:function ($$v) {_vm.$set(_vm.form, "organization", $$v);},expression:"form.organization"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_job_title)?_c('input-field',{attrs:{"id":"job_title","label":"Job Title","errors":_vm.errors},model:{value:(_vm.form.job_title),callback:function ($$v) {_vm.$set(_vm.form, "job_title", $$v);},expression:"form.job_title"}}):_vm._e()],1),_vm._v(" "),_c('div',{staticClass:"col-sm-4"},[(_vm.page.options.show_questions)?_c('textarea-field',{directives:[{name:"autogrow",rawName:"v-autogrow"}],attrs:{"id":"questions_comments","label":"Questions and Comments","errors":_vm.errors},model:{value:(_vm.form.questions_comments),callback:function ($$v) {_vm.$set(_vm.form, "questions_comments", $$v);},expression:"form.questions_comments"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_industry)?_c('input-field',{attrs:{"id":"industry","label":"Industry","errors":_vm.errors},model:{value:(_vm.form.industry),callback:function ($$v) {_vm.$set(_vm.form, "industry", $$v);},expression:"form.industry"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_employees)?_c('input-field',{attrs:{"id":"number_employees","label":"Number of Employees","errors":_vm.errors},model:{value:(_vm.form.number_employees),callback:function ($$v) {_vm.$set(_vm.form, "number_employees", $$v);},expression:"form.number_employees"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_timeframe)?_c('input-field',{attrs:{"id":"purchasing_timeframe","label":"Purchasing Timeframe","errors":_vm.errors},model:{value:(_vm.form.purchasing_timeframe),callback:function ($$v) {_vm.$set(_vm.form, "purchasing_timeframe", $$v);},expression:"form.purchasing_timeframe"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_role)?_c('input-field',{attrs:{"id":"purchasing_role","label":"Purchasing Role","errors":_vm.errors},model:{value:(_vm.form.purchasing_role),callback:function ($$v) {_vm.$set(_vm.form, "purchasing_role", $$v);},expression:"form.purchasing_role"}}):_vm._e(),_vm._v(" "),_c('btn-activity',{attrs:{"size":"lg","type":"submit","orientation":"right","activity":_vm.submitting,"block":true,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.signup}})],1)])]:[_c('input-field',{attrs:{"id":"first","label":"First Name*","errors":_vm.errors},model:{value:(_vm.form.first),callback:function ($$v) {_vm.$set(_vm.form, "first", $$v);},expression:"form.first"}}),_vm._v(" "),_c('input-field',{attrs:{"id":"last","label":"Last Name*","errors":_vm.errors},model:{value:(_vm.form.last),callback:function ($$v) {_vm.$set(_vm.form, "last", $$v);},expression:"form.last"}}),_vm._v(" "),_c('input-field',{attrs:{"id":"email","label":"Email*","errors":_vm.errors},model:{value:(_vm.form.email),callback:function ($$v) {_vm.$set(_vm.form, "email", $$v);},expression:"form.email"}}),_vm._v(" "),(_vm.page.options.show_source)?_c('input-field',{attrs:{"id":"source","label":"Source","errors":_vm.errors},model:{value:(_vm.form.source),callback:function ($$v) {_vm.$set(_vm.form, "source", $$v);},expression:"form.source"}}):_vm._e(),_vm._v(" "),(_vm.address || _vm.page.options.show_address)?_c('place-autocomplete-field',{directives:[{name:"place-autofill",rawName:"v-place-autofill:street.query",value:(_vm.form.address),expression:"form.address",arg:"street",modifiers:{"query":true}},{name:"place-autofill",rawName:"v-place-autofill:city",value:(_vm.form.city),expression:"form.city",arg:"city"},{name:"place-autofill",rawName:"v-place-autofill:state.short",value:(_vm.form.state),expression:"form.state",arg:"state",modifiers:{"short":true}},{name:"place-autofill",rawName:"v-place-autofill:zip",value:(_vm.form.zip_code),expression:"form.zip_code",arg:"zip"}],attrs:{"name":"address","label":"Address","api-key":"AIzaSyAhSv9zWvisiTXRPRw6K8AE0DCmrRMpQcU","errors":_vm.errors},model:{value:(_vm.form.address),callback:function ($$v) {_vm.$set(_vm.form, "address", $$v);},expression:"form.address"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_city)?_c('input-field',{attrs:{"id":"city","label":"City","errors":_vm.errors},model:{value:(_vm.form.city),callback:function ($$v) {_vm.$set(_vm.form, "city", $$v);},expression:"form.city"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_state)?_c('input-field',{attrs:{"id":"state","label":"State","errors":_vm.errors},model:{value:(_vm.form.state),callback:function ($$v) {_vm.$set(_vm.form, "state", $$v);},expression:"form.state"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_zip)?_c('input-field',{attrs:{"id":"zip_code","label":"Zip Code","errors":_vm.errors},model:{value:(_vm.form.zip_code),callback:function ($$v) {_vm.$set(_vm.form, "zip_code", $$v);},expression:"form.zip_code"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_country)?_c('input-field',{attrs:{"id":"country","label":"Country","errors":_vm.errors},model:{value:(_vm.form.country),callback:function ($$v) {_vm.$set(_vm.form, "country", $$v);},expression:"form.country"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_phone)?_c('input-field',{attrs:{"id":"phone","label":"Phone","errors":_vm.errors},model:{value:(_vm.form.phone),callback:function ($$v) {_vm.$set(_vm.form, "phone", $$v);},expression:"form.phone"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_organization)?_c('input-field',{attrs:{"id":"organization","label":"Organization","errors":_vm.errors},model:{value:(_vm.form.organization),callback:function ($$v) {_vm.$set(_vm.form, "organization", $$v);},expression:"form.organization"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_job_title)?_c('input-field',{attrs:{"id":"job_title","label":"Job Title","errors":_vm.errors},model:{value:(_vm.form.job_title),callback:function ($$v) {_vm.$set(_vm.form, "job_title", $$v);},expression:"form.job_title"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_questions)?_c('textarea-field',{directives:[{name:"autogrow",rawName:"v-autogrow"}],attrs:{"id":"questions_comments","label":"Questions and Comments","errors":_vm.errors},model:{value:(_vm.form.questions_comments),callback:function ($$v) {_vm.$set(_vm.form, "questions_comments", $$v);},expression:"form.questions_comments"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_industry)?_c('input-field',{attrs:{"id":"industry","label":"Industry","errors":_vm.errors},model:{value:(_vm.form.industry),callback:function ($$v) {_vm.$set(_vm.form, "industry", $$v);},expression:"form.industry"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_employees)?_c('input-field',{attrs:{"id":"number_employees","label":"Number of Employees","errors":_vm.errors},model:{value:(_vm.form.number_employees),callback:function ($$v) {_vm.$set(_vm.form, "number_employees", $$v);},expression:"form.number_employees"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_timeframe)?_c('input-field',{attrs:{"id":"purchasing_timeframe","label":"Purchasing Timeframe","errors":_vm.errors},model:{value:(_vm.form.purchasing_timeframe),callback:function ($$v) {_vm.$set(_vm.form, "purchasing_timeframe", $$v);},expression:"form.purchasing_timeframe"}}):_vm._e(),_vm._v(" "),(_vm.page.options.show_role)?_c('input-field',{attrs:{"id":"purchasing_role","label":"Purchasing Role","errors":_vm.errors},model:{value:(_vm.form.purchasing_role),callback:function ($$v) {_vm.$set(_vm.form, "purchasing_role", $$v);},expression:"form.purchasing_role"}}):_vm._e(),_vm._v(" "),_c('btn-activity',{attrs:{"size":"lg","type":"submit","orientation":"right","activity":_vm.submitting,"block":true,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.signup}})]],2)},staticRenderFns: [function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('p',[_c('em',[_vm._v("* Indicates required fields")])])}],
 
     name: 'go-to-webinar',
 
@@ -24146,7 +24142,7 @@ const COMPONENTS = {
     'zip': 'ZipField'
 };
 
-var VerticalSurveyForm = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._l((_vm.page.questions),function(question){return _c('div',[_c(_vm.component(question.type),{tag:"component",attrs:{"value":_vm.form[`field_${question.id}`],"name":`field_${question.id}`,"page":_vm.page,"form":_vm.form,"errors":_vm.errors,"question":question}})],1)}),_vm._v(" "),_c('activity-button',{attrs:{"size":"lg","type":"submit","block":true,"orientation":"right","activity":_vm.submitting,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.survey}})],2)},staticRenderFns: [],
+var VerticalSurveyForm = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._l((_vm.page.questions),function(question){return _c('div',[_c(_vm.component(question.type),{tag:"component",attrs:{"value":_vm.form[`field_${question.id}`],"name":`field_${question.id}`,"page":_vm.page,"form":_vm.form,"errors":_vm.errors,"question":question}})],1)}),_vm._v(" "),_c('btn-activity',{attrs:{"size":"lg","type":"submit","block":true,"orientation":"right","activity":_vm.submitting,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.survey}})],2)},staticRenderFns: [],
 
     components: {
         AltEmailField,
@@ -24192,7 +24188,7 @@ const RESERVED_FIELDS = [
     'zip'
 ];
 
-var HorizontalSurveyForm = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._l((_vm.questions),function(chunk$$1,i){return [_vm._l((chunk$$1),function(question){return _c('div',[_c(_vm.component(question.type),{tag:"component",attrs:{"name":_vm.name(question),"page":_vm.page,"form":_vm.form,"value":_vm.form[_vm.name(question)],"errors":_vm.errors,"question":question},model:{value:(_vm.form[_vm.name(question)]),callback:function ($$v) {_vm.$set(_vm.form, _vm.name(question), $$v);},expression:"form[name(question)]"}})],1)}),_vm._v(" "),(i === 2)?_c('activity-button',{attrs:{"size":"lg","type":"submit","block":true,"orientation":"right","activity":_vm.submitting,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.survey}}):_vm._e()]})],2)},staticRenderFns: [],
+var HorizontalSurveyForm = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._l((_vm.questions),function(chunk$$1,i){return [_vm._l((chunk$$1),function(question){return _c('div',[_c(_vm.component(question.type),{tag:"component",attrs:{"name":_vm.name(question),"page":_vm.page,"form":_vm.form,"value":_vm.form[_vm.name(question)],"errors":_vm.errors,"question":question},model:{value:(_vm.form[_vm.name(question)]),callback:function ($$v) {_vm.$set(_vm.form, _vm.name(question), $$v);},expression:"form[name(question)]"}})],1)}),_vm._v(" "),(i === 2)?_c('btn-activity',{attrs:{"size":"lg","type":"submit","block":true,"orientation":"right","activity":_vm.submitting,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.survey}}):_vm._e()]})],2)},staticRenderFns: [],
 
     extends: VerticalSurveyForm,
 
@@ -24845,6 +24841,244 @@ function Autogrow$1(Vue, options) {
     Vue.directive('autogrow', Autogrow);
 }
 
+const convertAnimationDelayToInt = function(delay) {
+    const num = parseFloat(delay, 10);
+    const matches = delay.match(/m?s/);
+    const unit = matches ? matches[0] : false;
+
+    let milliseconds;
+
+    switch (unit) {
+        case "s": // seconds
+            milliseconds = num * 1000;
+            break;
+        case "ms":
+        default:
+            milliseconds = num;
+            break;
+    }
+
+    return milliseconds || 0;
+};
+
+const animated = function(el, callback) {
+    const defaultView = (el.ownerDocument || document).defaultView;
+
+    setTimeout(() => {
+        callback.apply();
+    }, convertAnimationDelayToInt(defaultView.getComputedStyle(el).animationDuration));
+};
+
+var BtnActivity = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('button',{staticClass:"btn",class:_vm.classes,attrs:{"type":_vm.type},on:{"click":_vm.onClick}},[(_vm.icon)?_c('i',{class:_vm.icon}):_vm._e(),_vm._v(" "+_vm._s(_vm.label)+" "),_vm._t("default"),_vm._v(" "),_c('activity-indicator',{attrs:{"type":_vm.indicator}})],2)},staticRenderFns: [],
+
+    name: 'activity-button',
+
+    components: {
+        ActivityIndicator
+    },
+
+    props: {
+
+        /**
+         * Make the button appear with the active state.
+         *
+         * @property {Boolea}n}
+         */
+        active: Boolean,
+
+        /**
+         * Show the activity indicator inside the button.
+         *
+         * @property {Boolea}n}
+         */
+        activity: Boolean,
+
+        /**
+         * Display the button as block width.
+         *
+         * @property {Boolea}n}
+         */
+        block: Boolean,
+
+        /**
+         * Make the button appear with the disabled state.
+         *
+         * @property {Boolea}n}
+         */
+        disabled: Boolean,
+
+        /**
+         * The button label. If not passed as a property, label must be passed
+         * inside the element's html.
+         *
+         * @property {String}
+         */
+        label: String,
+
+        /**
+         * The button icon
+         *
+         * @property {String}
+         */
+        icon: String,
+
+        /**
+         * The `type` attribute for the button element.
+         *
+         * @property {String}
+         */
+        type: String,
+
+        /**
+         * The size of the button.
+         *
+         * @property {String}
+         */
+        size: {
+            type: String,
+            default: 'md'
+        },
+
+        /**
+         * The variant of the button.
+         *
+         * @property {String}
+         */
+        variant: {
+            type: String,
+            default: 'primary'
+        },
+
+        /**
+         * The type of activity indicator inside the button.
+         *
+         * @property {String}
+         */
+        indicator: {
+            type: String,
+            default: 'spinner'
+        },
+
+        /**
+         * The orientation of the activity button inside the button.
+         *
+         * @property {String}
+         */
+        orientation: {
+            type: String,
+            default: 'right'
+        }
+    },
+
+    methods: {
+
+        /**
+         * Disable the button.
+         *
+         * @return void
+         */
+        disable() {
+            this.$el.disabled = true;
+        },
+
+        /**
+         * Enable the button.
+         *
+         * @return void
+         */
+        enable() {
+            this.$el.disabled = false;
+        },
+
+        /**
+         * Show the activity indicator inside the button.
+         *
+         * @return void
+         */
+        showActivity() {
+            this.disable();
+
+            animated(this.$el, () => {
+                this.$el.classList.add('btn-activity');
+                this.$emit('activity:show');
+            });
+        },
+
+        /**
+         * Hide the activity indicator inside the button.
+         *
+         * @return void
+         */
+        hideActivity() {
+            this.$el.classList.add('btn-hide-activity');
+
+            animated(this.$el, () => {
+                this.enable();
+                this.$el.classList.remove('btn-activity', 'btn-hide-activity');
+                this.$emit('activity:hide');
+            });
+        },
+
+        /**
+         * The click callback function
+         *
+         * @return void
+         */
+        onClick(event) {
+            this.$emit('click', event, this);
+        }
+
+    },
+
+    computed: {
+
+        /**
+         * An object of classes to append to the button.
+         *
+         * @return void
+         */
+        classes() {
+            const classes = {
+                'disabled': this.disabled,
+                'active': this.active,
+                'btn-block': this.block,
+                'btn-activity': this.activity
+            };
+
+            classes['btn-' + this.size.replace('btn-', '')] = !!this.size;
+            classes['btn-' + this.variant.replace('btn-', '')] = !!this.variant;
+            classes['btn-activity-' + this.orientation.replace('btn-activity-', '')] = !!this.orientation;
+            classes['btn-activity-indicator-' + this.indicator.replace('btn-activity-indicator-', '')] = !!this.indicator;
+
+            return classes;
+        }
+    },
+
+    watch: {
+
+        activity(value) {
+            if(value) {
+                this.showActivity();
+            }
+            else {
+                this.hideActivity();
+            }
+        }
+
+    }
+
+}
+
+const plugin$4 = VueInstaller.use({
+
+    install(Vue, options) {
+        VueInstaller.components({
+            BtnActivity
+        });
+    }
+
+});
+
 const COLORS = [
     'primary',
     'secondary',
@@ -24979,7 +25213,7 @@ var HelpText = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
 
 }
 
-const plugin$4 = VueInstaller.use({
+const plugin$5 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -24995,7 +25229,7 @@ var FormGroup = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
     
 }
 
-const plugin$5 = VueInstaller.use({
+const plugin$6 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -25022,7 +25256,7 @@ var FormLabel = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
 
 }
 
-const plugin$6 = VueInstaller.use({
+const plugin$7 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -25067,7 +25301,7 @@ var FormFeedback = {render: function(){var _vm=this;var _h=_vm.$createElement;va
 
 }
 
-const plugin$7 = VueInstaller.use({
+const plugin$8 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -25109,7 +25343,7 @@ var InputField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;va
 
 }
 
-const plugin$8 = VueInstaller.use({
+const plugin$9 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -25266,7 +25500,7 @@ var InputGroup = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
 
 }
 
-const plugin$9 = VueInstaller.use({
+const plugin$10 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -25311,7 +25545,7 @@ var FormControl$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;v
 
 }
 
-const plugin$10 = VueInstaller.use({
+const plugin$11 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -25424,7 +25658,7 @@ var RadioField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;va
 
 }
 
-const plugin$11 = VueInstaller.use({
+const plugin$12 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -25480,7 +25714,7 @@ var CheckboxField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement
     }
 }
 
-const plugin$12 = VueInstaller.use({
+const plugin$13 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -25539,7 +25773,7 @@ var SelectField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;v
 
 }
 
-const plugin$13 = VueInstaller.use({
+const plugin$14 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -25586,7 +25820,7 @@ var TextareaField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement
 
 }
 
-const plugin$14 = VueInstaller.use({
+const plugin$15 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -47696,7 +47930,7 @@ var FormGroup$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var
 const VueInstaller$1 = {
     use: use$1,
     script: script$1,
-    plugin: plugin$15,
+    plugin: plugin$16,
     plugins: plugins$1,
     filter: filter$2$1,
     filters: filters$1,
@@ -47718,7 +47952,7 @@ function use$1(plugin) {
     return plugin;
 }
 
-function plugin$15(Vue, name, def) {
+function plugin$16(Vue, name, def) {
     if(!VueInstaller$1.$plugins[name]) {
         Vue.use(VueInstaller$1.$plugins[name] = def);
     }
@@ -47726,7 +47960,7 @@ function plugin$15(Vue, name, def) {
 
 function plugins$1(Vue, plugins) {
     forEach$1(plugins, (def, name) => {
-        plugin$15(Vue, name, def);
+        plugin$16(Vue, name, def);
     });
 }
 
@@ -48814,7 +49048,7 @@ if (window && window.Vue) {
 
 const components$2 = {
     Alert,
-    ActivityButton,
+    BtnActivity,
     CheckboxField: CheckboxField$1,
     FormControl: FormControl$1,
     FormFeedback,
@@ -48841,7 +49075,7 @@ function install$1(Vue, options) {
     Vue.use(install);
     Vue.component('giveworks-form', GiveworksForm);
     Vue.use(Autogrow$1);
-    
+
     if(window && window.Vue) {
         const data = (
             window.GiveworksFormOptions && window.GiveworksFormOptions.data

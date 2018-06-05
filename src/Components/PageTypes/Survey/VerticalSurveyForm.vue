@@ -12,7 +12,7 @@
                 :question="question"/>
         </div>
 
-        <activity-button
+        <btn-activity
             size="lg"
             type="submit"
             :block="true"

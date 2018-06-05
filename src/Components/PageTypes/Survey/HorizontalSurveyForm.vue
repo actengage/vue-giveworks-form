@@ -16,7 +16,7 @@
                     :question="question"/>
             </div>
 
-            <activity-button
+            <btn-activity
                 v-if="i === 2"
                 size="lg"
                 type="submit"

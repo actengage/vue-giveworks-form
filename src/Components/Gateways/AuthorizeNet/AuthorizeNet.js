@@ -39,7 +39,7 @@ export default class AuthorizetNet extends Api {
             'https://jstest.authorize.net/v1/Accept.js' : // Developer
             'https://js.authorize.net/v1/Accept.js'; // Production;
 
-        Script(url, callback);
+        script(url, callback);
     }
 
  }

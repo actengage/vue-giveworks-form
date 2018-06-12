@@ -19966,7 +19966,7 @@
       }
 
       script(callback) {
-          Script('https://www.paypalobjects.com/api/checkout.js', callback);
+          script('https://www.paypalobjects.com/api/checkout.js', callback);
       }
 
    }
@@ -20008,7 +20008,7 @@
               'https://jstest.authorize.net/v1/Accept.js' : // Developer
               'https://js.authorize.net/v1/Accept.js'; // Production;
 
-          Script(url, callback);
+          script(url, callback);
       }
 
    }

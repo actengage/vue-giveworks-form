@@ -18,8 +18,8 @@ export default class Stripe extends Api {
             label: 'Credit Card',
             component: 'stripe-credit-card'
         },{
-            icon: 'apple-pay',
-            iconScale: 3,
+            icon: 'brands/apple-pay',
+            iconScale: 3.5,
             component: 'stripe-payment-button'
         },{
             icon: 'brands/google-wallet',

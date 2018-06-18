@@ -193,8 +193,6 @@ export default {
         });
 
         this.$dispatch.reply('form:submit', (resolve, reject) => {
-            console.log('submit');
-
             if(!this.submitting) {
                 this.showActivity();
                 this.errors = {};

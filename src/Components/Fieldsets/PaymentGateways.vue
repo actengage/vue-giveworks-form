@@ -12,7 +12,7 @@
                     :class="{'btn-success': button.active, 'btn-secondary': !button.active}"
                     @click="activate(button)">
                     <icon :name="button.icon" :scale="button.iconScale || 2" :class="{'mt-2 mb-1': !button.label}"></icon>
-                    <div v-if="button.label" class="pt-1 small">{{ button.label }}</div>
+                    <div v-if="button.label" class="pb-1 small">{{ button.label }}</div>
                 </button>
 
             </div>
@@ -120,6 +120,12 @@ export default {
 
 </script>
 
-<style>
-    .payment-gateway-button { height: 85px; }
+<style lang="scss">
+.payment-gateway-button {
+    height: 85px;
+
+    .small {
+        line-height: 1rem;
+    }
+}
 </style>

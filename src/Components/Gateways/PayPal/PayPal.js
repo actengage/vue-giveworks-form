@@ -106,8 +106,8 @@ export default class PayPal extends Api {
         return button;
     }
 
-    script(callback) {
-        script('https://www.paypalobjects.com/api/checkout.js', callback);
+    script(success, error) {
+        script('https://www.paypalobjects.com/api/checkout.js').then(success, error)
     }
 
  }

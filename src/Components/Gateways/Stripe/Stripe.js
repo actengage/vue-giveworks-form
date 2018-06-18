@@ -1,7 +1,7 @@
 import Api from '../Api';
 import '@/Icons/apple-pay';
 import extend from 'lodash-es/extend';
-import 'vue-awesome/icons/credit-card';
+import 'vue-awesome/icons/regular/credit-card';
 import 'vue-awesome/icons/brands/google-wallet';
 import script from 'vue-interface/src/Helpers/Script';
 import Icon from 'vue-awesome/components/Icon';
@@ -14,7 +14,7 @@ export default class Stripe extends Api {
 
     buttons() {
         return [{
-            icon: 'credit-card',
+            icon: 'regular/credit-card',
             label: 'Credit Card',
             component: 'stripe-credit-card'
         },{
@@ -110,8 +110,8 @@ export default class Stripe extends Api {
         return this._stripe || (this._stripe = new window.Stripe(this.options.publishable_key));
     }
 
-    script(callback) {
-        script('https://js.stripe.com/v3/').then(callback);
+    script(success, error) {
+        script('https://js.stripe.com/v3/').then(success, error);
     }
 
 }

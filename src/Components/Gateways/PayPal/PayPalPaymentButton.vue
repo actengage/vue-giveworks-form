@@ -37,7 +37,7 @@ import 'vue-awesome/icons/exclamation-triangle';
 import 'vue-awesome/icons/check-circle';
 import Gateway from '@/Components/Gateways/Gateway';
 import Icon from 'vue-awesome/components/Icon';
-//import ActivityIndicator from '@/Components/ActivityIndicators/ActivityIndicator';
+import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
 
 export default {
 
@@ -45,7 +45,7 @@ export default {
 
     components: {
         Icon,
-        //ActivityIndicator
+        ActivityIndicator
     },
 
     props: {
@@ -136,7 +136,7 @@ export default {
                 });
 
                 if(this.$unwatchRecurring) {
-                    this.$unwatchRecurrin();
+                    this.$unwatchRecurring();
                 }
 
                 this.$unwatchRecurring = this.$watch('form.recurring', value => {

@@ -34,12 +34,12 @@ export default class AuthorizetNet extends Api {
         return this._accept;
     }
 
-    script(callback) {
+    script(success, error) {
         const url = App.debug ? // Is app in developer mode?
             'https://jstest.authorize.net/v1/Accept.js' : // Developer
             'https://js.authorize.net/v1/Accept.js'; // Production;
 
-        script(url, callback);
+        script(url).then(success, error);
     }
 
  }

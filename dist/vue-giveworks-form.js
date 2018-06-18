@@ -19729,7 +19729,7 @@
   	}
   });
 
-  Icon.register({"credit-card":{"width":576,"height":512,"paths":[{"d":"M0 432C0 458.5 21.5 480 48 480H528C554.5 480 576 458.5 576 432V256H0V432zM192 364C192 357.4 197.4 352 204 352H340C346.6 352 352 357.4 352 364V404C352 410.6 346.6 416 340 416H204C197.4 416 192 410.6 192 404V364zM64 364C64 357.4 69.4 352 76 352H148C154.6 352 160 357.4 160 364V404C160 410.6 154.6 416 148 416H76C69.4 416 64 410.6 64 404V364zM576 80V128H0V80C0 53.5 21.5 32 48 32H528C554.5 32 576 53.5 576 80z"}]}});
+  Icon.register({"regular/credit-card":{"width":576,"height":512,"paths":[{"d":"M527.9 32H48.1C21.5 32 0 53.5 0 80V432C0 458.5 21.5 480 48.1 480H527.9C554.5 480 576 458.5 576 432V80C576 53.5 554.5 32 527.9 32zM54.1 80H521.9C525.2 80 527.9 82.7 527.9 86V128H48.1V86C48.1 82.7 50.8 80 54.1 80zM521.9 432H54.1C50.8 432 48.1 429.3 48.1 426V256H527.9V426C527.9 429.3 525.2 432 521.9 432zM192 332V372C192 378.6 186.6 384 180 384H108C101.4 384 96 378.6 96 372V332C96 325.4 101.4 320 108 320H180C186.6 320 192 325.4 192 332zM384 332V372C384 378.6 378.6 384 372 384H236C229.4 384 224 378.6 224 372V332C224 325.4 229.4 320 236 320H372C378.6 320 384 325.4 384 332z"}]}});
 
   Icon.register({"brands/google-wallet":{"width":448,"height":512,"paths":[{"d":"M156.8 126.8C194.4 187.4 221 239.9 241.1 289.3 232.8 323.1 222.3 355.8 209.8 387.6 196.6 335.3 183.3 286.3 153.8 239.1 160.3 202.7 156.1 165.5 156.8 126.8zM109.3 200H16.1C9.6 200 5.6 207.5 9.6 212.7 51.8 267 81.3 330.5 101.3 400H204.8C188.6 330.3 166.1 266.3 122.3 206.5 119.3 202.5 114.3 200 109.3 200zM157.1 112C225.6 220 287.1 346.5 295.3 480H409C397 342 340.6 215 265.8 112H157.1zM408.9 43.5C407.1 36.7 400.7 32 393.7 32H305.4C300.1 32 296.4 37 297.6 42.3 310.8 88.8 319.9 137.8 324.1 188.3 372.3 274.5 403.8 366.6 414.7 459.1 430.5 398.6 440 325.6 440 256.1 440 182.5 427.9 111 408.9 43.5z"}]}});
 
@@ -19741,7 +19741,7 @@
 
       buttons() {
           return [{
-              icon: 'credit-card',
+              icon: 'regular/credit-card',
               label: 'Credit Card',
               component: 'stripe-credit-card'
           },{
@@ -19837,8 +19837,8 @@
           return this._stripe || (this._stripe = new window.Stripe(this.options.publishable_key));
       }
 
-      script(callback) {
-          script('https://js.stripe.com/v3/').then(callback);
+      script(success, error) {
+          script('https://js.stripe.com/v3/').then(success, error);
       }
 
   }
@@ -19954,8 +19954,8 @@
           return button;
       }
 
-      script(callback) {
-          script('https://www.paypalobjects.com/api/checkout.js', callback);
+      script(success, error) {
+          script('https://www.paypalobjects.com/api/checkout.js').then(success, error);
       }
 
    }
@@ -19992,12 +19992,12 @@
           return this._accept;
       }
 
-      script(callback) {
+      script(success, error) {
           const url = App.debug ? // Is app in developer mode?
               'https://jstest.authorize.net/v1/Accept.js' : // Developer
               'https://js.authorize.net/v1/Accept.js'; // Production;
 
-          script(url, callback);
+          script(url).then(success, error);
       }
 
    }
@@ -20113,15 +20113,13 @@
 
   Icon.register({"check-circle":{"width":512,"height":512,"paths":[{"d":"M504 256C504 393 393 504 256 504S8 393 8 256 119 8 256 8 504 119 504 256zM227.3 387.3L411.3 203.3C417.6 197.1 417.6 186.9 411.3 180.7L388.7 158.1C382.4 151.8 372.3 151.8 366.1 158.1L216 308.1 145.9 238.1C139.7 231.8 129.6 231.8 123.3 238.1L100.7 260.7C94.4 266.9 94.4 277.1 100.7 283.3L204.7 387.3C210.9 393.6 221.1 393.6 227.3 387.3z"}]}});
 
-  //import ActivityIndicator from '@/Components/ActivityIndicators/ActivityIndicator';
-
   var PaypalPaymentButton = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(!_vm.loaded || _vm.submitting)?_c('div',{staticClass:"row my-5 py-1"},[_c('div',{staticClass:"col-xs-12"},[_c('activity-indicator',{attrs:{"size":"sm","center":true}})],1)]):_c('div',[(_vm.error)?_c('div',{staticClass:"alert alert-danger"},[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-sm-2"},[_c('icon',{staticClass:"float-left mt-2",attrs:{"name":"warning","scale":"2.5"}})],1),_vm._v(" "),_c('div',{staticClass:"col-sm-10",domProps:{"innerHTML":_vm._s(_vm.error)}})])]):(_vm.form.payerId && _vm.form.paymentId)?_c('div',{staticClass:"alert alert-success"},[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-sm-2"},[_c('icon',{staticClass:"float-left mt-2",attrs:{"name":"check-circle","scale":"2.5"}})],1),_vm._v(" "),_c('div',{staticClass:"col-sm-10"},[_vm._v(" Your PayPal payment information has been collected and is ready to be processed. "),_c('a',{attrs:{"href":"#"},on:{"click":function($event){_vm.removePaymentInfo($event);}}},[_vm._v("Cancel Payment")])])])]):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"paypal-payment-button mt-2 mb-4",class:{'disabled': _vm.disabled, 'd-none': _vm.submitting}})])},staticRenderFns: [],
 
       name: 'paypal-payment-button',
 
       components: {
           Icon,
-          //ActivityIndicator
+          ActivityIndicator
       },
 
       props: {
@@ -20212,7 +20210,7 @@
                   });
 
                   if(this.$unwatchRecurring) {
-                      this.$unwatchRecurrin();
+                      this.$unwatchRecurring();
                   }
 
                   this.$unwatchRecurring = this.$watch('form.recurring', value => {
@@ -20281,6 +20279,8 @@
 
   }
 
+  Icon.register({"credit-card":{"width":576,"height":512,"paths":[{"d":"M0 432C0 458.5 21.5 480 48 480H528C554.5 480 576 458.5 576 432V256H0V432zM192 364C192 357.4 197.4 352 204 352H340C346.6 352 352 357.4 352 364V404C352 410.6 346.6 416 340 416H204C197.4 416 192 410.6 192 404V364zM64 364C64 357.4 69.4 352 76 352H148C154.6 352 160 357.4 160 364V404C160 410.6 154.6 416 148 416H76C69.4 416 64 410.6 64 404V364zM576 80V128H0V80C0 53.5 21.5 32 48 32H528C554.5 32 576 53.5 576 80z"}]}});
+
   Icon.register({"brands/cc-jcb":{"width":576,"height":512,"paths":[{"d":"M431.5 244.3V212C472.7 212 470 212.2 470 212.2 477.3 213.5 483.3 219.5 483.3 228.2 483.3 237 477.3 242.7 470 244 468.8 244.4 466.7 244.3 431.5 244.3zM474.3 264.5C471.5 263.8 471 264 431.5 264V299C471.1 299 471.5 299.2 474.3 298.5 481.8 297 487.8 290.5 487.8 281.5 487.8 272.8 481.8 266 474.3 264.5zM576 80V432C576 458.5 554.5 480 528 480H48C21.5 480 0 458.5 0 432V80C0 53.5 21.5 32 48 32H528C554.5 32 576 53.5 576 80zM182 192.3H125C125 259.4 135.7 302 89.2 302 69.7 302 50.4 296.3 32 287.2V315.2C62 323.5 100 323.5 100 323.5 197.9 323.5 182 275.8 182 192.3zM360.5 196.8C297.1 180.8 195.5 181.9 195.5 256.1 195.5 333.2 303.7 329.7 360.5 315.3V287C312.9 311.7 253 309 253 256S312.8 200.4 360.5 224.8V196.8zM544 286.5C544 268 527.5 256 506 254.5V253.7C525.5 251 536.3 238.2 536.3 223.5 536.3 204.5 520.6 193.5 499.3 192.5 499.3 192.5 505.6 192.2 379 192.2V319.7H501.7C526 319.8 544 306.8 544 286.5z"}]}});
 
   Icon.register({"brands/cc-visa":{"width":576,"height":512,"paths":[{"d":"M470.1 231.3S477.7 268.5 479.4 276.3H446C449.3 267.4 462 232.8 462 232.8 461.8 233.1 465.3 223.7 467.3 217.9L470.1 231.3zM576 80V432C576 458.5 554.5 480 528 480H48C21.5 480 0 458.5 0 432V80C0 53.5 21.5 32 48 32H528C554.5 32 576 53.5 576 80zM152.5 331.2L215.7 176H173.2L133.9 282 129.6 260.5 115.6 189.1C113.3 179.2 106.2 176.4 97.4 176H32.7L32 179.1C47.8 183.1 61.9 188.9 74.2 196.2L110 331.2H152.5zM246.9 331.4L272.1 176H231.9L206.8 331.4H246.9zM386.8 280.6C387 262.9 376.2 249.4 353.1 238.3 339 231.2 330.4 226.4 330.4 219.1 330.6 212.5 337.7 205.7 353.5 205.7 366.6 205.4 376.2 208.5 383.4 211.6L387 213.3 392.5 179.7C384.6 176.6 372 173.1 356.5 173.1 316.8 173.1 288.9 194.3 288.7 224.5 288.4 246.8 308.7 259.2 323.9 266.7 339.4 274.3 344.7 279.3 344.7 286 344.5 296.4 332.1 301.2 320.6 301.2 304.6 301.2 296 298.7 282.9 292.9L277.6 290.4 272 325.3C281.4 329.6 298.8 333.4 316.8 333.6 359 333.7 386.5 312.8 386.8 280.6zM528 331.4L495.6 176H464.5C454.9 176 447.6 178.8 443.5 188.9L383.8 331.4H426S432.9 312.2 434.4 308.1H486C487.2 313.6 490.8 331.4 490.8 331.4H528z"}]}});
@@ -20293,15 +20293,13 @@
 
   Icon.register({"brands/cc-diners-club":{"width":576,"height":512,"paths":[{"d":"M239.7 79.9C142.8 79.9 63.9 158.5 63.9 255.7 63.9 352.6 142.8 431.5 239.7 431.5 336.9 431.5 415.5 352.6 415.5 255.7 415.5 158.5 336.9 79.9 239.7 79.9zM199.8 359.5C158.1 343.6 128.4 303.1 128.4 255.7S158.1 167.8 199.8 151.6V359.5zM279.6 359.8V151.6C321.3 167.8 351 208.3 351 255.7S321.3 343.6 279.6 359.8zM528 32H48C21.5 32 0 53.5 0 80V432C0 458.5 21.5 480 48 480H528C554.5 480 576 458.5 576 432V80C576 53.5 554.5 32 528 32zM329.7 448H239.4C133.2 448 45.6 362.5 45.6 257.8 45.6 143.2 133.2 64 239.4 64H329.7C434.7 64 530.4 143.2 530.4 257.8 530.4 362.5 434.7 448 329.7 448z"}]}});
 
-  //import ActivityIndicator from '@/Components/ActivityIndicators/ActivityIndicator';
-
   var StripePaymentButton = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(!_vm.error)?_c('div',[(_vm.card)?_c('div',{staticClass:"my-3"},[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-xs-2"},[_c('div',{staticClass:"mr-6"},[(_vm.card.brand === 'Visa')?_c('icon',{attrs:{"name":"cc-visa","scale":"3.5"}}):(_vm.card.brand === 'MasterCard')?_c('icon',{attrs:{"name":"cc-mastercard","scale":"3.5"}}):(_vm.card.brand === 'American Express')?_c('icon',{attrs:{"name":"cc-amex","scale":"3.5"}}):(_vm.card.brand === 'Discover')?_c('icon',{attrs:{"name":"cc-discover","scale":"3.5"}}):(_vm.card.brand === 'JCB')?_c('icon',{attrs:{"name":"cc-jcb","scale":"3.5"}}):(_vm.card.brand === 'Diners Club')?_c('icon',{attrs:{"name":"cc-diners-club","scale":"3.5"}}):_c('icon',{attrs:{"name":"credit-card","scale":"3.5"}})],1)]),_vm._v(" "),_c('div',{staticClass:"col-xs-10"},[_c('div',{staticClass:"pl-2"},[_c('button',{staticClass:"btn btn-xs btn-warning float-right",attrs:{"type":"button","disabled":_vm.submitting},on:{"click":function($event){_vm.changeCard($event);}}},[_vm._v("Change Card")]),_vm._v(" "),(_vm.card.name)?_c('span',[_vm._v(_vm._s(_vm.card.name)),_c('br')]):_vm._e(),_vm._v(" "),_c('small',[_vm._v("****"+_vm._s(_vm.card.last4)+" "),_c('span',{staticClass:"pl-2"},[_vm._v(_vm._s(_vm.card.exp_month)+"/"+_vm._s(_vm.card.exp_year))])])])])])]):_vm._e(),_vm._v(" "),(!_vm.loaded || _vm.submitting)?_c('div',{staticClass:"row my-5 py-1"},[_c('div',{staticClass:"col-xs-12"},[_c('activity-indicator',{attrs:{"size":"sm","center":true}})],1)]):_c('div',[_c('div',{staticClass:"stripe-payment-button mt-2 mb-4"})])]):_c('div',{staticClass:"alert alert-danger"},[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-xs-3 text-center"},[_c('icon',{staticClass:"mt-2",attrs:{"name":"warning","scale":"2"}})],1),_vm._v(" "),_c('div',{staticClass:"col-xs-9"},[_vm._v(" "+_vm._s(_vm.error.message)+" ")])])])])},staticRenderFns: [],
 
       name: 'stripe-payment-button',
 
       components: {
           Icon,
-          //ActivityIndicator
+          ActivityIndicator
       },
 
       props: {
@@ -21310,8 +21308,6 @@
   }).call(commonjsGlobal);
   });
 
-  Icon.register({"regular/credit-card":{"width":576,"height":512,"paths":[{"d":"M527.9 32H48.1C21.5 32 0 53.5 0 80V432C0 458.5 21.5 480 48.1 480H527.9C554.5 480 576 458.5 576 432V80C576 53.5 554.5 32 527.9 32zM54.1 80H521.9C525.2 80 527.9 82.7 527.9 86V128H48.1V86C48.1 82.7 50.8 80 54.1 80zM521.9 432H54.1C50.8 432 48.1 429.3 48.1 426V256H527.9V426C527.9 429.3 525.2 432 521.9 432zM192 332V372C192 378.6 186.6 384 180 384H108C101.4 384 96 378.6 96 372V332C96 325.4 101.4 320 108 320H180C186.6 320 192 325.4 192 332zM384 332V372C384 378.6 378.6 384 372 384H236C229.4 384 224 378.6 224 372V332C224 325.4 229.4 320 236 320H372C378.6 320 384 325.4 384 332z"}]}});
-
   const AVAILABLE_EVENTS = [
       'change',
       'invalid',
@@ -21335,7 +21331,7 @@
       'hipercard'
   ];
 
-  var CreditCardField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"input-credit-card-wrapper"},[_c('div',{staticClass:"form-control input-credit-card brand-unknown"},[_c('input',{staticClass:"input-credit-card-field input-credit-card-number",attrs:{"type":"text","placeholder":"Card number","maxlength":"19"},domProps:{"value":_vm.card.number},on:{"focus":function($event){_vm.addFocusClass($event.target, 'validateNumber'); _vm.removeTransform($event.target); _vm.hideSecurityFields();},"blur":function($event){_vm.removeFocusClass($event.target, 'validateNumber');},"keyup":function($event){_vm.updateModel($event, 'number', 'validateNumber');}}}),_vm._v(" "),_c('div',{staticClass:"input-credit-card-security-fields"},[_c('input',{staticClass:"input-credit-card-field input-credit-card-expiration",attrs:{"type":"text","placeholder":"MM / YY","maxlength":"7"},domProps:{"value":_vm.card.expiration},on:{"focus":function($event){_vm.addFocusClass($event.target, 'validateExpiration', true);},"blur":function($event){_vm.removeFocusClass($event.target, 'validateExpiration');},"keyup":function($event){_vm.updateModel($event, 'expiration', 'validateExpiration');},"keydown":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"delete",[8,46],$event.key,["Backspace","Delete"])){ return null; }_vm.focusPrevElement($event.target);}}}),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.card.cvc),expression:"card.cvc"}],staticClass:"input-credit-card-field input-credit-card-cvc",attrs:{"type":"text","placeholder":"CVC","maxlength":"4","autocomplete":"off"},domProps:{"value":(_vm.card.cvc)},on:{"focus":function($event){_vm.addFocusClass($event.target, 'validateCvc', true);},"blur":function($event){_vm.removeFocusClass($event.target, 'validateCvc');},"input":[function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "cvc", $event.target.value);},function($event){_vm.validateInput($event, 'validateCvc');}],"keydown":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"delete",[8,46],$event.key,["Backspace","Delete"])){ return null; }_vm.focusPrevElement($event.target);}}}),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.card.postalCode),expression:"card.postalCode"}],staticClass:"input-credit-card-field input-credit-card-postal",attrs:{"type":"text","placeholder":"Zip","maxlength":"5"},domProps:{"value":(_vm.card.postalCode)},on:{"focus":function($event){_vm.addFocusClass($event.target, 'validatePostalCode', true);},"blur":function($event){_vm.removeFocusClass($event.target, 'validatePostalCode');},"input":[function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "postalCode", $event.target.value);},function($event){_vm.validateInput($event, 'validatePostalCode');}],"keydown":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"delete",[8,46],$event.key,["Backspace","Delete"])){ return null; }_vm.focusPrevElement($event.target);}}})]),_vm._v(" "),_c('div',{staticClass:"input-credit-card-icon-wrapper"},[_c('div',{staticClass:"input-credit-card-icon-card"},[_c('div',{staticClass:"input-credit-card-icon-front"},[_c('icon',{staticClass:"input-credit-card-icon",attrs:{"name":"cc-jcb","data-brand":"jcb"}}),_vm._v(" "),_c('icon',{staticClass:"input-credit-card-icon",attrs:{"name":"cc-visa","data-brand":"visa"}}),_vm._v(" "),_c('icon',{staticClass:"input-credit-card-icon",attrs:{"name":"cc-amex","data-brand":"amex"}}),_vm._v(" "),_c('icon',{staticClass:"input-credit-card-icon",attrs:{"name":"credit-card","data-brand":"unknown","width":"20","height":"18"}}),_vm._v(" "),_c('icon',{staticClass:"input-credit-card-icon",attrs:{"name":"cc-discover","data-brand":"discover"}}),_vm._v(" "),_c('icon',{staticClass:"input-credit-card-icon",attrs:{"name":"cc-mastercard","data-brand":"mastercard"}}),_vm._v(" "),_c('icon',{staticClass:"input-credit-card-icon",attrs:{"name":"cc-diners-club","data-brand":"dinersclub"}})],1),_vm._v(" "),_c('div',{staticClass:"input-credit-card-icon-back"},[_c('icon',{staticClass:"input-credit-card-icon",attrs:{"name":"credit-card-alt","width":"23.33","height":"20"}})],1)])]),_vm._v(" "),_c('div',{staticClass:"input-credit-card-placeholder-mask"},[_vm._v("Number")]),_vm._v(" "),_c('div',{staticClass:"input-credit-card-number-mask",domProps:{"innerHTML":_vm._s(_vm.card.number)}})]),_vm._v(" "),(_vm.error)?_c('div',{staticClass:"invalid-feedback",domProps:{"innerHTML":_vm._s(_vm.error)}}):_vm._e()])},staticRenderFns: [],
+  var CreditCardField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"input-credit-card-wrapper"},[_c('div',{staticClass:"form-control input-credit-card brand-unknown"},[_c('input',{staticClass:"input-credit-card-field input-credit-card-number",attrs:{"type":"text","placeholder":"Card number","maxlength":"19"},domProps:{"value":_vm.card.number},on:{"focus":function($event){_vm.addFocusClass($event.target, 'validateNumber'); _vm.removeTransform($event.target); _vm.hideSecurityFields();},"blur":function($event){_vm.removeFocusClass($event.target, 'validateNumber');},"keyup":function($event){_vm.updateModel($event, 'number', 'validateNumber');}}}),_vm._v(" "),_c('div',{staticClass:"input-credit-card-security-fields"},[_c('input',{staticClass:"input-credit-card-field input-credit-card-expiration",attrs:{"type":"text","placeholder":"MM / YY","maxlength":"7"},domProps:{"value":_vm.card.expiration},on:{"focus":function($event){_vm.addFocusClass($event.target, 'validateExpiration', true);},"blur":function($event){_vm.removeFocusClass($event.target, 'validateExpiration');},"keyup":function($event){_vm.updateModel($event, 'expiration', 'validateExpiration');},"keydown":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"delete",[8,46],$event.key,["Backspace","Delete"])){ return null; }_vm.focusPrevElement($event.target);}}}),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.card.cvc),expression:"card.cvc"}],staticClass:"input-credit-card-field input-credit-card-cvc",attrs:{"type":"text","placeholder":"CVC","maxlength":"4","autocomplete":"off"},domProps:{"value":(_vm.card.cvc)},on:{"focus":function($event){_vm.addFocusClass($event.target, 'validateCvc', true);},"blur":function($event){_vm.removeFocusClass($event.target, 'validateCvc');},"input":[function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "cvc", $event.target.value);},function($event){_vm.validateInput($event, 'validateCvc');}],"keydown":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"delete",[8,46],$event.key,["Backspace","Delete"])){ return null; }_vm.focusPrevElement($event.target);}}}),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.card.postalCode),expression:"card.postalCode"}],staticClass:"input-credit-card-field input-credit-card-postal",attrs:{"type":"text","placeholder":"Zip","maxlength":"5"},domProps:{"value":(_vm.card.postalCode)},on:{"focus":function($event){_vm.addFocusClass($event.target, 'validatePostalCode', true);},"blur":function($event){_vm.removeFocusClass($event.target, 'validatePostalCode');},"input":[function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "postalCode", $event.target.value);},function($event){_vm.validateInput($event, 'validatePostalCode');}],"keydown":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"delete",[8,46],$event.key,["Backspace","Delete"])){ return null; }_vm.focusPrevElement($event.target);}}})]),_vm._v(" "),_c('div',{staticClass:"input-credit-card-icon-wrapper"},[_c('div',{staticClass:"input-credit-card-icon-card"},[_c('div',{staticClass:"input-credit-card-icon-front"},[_c('icon',{staticClass:"input-credit-card-icon",attrs:{"name":"brands/cc-jcb","data-brand":"jcb"}}),_vm._v(" "),_c('icon',{staticClass:"input-credit-card-icon",attrs:{"name":"brands/cc-visa","data-brand":"visa"}}),_vm._v(" "),_c('icon',{staticClass:"input-credit-card-icon",attrs:{"name":"brands/cc-amex","data-brand":"amex"}}),_vm._v(" "),_c('icon',{staticClass:"input-credit-card-icon",attrs:{"name":"regular/credit-card","data-brand":"unknown","width":"20","height":"18"}}),_vm._v(" "),_c('icon',{staticClass:"input-credit-card-icon",attrs:{"name":"brands/cc-discover","data-brand":"discover"}}),_vm._v(" "),_c('icon',{staticClass:"input-credit-card-icon",attrs:{"name":"brands/cc-mastercard","data-brand":"mastercard"}}),_vm._v(" "),_c('icon',{staticClass:"input-credit-card-icon",attrs:{"name":"brands/cc-diners-club","data-brand":"dinersclub"}})],1),_vm._v(" "),_c('div',{staticClass:"input-credit-card-icon-back"},[_c('icon',{staticClass:"input-credit-card-icon",attrs:{"name":"credit-card","width":"23.33","height":"20"}})],1)])]),_vm._v(" "),_c('div',{staticClass:"input-credit-card-placeholder-mask"},[_vm._v("Number")]),_vm._v(" "),_c('div',{staticClass:"input-credit-card-number-mask",domProps:{"innerHTML":_vm._s(_vm.card.number)}})]),_vm._v(" "),(_vm.error)?_c('div',{staticClass:"invalid-feedback",domProps:{"innerHTML":_vm._s(_vm.error)}}):_vm._e()])},staticRenderFns: [],
 
       name: 'credit-card-field',
 
@@ -21693,15 +21689,13 @@
 
   }
 
-  //import ActivityIndicator from '@/Components/ActivityIndicators/ActivityIndicator';
-
   var AuthorizeNetCreditCard = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (!_vm.loaded)?_c('div',{staticClass:"row my-5 py-1"},[_c('div',{staticClass:"col-xs-12"},[_c('activity-indicator',{attrs:{"size":"sm","center":true}})],1)]):_c('div',{staticClass:"form-group"},[_c('div',{staticClass:"text-bold mb-2"},[_vm._v("Credit Card")]),_vm._v(" "),_c('credit-card-field',{attrs:{"error":_vm.error || _vm.errors.token,"change":_vm.change,"complete":_vm.complete,"valid":_vm.valid,"invalid":_vm.invalid,"focus":_vm.focus,"blur":_vm.blur}})],1)},staticRenderFns: [],
 
       name: 'authorize-net-credit-card',
 
       components: {
           CreditCardField,
-          //ActivityIndicator,
+          ActivityIndicator
       },
 
       props: {
@@ -24355,8 +24349,6 @@
           });
 
           this.$dispatch.reply('form:submit', (resolve, reject) => {
-              console.log('submit');
-
               if(!this.submitting) {
                   this.showActivity();
                   this.errors = {};

@@ -16,7 +16,7 @@
 <script>
 import Gateway from '@/Components/Gateways/Gateway';
 import CreditCardField from '@/Components/Forms/CreditCardField';
-//import ActivityIndicator from '@/Components/ActivityIndicators/ActivityIndicator';
+import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
 
 export default {
 
@@ -24,7 +24,7 @@ export default {
 
     components: {
         CreditCardField,
-        //ActivityIndicator,
+        ActivityIndicator
     },
 
     props: {

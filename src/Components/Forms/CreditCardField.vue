@@ -13,16 +13,16 @@
             <div class="input-credit-card-icon-wrapper">
                 <div class="input-credit-card-icon-card">
                     <div class="input-credit-card-icon-front">
-                        <icon name="cc-jcb" data-brand="jcb" class="input-credit-card-icon"></icon>
-                        <icon name="cc-visa" data-brand="visa" class="input-credit-card-icon"></icon>
-                        <icon name="cc-amex" data-brand="amex" class="input-credit-card-icon"></icon>
-                        <icon name="credit-card" data-brand="unknown" class="input-credit-card-icon" width="20" height="18"></icon>
-                        <icon name="cc-discover" data-brand="discover" class="input-credit-card-icon"></icon>
-                        <icon name="cc-mastercard" data-brand="mastercard" class="input-credit-card-icon"></icon>
-                        <icon name="cc-diners-club" data-brand="dinersclub" class="input-credit-card-icon"></icon>
+                        <icon name="brands/cc-jcb" data-brand="jcb" class="input-credit-card-icon"></icon>
+                        <icon name="brands/cc-visa" data-brand="visa" class="input-credit-card-icon"></icon>
+                        <icon name="brands/cc-amex" data-brand="amex" class="input-credit-card-icon"></icon>
+                        <icon name="regular/credit-card" data-brand="unknown" class="input-credit-card-icon" width="20" height="18"></icon>
+                        <icon name="brands/cc-discover" data-brand="discover" class="input-credit-card-icon"></icon>
+                        <icon name="brands/cc-mastercard" data-brand="mastercard" class="input-credit-card-icon"></icon>
+                        <icon name="brands/cc-diners-club" data-brand="dinersclub" class="input-credit-card-icon"></icon>
                     </div>
                     <div class="input-credit-card-icon-back">
-                        <icon name="credit-card-alt" class="input-credit-card-icon" width="23.33" height="20"></icon>
+                        <icon name="credit-card" class="input-credit-card-icon" width="23.33" height="20"></icon>
                     </div>
                 </div>
             </div>

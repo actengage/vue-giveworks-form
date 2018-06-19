@@ -18,7 +18,7 @@
 
             <btn-activity
                 v-if="i === 2"
-                size="lg"
+                size="md"
                 type="submit"
                 :block="true"
                 orientation="right"

@@ -8,7 +8,7 @@
 
         <textarea-field v-if="page.options.add_comment" v-autogrow v-model="form.comment" id="comment" :label="commentMessage"/>
 
-        <btn-activity type="submit" size="lg" orientation="right" :activity="submitting" :block="true" :label="buttonLabel || page.site.config.giveworks.button.donate"/>
+        <btn-activity type="submit" size="md" orientation="right" :activity="submitting" :block="true" :label="buttonLabel || page.site.config.giveworks.button.donate"/>
 
         <div v-if="page.options.add_optin">
             <label class="custom-control custom-checkbox">

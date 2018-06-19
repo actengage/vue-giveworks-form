@@ -31,7 +31,7 @@
                     <input-field v-if="page.options.show_role" v-model="form.purchasing_role" id="purchasing_role" label="Purchasing Role" :errors="errors"/>
 
                     <btn-activity
-                        size="lg"
+                        size="md"
                         type="submit"
                         orientation="right"
                         :activity="submitting"
@@ -75,7 +75,7 @@
             <input-field v-if="page.options.show_role" v-model="form.purchasing_role" id="purchasing_role" label="Purchasing Role" :errors="errors"/>
 
             <btn-activity
-                size="lg"
+                size="md"
                 type="submit"
                 orientation="right"
                 :activity="submitting"

@@ -20262,8 +20262,14 @@ var PaypalPaymentButton = {render: function(){var _vm=this;var _h=_vm.$createEle
     },
 
     beforeDestroy() {
-        this.$unwatchAmount();
-        this.$unwatchRecurring();
+        if(this.$unwatchAmount) {
+            this.$unwatchAmount();
+        }
+
+        if(this.$unwatchRecurring) {
+            this.$unwatchRecurring();
+        }
+
         this.$dispatch.request('submit:show');
         this.$dispatch.off('paypal:authorize');
         this.$dispatch.off(this.$submitEvent);

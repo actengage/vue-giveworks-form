@@ -194,8 +194,14 @@ export default {
     },
 
     beforeDestroy() {
-        this.$unwatchAmount();
-        this.$unwatchRecurring();
+        if(this.$unwatchAmount) {
+            this.$unwatchAmount();
+        }
+
+        if(this.$unwatchRecurring) {
+            this.$unwatchRecurring();
+        }
+
         this.$dispatch.request('submit:show');
         this.$dispatch.off('paypal:authorize');
         this.$dispatch.off(this.$submitEvent);

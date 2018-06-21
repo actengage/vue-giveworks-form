@@ -8,7 +8,7 @@
 
     <div v-else class="form-group">
         <div class="text-bold mb-2">Credit Card</div>
-        <credit-card-field :error="error || errors.token" :change="change" :complete="complete" :valid="valid" :invalid="invalid" :focus="focus" :blur="blur"></credit-card-field>
+        <credit-card-field :error="error || errors.token" @change="onChange" @complete="onComplete"></credit-card-field>
     </div>
 
 </template>
@@ -54,12 +54,12 @@ export default {
     },
 
     methods: {
-        change: function(event) {
+        onChange: function(event) {
             if(!event.complete) {
                 this.$dispatch.request('submit:disable');
             }
         },
-        complete: function(event) {
+        onComplete: function(event) {
             Gateway(this.gateway).createToken({
                 cardNumber: event.card.number,
                 month: event.card.expMonth,
@@ -67,13 +67,13 @@ export default {
                 cardCode: event.card.cvc
             }, (event) => {
                 if(event.messages.resultCode === 'Ok') {
-                    this.$children[0].makeValid();
+                    //this.$children[0].makeValid();
                     this.$set(this.form, 'token', event.opaqueData.dataValue);
                     this.$set(this.form, 'tokenDescriptor', event.opaqueData.dataDescriptor);
                     this.$dispatch.request('submit:enable');
                 }
                 else if(event.messages.resultCode === 'Error') {
-                    this.$children[0].makeInvalid();
+                    //this.$children[0].makeInvalid();
                     this.error = event.messages.message[0].text;
                     this.$dispatch.request('submit:disable');
                 }

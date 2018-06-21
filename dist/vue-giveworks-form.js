@@ -21811,6 +21811,332 @@
 
   }
 
+  var FormGroup = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"form-group"},[_vm._t("default")],2)},staticRenderFns: [],
+
+      name: 'form-group'
+      
+  }
+
+  const loaded$1 = {};
+
+  function element$1(url) {
+      const script = document.createElement('script');
+      script.setAttribute('src', url);
+      script.setAttribute('type', 'text/javascript');
+      script.setAttribute('charset', 'utf-8');
+      return script;
+  }
+
+  function append$1(script) {
+      if(document.querySelector('head')) {
+          document.querySelector('head').appendChild(script);
+      }
+      else {
+          document.querySelector('body').appendChild(script);
+      }
+
+      return script;
+  }
+
+  function script$1(url) {
+      if(loaded$1[url] instanceof Promise) {
+          return loaded$1[url];
+      }
+
+      return loaded$1[url] = new Promise((resolve, reject) => {
+          try {
+              if(!loaded$1[url]) {
+                  append$1(element$1(url)).addEventListener('load', event => {
+                      resolve(loaded$1[url] = event);
+                  });
+              }
+              else {
+                  resolve(loaded$1[url]);
+              }
+          }
+          catch(e) {
+              reject(e);
+          }
+      });
+  }
+
+  const VueInstaller$1 = {
+      use: use$1,
+      script: script$1,
+      plugin: plugin$2,
+      plugins: plugins$1,
+      filter: filter$2,
+      filters: filters$1,
+      component: component$1,
+      components: components$1,
+      directive: directive$1,
+      directives: directives$1,
+      $plugins: {},
+      $filters: {},
+      $directives: {},
+      $components: {},
+  };
+
+  function use$1(plugin) {
+      if (typeof window !== 'undefined' && window.Vue) {
+          window.Vue.use(plugin);
+      }
+
+      return plugin;
+  }
+
+  function plugin$2(Vue, name, def) {
+      if(!VueInstaller$1.$plugins[name]) {
+          Vue.use(VueInstaller$1.$plugins[name] = def);
+      }
+  }
+
+  function plugins$1(Vue, plugins) {
+      forEach(plugins, (def, name) => {
+          plugin$2(Vue, name, def);
+      });
+  }
+
+  function filter$2(Vue, name, def) {
+      if(!VueInstaller$1.$filters[name]) {
+          Vue.use(VueInstaller$1.$filters[name] = def);
+      }
+  }
+
+  function filters$1(Vue, filters) {
+      forEach(filters, (def, name) => {
+          filter$2(Vue, name, def);
+      });
+  }
+
+  function component$1(Vue, name, def) {
+      if(!VueInstaller$1.$components[name]) {
+          Vue.component(name, VueInstaller$1.$components[name] = def);
+      }
+  }
+
+  function components$1(Vue, components) {
+      forEach(components, (def, name) => {
+          component$1(Vue, name, def);
+      });
+  }
+
+  function directive$1(Vue, name, def) {
+      if(!VueInstaller$1.$directives[name]) {
+          if(isFunction(def)) {
+              Vue.use(VueInstaller$1.$directives[name] = def);
+          }
+          else {
+              Vue.directive(name, def);
+          }
+      }
+  }
+
+  function directives$1(Vue, directives) {
+      forEach(directives, (def, name) => {
+          directive$1(Vue, name, def);
+      });
+  }
+
+  const plugin$3 = VueInstaller$1.use({
+
+      install(Vue, options) {
+          VueInstaller$1.components({
+              FormGroup
+          });
+      }
+
+  });
+
+  const COLORS = [
+      'primary',
+      'secondary',
+      'success',
+      'danger',
+      'warning',
+      'info',
+      'light',
+      'dark',
+      'white',
+      'muted'
+  ];
+
+  const props = {};
+
+  forEach(['border', 'text', 'bg', 'bg-gradient'], namespace => {
+      forEach(COLORS, color => {
+          props[camelCase(prefix(color, namespace))] = Boolean;
+      });
+  });
+
+  function classes(instance, namespace) {
+      return filter(map(COLORS, color => {
+          return instance[camelCase(color = prefix(color, namespace))] ? color : null;
+      }));
+  }
+
+  var Colorable = {
+
+      props: props,
+
+      methods: {
+
+          textColor() {
+              return classes(this, 'text');
+          },
+
+          bgColor() {
+              return classes(this, 'bg');
+          },
+
+          borderColor() {
+              return classes(this, 'border');
+          },
+
+          bgGradientColor() {
+              return classes(this, 'bg-gradient');
+          }
+
+      },
+
+      computed: {
+
+          textColorClasses() {
+              return this.textColor().join(' ').trim() || null;
+          },
+
+          borderColorClasses() {
+              return this.borderColor().join(' ').trim() || null;
+          },
+
+          bgColorClasses() {
+              return this.bgColor().join(' ').trim() || null;
+          },
+
+          bgGradientColorClasses() {
+              return this.bgGradientColor().join(' ').trim() || null;
+          },
+
+          colorableClasses() {
+              const classes = {};
+
+              classes[this.textColorClasses] = !!this.textColorClasses;
+              classes[this.borderColorClasses] = !!this.borderColorClasses;
+              classes[this.bgColorClasses] = !!this.bgColorClasses;
+              classes[this.bgGradientColorClasses] = !!this.bgGradientColorClasses;
+
+              return omitBy(classes, (key, value) => {
+                  return !key || !value;
+              });
+          }
+
+      }
+
+  }
+
+  var FormFeedback = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:{'invalid-feedback': _vm.invalid, 'valid-feedback': _vm.valid && !_vm.invalid}},[_vm._t("default",[_vm._v(_vm._s(_vm.label))])],2)},staticRenderFns: [],
+
+      name: 'form-feedback',
+
+      mixins: [
+          Colorable
+      ],
+
+      props: {
+
+          /**
+           * The value of label element. If no value, no label will appear.
+           *
+           * @property String
+           */
+          label: String,
+
+          /**
+           * Should the feedback marked as invalid
+           *
+           * @property String
+           */
+          invalid: Boolean,
+
+          /**
+           * Should the feedback marked as invalid
+           *
+           * @property String
+           */
+          valid: Boolean
+
+      }
+
+  }
+
+  const plugin$4 = VueInstaller$1.use({
+
+      install(Vue, options) {
+          VueInstaller$1.components({
+              FormFeedback
+          });
+      }
+
+  });
+
+  var Screenreaders = {
+
+      props: {
+
+          /**
+           * Should show only for screenreaders
+           *
+           * @property Boolean
+           */
+          srOnly: Boolean,
+
+          /**
+           * Should be focusable for screenreaders
+           *
+           * @property Boolean
+           */
+          srOnlyFocusable: Boolean
+
+      },
+
+      computed: {
+          screenreaderClasses() {
+              return {
+                  'sr-only': this.srOnly,
+                  'sr-only-focusable': this.srOnlyFocusable,
+              };
+          }
+      }
+
+  }
+
+  var HelpText = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('small',{staticClass:"form-text",class:_vm.classes},[_vm._t("default")],2)},staticRenderFns: [],
+
+      name: 'help-text',
+
+      mixins: [
+          Colorable,
+          Screenreaders
+      ],
+
+      computed: {
+          classes() {
+              return assignIn({}, this.screenreaderClasses, this.colorableClasses);
+          }
+      }
+
+  }
+
+  const plugin$5 = VueInstaller$1.use({
+
+      install(Vue, options) {
+          VueInstaller$1.components({
+              HelpText
+          });
+      }
+
+  });
+
   var Variant = {
 
       props: {
@@ -21867,12 +22193,15 @@
       'blur'
   ];
 
-  var CreditCardField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"form-group",on:{"click":_vm.onClick}},[_c('div',{staticClass:"credit-card-field",class:_vm.mergeClasses(_vm.controlClasses, _vm.variantClass, _vm.classes)},[_c('div',{staticClass:"credit-card-field-icon-wrapper"},[_c('div',{staticClass:"credit-card-field-icon-card"},[_c('div',{staticClass:"credit-card-field-icon-front"},[_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-jcb","data-brand":"jcb"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-visa","data-brand":"visa"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-amex","data-brand":"amex"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"credit-card","data-brand":"unknown","width":"20","height":"18"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-discover","data-brand":"discover"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-mastercard","data-brand":"mastercard"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-diners-club","data-brand":"dinersclub"}})],1),_vm._v(" "),_c('div',{staticClass:"credit-card-field-icon-back"},[_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"credit-card-alt","width":"23.33","height":"20"}})],1)])]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-fields"},[_c('input',{directives:[{name:"focus",rawName:"v-focus.transform",modifiers:{"transform":true}},{name:"validate",rawName:"v-validate:number",value:(_vm.validateNumber),expression:"validateNumber",arg:"number"},{name:"model",rawName:"v-model",value:(_vm.card.number),expression:"card.number"}],staticClass:"credit-card-field-field credit-card-field-number",class:_vm.mergeClasses({'is-empty': !_vm.card.number, 'is-invalid': _vm.validated.number === false}),attrs:{"type":"text","placeholder":"Card number"},domProps:{"value":(_vm.card.number)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "number", $event.target.value);}}}),_vm._v(" "),_c('div',{staticClass:"credit-card-field-security-fields"},[_c('input',{directives:[{name:"focus",rawName:"v-focus"},{name:"validate",rawName:"v-validate:expiration",value:(_vm.validateExpiration),expression:"validateExpiration",arg:"expiration"},{name:"model",rawName:"v-model",value:(_vm.card.expiration),expression:"card.expiration"}],staticClass:"credit-card-field-field credit-card-field-expiration",class:_vm.mergeClasses({'is-empty': !_vm.card.expiration, 'is-invalid': _vm.validated.expiration === false}),attrs:{"type":"text","placeholder":"MM / YY","maxlength":"7"},domProps:{"value":(_vm.card.expiration)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "expiration", $event.target.value);}}}),_vm._v(" "),_c('input',{directives:[{name:"focus",rawName:"v-focus",value:(_vm.validateCvc),expression:"validateCvc"},{name:"validate",rawName:"v-validate:cvc",value:(_vm.validateCvc),expression:"validateCvc",arg:"cvc"},{name:"model",rawName:"v-model",value:(_vm.card.cvc),expression:"card.cvc"}],staticClass:"credit-card-field-field credit-card-field-cvc",class:_vm.mergeClasses({'is-empty': !_vm.card.cvc, 'is-invalid': _vm.validated.cvc === false}),attrs:{"type":"text","placeholder":"CVC","maxlength":"4","autocomplete":"off"},domProps:{"value":(_vm.card.cvc)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "cvc", $event.target.value);}}}),_vm._v(" "),_c('input',{directives:[{name:"focus",rawName:"v-focus",value:(_vm.validatePostalCode),expression:"validatePostalCode"},{name:"validate",rawName:"v-validate:postalCode",value:(_vm.validatePostalCode),expression:"validatePostalCode",arg:"postalCode"},{name:"model",rawName:"v-model",value:(_vm.card.postalCode),expression:"card.postalCode"}],staticClass:"credit-card-field-field credit-card-field-postal",class:_vm.mergeClasses({'is-empty': !_vm.card.postalCode, 'is-invalid': _vm.validated.postalCode === false}),attrs:{"type":"text","placeholder":"Zip","maxlength":"5"},domProps:{"value":(_vm.card.postalCode)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "postalCode", $event.target.value);}}})]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-placeholder-mask"},[_vm._v("Number")]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-number-mask",domProps:{"innerHTML":_vm._s(_vm.card.number)}})])]),_vm._v(" "),(_vm.error)?_c('div',{staticClass:"invalid-feedback",domProps:{"innerHTML":_vm._s(_vm.error)}}):_vm._e()])},staticRenderFns: [],
+  var CreditCardField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',{on:{"click":_vm.onClick}},[_vm._t("control",[_c('div',{staticClass:"credit-card-field",class:_vm.mergeClasses(_vm.controlClasses, _vm.variantClass, _vm.classes)},[_c('div',{staticClass:"credit-card-field-icon-wrapper"},[_c('div',{staticClass:"credit-card-field-icon-card"},[_c('div',{staticClass:"credit-card-field-icon-front"},[_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-jcb","data-brand":"jcb"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-visa","data-brand":"visa"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-amex","data-brand":"amex"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"credit-card","data-brand":"unknown","width":"20","height":"18"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-discover","data-brand":"discover"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-mastercard","data-brand":"mastercard"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-diners-club","data-brand":"dinersclub"}})],1),_vm._v(" "),_c('div',{staticClass:"credit-card-field-icon-back"},[_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"credit-card-alt","width":"23.33","height":"20"}})],1)])]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-fields"},[_c('input',{directives:[{name:"focus",rawName:"v-focus.transform",modifiers:{"transform":true}},{name:"validate",rawName:"v-validate:number",value:(_vm.validateNumber),expression:"validateNumber",arg:"number"},{name:"model",rawName:"v-model",value:(_vm.card.number),expression:"card.number"}],staticClass:"credit-card-field-field credit-card-field-number",class:_vm.mergeClasses({'is-empty': !_vm.card.number, 'is-invalid': _vm.validated.number === false}),attrs:{"type":"text","placeholder":"Card number"},domProps:{"value":(_vm.card.number)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "number", $event.target.value);}}}),_vm._v(" "),_c('div',{staticClass:"credit-card-field-security-fields"},[_c('input',{directives:[{name:"focus",rawName:"v-focus"},{name:"validate",rawName:"v-validate:expiration",value:(_vm.validateExpiration),expression:"validateExpiration",arg:"expiration"},{name:"model",rawName:"v-model",value:(_vm.card.expiration),expression:"card.expiration"}],staticClass:"credit-card-field-field credit-card-field-expiration",class:_vm.mergeClasses({'is-empty': !_vm.card.expiration, 'is-invalid': _vm.validated.expiration === false}),attrs:{"type":"text","placeholder":"MM / YY","maxlength":"7"},domProps:{"value":(_vm.card.expiration)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "expiration", $event.target.value);}}}),_vm._v(" "),_c('input',{directives:[{name:"focus",rawName:"v-focus",value:(_vm.validateCvc),expression:"validateCvc"},{name:"validate",rawName:"v-validate:cvc",value:(_vm.validateCvc),expression:"validateCvc",arg:"cvc"},{name:"model",rawName:"v-model",value:(_vm.card.cvc),expression:"card.cvc"}],staticClass:"credit-card-field-field credit-card-field-cvc",class:_vm.mergeClasses({'is-empty': !_vm.card.cvc, 'is-invalid': _vm.validated.cvc === false}),attrs:{"type":"text","placeholder":"CVC","maxlength":"4","autocomplete":"off"},domProps:{"value":(_vm.card.cvc)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "cvc", $event.target.value);}}}),_vm._v(" "),_c('input',{directives:[{name:"focus",rawName:"v-focus",value:(_vm.validatePostalCode),expression:"validatePostalCode"},{name:"validate",rawName:"v-validate:postalCode",value:(_vm.validatePostalCode),expression:"validatePostalCode",arg:"postalCode"},{name:"model",rawName:"v-model",value:(_vm.card.postalCode),expression:"card.postalCode"}],staticClass:"credit-card-field-field credit-card-field-postal",class:_vm.mergeClasses({'is-empty': !_vm.card.postalCode, 'is-invalid': _vm.validated.postalCode === false}),attrs:{"type":"text","placeholder":"Zip","maxlength":"5"},domProps:{"value":(_vm.card.postalCode)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "postalCode", $event.target.value);}}})]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-placeholder-mask"},[_vm._v("Number")]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-number-mask",domProps:{"innerHTML":_vm._s(_vm.card.number)}})])])]),_vm._v(" "),_vm._t("default"),_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)},staticRenderFns: [],
 
       name: 'credit-card-field',
 
       components: {
-          Icon: Icon$1
+          Icon: Icon$1,
+          FormGroup,
+          FormFeedback,
+          HelpText
       },
 
       mixins: [
@@ -21902,8 +22231,13 @@
           },
           validate: {
               bind(el, binding, vnode) {
-                  function validate() {
+                  function validate(isValid) {
                       vnode.context.validated[binding.arg] = el.value !== '' ? binding.value && binding.value(el.value) : null;
+                      vnode.context.$emit(isValid ? 'valid' : 'invalid', vnode.context.getEventPayload(el, isValid));
+
+                      if(vnode.context.isComplete()) {
+                          vnode.context.$emit('complete', vnode.context.getEventPayload(el, isValid));
+                      }
                   }
 
                   el.addEventListener('keydown', event => {
@@ -21915,15 +22249,6 @@
                       else if(!el.value && event.keyCode === 8) {
                           vnode.context.focusPrevElement(el);
                       }
-                      else {
-                          vnode.context.$emit('input', vnode.context.card);
-                          vnode.context.$emit('change', vnode.context.getEventPayload(el, isValid));
-                          vnode.context.$emit(isValid ? 'valid' : 'invalid', vnode.context.getEventPayload(el, isValid));
-
-                          if(vnode.context.isComplete()) {
-                              vnode.context.$emit('complete', vnode.context.getEventPayload(el, isValid));
-                          }
-                      }
                   });
 
                   el.addEventListener('keyup', event => {
@@ -21934,13 +22259,16 @@
                               vnode.context.focusNextElement(el);
                           }
                           else if(!isValid && el.value.length >= 19) {
-                              validate();
+                              validate(isValid);
                           }
+
+                          vnode.context.$emit('input', vnode.context.card);
+                          vnode.context.$emit('change', vnode.context.getEventPayload(el, isValid));
                       }
                   });
 
                   el.addEventListener('blur', event => {
-                      validate();
+                      validate(binding.value && binding.value(el.value));
                   });
               }
           }
@@ -25072,7 +25400,7 @@
 
   }
 
-  const plugin$2 = VueInstaller.use({
+  const plugin$6 = VueInstaller.use({
 
       install(Vue, options) {
           VueInstaller.components({
@@ -25214,7 +25542,7 @@
 
   }
 
-  const plugin$3 = VueInstaller.use({
+  const plugin$7 = VueInstaller.use({
 
       install(Vue, options) {
           VueInstaller.components({
@@ -25574,7 +25902,7 @@
 
   }
 
-  const plugin$4 = VueInstaller.use({
+  const plugin$8 = VueInstaller.use({
 
       install(Vue, options) {
           VueInstaller.components({
@@ -25584,7 +25912,7 @@
 
   });
 
-  const COLORS = [
+  const COLORS$1 = [
       'primary',
       'secondary',
       'success',
@@ -25597,40 +25925,40 @@
       'muted'
   ];
 
-  const props = {};
+  const props$1 = {};
 
   forEach(['border', 'text', 'bg', 'bg-gradient'], namespace => {
-      forEach(COLORS, color => {
-          props[camelCase(prefix$1(color, namespace))] = Boolean;
+      forEach(COLORS$1, color => {
+          props$1[camelCase(prefix$1(color, namespace))] = Boolean;
       });
   });
 
-  function classes(instance, namespace) {
-      return filter(map(COLORS, color => {
+  function classes$1(instance, namespace) {
+      return filter(map(COLORS$1, color => {
           return instance[camelCase(color = prefix$1(color, namespace))] ? color : null;
       }));
   }
 
-  var Colorable = {
+  var Colorable$1 = {
 
-      props: props,
+      props: props$1,
 
       methods: {
 
           textColor() {
-              return classes(this, 'text');
+              return classes$1(this, 'text');
           },
 
           bgColor() {
-              return classes(this, 'bg');
+              return classes$1(this, 'bg');
           },
 
           borderColor() {
-              return classes(this, 'border');
+              return classes$1(this, 'border');
           },
 
           bgGradientColor() {
-              return classes(this, 'bg-gradient');
+              return classes$1(this, 'bg-gradient');
           }
 
       },
@@ -25670,7 +25998,7 @@
 
   }
 
-  var Screenreaders = {
+  var Screenreaders$1 = {
 
       props: {
 
@@ -25701,13 +26029,13 @@
 
   }
 
-  var HelpText = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('small',{staticClass:"form-text",class:_vm.classes},[_vm._t("default")],2)},staticRenderFns: [],
+  var HelpText$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('small',{staticClass:"form-text",class:_vm.classes},[_vm._t("default")],2)},staticRenderFns: [],
 
       name: 'help-text',
 
       mixins: [
-          Colorable,
-          Screenreaders
+          Colorable$1,
+          Screenreaders$1
       ],
 
       computed: {
@@ -25718,27 +26046,27 @@
 
   }
 
-  const plugin$5 = VueInstaller.use({
+  const plugin$9 = VueInstaller.use({
 
       install(Vue, options) {
           VueInstaller.components({
-              HelpText
+              HelpText: HelpText$1
           });
       }
 
   });
 
-  var FormGroup = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"form-group"},[_vm._t("default")],2)},staticRenderFns: [],
+  var FormGroup$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"form-group"},[_vm._t("default")],2)},staticRenderFns: [],
 
       name: 'form-group'
       
   }
 
-  const plugin$6 = VueInstaller.use({
+  const plugin$10 = VueInstaller.use({
 
       install(Vue, options) {
           VueInstaller.components({
-              FormGroup
+              FormGroup: FormGroup$1
           });
       }
 
@@ -25749,8 +26077,8 @@
       name: 'form-label',
 
       mixins: [
-          Colorable,
-          Screenreaders
+          Colorable$1,
+          Screenreaders$1
       ],
 
       computed: {
@@ -25761,7 +26089,7 @@
 
   }
 
-  const plugin$7 = VueInstaller.use({
+  const plugin$11 = VueInstaller.use({
 
       install(Vue, options) {
           VueInstaller.components({
@@ -25771,12 +26099,12 @@
 
   });
 
-  var FormFeedback = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:{'invalid-feedback': _vm.invalid, 'valid-feedback': _vm.valid && !_vm.invalid}},[_vm._t("default",[_vm._v(_vm._s(_vm.label))])],2)},staticRenderFns: [],
+  var FormFeedback$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:{'invalid-feedback': _vm.invalid, 'valid-feedback': _vm.valid && !_vm.invalid}},[_vm._t("default",[_vm._v(_vm._s(_vm.label))])],2)},staticRenderFns: [],
 
       name: 'form-feedback',
 
       mixins: [
-          Colorable
+          Colorable$1
       ],
 
       props: {
@@ -25806,11 +26134,11 @@
 
   }
 
-  const plugin$8 = VueInstaller.use({
+  const plugin$12 = VueInstaller.use({
 
       install(Vue, options) {
           VueInstaller.components({
-              FormFeedback
+              FormFeedback: FormFeedback$1
           });
       }
 
@@ -25821,15 +26149,15 @@
       name: 'input-field',
 
       mixins: [
-          Colorable,
+          Colorable$1,
           FormControl$1
       ],
 
       components: {
-          HelpText,
-          FormGroup,
+          HelpText: HelpText$1,
+          FormGroup: FormGroup$1,
           FormLabel,
-          FormFeedback
+          FormFeedback: FormFeedback$1
       },
 
       props: {
@@ -25848,7 +26176,7 @@
 
   }
 
-  const plugin$9 = VueInstaller.use({
+  const plugin$13 = VueInstaller.use({
 
       install(Vue, options) {
           VueInstaller.components({
@@ -25992,7 +26320,7 @@
       mixins: [
           HasSlots,
           Sizeable,
-          Colorable
+          Colorable$1
       ],
 
       props: {
@@ -26005,7 +26333,7 @@
 
   }
 
-  const plugin$10 = VueInstaller.use({
+  const plugin$14 = VueInstaller.use({
 
       install(Vue, options) {
           VueInstaller.components({
@@ -26023,7 +26351,7 @@
       name: 'form-control',
 
       mixins: [
-          Colorable,
+          Colorable$1,
           FormControl$1
       ],
 
@@ -26050,7 +26378,7 @@
 
   }
 
-  const plugin$11 = VueInstaller.use({
+  const plugin$15 = VueInstaller.use({
 
       install(Vue, options) {
           VueInstaller.components({
@@ -26065,12 +26393,12 @@
       name: 'radio-field',
 
       components: {
-          HelpText,
-          FormFeedback
+          HelpText: HelpText$1,
+          FormFeedback: FormFeedback$1
       },
 
       mixins: [
-          Colorable,
+          Colorable$1,
           FormControl$1
       ],
 
@@ -26163,7 +26491,7 @@
 
   }
 
-  const plugin$12 = VueInstaller.use({
+  const plugin$16 = VueInstaller.use({
 
       install(Vue, options) {
           VueInstaller.components({
@@ -26219,7 +26547,7 @@
       }
   }
 
-  const plugin$13 = VueInstaller.use({
+  const plugin$17 = VueInstaller.use({
 
       install(Vue, options) {
           VueInstaller.components({
@@ -26236,17 +26564,17 @@
       name: 'select-field',
 
       components: {
-          HelpText,
-          FormGroup,
+          HelpText: HelpText$1,
+          FormGroup: FormGroup$1,
           FormLabel,
-          FormFeedback
+          FormFeedback: FormFeedback$1
       },
 
       extends: FormControl$1,
 
       mixins: [
           FormControl$1,
-          Colorable
+          Colorable$1
       ],
 
       props: {
@@ -26278,7 +26606,7 @@
 
   }
 
-  const plugin$14 = VueInstaller.use({
+  const plugin$18 = VueInstaller.use({
 
       install(Vue, options) {
           VueInstaller.components({
@@ -26293,14 +26621,14 @@
       name: 'textarea-field',
 
       components: {
-          HelpText,
-          FormGroup,
+          HelpText: HelpText$1,
+          FormGroup: FormGroup$1,
           FormLabel,
-          FormFeedback
+          FormFeedback: FormFeedback$1
       },
 
       mixins: [
-          Colorable,
+          Colorable$1,
           FormControl$1
       ],
 
@@ -26325,7 +26653,7 @@
 
   }
 
-  const plugin$15 = VueInstaller.use({
+  const plugin$19 = VueInstaller.use({
 
       install(Vue, options) {
           VueInstaller.components({
@@ -34959,7 +35287,7 @@
    * _.filter(users, 'active');
    * // => objects for ['barney']
    */
-  function filter$2(collection, predicate) {
+  function filter$3(collection, predicate) {
     var func = isArray$1(collection) ? arrayFilter$1 : baseFilter$1;
     return func(collection, baseIteratee$1(predicate, 3));
   }
@@ -43425,7 +43753,7 @@
   };
 
   var collection$1 = {
-    countBy: countBy$1, each: forEach$1, eachRight: forEachRight$1, every: every$1, filter: filter$2,
+    countBy: countBy$1, each: forEach$1, eachRight: forEachRight$1, every: every$1, filter: filter$3,
     find: find$1, findLast: findLast$1, flatMap: flatMap$1, flatMapDeep: flatMapDeep$1, flatMapDepth: flatMapDepth$1,
     forEach: forEach$1, forEachRight: forEachRight$1, groupBy: groupBy$1, includes: includes$1, invokeMap: invokeMap$1,
     keyBy: keyBy$1, map: map$1, orderBy: orderBy$1, partition: partition$1, reduce: reduce$1,
@@ -48330,9 +48658,9 @@
 
   var each = forEach_1;
 
-  const loaded$1 = {};
+  const loaded$2 = {};
 
-  function element$1(url) {
+  function element$2(url) {
       const script = document.createElement('script');
       script.setAttribute('src', url);
       script.setAttribute('type', 'text/javascript');
@@ -48340,7 +48668,7 @@
       return script;
   }
 
-  function append$1(script) {
+  function append$2(script) {
       if(document.querySelector('head')) {
           document.querySelector('head').appendChild(script);
       }
@@ -48351,20 +48679,20 @@
       return script;
   }
 
-  function script$1(url) {
-      if(loaded$1[url] instanceof Promise) {
-          return loaded$1[url];
+  function script$2(url) {
+      if(loaded$2[url] instanceof Promise) {
+          return loaded$2[url];
       }
 
-      return loaded$1[url] = new Promise((resolve, reject) => {
+      return loaded$2[url] = new Promise((resolve, reject) => {
           try {
-              if(!loaded$1[url]) {
-                  append$1(element$1(url)).addEventListener('load', event => {
-                      resolve(loaded$1[url] = event);
+              if(!loaded$2[url]) {
+                  append$2(element$2(url)).addEventListener('load', event => {
+                      resolve(loaded$2[url] = event);
                   });
               }
               else {
-                  resolve(loaded$1[url]);
+                  resolve(loaded$2[url]);
               }
           }
           catch(e) {
@@ -48426,30 +48754,30 @@
     }
   };
 
-  var FormGroup$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"form-group"},[_vm._t("default")],2)},staticRenderFns: [],
+  var FormGroup$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"form-group"},[_vm._t("default")],2)},staticRenderFns: [],
 
       name: 'form-group'
       
   };
 
-  const VueInstaller$1 = {
-      use: use$1,
-      script: script$1,
-      plugin: plugin$16,
-      plugins: plugins$1,
+  const VueInstaller$2 = {
+      use: use$2,
+      script: script$2,
+      plugin: plugin$20,
+      plugins: plugins$2,
       filter: filter$2$1,
-      filters: filters$1,
-      component: component$1,
-      components: components$1,
-      directive: directive$1,
-      directives: directives$1,
+      filters: filters$2,
+      component: component$2,
+      components: components$2,
+      directive: directive$2,
+      directives: directives$2,
       $plugins: {},
       $filters: {},
       $directives: {},
       $components: {},
   };
 
-  function use$1(plugin) {
+  function use$2(plugin) {
       if (typeof window !== 'undefined' && window.Vue) {
           window.Vue.use(plugin);
       }
@@ -48457,46 +48785,46 @@
       return plugin;
   }
 
-  function plugin$16(Vue, name, def) {
-      if(!VueInstaller$1.$plugins[name]) {
-          Vue.use(VueInstaller$1.$plugins[name] = def);
+  function plugin$20(Vue, name, def) {
+      if(!VueInstaller$2.$plugins[name]) {
+          Vue.use(VueInstaller$2.$plugins[name] = def);
       }
   }
 
-  function plugins$1(Vue, plugins) {
+  function plugins$2(Vue, plugins) {
       forEach$1(plugins, (def, name) => {
-          plugin$16(Vue, name, def);
+          plugin$20(Vue, name, def);
       });
   }
 
   function filter$2$1(Vue, name, def) {
-      if(!VueInstaller$1.$filters[name]) {
-          Vue.use(VueInstaller$1.$filters[name] = def);
+      if(!VueInstaller$2.$filters[name]) {
+          Vue.use(VueInstaller$2.$filters[name] = def);
       }
   }
 
-  function filters$1(Vue, filters) {
+  function filters$2(Vue, filters) {
       forEach$1(filters, (def, name) => {
           filter$2$1(Vue, name, def);
       });
   }
 
-  function component$1(Vue, name, def) {
-      if(!VueInstaller$1.$components[name]) {
-          Vue.component(name, VueInstaller$1.$components[name] = def);
+  function component$2(Vue, name, def) {
+      if(!VueInstaller$2.$components[name]) {
+          Vue.component(name, VueInstaller$2.$components[name] = def);
       }
   }
 
-  function components$1(Vue, components) {
+  function components$2(Vue, components) {
       forEach$1(components, (def, name) => {
-          component$1(Vue, name, def);
+          component$2(Vue, name, def);
       });
   }
 
-  function directive$1(Vue, name, def) {
-      if(!VueInstaller$1.$directives[name]) {
+  function directive$2(Vue, name, def) {
+      if(!VueInstaller$2.$directives[name]) {
           if(isFunction$2(def)) {
-              Vue.use(VueInstaller$1.$directives[name] = def);
+              Vue.use(VueInstaller$2.$directives[name] = def);
           }
           else {
               Vue.directive(name, def);
@@ -48504,17 +48832,17 @@
       }
   }
 
-  function directives$1(Vue, directives) {
+  function directives$2(Vue, directives) {
       forEach$1(directives, (def, name) => {
-          directive$1(Vue, name, def);
+          directive$2(Vue, name, def);
       });
   }
 
-  const plugin$1$1 = VueInstaller$1.use({
+  const plugin$1$1 = VueInstaller$2.use({
 
       install(Vue, options) {
-          VueInstaller$1.components({
-              FormGroup: FormGroup$1
+          VueInstaller$2.components({
+              FormGroup: FormGroup$2
           });
       }
 
@@ -48541,7 +48869,7 @@
       return prefixer(subject);
   }
 
-  const COLORS$1 = [
+  const COLORS$2 = [
       'primary',
       'secondary',
       'success',
@@ -48554,40 +48882,40 @@
       'muted'
   ];
 
-  const props$1 = {};
+  const props$2 = {};
 
   forEach$1(['border', 'text', 'bg', 'bg-gradient'], namespace => {
-      forEach$1(COLORS$1, color => {
-          props$1[camelCase$1(prefix$2(color, namespace))] = Boolean;
+      forEach$1(COLORS$2, color => {
+          props$2[camelCase$1(prefix$2(color, namespace))] = Boolean;
       });
   });
 
-  function classes$1(instance, namespace) {
-      return filter$2(map$1(COLORS$1, color => {
+  function classes$2(instance, namespace) {
+      return filter$3(map$1(COLORS$2, color => {
           return instance[camelCase$1(color = prefix$2(color, namespace))] ? color : null;
       }));
   }
 
-  var Colorable$1 = {
+  var Colorable$2 = {
 
-      props: props$1,
+      props: props$2,
 
       methods: {
 
           textColor() {
-              return classes$1(this, 'text');
+              return classes$2(this, 'text');
           },
 
           bgColor() {
-              return classes$1(this, 'bg');
+              return classes$2(this, 'bg');
           },
 
           borderColor() {
-              return classes$1(this, 'border');
+              return classes$2(this, 'border');
           },
 
           bgGradientColor() {
-              return classes$1(this, 'bg-gradient');
+              return classes$2(this, 'bg-gradient');
           }
 
       },
@@ -48627,7 +48955,7 @@
 
   };
 
-  var Screenreaders$1 = {
+  var Screenreaders$2 = {
 
       props: {
 
@@ -48658,13 +48986,13 @@
 
   };
 
-  var HelpText$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('small',{staticClass:"form-text",class:_vm.classes},[_vm._t("default")],2)},staticRenderFns: [],
+  var HelpText$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('small',{staticClass:"form-text",class:_vm.classes},[_vm._t("default")],2)},staticRenderFns: [],
 
       name: 'help-text',
 
       mixins: [
-          Colorable$1,
-          Screenreaders$1
+          Colorable$2,
+          Screenreaders$2
       ],
 
       computed: {
@@ -48675,11 +49003,11 @@
 
   };
 
-  const plugin$2$1 = VueInstaller$1.use({
+  const plugin$2$1 = VueInstaller$2.use({
 
       install(Vue, options) {
-          VueInstaller$1.components({
-              HelpText: HelpText$1
+          VueInstaller$2.components({
+              HelpText: HelpText$2
           });
       }
 
@@ -48690,8 +49018,8 @@
       name: 'form-label',
 
       mixins: [
-          Colorable$1,
-          Screenreaders$1
+          Colorable$2,
+          Screenreaders$2
       ],
 
       computed: {
@@ -48702,22 +49030,22 @@
 
   };
 
-  const plugin$3$1 = VueInstaller$1.use({
+  const plugin$3$1 = VueInstaller$2.use({
 
       install(Vue, options) {
-          VueInstaller$1.components({
+          VueInstaller$2.components({
               FormLabel: FormLabel$1
           });
       }
 
   });
 
-  var FormFeedback$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:{'invalid-feedback': _vm.invalid, 'valid-feedback': _vm.valid && !_vm.invalid}},[_vm._t("default",[_vm._v(_vm._s(_vm.label))])],2)},staticRenderFns: [],
+  var FormFeedback$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:{'invalid-feedback': _vm.invalid, 'valid-feedback': _vm.valid && !_vm.invalid}},[_vm._t("default",[_vm._v(_vm._s(_vm.label))])],2)},staticRenderFns: [],
 
       name: 'form-feedback',
 
       mixins: [
-          Colorable$1
+          Colorable$2
       ],
 
       props: {
@@ -48747,11 +49075,11 @@
 
   };
 
-  const plugin$4$1 = VueInstaller$1.use({
+  const plugin$4$1 = VueInstaller$2.use({
 
       install(Vue, options) {
-          VueInstaller$1.components({
-              FormFeedback: FormFeedback$1
+          VueInstaller$2.components({
+              FormFeedback: FormFeedback$2
           });
       }
 
@@ -49033,15 +49361,15 @@
       name: 'input-field',
 
       mixins: [
-          Colorable$1,
+          Colorable$2,
           FormControl$3
       ],
 
       components: {
-          HelpText: HelpText$1,
-          FormGroup: FormGroup$1,
+          HelpText: HelpText$2,
+          FormGroup: FormGroup$2,
           FormLabel: FormLabel$1,
-          FormFeedback: FormFeedback$1
+          FormFeedback: FormFeedback$2
       },
 
       props: {
@@ -49060,10 +49388,10 @@
 
   };
 
-  const plugin$5$1 = VueInstaller$1.use({
+  const plugin$5$1 = VueInstaller$2.use({
 
       install(Vue, options) {
-          VueInstaller$1.components({
+          VueInstaller$2.components({
               InputField: InputField$2
           });
       }
@@ -49166,10 +49494,10 @@
 
   };
 
-  const plugin$6$1 = VueInstaller$1.use({
+  const plugin$6$1 = VueInstaller$2.use({
 
       install(Vue, options) {
-          VueInstaller$1.components({
+          VueInstaller$2.components({
               ActivityIndicator: ActivityIndicator$1
           });
       }
@@ -49248,7 +49576,7 @@
     name: 'place-autocomplete-field',
     extends: InputField$2,
     components: {
-      FormGroup: FormGroup$1,
+      FormGroup: FormGroup$2,
       InputField: InputField$2,
       ActivityIndicator: ActivityIndicator$1,
       PlaceAutocompleteList: PlaceAutocompleteList
@@ -49448,7 +49776,7 @@
     mounted: function mounted() {
       var _this6 = this;
 
-      script$1('https://maps.googleapis.com/maps/api/js?key=' + this.apiKey + '&libraries=places').then(function () {
+      script$2('https://maps.googleapis.com/maps/api/js?key=' + this.apiKey + '&libraries=places').then(function () {
         _this6.$geocoder = new google.maps.Geocoder();
         _this6.$service = new google.maps.places.AutocompleteService();
       }); //this.$on('place:changed', this.placeChanged);
@@ -49551,13 +49879,13 @@
     window.Vue.use(install);
   }
 
-  const components$2 = {
+  const components$3 = {
       Alert,
       BtnActivity,
       CheckboxField: CheckboxField$1,
       FormControl: FormControl$2,
-      FormFeedback,
-      FormGroup,
+      FormFeedback: FormFeedback$1,
+      FormGroup: FormGroup$1,
       FormLabel,
       InputField: InputField$1,
       InputGroup,
@@ -49572,7 +49900,7 @@
       Vue.prototype.$broadcast = new BroadcastManager;
       Vue.prototype.$dispatch = Vue.prototype.$broadcast.dispatch();
 
-      forEach(components$2, (component, key) => {
+      forEach(components$3, (component, key) => {
           Vue.component(key, component);
       });
 

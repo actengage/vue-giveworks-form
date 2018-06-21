@@ -15,8 +15,8 @@
 
 <script>
 import Gateway from '@/Components/Gateways/Gateway';
-import CreditCardField from '@/Components/Forms/CreditCardField';
 import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
+import CreditCardField from 'vue-credit-card-field/src/Components/CreditCardField';
 
 export default {
 

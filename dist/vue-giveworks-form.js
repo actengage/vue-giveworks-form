@@ -22325,6 +22325,7 @@
 
           classes() {
               const classes = {
+                  'text-sm': this.width < 300,
                   'is-focused': this.isFocused,
                   'is-invalid': this.isInvalid()
               };
@@ -22356,7 +22357,9 @@
               const parts = el.value.split(' ');
               const totalWidth = positionInfo.width;
               const computedStyle = defaultView.getComputedStyle(el);
-              const width = this.getTextWidth(parts[parts.length - 1].trim(), computedStyle.fontStyle+' '+computedStyle.fontSize+' '+computedStyle.fontFamily);
+              const width = this.getTextWidth(parts[parts.length - 1].trim(), computedStyle.fontSize+' '+computedStyle.fontStyle+' '+computedStyle.fontFamily);
+
+              console.log(positionInfo, computedStyle, width);
 
               el.style.transform = 'translateX('+((totalWidth - width) * -1)+'px)';
           },
@@ -22409,6 +22412,7 @@
               var context = canvas.getContext("2d");
               context.font = font;
               var metrics = context.measureText(text);
+              console.log(text, metrics);
               return metrics.width;
           },
 
@@ -22481,6 +22485,12 @@
               );
           },
 
+          onResize(event) {
+              this.width = this.$el.offsetWidth;
+
+              return this.onResize;
+          },
+
           onClick(event) {
               if(!event.target.classList.contains('credit-card-field-field')) {
                   this.focusedElement ? this.focusedElement.focus() : this.$el.querySelector('.credit-card-field-field').focus();
@@ -22499,17 +22509,24 @@
           lib$1.formatCardNumber(this.$el.querySelector('.credit-card-field-number'));
           lib$1.formatCardExpiry(this.$el.querySelector('.credit-card-field-expiration'));
 
+          this.$emit('input', this.card);
+
           for(let i in AVAILABLE_EVENTS) {
               if(this[AVAILABLE_EVENTS[i]]) {
                   this.$on(AVAILABLE_EVENTS[i], this[AVAILABLE_EVENTS[i]]);
               }
           }
 
-          this.$emit('input', this.card);
+          window.addEventListener('resize', this.onResize());
+      },
+
+      destroyed() {
+          window.removeEventListener('resize', this.onResize);
       },
 
       data() {
           return {
+              width: null,
               isFocused: false,
               focusedElement: null,
               brand: null,

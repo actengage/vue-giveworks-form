@@ -8,13 +8,15 @@
 
     <div v-else class="form-group">
         <div class="text-bold mb-2">Credit Card</div>
-        <credit-card-field :error="error || errors.token" @change="onChange" @complete="onComplete"></credit-card-field>
+        <credit-card-field :activity="activity" :error="error || errors.token" @change="onChange" @complete="onComplete"/>
     </div>
 
 </template>
 
 <script>
 import Gateway from '@/Components/Gateways/Gateway';
+import elapsed from 'vue-interface/src/Helpers/Elapsed';
+import wait from 'vue-interface/src/Helpers/Wait';
 import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
 import CreditCardField from 'vue-credit-card-field/src/Components/CreditCardField';
 
@@ -46,13 +48,6 @@ export default {
         }
     },
 
-    data() {
-        return {
-            error: false,
-            loaded: false
-        };
-    },
-
     methods: {
         onChange: function(event) {
             if(!event.complete) {
@@ -60,25 +55,34 @@ export default {
             }
         },
         onComplete: function(event) {
-            Gateway(this.gateway).createToken({
-                cardNumber: event.card.number,
-                month: event.card.expMonth,
-                year: event.card.expYear,
-                cardCode: event.card.cvc
-            }, (event) => {
-                if(event.messages.resultCode === 'Ok') {
-                    //this.$children[0].makeValid();
-                    this.$set(this.form, 'token', event.opaqueData.dataValue);
-                    this.$set(this.form, 'tokenDescriptor', event.opaqueData.dataDescriptor);
-                    this.$dispatch.request('submit:enable');
-                }
-                else if(event.messages.resultCode === 'Error') {
-                    //this.$children[0].makeInvalid();
-                    this.error = event.messages.message[0].text;
-                    this.$dispatch.request('submit:disable');
-                }
+            elapsed(500, (resolve, reject) => {
+                Gateway(this.gateway).createToken({
+                    cardNumber: event.card.number,
+                    month: event.card.expMonth,
+                    year: event.card.expYear,
+                    cardCode: event.card.cvc
+                }, event => {
+                    wait(this.activity ? 750 : 0, (resolve, reject) => {
+                        if(event.messages.resultCode === 'Ok') {
+                            this.$set(this.form, 'token', event.opaqueData.dataValue);
+                            this.$set(this.form, 'tokenDescriptor', event.opaqueData.dataDescriptor);
+                            this.$dispatch.request('submit:enable');
+                            resolve(event);
+                        }
+                        else if(event.messages.resultCode === 'Error') {
+                            this.error = event.messages.message[0].text;
+                            this.$dispatch.request('submit:disable');
+                            reject(this.error);
+                        }
+                    }).then(resolve, reject);
+                });
+            }, () => {
+                this.activity = true;
+            }).then(() => {
+                this.activity = false;
+            },() => {
+                this.activity = false;
             });
-
         }
     },
 
@@ -88,6 +92,14 @@ export default {
         Gateway(this.gateway).script((event) => {
             this.loaded = true;
         });
+    },
+
+    data() {
+        return {
+            error: false,
+            loaded: false,
+            activity: false
+        };
     }
 
 }

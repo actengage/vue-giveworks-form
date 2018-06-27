@@ -1,3 +1,4 @@
+import 'promise-polyfill/src/polyfill';
 import 'vue-place-autocomplete/dist/vue-place-autocomplete.css';
 import GiveworksForm from '@/Plugins/GiveworksForm';
 

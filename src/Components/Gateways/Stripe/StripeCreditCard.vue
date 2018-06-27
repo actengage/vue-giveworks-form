@@ -1,9 +1,16 @@
 <template>
 
-    <div class="form-group" :class="{'was-validated': !!errors.token}">
-        <label class="d-block mt-3">
+    <div v-else class="form-group" :class="{'was-validated': !!errors.token}">
+
+        <div v-if="!loaded" class="row my-5 py-1">
+            <div class="col-xs-12">
+                <activity-indicator size="sm" :center="true"></activity-indicator>
+            </div>
+        </div>
+
+        <label v-else class="d-block mt-3">
             <div class="text-bold mb-2">Credit Card</div>
-            <div class="stripe-field" :class="{'activity': isLoading}">
+            <div class="stripe-field" :class="{'has-activity': activity}">
                 <div class="form-control p-2" :class="{'is-invalid': !!errors.token}">
                     <div class="stripe-field-input"></div>
                 </div>
@@ -19,6 +26,8 @@
 
 <script>
 import Gateway from '@/Components/Gateways/Gateway';
+import elapsed from 'vue-interface/src/Helpers/Elapsed';
+import wait from 'vue-interface/src/Helpers/Wait';
 import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
 
 export default {
@@ -85,30 +94,39 @@ export default {
                 this.errors.token = event.error ? [event.error.message] : null;
 
                 if(event.complete) {
-                    // this.isLoading = true;
-
-                    gateway.createToken(this.$card, {
-                        currency: 'usd'
-                    }).then((result) => {
-                        // this.isLoading = false;
-
-                        if (result.error) {
-                            this.errors.token = [event.error.message];
-                        } else {
-                            this.form.token = result.token.id;
-                            this.$dispatch.request('submit:enable');
-                        }
+                    elapsed(500, (resolve, reject) => {
+                        gateway.createToken(this.$card, {
+                            currency: 'usd'
+                        }).then((result) => {
+                            wait(this.activity ? 750 : 0, (resolve, reject) => {
+                                if (result.error) {
+                                    reject(this.errors.token = [event.error.message]);
+                                } else {
+                                    this.form.token = result.token.id;
+                                    this.$dispatch.request('submit:enable');
+                                    resolve(result);
+                                }
+                            }).then(resolve, reject);
+                        });
+                    }, () => {
+                        this.activity = true;
+                    }).then(() => {
+                        this.activity = false;
+                    }, () => {
+                        this.activity = false;
                     });
                 }
             });
 
-            this.$card.mount(this.$el.querySelector('.stripe-field-input'));
+            this.loaded = true;
+            this.$nextTick(() => this.$card.mount(this.$el.querySelector('.stripe-field-input')));
         });
     },
 
     data() {
         return {
-            isLoading: false
+            activity: false,
+            loaded: false
         }
     }
 
@@ -121,7 +139,7 @@ export default {
 
     .form-control {
         width: 100%;
-        transition: all .33s ease-in-out;
+        transition: all .15s ease-in-out;
     }
 
     .stripe-field-activity {
@@ -132,10 +150,10 @@ export default {
         z-index: 1;
         height: 100%;
         width: 35px;
-        transition: all .33s ease-in-out;
+        transition: all .15s ease-in-out;
     }
 
-    &.activity {
+    &.has-activity {
         .form-control {
             width: calc(100% - 35px);
         }

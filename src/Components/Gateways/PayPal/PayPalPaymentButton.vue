@@ -1,5 +1,4 @@
 <template>
-
     <div>
         <div v-if="!loaded || submitting" class="row my-5 py-1">
             <div class="col-xs-12">
@@ -29,7 +28,6 @@
 
         <div class="paypal-payment-button mt-2 mb-4" :class="{'disabled': disabled, 'd-none': submitting}"></div>
     </div>
-
 </template>
 
 <script>

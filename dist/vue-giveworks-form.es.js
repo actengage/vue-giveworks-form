@@ -1,6 +1,273 @@
 import axios from 'axios';
 import moment from 'moment';
 
+var global$1 = typeof global !== "undefined" ? global :
+            typeof self !== "undefined" ? self :
+            typeof window !== "undefined" ? window : {}
+
+function promiseFinally(callback) {
+  var constructor = this.constructor;
+  return this.then(
+    function(value) {
+      return constructor.resolve(callback()).then(function() {
+        return value;
+      });
+    },
+    function(reason) {
+      return constructor.resolve(callback()).then(function() {
+        return constructor.reject(reason);
+      });
+    }
+  );
+}
+
+// Store setTimeout reference so promise-polyfill will be unaffected by
+// other code modifying setTimeout (like sinon.useFakeTimers())
+var setTimeoutFunc = setTimeout;
+
+function noop() {}
+
+// Polyfill for Function.prototype.bind
+function bind(fn, thisArg) {
+  return function() {
+    fn.apply(thisArg, arguments);
+  };
+}
+
+function Promise$1(fn) {
+  if (!(this instanceof Promise$1))
+    throw new TypeError('Promises must be constructed via new');
+  if (typeof fn !== 'function') throw new TypeError('not a function');
+  this._state = 0;
+  this._handled = false;
+  this._value = undefined;
+  this._deferreds = [];
+
+  doResolve(fn, this);
+}
+
+function handle(self, deferred) {
+  while (self._state === 3) {
+    self = self._value;
+  }
+  if (self._state === 0) {
+    self._deferreds.push(deferred);
+    return;
+  }
+  self._handled = true;
+  Promise$1._immediateFn(function() {
+    var cb = self._state === 1 ? deferred.onFulfilled : deferred.onRejected;
+    if (cb === null) {
+      (self._state === 1 ? resolve : reject)(deferred.promise, self._value);
+      return;
+    }
+    var ret;
+    try {
+      ret = cb(self._value);
+    } catch (e) {
+      reject(deferred.promise, e);
+      return;
+    }
+    resolve(deferred.promise, ret);
+  });
+}
+
+function resolve(self, newValue) {
+  try {
+    // Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
+    if (newValue === self)
+      throw new TypeError('A promise cannot be resolved with itself.');
+    if (
+      newValue &&
+      (typeof newValue === 'object' || typeof newValue === 'function')
+    ) {
+      var then = newValue.then;
+      if (newValue instanceof Promise$1) {
+        self._state = 3;
+        self._value = newValue;
+        finale(self);
+        return;
+      } else if (typeof then === 'function') {
+        doResolve(bind(then, newValue), self);
+        return;
+      }
+    }
+    self._state = 1;
+    self._value = newValue;
+    finale(self);
+  } catch (e) {
+    reject(self, e);
+  }
+}
+
+function reject(self, newValue) {
+  self._state = 2;
+  self._value = newValue;
+  finale(self);
+}
+
+function finale(self) {
+  if (self._state === 2 && self._deferreds.length === 0) {
+    Promise$1._immediateFn(function() {
+      if (!self._handled) {
+        Promise$1._unhandledRejectionFn(self._value);
+      }
+    });
+  }
+
+  for (var i = 0, len = self._deferreds.length; i < len; i++) {
+    handle(self, self._deferreds[i]);
+  }
+  self._deferreds = null;
+}
+
+function Handler(onFulfilled, onRejected, promise) {
+  this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
+  this.onRejected = typeof onRejected === 'function' ? onRejected : null;
+  this.promise = promise;
+}
+
+/**
+ * Take a potentially misbehaving resolver function and make sure
+ * onFulfilled and onRejected are only called once.
+ *
+ * Makes no guarantees about asynchrony.
+ */
+function doResolve(fn, self) {
+  var done = false;
+  try {
+    fn(
+      function(value) {
+        if (done) return;
+        done = true;
+        resolve(self, value);
+      },
+      function(reason) {
+        if (done) return;
+        done = true;
+        reject(self, reason);
+      }
+    );
+  } catch (ex) {
+    if (done) return;
+    done = true;
+    reject(self, ex);
+  }
+}
+
+Promise$1.prototype['catch'] = function(onRejected) {
+  return this.then(null, onRejected);
+};
+
+Promise$1.prototype.then = function(onFulfilled, onRejected) {
+  var prom = new this.constructor(noop);
+
+  handle(this, new Handler(onFulfilled, onRejected, prom));
+  return prom;
+};
+
+Promise$1.prototype['finally'] = promiseFinally;
+
+Promise$1.all = function(arr) {
+  return new Promise$1(function(resolve, reject) {
+    if (!arr || typeof arr.length === 'undefined')
+      throw new TypeError('Promise.all accepts an array');
+    var args = Array.prototype.slice.call(arr);
+    if (args.length === 0) return resolve([]);
+    var remaining = args.length;
+
+    function res(i, val) {
+      try {
+        if (val && (typeof val === 'object' || typeof val === 'function')) {
+          var then = val.then;
+          if (typeof then === 'function') {
+            then.call(
+              val,
+              function(val) {
+                res(i, val);
+              },
+              reject
+            );
+            return;
+          }
+        }
+        args[i] = val;
+        if (--remaining === 0) {
+          resolve(args);
+        }
+      } catch (ex) {
+        reject(ex);
+      }
+    }
+
+    for (var i = 0; i < args.length; i++) {
+      res(i, args[i]);
+    }
+  });
+};
+
+Promise$1.resolve = function(value) {
+  if (value && typeof value === 'object' && value.constructor === Promise$1) {
+    return value;
+  }
+
+  return new Promise$1(function(resolve) {
+    resolve(value);
+  });
+};
+
+Promise$1.reject = function(value) {
+  return new Promise$1(function(resolve, reject) {
+    reject(value);
+  });
+};
+
+Promise$1.race = function(values) {
+  return new Promise$1(function(resolve, reject) {
+    for (var i = 0, len = values.length; i < len; i++) {
+      values[i].then(resolve, reject);
+    }
+  });
+};
+
+// Use polyfill for setImmediate for performance gains
+Promise$1._immediateFn =
+  (typeof setImmediate === 'function' &&
+    function(fn) {
+      setImmediate(fn);
+    }) ||
+  function(fn) {
+    setTimeoutFunc(fn, 0);
+  };
+
+Promise$1._unhandledRejectionFn = function _unhandledRejectionFn(err) {
+  if (typeof console !== 'undefined' && console) {
+    console.warn('Possible Unhandled Promise Rejection:', err); // eslint-disable-line no-console
+  }
+};
+
+var globalNS = (function() {
+  // the only reliable means to get the global object is
+  // `Function('return this')()`
+  // However, this causes CSP violations in Chrome apps.
+  if (typeof self !== 'undefined') {
+    return self;
+  }
+  if (typeof window !== 'undefined') {
+    return window;
+  }
+  if (typeof global$1 !== 'undefined') {
+    return global$1;
+  }
+  throw new Error('unable to locate global object');
+})();
+
+if (!globalNS.Promise) {
+  globalNS.Promise = Promise$1;
+} else if (!globalNS.Promise.prototype['finally']) {
+  globalNS.Promise.prototype['finally'] = promiseFinally;
+}
+
 function styleInject(css, ref) {
   if ( ref === void 0 ) ref = {};
   var insertAt = ref.insertAt;
@@ -107,10 +374,6 @@ function baseTimes(n, iteratee) {
   }
   return result;
 }
-
-var global$1 = typeof global !== "undefined" ? global :
-            typeof self !== "undefined" ? self :
-            typeof window !== "undefined" ? window : {}
 
 /** Detect free variable `global` from Node.js. */
 var freeGlobal = typeof global$1 == 'object' && global$1 && global$1.Object === Object && global$1;
@@ -1117,7 +1380,7 @@ class BroadcastManager {
 
 }
 
-var css$1 = "@keyframes btn-activity-in {\n  0%, 100% {\n    transform: scale(1); }\n  30% {\n    transform: scale(0.98); } }\n\n@keyframes btn-activity-out {\n  0%, 100% {\n    transform: scale(1); }\n  70% {\n    transform: scale(0.98); } }\n\n.btn-activity-top,\n.btn-activity-bottom,\n.btn-activity-left,\n.btn-activity-right {\n  position: relative;\n  transition: padding 166.5ms ease-in; }\n  .btn-activity-top .activity-indicator,\n  .btn-activity-bottom .activity-indicator,\n  .btn-activity-left .activity-indicator,\n  .btn-activity-right .activity-indicator {\n    opacity: 0;\n    position: absolute;\n    visibility: hidden;\n    transition: opacity 333ms ease-in; }\n\n.btn-activity-top .activity-indicator,\n.btn-activity-bottom .activity-indicator {\n  left: 50%;\n  margin-right: -50%;\n  transform: translateX(-50%); }\n\n.btn-activity-left .activity-indicator,\n.btn-activity-right .activity-indicator {\n  top: 50%;\n  margin-bottom: -50%;\n  transform: translateY(-50%); }\n\n.btn-activity:not(.btn-link) {\n  animation: btn-activity-in 333ms; }\n\n.btn-hide-activity:not(.btn-link) {\n  animation: btn-activity-out 333ms; }\n\n.btn-activity.btn-hide-activity .activity-indicator {\n  opacity: 0; }\n\n.btn-activity .activity-indicator {\n  opacity: 1;\n  visibility: visible;\n  position: absolute; }\n\n.btn-activity.btn-outline-primary.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #007bff; }\n\n.btn-activity.btn-outline-secondary.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #28a745; }\n\n.btn-activity.btn-outline-danger.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #dc3545; }\n\n.btn-activity.btn-outline-success.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #28a745; }\n\n.btn-activity.btn-outline-warning.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #ffc107; }\n\n.btn-activity.btn-outline-info.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #17a2b8; }\n\n.btn-activity.btn-outline-link.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #007bff; }\n\n.btn-activity.btn-xs.btn-activity-top.btn-activity-indicator-dots {\n  padding-top: 1.25rem; }\n  .btn-activity.btn-xs.btn-activity-top.btn-activity-indicator-dots .activity-indicator {\n    top: 0.5rem; }\n\n.btn-activity.btn-xs.btn-activity-bottom.btn-activity-indicator-dots {\n  padding-bottom: 1.25rem; }\n  .btn-activity.btn-xs.btn-activity-bottom.btn-activity-indicator-dots .activity-indicator {\n    bottom: 0.5rem; }\n\n.btn-activity.btn-xs.btn-activity-left.btn-activity-indicator-dots {\n  padding-left: 2.33rem; }\n  .btn-activity.btn-xs.btn-activity-left.btn-activity-indicator-dots .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity.btn-xs.btn-activity-right.btn-activity-indicator-dots {\n  padding-right: 2.33rem; }\n  .btn-activity.btn-xs.btn-activity-right.btn-activity-indicator-dots .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity.btn-xs.btn-activity-indicator-dots .activity-indicator > div,\n.btn-activity.btn-xs .activity-indicator-dots > div {\n  width: 0.33333rem;\n  height: 0.33333rem; }\n\n.btn-activity.btn-xs.btn-activity-top.btn-activity-indicator-spinner {\n  padding-top: 1.66rem; }\n  .btn-activity.btn-xs.btn-activity-top.btn-activity-indicator-spinner .activity-indicator {\n    top: 0.25rem; }\n\n.btn-activity.btn-xs.btn-activity-bottom.btn-activity-indicator-spinner {\n  padding-bottom: 1.66rem; }\n  .btn-activity.btn-xs.btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator {\n    bottom: 0.25rem; }\n\n.btn-activity.btn-xs.btn-activity-left.btn-activity-indicator-spinner {\n  padding-left: 1.66rem; }\n  .btn-activity.btn-xs.btn-activity-left.btn-activity-indicator-spinner .activity-indicator {\n    left: 0.25rem; }\n\n.btn-activity.btn-xs.btn-activity-right.btn-activity-indicator-spinner {\n  padding-right: 1.66rem; }\n  .btn-activity.btn-xs.btn-activity-right.btn-activity-indicator-spinner .activity-indicator {\n    right: 0.25rem; }\n\n.btn-activity.btn-xs.btn-activity-indicator-spinner .activity-indicator,\n.btn-activity.btn-xs .activity-indicator-spinner {\n  width: 1rem;\n  height: 1rem; }\n  .btn-activity.btn-xs.btn-activity-indicator-spinner .activity-indicator > div:before,\n  .btn-activity.btn-xs .activity-indicator-spinner > div:before {\n    width: 8.4%;\n    height: 30%; }\n\n.btn-activity.btn-sm.btn-activity-top.btn-activity-indicator-dots {\n  padding-top: 1.75rem; }\n  .btn-activity.btn-sm.btn-activity-top.btn-activity-indicator-dots .activity-indicator {\n    top: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-bottom.btn-activity-indicator-dots {\n  padding-bottom: 1.75rem; }\n  .btn-activity.btn-sm.btn-activity-bottom.btn-activity-indicator-dots .activity-indicator {\n    bottom: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-left.btn-activity-indicator-dots {\n  padding-left: 3rem; }\n  .btn-activity.btn-sm.btn-activity-left.btn-activity-indicator-dots .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-right.btn-activity-indicator-dots {\n  padding-right: 3rem; }\n  .btn-activity.btn-sm.btn-activity-right.btn-activity-indicator-dots .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-indicator-dots .activity-indicator > div,\n.btn-activity.btn-sm .activity-indicator-dots > div {\n  width: 0.5rem;\n  height: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-top.btn-activity-indicator-spinner {\n  padding-top: 2rem; }\n  .btn-activity.btn-sm.btn-activity-top.btn-activity-indicator-spinner .activity-indicator {\n    top: 0.33rem; }\n\n.btn-activity.btn-sm.btn-activity-bottom.btn-activity-indicator-spinner {\n  padding-bottom: 2rem; }\n  .btn-activity.btn-sm.btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator {\n    bottom: 0.33rem; }\n\n.btn-activity.btn-sm.btn-activity-left.btn-activity-indicator-spinner {\n  padding-left: 2.5rem; }\n  .btn-activity.btn-sm.btn-activity-left.btn-activity-indicator-spinner .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-right.btn-activity-indicator-spinner {\n  padding-right: 2.5rem; }\n  .btn-activity.btn-sm.btn-activity-right.btn-activity-indicator-spinner .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-indicator-spinner .activity-indicator,\n.btn-activity.btn-sm .activity-indicator-spinner {\n  width: 1.5rem;\n  height: 1.5rem; }\n  .btn-activity.btn-sm.btn-activity-indicator-spinner .activity-indicator > div:before,\n  .btn-activity.btn-sm .activity-indicator-spinner > div:before {\n    width: 5.6%;\n    height: 30%; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-top.btn-activity-indicator-dots, .btn-activity.btn-md.btn-activity-top.btn-activity-indicator-dots {\n  padding-top: 2rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-top.btn-activity-indicator-dots .activity-indicator, .btn-activity.btn-md.btn-activity-top.btn-activity-indicator-dots .activity-indicator {\n    top: 0.66rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-bottom.btn-activity-indicator-dots, .btn-activity.btn-md.btn-activity-bottom.btn-activity-indicator-dots {\n  padding-bottom: 2rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-bottom.btn-activity-indicator-dots .activity-indicator, .btn-activity.btn-md.btn-activity-bottom.btn-activity-indicator-dots .activity-indicator {\n    bottom: 0.66rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-left.btn-activity-indicator-dots, .btn-activity.btn-md.btn-activity-left.btn-activity-indicator-dots {\n  padding-left: 4rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-left.btn-activity-indicator-dots .activity-indicator, .btn-activity.btn-md.btn-activity-left.btn-activity-indicator-dots .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-right.btn-activity-indicator-dots, .btn-activity.btn-md.btn-activity-right.btn-activity-indicator-dots {\n  padding-right: 4rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-right.btn-activity-indicator-dots .activity-indicator, .btn-activity.btn-md.btn-activity-right.btn-activity-indicator-dots .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-indicator-dots .activity-indicator > div,\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl) .activity-indicator-dots > div, .btn-activity.btn-md.btn-activity-indicator-dots .activity-indicator > div,\n.btn-activity.btn-md .activity-indicator-dots > div {\n  width: 0.8rem;\n  height: 0.8rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-top.btn-activity-indicator-spinner, .btn-activity.btn-md.btn-activity-top.btn-activity-indicator-spinner {\n  padding-top: 2.75rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-top.btn-activity-indicator-spinner .activity-indicator, .btn-activity.btn-md.btn-activity-top.btn-activity-indicator-spinner .activity-indicator {\n    top: 0.33rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-bottom.btn-activity-indicator-spinner, .btn-activity.btn-md.btn-activity-bottom.btn-activity-indicator-spinner {\n  padding-bottom: 2.75rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator, .btn-activity.btn-md.btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator {\n    bottom: 0.33rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-left.btn-activity-indicator-spinner, .btn-activity.btn-md.btn-activity-left.btn-activity-indicator-spinner {\n  padding-left: 2.75rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-left.btn-activity-indicator-spinner .activity-indicator, .btn-activity.btn-md.btn-activity-left.btn-activity-indicator-spinner .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-right.btn-activity-indicator-spinner, .btn-activity.btn-md.btn-activity-right.btn-activity-indicator-spinner {\n  padding-right: 2.75rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-right.btn-activity-indicator-spinner .activity-indicator, .btn-activity.btn-md.btn-activity-right.btn-activity-indicator-spinner .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-indicator-spinner .activity-indicator,\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl) .activity-indicator-spinner, .btn-activity.btn-md.btn-activity-indicator-spinner .activity-indicator,\n.btn-activity.btn-md .activity-indicator-spinner {\n  width: 1.75rem;\n  height: 1.75rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-indicator-spinner .activity-indicator > div:before,\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl) .activity-indicator-spinner > div:before, .btn-activity.btn-md.btn-activity-indicator-spinner .activity-indicator > div:before,\n  .btn-activity.btn-md .activity-indicator-spinner > div:before {\n    width: 6.6%;\n    height: 30%; }\n\n.btn-activity.btn-lg.btn-activity-top.btn-activity-indicator-dots {\n  padding-top: 2.75rem; }\n  .btn-activity.btn-lg.btn-activity-top.btn-activity-indicator-dots .activity-indicator {\n    top: 0.66rem; }\n\n.btn-activity.btn-lg.btn-activity-bottom.btn-activity-indicator-dots {\n  padding-bottom: 2.75rem; }\n  .btn-activity.btn-lg.btn-activity-bottom.btn-activity-indicator-dots .activity-indicator {\n    bottom: 0.66rem; }\n\n.btn-activity.btn-lg.btn-activity-left.btn-activity-indicator-dots {\n  padding-left: 5rem; }\n  .btn-activity.btn-lg.btn-activity-left.btn-activity-indicator-dots .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity.btn-lg.btn-activity-right.btn-activity-indicator-dots {\n  padding-right: 5rem; }\n  .btn-activity.btn-lg.btn-activity-right.btn-activity-indicator-dots .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity.btn-lg.btn-activity-indicator-dots .activity-indicator > div,\n.btn-activity.btn-lg .activity-indicator-dots > div {\n  width: 1.1rem;\n  height: 1.1rem; }\n\n.btn-activity.btn-lg.btn-activity-top.btn-activity-indicator-spinner {\n  padding-top: 3.5rem; }\n  .btn-activity.btn-lg.btn-activity-top.btn-activity-indicator-spinner .activity-indicator {\n    top: 0.5rem; }\n\n.btn-activity.btn-lg.btn-activity-bottom.btn-activity-indicator-spinner {\n  padding-bottom: 3.5rem; }\n  .btn-activity.btn-lg.btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator {\n    bottom: 0.5rem; }\n\n.btn-activity.btn-lg.btn-activity-left.btn-activity-indicator-spinner {\n  padding-left: 3.25rem; }\n  .btn-activity.btn-lg.btn-activity-left.btn-activity-indicator-spinner .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity.btn-lg.btn-activity-right.btn-activity-indicator-spinner {\n  padding-right: 3.25rem; }\n  .btn-activity.btn-lg.btn-activity-right.btn-activity-indicator-spinner .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity.btn-lg.btn-activity-indicator-spinner .activity-indicator,\n.btn-activity.btn-lg .activity-indicator-spinner {\n  width: 2.15rem;\n  height: 2.15rem; }\n  .btn-activity.btn-lg.btn-activity-indicator-spinner .activity-indicator > div:before,\n  .btn-activity.btn-lg .activity-indicator-spinner > div:before {\n    width: 7.5%; }\n\n.btn-activity.btn-xl.btn-activity-top.btn-activity-indicator-dots {\n  padding-top: 3.75rem; }\n  .btn-activity.btn-xl.btn-activity-top.btn-activity-indicator-dots .activity-indicator {\n    top: 1rem; }\n\n.btn-activity.btn-xl.btn-activity-bottom.btn-activity-indicator-dots {\n  padding-bottom: 3.75rem; }\n  .btn-activity.btn-xl.btn-activity-bottom.btn-activity-indicator-dots .activity-indicator {\n    bottom: 1rem; }\n\n.btn-activity.btn-xl.btn-activity-left.btn-activity-indicator-dots {\n  padding-left: 6rem; }\n  .btn-activity.btn-xl.btn-activity-left.btn-activity-indicator-dots .activity-indicator {\n    left: 0.75rem; }\n\n.btn-activity.btn-xl.btn-activity-right.btn-activity-indicator-dots {\n  padding-right: 6rem; }\n  .btn-activity.btn-xl.btn-activity-right.btn-activity-indicator-dots .activity-indicator {\n    right: 0.75rem; }\n\n.btn-activity.btn-xl.btn-activity-indicator-dots .activity-indicator > div,\n.btn-activity.btn-xl .activity-indicator-dots > div {\n  width: 1.25rem;\n  height: 1.25rem; }\n\n.btn-activity.btn-xl.btn-activity-top.btn-activity-indicator-spinner {\n  padding-top: 4.25rem; }\n  .btn-activity.btn-xl.btn-activity-top.btn-activity-indicator-spinner .activity-indicator {\n    top: 0.66rem; }\n\n.btn-activity.btn-xl.btn-activity-bottom.btn-activity-indicator-spinner {\n  padding-bottom: 4.25rem; }\n  .btn-activity.btn-xl.btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator {\n    bottom: 0.66rem; }\n\n.btn-activity.btn-xl.btn-activity-left.btn-activity-indicator-spinner {\n  padding-left: 4rem; }\n  .btn-activity.btn-xl.btn-activity-left.btn-activity-indicator-spinner .activity-indicator {\n    left: 0.75rem; }\n\n.btn-activity.btn-xl.btn-activity-right.btn-activity-indicator-spinner {\n  padding-right: 4rem; }\n  .btn-activity.btn-xl.btn-activity-right.btn-activity-indicator-spinner .activity-indicator {\n    right: 0.75rem; }\n\n.btn-activity.btn-xl.btn-activity-indicator-spinner .activity-indicator,\n.btn-activity.btn-xl .activity-indicator-spinner {\n  width: 2.5rem;\n  height: 2.5rem; }\n  .btn-activity.btn-xl.btn-activity-indicator-spinner .activity-indicator > div:before,\n  .btn-activity.btn-xl .activity-indicator-spinner > div:before {\n    width: 7.5%; }\n\n.center-wrapper {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%; }\n\n.center-content {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  margin-right: -50%;\n  transform: translate(-50%, -50%); }\n\n.activity-indicator-dots > div {\n  border-radius: 100%;\n  display: inline-block;\n  background-color: #212529;\n  width: 0.6rem;\n  height: 0.6rem;\n  animation: activity-indicator-dots 1.4s infinite ease-in-out both; }\n\n.activity-indicator-dots > div:not(:last-child) {\n  margin-right: 0.198rem; }\n\n.activity-indicator-dots.activity-indicator-xs > div {\n  width: 0.3rem;\n  height: 0.3rem; }\n\n.activity-indicator-dots.activity-indicator-sm > div {\n  width: 0.45rem;\n  height: 0.45rem; }\n\n.activity-indicator-dots.activity-indicator-md > div {\n  width: 0.6rem;\n  height: 0.6rem; }\n\n.activity-indicator-dots.activity-indicator-lg > div {\n  width: 0.9rem;\n  height: 0.9rem; }\n\n.activity-indicator-dots.activity-indicator-xl > div {\n  width: 1.2rem;\n  height: 1.2rem; }\n\n.activity-indicator-dots > div:nth-child(1) {\n  animation-delay: 0s; }\n\n.activity-indicator-dots > div:nth-child(2) {\n  animation-delay: 0.16s; }\n\n.activity-indicator-dots > div:nth-child(3) {\n  animation-delay: 0.32s; }\n\n.activity-indicator-dots > div:nth-child(4) {\n  animation-delay: 0.48s; }\n\n.activity-indicator-dots > div:nth-child(5) {\n  animation-delay: 0.64s; }\n\n.activity-indicator-dots > div:nth-child(6) {\n  animation-delay: 0.8s; }\n\n.activity-indicator-dots > div:nth-child(7) {\n  animation-delay: 0.96s; }\n\n.activity-indicator-dots > div:nth-child(8) {\n  animation-delay: 1.12s; }\n\n.activity-indicator-dots > div:nth-child(9) {\n  animation-delay: 1.28s; }\n\n.activity-indicator-dots > div:nth-child(10) {\n  animation-delay: 1.44s; }\n\n.activity-indicator-dots > div:nth-child(11) {\n  animation-delay: 1.6s; }\n\n.activity-indicator-dots > div:nth-child(12) {\n  animation-delay: 1.76s; }\n\n.activity-indicator-dots > div:nth-child(13) {\n  animation-delay: 1.92s; }\n\n@keyframes activity-indicator-dots {\n  0%, 80%, 100% {\n    transform: scale(0); }\n  40% {\n    transform: scale(1); } }\n\n.btn-activity-indicator-dots:not(.btn-warning) .activity-indicator-dots > div {\n  background: white; }\n\n.activity-indicator-spinner {\n  position: relative;\n  width: 2.25rem;\n  height: 2.25rem; }\n  .activity-indicator-spinner > div {\n    width: 100%;\n    height: 100%;\n    position: absolute;\n    left: 0;\n    top: 0; }\n    .activity-indicator-spinner > div:before {\n      content: '';\n      display: block;\n      margin: 0 auto;\n      background-color: #212529;\n      width: 10%;\n      height: 30%;\n      border-radius: 5px;\n      animation: activity-indicator-spinner 1s infinite ease-in-out both; }\n  .activity-indicator-spinner.activity-indicator-xs {\n    width: 1.125rem;\n    height: 1.125rem; }\n  .activity-indicator-spinner.activity-indicator-sm {\n    width: 1.6875rem;\n    height: 1.6875rem; }\n  .activity-indicator-spinner.activity-indicator-md {\n    width: 2.25rem;\n    height: 2.25rem; }\n  .activity-indicator-spinner.activity-indicator-lg {\n    width: 3.375rem;\n    height: 3.375rem; }\n  .activity-indicator-spinner.activity-indicator-xl {\n    width: 4.5rem;\n    height: 4.5rem; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(1):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(1) ~ div:nth-child(1) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(1):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(1) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(2):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(2) ~ div:nth-child(1) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(2):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(2) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(2):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(2) ~ div:nth-child(2) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(2):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(2) ~ div:nth-child(2):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(1) {\n    transform: rotate(120deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(2) {\n    transform: rotate(240deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(2):before {\n      animation-delay: -0.66667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(3) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(3):before {\n      animation-delay: -0.33333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(1) {\n    transform: rotate(90deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(2) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(2):before {\n      animation-delay: -0.75s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(3) {\n    transform: rotate(270deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(3):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(4) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(4):before {\n      animation-delay: -0.25s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(1) {\n    transform: rotate(72deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(2) {\n    transform: rotate(144deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(2):before {\n      animation-delay: -0.8s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(3) {\n    transform: rotate(216deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(3):before {\n      animation-delay: -0.6s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(4) {\n    transform: rotate(288deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(4):before {\n      animation-delay: -0.4s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(5) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(5):before {\n      animation-delay: -0.2s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(1) {\n    transform: rotate(60deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(2) {\n    transform: rotate(120deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(2):before {\n      animation-delay: -0.83333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(3) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(3):before {\n      animation-delay: -0.66667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(4) {\n    transform: rotate(240deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(4):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(5) {\n    transform: rotate(300deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(5):before {\n      animation-delay: -0.33333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(6) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(6):before {\n      animation-delay: -0.16667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(1) {\n    transform: rotate(51.42857deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(2) {\n    transform: rotate(102.85714deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(2):before {\n      animation-delay: -0.85714s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(3) {\n    transform: rotate(154.28571deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(3):before {\n      animation-delay: -0.71429s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(4) {\n    transform: rotate(205.71429deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(4):before {\n      animation-delay: -0.57143s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(5) {\n    transform: rotate(257.14286deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(5):before {\n      animation-delay: -0.42857s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(6) {\n    transform: rotate(308.57143deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(6):before {\n      animation-delay: -0.28571s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(7) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(7):before {\n      animation-delay: -0.14286s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(1) {\n    transform: rotate(45deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(2) {\n    transform: rotate(90deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(2):before {\n      animation-delay: -0.875s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(3) {\n    transform: rotate(135deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(3):before {\n      animation-delay: -0.75s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(4) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(4):before {\n      animation-delay: -0.625s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(5) {\n    transform: rotate(225deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(5):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(6) {\n    transform: rotate(270deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(6):before {\n      animation-delay: -0.375s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(7) {\n    transform: rotate(315deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(7):before {\n      animation-delay: -0.25s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(8),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(8) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(8):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(8):before {\n      animation-delay: -0.125s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(1) {\n    transform: rotate(40deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(2) {\n    transform: rotate(80deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(2):before {\n      animation-delay: -0.88889s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(3) {\n    transform: rotate(120deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(3):before {\n      animation-delay: -0.77778s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(4) {\n    transform: rotate(160deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(4):before {\n      animation-delay: -0.66667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(5) {\n    transform: rotate(200deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(5):before {\n      animation-delay: -0.55556s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(6) {\n    transform: rotate(240deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(6):before {\n      animation-delay: -0.44444s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(7) {\n    transform: rotate(280deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(7):before {\n      animation-delay: -0.33333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(8),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(8) {\n    transform: rotate(320deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(8):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(8):before {\n      animation-delay: -0.22222s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(9),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(9) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(9):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(9):before {\n      animation-delay: -0.11111s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(1) {\n    transform: rotate(36deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(2) {\n    transform: rotate(72deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(2):before {\n      animation-delay: -0.9s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(3) {\n    transform: rotate(108deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(3):before {\n      animation-delay: -0.8s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(4) {\n    transform: rotate(144deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(4):before {\n      animation-delay: -0.7s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(5) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(5):before {\n      animation-delay: -0.6s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(6) {\n    transform: rotate(216deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(6):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(7) {\n    transform: rotate(252deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(7):before {\n      animation-delay: -0.4s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(8),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(8) {\n    transform: rotate(288deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(8):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(8):before {\n      animation-delay: -0.3s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(9),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(9) {\n    transform: rotate(324deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(9):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(9):before {\n      animation-delay: -0.2s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(10),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(10) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(10):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(10):before {\n      animation-delay: -0.1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(1) {\n    transform: rotate(32.72727deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(2) {\n    transform: rotate(65.45455deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(2):before {\n      animation-delay: -0.90909s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(3) {\n    transform: rotate(98.18182deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(3):before {\n      animation-delay: -0.81818s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(4) {\n    transform: rotate(130.90909deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(4):before {\n      animation-delay: -0.72727s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(5) {\n    transform: rotate(163.63636deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(5):before {\n      animation-delay: -0.63636s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(6) {\n    transform: rotate(196.36364deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(6):before {\n      animation-delay: -0.54545s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(7) {\n    transform: rotate(229.09091deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(7):before {\n      animation-delay: -0.45455s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(8),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(8) {\n    transform: rotate(261.81818deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(8):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(8):before {\n      animation-delay: -0.36364s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(9),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(9) {\n    transform: rotate(294.54545deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(9):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(9):before {\n      animation-delay: -0.27273s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(10),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(10) {\n    transform: rotate(327.27273deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(10):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(10):before {\n      animation-delay: -0.18182s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(11),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(11) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(11):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(11):before {\n      animation-delay: -0.09091s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(1) {\n    transform: rotate(30deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(2) {\n    transform: rotate(60deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(2):before {\n      animation-delay: -0.91667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(3) {\n    transform: rotate(90deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(3):before {\n      animation-delay: -0.83333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(4) {\n    transform: rotate(120deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(4):before {\n      animation-delay: -0.75s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(5) {\n    transform: rotate(150deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(5):before {\n      animation-delay: -0.66667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(6) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(6):before {\n      animation-delay: -0.58333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(7) {\n    transform: rotate(210deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(7):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(8),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(8) {\n    transform: rotate(240deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(8):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(8):before {\n      animation-delay: -0.41667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(9),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(9) {\n    transform: rotate(270deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(9):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(9):before {\n      animation-delay: -0.33333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(10),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(10) {\n    transform: rotate(300deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(10):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(10):before {\n      animation-delay: -0.25s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(11),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(11) {\n    transform: rotate(330deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(11):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(11):before {\n      animation-delay: -0.16667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(12),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(12) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(12):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(12):before {\n      animation-delay: -0.08333s; }\n\n@keyframes activity-indicator-spinner {\n  0%, 39%, 100% {\n    opacity: 0; }\n  40% {\n    opacity: 1; } }\n\n.btn-activity-indicator-spinner:not(.btn-warning) .activity-indicator-spinner > div:before {\n  background-color: white; }\n\n.overlay {\n  position: fixed;\n  display: flex;\n  min-height: 0;\n  top: 0;\n  left: 0;\n  z-index: -1;\n  opacity: 0;\n  width: 100%;\n  height: 100%;\n  align-items: center;\n  align-content: center;\n  justify-content: center;\n  flex-direction: column; }\n  .overlay.fade {\n    transition: opacity 333ms ease-out; }\n  .overlay.show {\n    z-index: 10000;\n    opacity: 1; }\n  .overlay .overlay-content {\n    flex: 1; }\n  .overlay .overlay-header {\n    margin-top: 1.5rem; }\n  .overlay .overlay-close {\n    font-size: 1.25rem;\n    color: #495057;\n    position: absolute;\n    top: 1rem;\n    right: 1rem;\n    z-index: 1; }\n\n.overlay-content {\n  margin: 0 auto;\n  overflow-y: auto;\n  position: relative; }\n  .overlay-content.overlay-content-center {\n    display: flex;\n    justify-content: center;\n    align-items: center; }\n    .overlay-content.overlay-content-center .overlay-body {\n      flex: 1; }\n  .overlay-content.overlay-content-fixed {\n    top: 0;\n    left: 0;\n    padding: 0;\n    height: 100%;\n    position: fixed;\n    max-width: none; }\n  .overlay-content .overlay-controls {\n    float: right;\n    position: relative;\n    top: 4px;\n    padding-right: 0;\n    padding-bottom: 1rem; }\n    .overlay-content .overlay-controls.left {\n      left: 0; }\n    .overlay-content .overlay-controls.right {\n      right: 0; }\n    .overlay-content .overlay-controls + * {\n      clear: both; }\n\n@media (max-width: 575.98px) {\n  .btn-xs-block {\n    width: 100%;\n    display: block; }\n    .btn-xs-block + .btn-xs-block {\n      margin-top: 0.5rem; } }\n\n@media (max-width: 767.98px) {\n  .btn-sm-block {\n    width: 100%;\n    display: block; }\n    .btn-sm-block + .btn-xs-block,\n    .btn-sm-block + .btn-sm-block {\n      margin-top: 0.5rem; } }\n\n@media (max-width: 991.98px) {\n  .btn-md-block {\n    width: 100%;\n    display: block; }\n    .btn-md-block + .btn-xs-block,\n    .btn-md-block + .btn-sm-block,\n    .btn-md-block + .btn-md-block {\n      margin-top: 0.5rem; } }\n\n@media (max-width: 1199.98px) {\n  .btn-lg-block {\n    width: 100%;\n    display: block; }\n    .btn-lg-block + .btn-xs-block,\n    .btn-lg-block + .btn-sm-block,\n    .btn-lg-block + .btn-md-block,\n    .btn-lg-block + .btn-lg-block {\n      margin-top: 0.5rem; } }\n\n.btn-xl-block {\n  width: 100%;\n  display: block; }\n  .btn-xl-block + .btn-xs-block,\n  .btn-xl-block + .btn-sm-block,\n  .btn-xl-block + .btn-md-block,\n  .btn-xl-block + .btn-lg-block,\n  .btn-xl-block + .btn-xl-block {\n    margin-top: 0.5rem; }\n\n.btn-file {\n  cursor: pointer;\n  position: relative; }\n  .btn-file input {\n    z-index: 1;\n    opacity: 0;\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%; }\n\n.card .card-btn-group,\n.card .btn-group.card-btn-group {\n  flex: 1;\n  display: flex;\n  align-items: center;\n  justify-content: space-between; }\n  .card .card-btn-group > .btn,\n  .card .btn-group.card-btn-group > .btn {\n    flex: 1;\n    width: 100%;\n    text-align: center;\n    border-radius: 0; }\n    .card .card-btn-group > .btn:not(:last-child)::after,\n    .card .btn-group.card-btn-group > .btn:not(:last-child)::after {\n      content: '';\n      position: absolute;\n      top: 50%;\n      right: 0;\n      padding: 1rem;\n      transform: translateY(-50%);\n      border-right: 1px solid rgba(0, 0, 0, 0.125); }\n\n.card-img,\n.card-img-top,\n.card-img-bottom {\n  color: white;\n  position: relative;\n  text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);\n  /*\n    & > :not(img) {\n        position: absolute;\n    }\n    */ }\n  .card-img .card-img-bg,\n  .card-img-top .card-img-bg,\n  .card-img-bottom .card-img-bg {\n    z-index: 0;\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background-size: cover !important;\n    background-position: center !important;\n    background-repeat: no-repeat !important; }\n    .card-img .card-img-bg > img:first-child,\n    .card-img-top .card-img-bg > img:first-child,\n    .card-img-bottom .card-img-bg > img:first-child {\n      position: absolute; }\n  .card-img .card-img-content,\n  .card-img-top .card-img-content,\n  .card-img-bottom .card-img-content {\n    flex: 1;\n    z-index: 1;\n    position: relative; }\n\n.dropzone[data-v-744e8f62] {\n  position: relative; }\n  .dropzone p[data-v-744e8f62] {\n    font-size: 18px; }\n  .dropzone .fa-image[data-v-744e8f62] {\n    font-size: 100px; }\n  .dropzone .dropzone-placeholder[data-v-744e8f62] {\n    display: none;\n    position: absolute;\n    top: 0;\n    left: 0;\n    z-index: 2;\n    width: 100%;\n    height: 100%;\n    background: white; }\n  .dropzone.is-dragging .dropzone-placeholder[data-v-744e8f62] {\n    display: block; }\n\n.file-preview {\n  width: 100%; }\n  .file-preview .file-preview-inner {\n    position: relative; }\n  .file-preview .file-preview-close {\n    top: 0;\n    right: 0;\n    padding: 0;\n    width: 24px;\n    height: 24px;\n    background: white;\n    position: absolute;\n    border-radius: 100%;\n    transform: translate(33%, -33%); }\n    .file-preview .file-preview-close i {\n      position: absolute;\n      top: 0;\n      left: 0;\n      width: 100%;\n      font-size: 24px;\n      text-align: center; }\n  .file-preview .file-preview-icon {\n    text-align: center;\n    font-size: 60px;\n    padding: 1rem; }\n  .file-preview .file-preview-thumbnail {\n    width: 100%;\n    max-width: 100%; }\n  .file-preview .file-preview-filename {\n    overflow: hidden;\n    text-align: center;\n    white-space: nowrap;\n    text-overflow: ellipsis; }\n  .file-preview .file-preview-filename,\n  .file-preview .file-preview-filesize {\n    text-align: center; }\n\n.infinite-scrolling {\n  position: relative; }\n\n.light-switch {\n  padding: 0;\n  position: relative;\n  border: none;\n  width: 3rem;\n  height: 2rem;\n  border-radius: 2rem;\n  overflow: hidden;\n  cursor: pointer;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  overflow: hidden; }\n  .light-switch.light-switch-xs {\n    padding: 0;\n    width: 1.5rem;\n    height: 1rem;\n    border-radius: 1rem; }\n    .light-switch.light-switch-xs .light-switch-handle {\n      width: 1rem;\n      height: 1rem; }\n    .light-switch.light-switch-xs .light-switch-container {\n      left: -0.5rem;\n      width: 2rem;\n      height: 1rem; }\n    .light-switch.light-switch-xs.is-active .light-switch-handle {\n      left: 0.5rem; }\n    .light-switch.light-switch-xs .light-switch-label {\n      width: 1rem;\n      height: 1rem; }\n  .light-switch.light-switch-sm {\n    padding: 0;\n    width: 2.25rem;\n    height: 1.5rem;\n    border-radius: 1.5rem; }\n    .light-switch.light-switch-sm .light-switch-handle {\n      width: 1.5rem;\n      height: 1.5rem; }\n    .light-switch.light-switch-sm .light-switch-container {\n      left: -0.75rem;\n      width: 3rem;\n      height: 1.5rem; }\n    .light-switch.light-switch-sm.is-active .light-switch-handle {\n      left: 0.75rem; }\n    .light-switch.light-switch-sm .light-switch-label {\n      width: 1.5rem;\n      height: 1.5rem; }\n  .light-switch.light-switch-md {\n    padding: 0;\n    width: 3rem;\n    height: 2rem;\n    border-radius: 2rem; }\n    .light-switch.light-switch-md .light-switch-handle {\n      width: 2rem;\n      height: 2rem; }\n    .light-switch.light-switch-md .light-switch-container {\n      left: -1rem;\n      width: 4rem;\n      height: 2rem; }\n    .light-switch.light-switch-md.is-active .light-switch-handle {\n      left: 1rem; }\n    .light-switch.light-switch-md .light-switch-label {\n      width: 2rem;\n      height: 2rem; }\n  .light-switch.light-switch-lg {\n    padding: 0;\n    width: 4.5rem;\n    height: 3rem;\n    border-radius: 3rem; }\n    .light-switch.light-switch-lg .light-switch-handle {\n      width: 3rem;\n      height: 3rem; }\n    .light-switch.light-switch-lg .light-switch-container {\n      left: -1.5rem;\n      width: 6rem;\n      height: 3rem; }\n    .light-switch.light-switch-lg.is-active .light-switch-handle {\n      left: 1.5rem; }\n    .light-switch.light-switch-lg .light-switch-label {\n      width: 3rem;\n      height: 3rem; }\n  .light-switch.light-switch-xl {\n    padding: 0;\n    width: 6rem;\n    height: 4rem;\n    border-radius: 4rem; }\n    .light-switch.light-switch-xl .light-switch-handle {\n      width: 4rem;\n      height: 4rem; }\n    .light-switch.light-switch-xl .light-switch-container {\n      left: -2rem;\n      width: 8rem;\n      height: 4rem; }\n    .light-switch.light-switch-xl.is-active .light-switch-handle {\n      left: 2rem; }\n    .light-switch.light-switch-xl .light-switch-label {\n      width: 4rem;\n      height: 4rem; }\n  .light-switch .valid-feedback {\n    display: none;\n    width: 100%;\n    margin-top: 0.25rem;\n    font-size: 80%;\n    color: #28a745; }\n  .light-switch .valid-tooltip {\n    position: absolute;\n    top: 100%;\n    z-index: 5;\n    display: none;\n    max-width: 100%;\n    padding: .5rem;\n    margin-top: .1rem;\n    font-size: .875rem;\n    line-height: 1;\n    color: #fff;\n    background-color: rgba(40, 167, 69, 0.8);\n    border-radius: .2rem; }\n  .was-validated .light-switch .form-control:valid, .light-switch .form-control.is-valid, .was-validated\n  .light-switch .custom-select:valid,\n  .light-switch .custom-select.is-valid {\n    border-color: #28a745; }\n    .was-validated .light-switch .form-control:valid:focus, .light-switch .form-control.is-valid:focus, .was-validated\n    .light-switch .custom-select:valid:focus,\n    .light-switch .custom-select.is-valid:focus {\n      border-color: #28a745;\n      box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25); }\n    .was-validated .light-switch .form-control:valid ~ .valid-feedback,\n    .was-validated .light-switch .form-control:valid ~ .valid-tooltip, .light-switch .form-control.is-valid ~ .valid-feedback,\n    .light-switch .form-control.is-valid ~ .valid-tooltip, .was-validated\n    .light-switch .custom-select:valid ~ .valid-feedback,\n    .was-validated\n    .light-switch .custom-select:valid ~ .valid-tooltip,\n    .light-switch .custom-select.is-valid ~ .valid-feedback,\n    .light-switch .custom-select.is-valid ~ .valid-tooltip {\n      display: block; }\n  .was-validated .light-switch .form-control-file:valid ~ .valid-feedback,\n  .was-validated .light-switch .form-control-file:valid ~ .valid-tooltip, .light-switch .form-control-file.is-valid ~ .valid-feedback,\n  .light-switch .form-control-file.is-valid ~ .valid-tooltip {\n    display: block; }\n  .was-validated .light-switch .form-check-input:valid ~ .form-check-label, .light-switch .form-check-input.is-valid ~ .form-check-label {\n    color: #28a745; }\n  .was-validated .light-switch .form-check-input:valid ~ .valid-feedback,\n  .was-validated .light-switch .form-check-input:valid ~ .valid-tooltip, .light-switch .form-check-input.is-valid ~ .valid-feedback,\n  .light-switch .form-check-input.is-valid ~ .valid-tooltip {\n    display: block; }\n  .was-validated .light-switch .custom-control-input:valid ~ .custom-control-label, .light-switch .custom-control-input.is-valid ~ .custom-control-label {\n    color: #28a745; }\n    .was-validated .light-switch .custom-control-input:valid ~ .custom-control-label::before, .light-switch .custom-control-input.is-valid ~ .custom-control-label::before {\n      background-color: #71dd8a; }\n  .was-validated .light-switch .custom-control-input:valid ~ .valid-feedback,\n  .was-validated .light-switch .custom-control-input:valid ~ .valid-tooltip, .light-switch .custom-control-input.is-valid ~ .valid-feedback,\n  .light-switch .custom-control-input.is-valid ~ .valid-tooltip {\n    display: block; }\n  .was-validated .light-switch .custom-control-input:valid:checked ~ .custom-control-label::before, .light-switch .custom-control-input.is-valid:checked ~ .custom-control-label::before {\n    background-color: #34ce57; }\n  .was-validated .light-switch .custom-control-input:valid:focus ~ .custom-control-label::before, .light-switch .custom-control-input.is-valid:focus ~ .custom-control-label::before {\n    box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(40, 167, 69, 0.25); }\n  .was-validated .light-switch .custom-file-input:valid ~ .custom-file-label, .light-switch .custom-file-input.is-valid ~ .custom-file-label {\n    border-color: #28a745; }\n    .was-validated .light-switch .custom-file-input:valid ~ .custom-file-label::before, .light-switch .custom-file-input.is-valid ~ .custom-file-label::before {\n      border-color: inherit; }\n  .was-validated .light-switch .custom-file-input:valid ~ .valid-feedback,\n  .was-validated .light-switch .custom-file-input:valid ~ .valid-tooltip, .light-switch .custom-file-input.is-valid ~ .valid-feedback,\n  .light-switch .custom-file-input.is-valid ~ .valid-tooltip {\n    display: block; }\n  .was-validated .light-switch .custom-file-input:valid:focus ~ .custom-file-label, .light-switch .custom-file-input.is-valid:focus ~ .custom-file-label {\n    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25); }\n  .light-switch .invalid-feedback {\n    display: none;\n    width: 100%;\n    margin-top: 0.25rem;\n    font-size: 80%;\n    color: #dc3545; }\n  .light-switch .invalid-tooltip {\n    position: absolute;\n    top: 100%;\n    z-index: 5;\n    display: none;\n    max-width: 100%;\n    padding: .5rem;\n    margin-top: .1rem;\n    font-size: .875rem;\n    line-height: 1;\n    color: #fff;\n    background-color: rgba(220, 53, 69, 0.8);\n    border-radius: .2rem; }\n  .was-validated .light-switch .form-control:invalid, .light-switch .form-control.is-invalid, .was-validated\n  .light-switch .custom-select:invalid,\n  .light-switch .custom-select.is-invalid {\n    border-color: #dc3545; }\n    .was-validated .light-switch .form-control:invalid:focus, .light-switch .form-control.is-invalid:focus, .was-validated\n    .light-switch .custom-select:invalid:focus,\n    .light-switch .custom-select.is-invalid:focus {\n      border-color: #dc3545;\n      box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25); }\n    .was-validated .light-switch .form-control:invalid ~ .invalid-feedback,\n    .was-validated .light-switch .form-control:invalid ~ .invalid-tooltip, .light-switch .form-control.is-invalid ~ .invalid-feedback,\n    .light-switch .form-control.is-invalid ~ .invalid-tooltip, .was-validated\n    .light-switch .custom-select:invalid ~ .invalid-feedback,\n    .was-validated\n    .light-switch .custom-select:invalid ~ .invalid-tooltip,\n    .light-switch .custom-select.is-invalid ~ .invalid-feedback,\n    .light-switch .custom-select.is-invalid ~ .invalid-tooltip {\n      display: block; }\n  .was-validated .light-switch .form-control-file:invalid ~ .invalid-feedback,\n  .was-validated .light-switch .form-control-file:invalid ~ .invalid-tooltip, .light-switch .form-control-file.is-invalid ~ .invalid-feedback,\n  .light-switch .form-control-file.is-invalid ~ .invalid-tooltip {\n    display: block; }\n  .was-validated .light-switch .form-check-input:invalid ~ .form-check-label, .light-switch .form-check-input.is-invalid ~ .form-check-label {\n    color: #dc3545; }\n  .was-validated .light-switch .form-check-input:invalid ~ .invalid-feedback,\n  .was-validated .light-switch .form-check-input:invalid ~ .invalid-tooltip, .light-switch .form-check-input.is-invalid ~ .invalid-feedback,\n  .light-switch .form-check-input.is-invalid ~ .invalid-tooltip {\n    display: block; }\n  .was-validated .light-switch .custom-control-input:invalid ~ .custom-control-label, .light-switch .custom-control-input.is-invalid ~ .custom-control-label {\n    color: #dc3545; }\n    .was-validated .light-switch .custom-control-input:invalid ~ .custom-control-label::before, .light-switch .custom-control-input.is-invalid ~ .custom-control-label::before {\n      background-color: #efa2a9; }\n  .was-validated .light-switch .custom-control-input:invalid ~ .invalid-feedback,\n  .was-validated .light-switch .custom-control-input:invalid ~ .invalid-tooltip, .light-switch .custom-control-input.is-invalid ~ .invalid-feedback,\n  .light-switch .custom-control-input.is-invalid ~ .invalid-tooltip {\n    display: block; }\n  .was-validated .light-switch .custom-control-input:invalid:checked ~ .custom-control-label::before, .light-switch .custom-control-input.is-invalid:checked ~ .custom-control-label::before {\n    background-color: #e4606d; }\n  .was-validated .light-switch .custom-control-input:invalid:focus ~ .custom-control-label::before, .light-switch .custom-control-input.is-invalid:focus ~ .custom-control-label::before {\n    box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(220, 53, 69, 0.25); }\n  .was-validated .light-switch .custom-file-input:invalid ~ .custom-file-label, .light-switch .custom-file-input.is-invalid ~ .custom-file-label {\n    border-color: #dc3545; }\n    .was-validated .light-switch .custom-file-input:invalid ~ .custom-file-label::before, .light-switch .custom-file-input.is-invalid ~ .custom-file-label::before {\n      border-color: inherit; }\n  .was-validated .light-switch .custom-file-input:invalid ~ .invalid-feedback,\n  .was-validated .light-switch .custom-file-input:invalid ~ .invalid-tooltip, .light-switch .custom-file-input.is-invalid ~ .invalid-feedback,\n  .light-switch .custom-file-input.is-invalid ~ .invalid-tooltip {\n    display: block; }\n  .was-validated .light-switch .custom-file-input:invalid:focus ~ .custom-file-label, .light-switch .custom-file-input.is-invalid:focus ~ .custom-file-label {\n    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25); }\n  .light-switch.is-invalid {\n    border: 1px solid #dc3545; }\n    .light-switch.is-invalid:not(.is-active) .light-switch-handle {\n      background: #dc3545; }\n    .light-switch.is-invalid .light-switch-label.on-value {\n      left: 0; }\n    .light-switch.is-invalid .light-switch-label.off-value {\n      right: 0; }\n  .light-switch .light-switch-handle {\n    top: 0;\n    left: 0;\n    z-index: 1;\n    position: absolute;\n    border-radius: 100%;\n    transition: left 0.33333s ease;\n    width: 2rem;\n    height: 2rem;\n    background: white;\n    background-image: radial-gradient(white, #fafafa 50%, white 75%);\n    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.1); }\n  .light-switch .light-switch-container {\n    position: relative;\n    left: -1rem;\n    top: 0rem;\n    width: 4rem;\n    height: 2rem;\n    transition: left 0.33333s ease; }\n  .light-switch:not(.is-active):not(.is-dragging) .on-value {\n    visibility: hidden; }\n  .light-switch.is-active:not(.is-dragging) .off-value {\n    visibility: hidden; }\n  .light-switch.is-active .light-switch-handle {\n    left: 1rem; }\n  .light-switch.is-active .light-switch-container {\n    left: 0; }\n  .light-switch .light-switch-label {\n    position: absolute;\n    width: 2rem;\n    height: 2rem; }\n    .light-switch .light-switch-label.on-value {\n      left: 0;\n      background: #00b007; }\n    .light-switch .light-switch-label.off-value {\n      right: 0;\n      background: #ebedef; }\n\n.slide-deck {\n  height: auto;\n  position: relative;\n  transition: all .5s ease;\n  /*\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    */\n  /*\n    .slide-fade-forward-leave-active,\n    .slide-fade-forward-leave-to {\n        z-index: 1;\n        transform: translateX(-100%);\n    }\n\n    .slide-fade-forward-enter-active,\n    .slide-fade-backward-enter-active {\n        z-index: 2;\n        transition: all 2s ease-out;\n    }\n    .slide-fade-forward-leave-active,\n    .slide-fade-backward-leave-active {\n        z-index: 1;\n        transition: all 2s cubic-bezier(1.0, 0.5, 0.8, 1.0);\n    }\n\n    .slide-fade-forward-enter,\n    .slide-fade-forward-leave-to,\n    .slide-fade-backward-enter,\n    .slide-fade-backward-leave-to {\n        position: absolute !important;\n        top: 0;\n        width: 100%;\n        opacity: 0;\n    }\n\n    .slide-fade-forward-enter,\n    .slide-fade-forward-leave-to {\n        right: 0;\n    }\n\n    .slide-fade-forward-enter,\n    .slide-fade-forward-leave-to {\n        transform: translateX(100%);\n    }\n\n    .slide-fade-backward-enter,\n    .slide-fade-backward-leave-to {\n        transform: translateX(100%);\n    }\n    */ }\n  .slide-deck.slide-deck-flex {\n    display: flex;\n    align-items: center;\n    justify-content: center; }\n    .slide-deck.slide-deck-flex .slide-deck-content {\n      flex: 1; }\n  .slide-deck .slide-deck-content {\n    overflow-y: auto; }\n  .slide-deck .slide-deck-controls {\n    position: absolute;\n    left: 50%;\n    bottom: 1rem;\n    transform: translateX(-50%); }\n  .slide-deck .slide-forward-enter-active,\n  .slide-deck .slide-forward-leave-active,\n  .slide-deck .slide-backward-enter-active,\n  .slide-deck .slide-backward-leave-active {\n    opacity: 0;\n    transition: all .5s ease; }\n  .slide-deck .slide-forward-enter-active,\n  .slide-deck .slide-backward-enter-active {\n    position: absolute;\n    top: 0;\n    width: 100%; }\n  .slide-deck .slide-forward-enter-active {\n    left: 0; }\n  .slide-deck .slide-backward-enter-active {\n    right: 0; }\n  .slide-deck .slide-forward-enter-active,\n  .slide-deck .slide-backward-leave-to {\n    transform: translateX(100%); }\n  .slide-deck .slide-forward-leave-to,\n  .slide-deck .slide-backward-enter-active {\n    transform: translateX(-100%); }\n  .slide-deck .slide-forward-enter-to,\n  .slide-deck .slide-backward-enter-to {\n    opacity: 1;\n    transform: translateX(0); }\n\n.slide-deck-controls .slide-deck-control-icon {\n  color: #fff;\n  font-size: 1rem; }\n  .slide-deck-controls .slide-deck-control-icon:not(:last-child) {\n    margin-right: 0.5rem; }\n\n.slide-deck-controls .slide-deck-control-icon.is-active {\n  color: #007bff; }\n\n.thumbnail-list {\n  width: 100%;\n  display: flex; }\n  .thumbnail-list:not(.thumbnail-list-grid) > * {\n    padding-right: 10px;\n    padding-bottom: 10px; }\n  .thumbnail-list.thumbnail-list-fill, .thumbnail-list.thumbnail-list-wrap {\n    flex-flow: row wrap; }\n  .thumbnail-list.thumbnail-list-noflex > * {\n    flex: 0; }\n  .thumbnail-list.thumbnail-list-fill > * {\n    flex: 1 0 auto; }\n  .thumbnail-list.thumbnail-list-wrap > * {\n    flex: 0 0 auto; }\n  .thumbnail-list.thumbnail-list-flex > * {\n    flex: 1; }\n\n.thumbnail-list-item {\n  max-width: 100%;\n  max-height: 100%;\n  /*\n    &:not(:only-child) {\n        margin-right: 10px;\n        margin-bottom: 10px;\n    }\n\n    &:nth-child(2n) {\n        opacity: .25;\n    }\n    */ }\n  .thumbnail-list-item > img {\n    max-width: 100%; }\n    .thumbnail-list-item > img.img-fluid {\n      width: 100%; }\n\n";
+var css$1 = "@keyframes btn-activity-in {\n  0%, 100% {\n    transform: scale(1); }\n  30% {\n    transform: scale(0.98); } }\n\n@keyframes btn-activity-out {\n  0%, 100% {\n    transform: scale(1); }\n  70% {\n    transform: scale(0.98); } }\n\n.btn-activity-top,\n.btn-activity-bottom,\n.btn-activity-left,\n.btn-activity-right {\n  position: relative;\n  transition: padding 166.5ms ease-in; }\n  .btn-activity-top .activity-indicator,\n  .btn-activity-bottom .activity-indicator,\n  .btn-activity-left .activity-indicator,\n  .btn-activity-right .activity-indicator {\n    opacity: 0;\n    position: absolute;\n    visibility: hidden;\n    transition: opacity 333ms ease-in; }\n\n.btn-activity-top .activity-indicator,\n.btn-activity-bottom .activity-indicator {\n  left: 50%;\n  margin-right: -50%;\n  transform: translateX(-50%); }\n\n.btn-activity-left .activity-indicator,\n.btn-activity-right .activity-indicator {\n  top: 50%;\n  margin-bottom: -50%;\n  transform: translateY(-50%); }\n\n.btn-activity:not(.btn-link) {\n  animation: btn-activity-in 333ms; }\n\n.btn-hide-activity:not(.btn-link) {\n  animation: btn-activity-out 333ms; }\n\n.btn-activity.btn-hide-activity .activity-indicator {\n  opacity: 0; }\n\n.btn-activity .activity-indicator {\n  opacity: 1;\n  visibility: visible;\n  position: absolute; }\n\n.btn-activity.btn-outline-primary.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #007bff; }\n\n.btn-activity.btn-outline-secondary.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #28a745; }\n\n.btn-activity.btn-outline-danger.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #dc3545; }\n\n.btn-activity.btn-outline-success.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #28a745; }\n\n.btn-activity.btn-outline-warning.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #ffc107; }\n\n.btn-activity.btn-outline-info.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #17a2b8; }\n\n.btn-activity.btn-outline-link.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #007bff; }\n\n.btn-activity.btn-xs.btn-activity-top.btn-activity-indicator-dots {\n  padding-top: 1.25rem; }\n  .btn-activity.btn-xs.btn-activity-top.btn-activity-indicator-dots .activity-indicator {\n    top: 0.5rem; }\n\n.btn-activity.btn-xs.btn-activity-bottom.btn-activity-indicator-dots {\n  padding-bottom: 1.25rem; }\n  .btn-activity.btn-xs.btn-activity-bottom.btn-activity-indicator-dots .activity-indicator {\n    bottom: 0.5rem; }\n\n.btn-activity.btn-xs.btn-activity-left.btn-activity-indicator-dots {\n  padding-left: 2.33rem; }\n  .btn-activity.btn-xs.btn-activity-left.btn-activity-indicator-dots .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity.btn-xs.btn-activity-right.btn-activity-indicator-dots {\n  padding-right: 2.33rem; }\n  .btn-activity.btn-xs.btn-activity-right.btn-activity-indicator-dots .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity.btn-xs.btn-activity-indicator-dots .activity-indicator > div,\n.btn-activity.btn-xs .activity-indicator-dots > div {\n  width: 0.33333rem;\n  height: 0.33333rem; }\n\n.btn-activity.btn-xs.btn-activity-top.btn-activity-indicator-spinner {\n  padding-top: 1.66rem; }\n  .btn-activity.btn-xs.btn-activity-top.btn-activity-indicator-spinner .activity-indicator {\n    top: 0.25rem; }\n\n.btn-activity.btn-xs.btn-activity-bottom.btn-activity-indicator-spinner {\n  padding-bottom: 1.66rem; }\n  .btn-activity.btn-xs.btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator {\n    bottom: 0.25rem; }\n\n.btn-activity.btn-xs.btn-activity-left.btn-activity-indicator-spinner {\n  padding-left: 1.66rem; }\n  .btn-activity.btn-xs.btn-activity-left.btn-activity-indicator-spinner .activity-indicator {\n    left: 0.25rem; }\n\n.btn-activity.btn-xs.btn-activity-right.btn-activity-indicator-spinner {\n  padding-right: 1.66rem; }\n  .btn-activity.btn-xs.btn-activity-right.btn-activity-indicator-spinner .activity-indicator {\n    right: 0.25rem; }\n\n.btn-activity.btn-xs.btn-activity-indicator-spinner .activity-indicator,\n.btn-activity.btn-xs .activity-indicator-spinner {\n  width: 1rem;\n  height: 1rem; }\n  .btn-activity.btn-xs.btn-activity-indicator-spinner .activity-indicator > div:before,\n  .btn-activity.btn-xs .activity-indicator-spinner > div:before {\n    width: 8.4%;\n    height: 30%; }\n\n.btn-activity.btn-sm.btn-activity-top.btn-activity-indicator-dots {\n  padding-top: 1.75rem; }\n  .btn-activity.btn-sm.btn-activity-top.btn-activity-indicator-dots .activity-indicator {\n    top: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-bottom.btn-activity-indicator-dots {\n  padding-bottom: 1.75rem; }\n  .btn-activity.btn-sm.btn-activity-bottom.btn-activity-indicator-dots .activity-indicator {\n    bottom: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-left.btn-activity-indicator-dots {\n  padding-left: 3rem; }\n  .btn-activity.btn-sm.btn-activity-left.btn-activity-indicator-dots .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-right.btn-activity-indicator-dots {\n  padding-right: 3rem; }\n  .btn-activity.btn-sm.btn-activity-right.btn-activity-indicator-dots .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-indicator-dots .activity-indicator > div,\n.btn-activity.btn-sm .activity-indicator-dots > div {\n  width: 0.5rem;\n  height: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-top.btn-activity-indicator-spinner {\n  padding-top: 2rem; }\n  .btn-activity.btn-sm.btn-activity-top.btn-activity-indicator-spinner .activity-indicator {\n    top: 0.33rem; }\n\n.btn-activity.btn-sm.btn-activity-bottom.btn-activity-indicator-spinner {\n  padding-bottom: 2rem; }\n  .btn-activity.btn-sm.btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator {\n    bottom: 0.33rem; }\n\n.btn-activity.btn-sm.btn-activity-left.btn-activity-indicator-spinner {\n  padding-left: 2.5rem; }\n  .btn-activity.btn-sm.btn-activity-left.btn-activity-indicator-spinner .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-right.btn-activity-indicator-spinner {\n  padding-right: 2.5rem; }\n  .btn-activity.btn-sm.btn-activity-right.btn-activity-indicator-spinner .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-indicator-spinner .activity-indicator,\n.btn-activity.btn-sm .activity-indicator-spinner {\n  width: 1.5rem;\n  height: 1.5rem; }\n  .btn-activity.btn-sm.btn-activity-indicator-spinner .activity-indicator > div:before,\n  .btn-activity.btn-sm .activity-indicator-spinner > div:before {\n    width: 5.6%;\n    height: 30%; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-top.btn-activity-indicator-dots, .btn-activity.btn-md.btn-activity-top.btn-activity-indicator-dots {\n  padding-top: 2rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-top.btn-activity-indicator-dots .activity-indicator, .btn-activity.btn-md.btn-activity-top.btn-activity-indicator-dots .activity-indicator {\n    top: 0.66rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-bottom.btn-activity-indicator-dots, .btn-activity.btn-md.btn-activity-bottom.btn-activity-indicator-dots {\n  padding-bottom: 2rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-bottom.btn-activity-indicator-dots .activity-indicator, .btn-activity.btn-md.btn-activity-bottom.btn-activity-indicator-dots .activity-indicator {\n    bottom: 0.66rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-left.btn-activity-indicator-dots, .btn-activity.btn-md.btn-activity-left.btn-activity-indicator-dots {\n  padding-left: 4rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-left.btn-activity-indicator-dots .activity-indicator, .btn-activity.btn-md.btn-activity-left.btn-activity-indicator-dots .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-right.btn-activity-indicator-dots, .btn-activity.btn-md.btn-activity-right.btn-activity-indicator-dots {\n  padding-right: 4rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-right.btn-activity-indicator-dots .activity-indicator, .btn-activity.btn-md.btn-activity-right.btn-activity-indicator-dots .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-indicator-dots .activity-indicator > div,\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl) .activity-indicator-dots > div, .btn-activity.btn-md.btn-activity-indicator-dots .activity-indicator > div,\n.btn-activity.btn-md .activity-indicator-dots > div {\n  width: 0.8rem;\n  height: 0.8rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-top.btn-activity-indicator-spinner, .btn-activity.btn-md.btn-activity-top.btn-activity-indicator-spinner {\n  padding-top: 2.75rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-top.btn-activity-indicator-spinner .activity-indicator, .btn-activity.btn-md.btn-activity-top.btn-activity-indicator-spinner .activity-indicator {\n    top: 0.33rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-bottom.btn-activity-indicator-spinner, .btn-activity.btn-md.btn-activity-bottom.btn-activity-indicator-spinner {\n  padding-bottom: 2.75rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator, .btn-activity.btn-md.btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator {\n    bottom: 0.33rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-left.btn-activity-indicator-spinner, .btn-activity.btn-md.btn-activity-left.btn-activity-indicator-spinner {\n  padding-left: 2.75rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-left.btn-activity-indicator-spinner .activity-indicator, .btn-activity.btn-md.btn-activity-left.btn-activity-indicator-spinner .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-right.btn-activity-indicator-spinner, .btn-activity.btn-md.btn-activity-right.btn-activity-indicator-spinner {\n  padding-right: 2.75rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-right.btn-activity-indicator-spinner .activity-indicator, .btn-activity.btn-md.btn-activity-right.btn-activity-indicator-spinner .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-indicator-spinner .activity-indicator,\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl) .activity-indicator-spinner, .btn-activity.btn-md.btn-activity-indicator-spinner .activity-indicator,\n.btn-activity.btn-md .activity-indicator-spinner {\n  width: 1.75rem;\n  height: 1.75rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-indicator-spinner .activity-indicator > div:before,\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl) .activity-indicator-spinner > div:before, .btn-activity.btn-md.btn-activity-indicator-spinner .activity-indicator > div:before,\n  .btn-activity.btn-md .activity-indicator-spinner > div:before {\n    width: 6.6%;\n    height: 30%; }\n\n.btn-activity.btn-lg.btn-activity-top.btn-activity-indicator-dots {\n  padding-top: 2.75rem; }\n  .btn-activity.btn-lg.btn-activity-top.btn-activity-indicator-dots .activity-indicator {\n    top: 0.66rem; }\n\n.btn-activity.btn-lg.btn-activity-bottom.btn-activity-indicator-dots {\n  padding-bottom: 2.75rem; }\n  .btn-activity.btn-lg.btn-activity-bottom.btn-activity-indicator-dots .activity-indicator {\n    bottom: 0.66rem; }\n\n.btn-activity.btn-lg.btn-activity-left.btn-activity-indicator-dots {\n  padding-left: 5rem; }\n  .btn-activity.btn-lg.btn-activity-left.btn-activity-indicator-dots .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity.btn-lg.btn-activity-right.btn-activity-indicator-dots {\n  padding-right: 5rem; }\n  .btn-activity.btn-lg.btn-activity-right.btn-activity-indicator-dots .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity.btn-lg.btn-activity-indicator-dots .activity-indicator > div,\n.btn-activity.btn-lg .activity-indicator-dots > div {\n  width: 1.1rem;\n  height: 1.1rem; }\n\n.btn-activity.btn-lg.btn-activity-top.btn-activity-indicator-spinner {\n  padding-top: 3.5rem; }\n  .btn-activity.btn-lg.btn-activity-top.btn-activity-indicator-spinner .activity-indicator {\n    top: 0.5rem; }\n\n.btn-activity.btn-lg.btn-activity-bottom.btn-activity-indicator-spinner {\n  padding-bottom: 3.5rem; }\n  .btn-activity.btn-lg.btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator {\n    bottom: 0.5rem; }\n\n.btn-activity.btn-lg.btn-activity-left.btn-activity-indicator-spinner {\n  padding-left: 3.25rem; }\n  .btn-activity.btn-lg.btn-activity-left.btn-activity-indicator-spinner .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity.btn-lg.btn-activity-right.btn-activity-indicator-spinner {\n  padding-right: 3.25rem; }\n  .btn-activity.btn-lg.btn-activity-right.btn-activity-indicator-spinner .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity.btn-lg.btn-activity-indicator-spinner .activity-indicator,\n.btn-activity.btn-lg .activity-indicator-spinner {\n  width: 2.15rem;\n  height: 2.15rem; }\n  .btn-activity.btn-lg.btn-activity-indicator-spinner .activity-indicator > div:before,\n  .btn-activity.btn-lg .activity-indicator-spinner > div:before {\n    width: 7.5%; }\n\n.btn-activity.btn-xl.btn-activity-top.btn-activity-indicator-dots {\n  padding-top: 3.75rem; }\n  .btn-activity.btn-xl.btn-activity-top.btn-activity-indicator-dots .activity-indicator {\n    top: 1rem; }\n\n.btn-activity.btn-xl.btn-activity-bottom.btn-activity-indicator-dots {\n  padding-bottom: 3.75rem; }\n  .btn-activity.btn-xl.btn-activity-bottom.btn-activity-indicator-dots .activity-indicator {\n    bottom: 1rem; }\n\n.btn-activity.btn-xl.btn-activity-left.btn-activity-indicator-dots {\n  padding-left: 6rem; }\n  .btn-activity.btn-xl.btn-activity-left.btn-activity-indicator-dots .activity-indicator {\n    left: 0.75rem; }\n\n.btn-activity.btn-xl.btn-activity-right.btn-activity-indicator-dots {\n  padding-right: 6rem; }\n  .btn-activity.btn-xl.btn-activity-right.btn-activity-indicator-dots .activity-indicator {\n    right: 0.75rem; }\n\n.btn-activity.btn-xl.btn-activity-indicator-dots .activity-indicator > div,\n.btn-activity.btn-xl .activity-indicator-dots > div {\n  width: 1.25rem;\n  height: 1.25rem; }\n\n.btn-activity.btn-xl.btn-activity-top.btn-activity-indicator-spinner {\n  padding-top: 4.25rem; }\n  .btn-activity.btn-xl.btn-activity-top.btn-activity-indicator-spinner .activity-indicator {\n    top: 0.66rem; }\n\n.btn-activity.btn-xl.btn-activity-bottom.btn-activity-indicator-spinner {\n  padding-bottom: 4.25rem; }\n  .btn-activity.btn-xl.btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator {\n    bottom: 0.66rem; }\n\n.btn-activity.btn-xl.btn-activity-left.btn-activity-indicator-spinner {\n  padding-left: 4rem; }\n  .btn-activity.btn-xl.btn-activity-left.btn-activity-indicator-spinner .activity-indicator {\n    left: 0.75rem; }\n\n.btn-activity.btn-xl.btn-activity-right.btn-activity-indicator-spinner {\n  padding-right: 4rem; }\n  .btn-activity.btn-xl.btn-activity-right.btn-activity-indicator-spinner .activity-indicator {\n    right: 0.75rem; }\n\n.btn-activity.btn-xl.btn-activity-indicator-spinner .activity-indicator,\n.btn-activity.btn-xl .activity-indicator-spinner {\n  width: 2.5rem;\n  height: 2.5rem; }\n  .btn-activity.btn-xl.btn-activity-indicator-spinner .activity-indicator > div:before,\n  .btn-activity.btn-xl .activity-indicator-spinner > div:before {\n    width: 7.5%; }\n\n.center-wrapper {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%; }\n\n.center-content {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  margin-right: -50%;\n  transform: translate(-50%, -50%); }\n\n.activity-indicator-dots > div {\n  border-radius: 100%;\n  display: inline-block;\n  background-color: #212529;\n  width: 0.6rem;\n  height: 0.6rem;\n  animation: activity-indicator-dots 1.4s infinite ease-in-out both; }\n\n.activity-indicator-dots > div:not(:last-child) {\n  margin-right: 0.198rem; }\n\n.activity-indicator-dots.activity-indicator-xs > div {\n  width: 0.3rem;\n  height: 0.3rem; }\n\n.activity-indicator-dots.activity-indicator-sm > div {\n  width: 0.45rem;\n  height: 0.45rem; }\n\n.activity-indicator-dots.activity-indicator-md > div {\n  width: 0.6rem;\n  height: 0.6rem; }\n\n.activity-indicator-dots.activity-indicator-lg > div {\n  width: 0.9rem;\n  height: 0.9rem; }\n\n.activity-indicator-dots.activity-indicator-xl > div {\n  width: 1.2rem;\n  height: 1.2rem; }\n\n.activity-indicator-dots > div:nth-child(1) {\n  animation-delay: 0s; }\n\n.activity-indicator-dots > div:nth-child(2) {\n  animation-delay: 0.16s; }\n\n.activity-indicator-dots > div:nth-child(3) {\n  animation-delay: 0.32s; }\n\n.activity-indicator-dots > div:nth-child(4) {\n  animation-delay: 0.48s; }\n\n.activity-indicator-dots > div:nth-child(5) {\n  animation-delay: 0.64s; }\n\n.activity-indicator-dots > div:nth-child(6) {\n  animation-delay: 0.8s; }\n\n.activity-indicator-dots > div:nth-child(7) {\n  animation-delay: 0.96s; }\n\n.activity-indicator-dots > div:nth-child(8) {\n  animation-delay: 1.12s; }\n\n.activity-indicator-dots > div:nth-child(9) {\n  animation-delay: 1.28s; }\n\n.activity-indicator-dots > div:nth-child(10) {\n  animation-delay: 1.44s; }\n\n.activity-indicator-dots > div:nth-child(11) {\n  animation-delay: 1.6s; }\n\n.activity-indicator-dots > div:nth-child(12) {\n  animation-delay: 1.76s; }\n\n.activity-indicator-dots > div:nth-child(13) {\n  animation-delay: 1.92s; }\n\n@keyframes activity-indicator-dots {\n  0%, 80%, 100% {\n    transform: scale(0); }\n  40% {\n    transform: scale(1); } }\n\n.btn-activity-indicator-dots:not(.btn-warning) .activity-indicator-dots > div {\n  background: white; }\n\n.activity-indicator-spinner {\n  position: relative;\n  width: 2.25rem;\n  height: 2.25rem; }\n  .activity-indicator-spinner > div {\n    width: 100%;\n    height: 100%;\n    position: absolute;\n    left: 0;\n    top: 0; }\n    .activity-indicator-spinner > div:before {\n      content: '';\n      display: block;\n      margin: 0 auto;\n      background-color: #212529;\n      width: 10%;\n      height: 30%;\n      border-radius: 5px;\n      animation: activity-indicator-spinner 1s infinite ease-in-out both; }\n  .activity-indicator-spinner.activity-indicator-xs {\n    width: 1.125rem;\n    height: 1.125rem; }\n  .activity-indicator-spinner.activity-indicator-sm {\n    width: 1.6875rem;\n    height: 1.6875rem; }\n  .activity-indicator-spinner.activity-indicator-md {\n    width: 2.25rem;\n    height: 2.25rem; }\n  .activity-indicator-spinner.activity-indicator-lg {\n    width: 3.375rem;\n    height: 3.375rem; }\n  .activity-indicator-spinner.activity-indicator-xl {\n    width: 4.5rem;\n    height: 4.5rem; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(1):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(1) ~ div:nth-child(1) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(1):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(1) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(2):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(2) ~ div:nth-child(1) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(2):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(2) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(2):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(2) ~ div:nth-child(2) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(2):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(2) ~ div:nth-child(2):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(1) {\n    transform: rotate(120deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(2) {\n    transform: rotate(240deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(2):before {\n      animation-delay: -0.66667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(3) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(3):before {\n      animation-delay: -0.33333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(1) {\n    transform: rotate(90deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(2) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(2):before {\n      animation-delay: -0.75s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(3) {\n    transform: rotate(270deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(3):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(4) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(4):before {\n      animation-delay: -0.25s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(1) {\n    transform: rotate(72deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(2) {\n    transform: rotate(144deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(2):before {\n      animation-delay: -0.8s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(3) {\n    transform: rotate(216deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(3):before {\n      animation-delay: -0.6s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(4) {\n    transform: rotate(288deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(4):before {\n      animation-delay: -0.4s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(5) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(5):before {\n      animation-delay: -0.2s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(1) {\n    transform: rotate(60deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(2) {\n    transform: rotate(120deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(2):before {\n      animation-delay: -0.83333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(3) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(3):before {\n      animation-delay: -0.66667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(4) {\n    transform: rotate(240deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(4):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(5) {\n    transform: rotate(300deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(5):before {\n      animation-delay: -0.33333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(6) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(6):before {\n      animation-delay: -0.16667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(1) {\n    transform: rotate(51.42857deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(2) {\n    transform: rotate(102.85714deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(2):before {\n      animation-delay: -0.85714s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(3) {\n    transform: rotate(154.28571deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(3):before {\n      animation-delay: -0.71429s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(4) {\n    transform: rotate(205.71429deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(4):before {\n      animation-delay: -0.57143s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(5) {\n    transform: rotate(257.14286deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(5):before {\n      animation-delay: -0.42857s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(6) {\n    transform: rotate(308.57143deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(6):before {\n      animation-delay: -0.28571s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(7) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(7):before {\n      animation-delay: -0.14286s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(1) {\n    transform: rotate(45deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(2) {\n    transform: rotate(90deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(2):before {\n      animation-delay: -0.875s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(3) {\n    transform: rotate(135deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(3):before {\n      animation-delay: -0.75s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(4) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(4):before {\n      animation-delay: -0.625s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(5) {\n    transform: rotate(225deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(5):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(6) {\n    transform: rotate(270deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(6):before {\n      animation-delay: -0.375s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(7) {\n    transform: rotate(315deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(7):before {\n      animation-delay: -0.25s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(8),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(8) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(8):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(8):before {\n      animation-delay: -0.125s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(1) {\n    transform: rotate(40deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(2) {\n    transform: rotate(80deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(2):before {\n      animation-delay: -0.88889s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(3) {\n    transform: rotate(120deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(3):before {\n      animation-delay: -0.77778s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(4) {\n    transform: rotate(160deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(4):before {\n      animation-delay: -0.66667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(5) {\n    transform: rotate(200deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(5):before {\n      animation-delay: -0.55556s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(6) {\n    transform: rotate(240deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(6):before {\n      animation-delay: -0.44444s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(7) {\n    transform: rotate(280deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(7):before {\n      animation-delay: -0.33333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(8),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(8) {\n    transform: rotate(320deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(8):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(8):before {\n      animation-delay: -0.22222s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(9),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(9) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(9):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(9):before {\n      animation-delay: -0.11111s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(1) {\n    transform: rotate(36deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(2) {\n    transform: rotate(72deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(2):before {\n      animation-delay: -0.9s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(3) {\n    transform: rotate(108deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(3):before {\n      animation-delay: -0.8s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(4) {\n    transform: rotate(144deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(4):before {\n      animation-delay: -0.7s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(5) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(5):before {\n      animation-delay: -0.6s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(6) {\n    transform: rotate(216deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(6):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(7) {\n    transform: rotate(252deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(7):before {\n      animation-delay: -0.4s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(8),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(8) {\n    transform: rotate(288deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(8):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(8):before {\n      animation-delay: -0.3s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(9),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(9) {\n    transform: rotate(324deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(9):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(9):before {\n      animation-delay: -0.2s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(10),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(10) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(10):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(10):before {\n      animation-delay: -0.1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(1) {\n    transform: rotate(32.72727deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(2) {\n    transform: rotate(65.45455deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(2):before {\n      animation-delay: -0.90909s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(3) {\n    transform: rotate(98.18182deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(3):before {\n      animation-delay: -0.81818s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(4) {\n    transform: rotate(130.90909deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(4):before {\n      animation-delay: -0.72727s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(5) {\n    transform: rotate(163.63636deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(5):before {\n      animation-delay: -0.63636s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(6) {\n    transform: rotate(196.36364deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(6):before {\n      animation-delay: -0.54545s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(7) {\n    transform: rotate(229.09091deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(7):before {\n      animation-delay: -0.45455s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(8),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(8) {\n    transform: rotate(261.81818deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(8):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(8):before {\n      animation-delay: -0.36364s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(9),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(9) {\n    transform: rotate(294.54545deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(9):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(9):before {\n      animation-delay: -0.27273s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(10),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(10) {\n    transform: rotate(327.27273deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(10):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(10):before {\n      animation-delay: -0.18182s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(11),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(11) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(11):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(11):before {\n      animation-delay: -0.09091s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(1) {\n    transform: rotate(30deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(2) {\n    transform: rotate(60deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(2):before {\n      animation-delay: -0.91667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(3) {\n    transform: rotate(90deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(3):before {\n      animation-delay: -0.83333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(4) {\n    transform: rotate(120deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(4):before {\n      animation-delay: -0.75s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(5) {\n    transform: rotate(150deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(5):before {\n      animation-delay: -0.66667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(6) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(6):before {\n      animation-delay: -0.58333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(7) {\n    transform: rotate(210deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(7):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(8),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(8) {\n    transform: rotate(240deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(8):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(8):before {\n      animation-delay: -0.41667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(9),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(9) {\n    transform: rotate(270deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(9):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(9):before {\n      animation-delay: -0.33333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(10),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(10) {\n    transform: rotate(300deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(10):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(10):before {\n      animation-delay: -0.25s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(11),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(11) {\n    transform: rotate(330deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(11):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(11):before {\n      animation-delay: -0.16667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(12),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(12) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(12):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(12):before {\n      animation-delay: -0.08333s; }\n\n@keyframes activity-indicator-spinner {\n  0%, 39%, 100% {\n    opacity: 0; }\n  40% {\n    opacity: 1; } }\n\n.btn-activity-indicator-spinner:not(.btn-warning) .activity-indicator-spinner > div:before {\n  background-color: white; }\n\n.overlay {\n  position: fixed;\n  display: flex;\n  min-height: 0;\n  top: 0;\n  left: 0;\n  z-index: -1;\n  opacity: 0;\n  width: 100%;\n  height: 100%;\n  align-items: center;\n  align-content: center;\n  justify-content: center;\n  flex-direction: column; }\n  .overlay.fade {\n    transition: opacity 333ms ease-out; }\n  .overlay.show {\n    z-index: 10000;\n    opacity: 1; }\n  .overlay .overlay-content {\n    flex: 1; }\n  .overlay .overlay-header {\n    margin-top: 1.5rem; }\n  .overlay .overlay-close {\n    font-size: 1.25rem;\n    color: #495057;\n    position: absolute;\n    top: 1rem;\n    right: 1rem;\n    z-index: 1; }\n\n.overlay-content {\n  margin: 0 auto;\n  overflow-y: auto;\n  position: relative; }\n  .overlay-content.overlay-content-center {\n    display: flex;\n    justify-content: center;\n    align-items: center; }\n    .overlay-content.overlay-content-center .overlay-body {\n      flex: 1; }\n  .overlay-content.overlay-content-fixed {\n    top: 0;\n    left: 0;\n    padding: 0;\n    height: 100%;\n    position: fixed;\n    max-width: none; }\n  .overlay-content .overlay-controls {\n    float: right;\n    position: relative;\n    top: 4px;\n    padding-right: 0;\n    padding-bottom: 1rem; }\n    .overlay-content .overlay-controls.left {\n      left: 0; }\n    .overlay-content .overlay-controls.right {\n      right: 0; }\n    .overlay-content .overlay-controls + * {\n      clear: both; }\n\n@media (max-width: 575.98px) {\n  .btn-xs-block {\n    width: 100%;\n    display: block; }\n    .btn-xs-block + .btn-xs-block {\n      margin-top: 0.5rem; } }\n\n@media (max-width: 767.98px) {\n  .btn-sm-block {\n    width: 100%;\n    display: block; }\n    .btn-sm-block + .btn-xs-block,\n    .btn-sm-block + .btn-sm-block {\n      margin-top: 0.5rem; } }\n\n@media (max-width: 991.98px) {\n  .btn-md-block {\n    width: 100%;\n    display: block; }\n    .btn-md-block + .btn-xs-block,\n    .btn-md-block + .btn-sm-block,\n    .btn-md-block + .btn-md-block {\n      margin-top: 0.5rem; } }\n\n@media (max-width: 1199.98px) {\n  .btn-lg-block {\n    width: 100%;\n    display: block; }\n    .btn-lg-block + .btn-xs-block,\n    .btn-lg-block + .btn-sm-block,\n    .btn-lg-block + .btn-md-block,\n    .btn-lg-block + .btn-lg-block {\n      margin-top: 0.5rem; } }\n\n.btn-xl-block {\n  width: 100%;\n  display: block; }\n  .btn-xl-block + .btn-xs-block,\n  .btn-xl-block + .btn-sm-block,\n  .btn-xl-block + .btn-md-block,\n  .btn-xl-block + .btn-lg-block,\n  .btn-xl-block + .btn-xl-block {\n    margin-top: 0.5rem; }\n\n.btn-file {\n  cursor: pointer;\n  position: relative; }\n  .btn-file input {\n    z-index: 1;\n    opacity: 0;\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%; }\n\n.card .card-btn-group,\n.card .btn-group.card-btn-group {\n  flex: 1;\n  display: flex;\n  align-items: center;\n  justify-content: space-between; }\n  .card .card-btn-group > .btn,\n  .card .btn-group.card-btn-group > .btn {\n    flex: 1;\n    width: 100%;\n    text-align: center;\n    border-radius: 0; }\n    .card .card-btn-group > .btn:not(:last-child)::after,\n    .card .btn-group.card-btn-group > .btn:not(:last-child)::after {\n      content: '';\n      position: absolute;\n      top: 50%;\n      right: 0;\n      padding: 1rem;\n      transform: translateY(-50%);\n      border-right: 1px solid rgba(0, 0, 0, 0.125); }\n\n.card-img,\n.card-img-top,\n.card-img-bottom {\n  color: white;\n  position: relative;\n  text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);\n  /*\n    & > :not(img) {\n        position: absolute;\n    }\n    */ }\n  .card-img .card-img-bg,\n  .card-img-top .card-img-bg,\n  .card-img-bottom .card-img-bg {\n    z-index: 0;\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background-size: cover !important;\n    background-position: center !important;\n    background-repeat: no-repeat !important; }\n    .card-img .card-img-bg > img:first-child,\n    .card-img-top .card-img-bg > img:first-child,\n    .card-img-bottom .card-img-bg > img:first-child {\n      position: absolute; }\n  .card-img .card-img-content,\n  .card-img-top .card-img-content,\n  .card-img-bottom .card-img-content {\n    flex: 1;\n    z-index: 1;\n    position: relative; }\n\n.dropzone[data-v-744e8f62] {\n  position: relative; }\n  .dropzone p[data-v-744e8f62] {\n    font-size: 18px; }\n  .dropzone .fa-image[data-v-744e8f62] {\n    font-size: 100px; }\n  .dropzone .dropzone-placeholder[data-v-744e8f62] {\n    display: none;\n    position: absolute;\n    top: 0;\n    left: 0;\n    z-index: 2;\n    width: 100%;\n    height: 100%;\n    background: white; }\n  .dropzone.is-dragging .dropzone-placeholder[data-v-744e8f62] {\n    display: block; }\n\n.file-preview {\n  width: 100%; }\n  .file-preview .file-preview-inner {\n    position: relative; }\n  .file-preview .file-preview-close {\n    top: 0;\n    right: 0;\n    padding: 0;\n    width: 24px;\n    height: 24px;\n    background: white;\n    position: absolute;\n    border-radius: 100%;\n    transform: translate(33%, -33%); }\n    .file-preview .file-preview-close i {\n      position: absolute;\n      top: 0;\n      left: 0;\n      width: 100%;\n      font-size: 24px;\n      text-align: center; }\n  .file-preview .file-preview-icon {\n    text-align: center;\n    font-size: 60px;\n    padding: 1rem; }\n  .file-preview .file-preview-thumbnail {\n    width: 100%;\n    max-width: 100%; }\n  .file-preview .file-preview-filename {\n    overflow: hidden;\n    text-align: center;\n    white-space: nowrap;\n    text-overflow: ellipsis; }\n  .file-preview .file-preview-filename,\n  .file-preview .file-preview-filesize {\n    text-align: center; }\n\n.infinite-scrolling {\n  position: relative; }\n\n.light-switch {\n  padding: 0;\n  position: relative;\n  border: none;\n  width: 3rem;\n  height: 2rem;\n  border-radius: 2rem;\n  overflow: hidden;\n  cursor: pointer;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  overflow: hidden; }\n  .light-switch.light-switch-xs {\n    padding: 0;\n    width: 1.5rem;\n    height: 1rem;\n    border-radius: 1rem; }\n    .light-switch.light-switch-xs .light-switch-handle {\n      width: 1rem;\n      height: 1rem; }\n    .light-switch.light-switch-xs .light-switch-container {\n      left: -0.5rem;\n      width: 2rem;\n      height: 1rem; }\n    .light-switch.light-switch-xs.is-active .light-switch-handle {\n      left: 0.5rem; }\n    .light-switch.light-switch-xs .light-switch-label {\n      width: 1rem;\n      height: 1rem; }\n  .light-switch.light-switch-sm {\n    padding: 0;\n    width: 2.25rem;\n    height: 1.5rem;\n    border-radius: 1.5rem; }\n    .light-switch.light-switch-sm .light-switch-handle {\n      width: 1.5rem;\n      height: 1.5rem; }\n    .light-switch.light-switch-sm .light-switch-container {\n      left: -0.75rem;\n      width: 3rem;\n      height: 1.5rem; }\n    .light-switch.light-switch-sm.is-active .light-switch-handle {\n      left: 0.75rem; }\n    .light-switch.light-switch-sm .light-switch-label {\n      width: 1.5rem;\n      height: 1.5rem; }\n  .light-switch.light-switch-md {\n    padding: 0;\n    width: 3rem;\n    height: 2rem;\n    border-radius: 2rem; }\n    .light-switch.light-switch-md .light-switch-handle {\n      width: 2rem;\n      height: 2rem; }\n    .light-switch.light-switch-md .light-switch-container {\n      left: -1rem;\n      width: 4rem;\n      height: 2rem; }\n    .light-switch.light-switch-md.is-active .light-switch-handle {\n      left: 1rem; }\n    .light-switch.light-switch-md .light-switch-label {\n      width: 2rem;\n      height: 2rem; }\n  .light-switch.light-switch-lg {\n    padding: 0;\n    width: 4.5rem;\n    height: 3rem;\n    border-radius: 3rem; }\n    .light-switch.light-switch-lg .light-switch-handle {\n      width: 3rem;\n      height: 3rem; }\n    .light-switch.light-switch-lg .light-switch-container {\n      left: -1.5rem;\n      width: 6rem;\n      height: 3rem; }\n    .light-switch.light-switch-lg.is-active .light-switch-handle {\n      left: 1.5rem; }\n    .light-switch.light-switch-lg .light-switch-label {\n      width: 3rem;\n      height: 3rem; }\n  .light-switch.light-switch-xl {\n    padding: 0;\n    width: 6rem;\n    height: 4rem;\n    border-radius: 4rem; }\n    .light-switch.light-switch-xl .light-switch-handle {\n      width: 4rem;\n      height: 4rem; }\n    .light-switch.light-switch-xl .light-switch-container {\n      left: -2rem;\n      width: 8rem;\n      height: 4rem; }\n    .light-switch.light-switch-xl.is-active .light-switch-handle {\n      left: 2rem; }\n    .light-switch.light-switch-xl .light-switch-label {\n      width: 4rem;\n      height: 4rem; }\n  .light-switch .valid-feedback {\n    display: none;\n    width: 100%;\n    margin-top: 0.25rem;\n    font-size: 80%;\n    color: #28a745; }\n  .light-switch .valid-tooltip {\n    position: absolute;\n    top: 100%;\n    z-index: 5;\n    display: none;\n    max-width: 100%;\n    padding: .5rem;\n    margin-top: .1rem;\n    font-size: .875rem;\n    line-height: 1;\n    color: #fff;\n    background-color: rgba(40, 167, 69, 0.8);\n    border-radius: .2rem; }\n  .was-validated .light-switch .form-control:valid, .light-switch .form-control.is-valid, .was-validated\n  .light-switch .custom-select:valid,\n  .light-switch .custom-select.is-valid {\n    border-color: #28a745; }\n    .was-validated .light-switch .form-control:valid:focus, .light-switch .form-control.is-valid:focus, .was-validated\n    .light-switch .custom-select:valid:focus,\n    .light-switch .custom-select.is-valid:focus {\n      border-color: #28a745;\n      box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25); }\n    .was-validated .light-switch .form-control:valid ~ .valid-feedback,\n    .was-validated .light-switch .form-control:valid ~ .valid-tooltip, .light-switch .form-control.is-valid ~ .valid-feedback,\n    .light-switch .form-control.is-valid ~ .valid-tooltip, .was-validated\n    .light-switch .custom-select:valid ~ .valid-feedback,\n    .was-validated\n    .light-switch .custom-select:valid ~ .valid-tooltip,\n    .light-switch .custom-select.is-valid ~ .valid-feedback,\n    .light-switch .custom-select.is-valid ~ .valid-tooltip {\n      display: block; }\n  .was-validated .light-switch .form-control-file:valid ~ .valid-feedback,\n  .was-validated .light-switch .form-control-file:valid ~ .valid-tooltip, .light-switch .form-control-file.is-valid ~ .valid-feedback,\n  .light-switch .form-control-file.is-valid ~ .valid-tooltip {\n    display: block; }\n  .was-validated .light-switch .form-check-input:valid ~ .form-check-label, .light-switch .form-check-input.is-valid ~ .form-check-label {\n    color: #28a745; }\n  .was-validated .light-switch .form-check-input:valid ~ .valid-feedback,\n  .was-validated .light-switch .form-check-input:valid ~ .valid-tooltip, .light-switch .form-check-input.is-valid ~ .valid-feedback,\n  .light-switch .form-check-input.is-valid ~ .valid-tooltip {\n    display: block; }\n  .was-validated .light-switch .custom-control-input:valid ~ .custom-control-label, .light-switch .custom-control-input.is-valid ~ .custom-control-label {\n    color: #28a745; }\n    .was-validated .light-switch .custom-control-input:valid ~ .custom-control-label::before, .light-switch .custom-control-input.is-valid ~ .custom-control-label::before {\n      background-color: #71dd8a; }\n  .was-validated .light-switch .custom-control-input:valid ~ .valid-feedback,\n  .was-validated .light-switch .custom-control-input:valid ~ .valid-tooltip, .light-switch .custom-control-input.is-valid ~ .valid-feedback,\n  .light-switch .custom-control-input.is-valid ~ .valid-tooltip {\n    display: block; }\n  .was-validated .light-switch .custom-control-input:valid:checked ~ .custom-control-label::before, .light-switch .custom-control-input.is-valid:checked ~ .custom-control-label::before {\n    background-color: #34ce57; }\n  .was-validated .light-switch .custom-control-input:valid:focus ~ .custom-control-label::before, .light-switch .custom-control-input.is-valid:focus ~ .custom-control-label::before {\n    box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(40, 167, 69, 0.25); }\n  .was-validated .light-switch .custom-file-input:valid ~ .custom-file-label, .light-switch .custom-file-input.is-valid ~ .custom-file-label {\n    border-color: #28a745; }\n    .was-validated .light-switch .custom-file-input:valid ~ .custom-file-label::before, .light-switch .custom-file-input.is-valid ~ .custom-file-label::before {\n      border-color: inherit; }\n  .was-validated .light-switch .custom-file-input:valid ~ .valid-feedback,\n  .was-validated .light-switch .custom-file-input:valid ~ .valid-tooltip, .light-switch .custom-file-input.is-valid ~ .valid-feedback,\n  .light-switch .custom-file-input.is-valid ~ .valid-tooltip {\n    display: block; }\n  .was-validated .light-switch .custom-file-input:valid:focus ~ .custom-file-label, .light-switch .custom-file-input.is-valid:focus ~ .custom-file-label {\n    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25); }\n  .light-switch .invalid-feedback {\n    display: none;\n    width: 100%;\n    margin-top: 0.25rem;\n    font-size: 80%;\n    color: #dc3545; }\n  .light-switch .invalid-tooltip {\n    position: absolute;\n    top: 100%;\n    z-index: 5;\n    display: none;\n    max-width: 100%;\n    padding: .5rem;\n    margin-top: .1rem;\n    font-size: .875rem;\n    line-height: 1;\n    color: #fff;\n    background-color: rgba(220, 53, 69, 0.8);\n    border-radius: .2rem; }\n  .was-validated .light-switch .form-control:invalid, .light-switch .form-control.is-invalid, .was-validated\n  .light-switch .custom-select:invalid,\n  .light-switch .custom-select.is-invalid {\n    border-color: #dc3545; }\n    .was-validated .light-switch .form-control:invalid:focus, .light-switch .form-control.is-invalid:focus, .was-validated\n    .light-switch .custom-select:invalid:focus,\n    .light-switch .custom-select.is-invalid:focus {\n      border-color: #dc3545;\n      box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25); }\n    .was-validated .light-switch .form-control:invalid ~ .invalid-feedback,\n    .was-validated .light-switch .form-control:invalid ~ .invalid-tooltip, .light-switch .form-control.is-invalid ~ .invalid-feedback,\n    .light-switch .form-control.is-invalid ~ .invalid-tooltip, .was-validated\n    .light-switch .custom-select:invalid ~ .invalid-feedback,\n    .was-validated\n    .light-switch .custom-select:invalid ~ .invalid-tooltip,\n    .light-switch .custom-select.is-invalid ~ .invalid-feedback,\n    .light-switch .custom-select.is-invalid ~ .invalid-tooltip {\n      display: block; }\n  .was-validated .light-switch .form-control-file:invalid ~ .invalid-feedback,\n  .was-validated .light-switch .form-control-file:invalid ~ .invalid-tooltip, .light-switch .form-control-file.is-invalid ~ .invalid-feedback,\n  .light-switch .form-control-file.is-invalid ~ .invalid-tooltip {\n    display: block; }\n  .was-validated .light-switch .form-check-input:invalid ~ .form-check-label, .light-switch .form-check-input.is-invalid ~ .form-check-label {\n    color: #dc3545; }\n  .was-validated .light-switch .form-check-input:invalid ~ .invalid-feedback,\n  .was-validated .light-switch .form-check-input:invalid ~ .invalid-tooltip, .light-switch .form-check-input.is-invalid ~ .invalid-feedback,\n  .light-switch .form-check-input.is-invalid ~ .invalid-tooltip {\n    display: block; }\n  .was-validated .light-switch .custom-control-input:invalid ~ .custom-control-label, .light-switch .custom-control-input.is-invalid ~ .custom-control-label {\n    color: #dc3545; }\n    .was-validated .light-switch .custom-control-input:invalid ~ .custom-control-label::before, .light-switch .custom-control-input.is-invalid ~ .custom-control-label::before {\n      background-color: #efa2a9; }\n  .was-validated .light-switch .custom-control-input:invalid ~ .invalid-feedback,\n  .was-validated .light-switch .custom-control-input:invalid ~ .invalid-tooltip, .light-switch .custom-control-input.is-invalid ~ .invalid-feedback,\n  .light-switch .custom-control-input.is-invalid ~ .invalid-tooltip {\n    display: block; }\n  .was-validated .light-switch .custom-control-input:invalid:checked ~ .custom-control-label::before, .light-switch .custom-control-input.is-invalid:checked ~ .custom-control-label::before {\n    background-color: #e4606d; }\n  .was-validated .light-switch .custom-control-input:invalid:focus ~ .custom-control-label::before, .light-switch .custom-control-input.is-invalid:focus ~ .custom-control-label::before {\n    box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(220, 53, 69, 0.25); }\n  .was-validated .light-switch .custom-file-input:invalid ~ .custom-file-label, .light-switch .custom-file-input.is-invalid ~ .custom-file-label {\n    border-color: #dc3545; }\n    .was-validated .light-switch .custom-file-input:invalid ~ .custom-file-label::before, .light-switch .custom-file-input.is-invalid ~ .custom-file-label::before {\n      border-color: inherit; }\n  .was-validated .light-switch .custom-file-input:invalid ~ .invalid-feedback,\n  .was-validated .light-switch .custom-file-input:invalid ~ .invalid-tooltip, .light-switch .custom-file-input.is-invalid ~ .invalid-feedback,\n  .light-switch .custom-file-input.is-invalid ~ .invalid-tooltip {\n    display: block; }\n  .was-validated .light-switch .custom-file-input:invalid:focus ~ .custom-file-label, .light-switch .custom-file-input.is-invalid:focus ~ .custom-file-label {\n    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25); }\n  .light-switch.is-invalid {\n    border: 1px solid #dc3545; }\n    .light-switch.is-invalid:not(.is-active) .light-switch-handle {\n      background: #dc3545; }\n    .light-switch.is-invalid .light-switch-label.on-value {\n      left: 0; }\n    .light-switch.is-invalid .light-switch-label.off-value {\n      right: 0; }\n  .light-switch .light-switch-handle {\n    top: 0;\n    left: 0;\n    z-index: 1;\n    position: absolute;\n    border-radius: 100%;\n    transition: left 0.33333s ease;\n    width: 2rem;\n    height: 2rem;\n    background: white;\n    background-image: radial-gradient(white, #fafafa 50%, white 75%);\n    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.1); }\n  .light-switch .light-switch-container {\n    position: relative;\n    left: -1rem;\n    top: 0rem;\n    width: 4rem;\n    height: 2rem;\n    transition: left 0.33333s ease; }\n  .light-switch:not(.is-active):not(.is-dragging) .on-value {\n    visibility: hidden; }\n  .light-switch.is-active:not(.is-dragging) .off-value {\n    visibility: hidden; }\n  .light-switch.is-active .light-switch-handle {\n    left: 1rem; }\n  .light-switch.is-active .light-switch-container {\n    left: 0; }\n  .light-switch .light-switch-label {\n    position: absolute;\n    width: 2rem;\n    height: 2rem; }\n    .light-switch .light-switch-label.on-value {\n      left: 0;\n      background: #00b007; }\n    .light-switch .light-switch-label.off-value {\n      right: 0;\n      background: #ebedef; }\n\n.slide-deck {\n  height: auto;\n  position: relative;\n  transition: all .5s ease;\n  /*\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    */\n  /*\n    .slide-fade-forward-leave-active,\n    .slide-fade-forward-leave-to {\n        z-index: 1;\n        transform: translateX(-100%);\n    }\n\n    .slide-fade-forward-enter-active,\n    .slide-fade-backward-enter-active {\n        z-index: 2;\n        transition: all 2s ease-out;\n    }\n    .slide-fade-forward-leave-active,\n    .slide-fade-backward-leave-active {\n        z-index: 1;\n        transition: all 2s cubic-bezier(1.0, 0.5, 0.8, 1.0);\n    }\n\n    .slide-fade-forward-enter,\n    .slide-fade-forward-leave-to,\n    .slide-fade-backward-enter,\n    .slide-fade-backward-leave-to {\n        position: absolute !important;\n        top: 0;\n        width: 100%;\n        opacity: 0;\n    }\n\n    .slide-fade-forward-enter,\n    .slide-fade-forward-leave-to {\n        right: 0;\n    }\n\n    .slide-fade-forward-enter,\n    .slide-fade-forward-leave-to {\n        transform: translateX(100%);\n    }\n\n    .slide-fade-backward-enter,\n    .slide-fade-backward-leave-to {\n        transform: translateX(100%);\n    }\n    */ }\n  .slide-deck.slide-deck-flex {\n    display: flex;\n    align-items: center;\n    justify-content: center; }\n    .slide-deck.slide-deck-flex .slide-deck-content {\n      flex: 1; }\n  .slide-deck .slide-deck-controls {\n    position: absolute;\n    left: 50%;\n    bottom: 1rem;\n    transform: translateX(-50%); }\n  .slide-deck .slide-forward-enter-active,\n  .slide-deck .slide-forward-leave-active,\n  .slide-deck .slide-backward-enter-active,\n  .slide-deck .slide-backward-leave-active {\n    opacity: 0;\n    transition: all .5s ease; }\n  .slide-deck .slide-forward-enter-active,\n  .slide-deck .slide-backward-enter-active {\n    position: absolute;\n    top: 0;\n    width: 100%; }\n  .slide-deck .slide-forward-enter-active {\n    left: 0; }\n  .slide-deck .slide-backward-enter-active {\n    right: 0; }\n  .slide-deck .slide-forward-enter-active,\n  .slide-deck .slide-backward-leave-to {\n    transform: translateX(100%); }\n  .slide-deck .slide-forward-leave-to,\n  .slide-deck .slide-backward-enter-active {\n    transform: translateX(-100%); }\n  .slide-deck .slide-forward-enter-to,\n  .slide-deck .slide-backward-enter-to {\n    opacity: 1;\n    transform: translateX(0); }\n\n.slide-deck-controls .slide-deck-control-icon {\n  color: #fff;\n  font-size: 1rem; }\n  .slide-deck-controls .slide-deck-control-icon:not(:last-child) {\n    margin-right: 0.5rem; }\n\n.slide-deck-controls .slide-deck-control-icon.is-active {\n  color: #007bff; }\n\n.thumbnail-list {\n  width: 100%;\n  display: flex; }\n  .thumbnail-list:not(.thumbnail-list-grid) > * {\n    padding-right: 10px;\n    padding-bottom: 10px; }\n  .thumbnail-list.thumbnail-list-fill, .thumbnail-list.thumbnail-list-wrap {\n    flex-flow: row wrap; }\n  .thumbnail-list.thumbnail-list-noflex > * {\n    flex: 0; }\n  .thumbnail-list.thumbnail-list-fill > * {\n    flex: 1 0 auto; }\n  .thumbnail-list.thumbnail-list-wrap > * {\n    flex: 0 0 auto; }\n  .thumbnail-list.thumbnail-list-flex > * {\n    flex: 1; }\n\n.thumbnail-list-item {\n  max-width: 100%;\n  max-height: 100%;\n  /*\n    &:not(:only-child) {\n        margin-right: 10px;\n        margin-bottom: 10px;\n    }\n\n    &:nth-child(2n) {\n        opacity: .25;\n    }\n    */ }\n  .thumbnail-list-item > img {\n    max-width: 100%; }\n    .thumbnail-list-item > img.img-fluid {\n      width: 100%; }\n\n.wizard .slide-deck-content {\n  margin: 1rem; }\n\n.wizard .wizard-content {\n  overflow: hidden; }\n\n.wizard .wizard-buttons {\n  border-top: 1px solid #7d7d7d;\n  padding-top: 1rem;\n  margin-top: 1rem; }\n\n.wizard-buttons {\n  display: flex;\n  justify-content: space-between; }\n.wizard-progress {\n  justify-content: space-between;\n  align-items: center;\n  padding: 30px 0;\n  counter-reset: step; }\n\n/*\n.wizard-progress-wrapper {\n    width: 100%;\n    padding: 30px 0;\n\n    &:after {\n        visibility: hidden;\n        display: block;\n        font-size: 0;\n        content: \" \";\n        clear: both;\n        height: 0;\n    }\n}\n*/\n.wizard-step {\n  cursor: default;\n  display: inline-block;\n  list-style-type: none;\n  font-size: 1rem;\n  position: relative;\n  text-align: center;\n  text-transform: uppercase; }\n  .wizard-step:before {\n    width: 40px;\n    height: 40px;\n    content: counter(step);\n    counter-increment: step;\n    line-height: 36px;\n    font-size: 15px;\n    display: block;\n    text-align: center;\n    margin: 0 auto 10px auto;\n    border-radius: 50%;\n    background-color: white;\n    position: relative;\n    z-index: 1;\n    border: 2px solid #008cc0;\n    color: #008cc0; }\n  .wizard-step:after {\n    width: 100%;\n    height: 2px;\n    content: '';\n    position: absolute;\n    background-color: #7d7d7d;\n    top: 20px;\n    left: -50%; }\n  .wizard-step:first-child:after {\n    content: none; }\n  .wizard-step, .wizard-step:hover {\n    color: #7d7d7d;\n    text-decoration: none; }\n    .wizard-step:not(.disabled), .wizard-step:hover:not(.disabled) {\n      cursor: pointer; }\n  .wizard-step .wizard-step-label {\n    color: #008cc0; }\n  .wizard-step.disabled {\n    cursor: default; }\n    .wizard-step.disabled:before {\n      color: #7d7d7d;\n      border-color: #7d7d7d; }\n    .wizard-step.disabled .wizard-step-label {\n      color: #7d7d7d; }\n  .wizard-step.complete:before {\n    border-color: #55b776;\n    color: #55b776; }\n  .wizard-step.complete:before {\n    font-family: FontAwesome;\n    content: \"\\f00c\";\n    line-height: 40px; }\n  .wizard-step.complete + .wizard-step:after {\n    background-color: #55b776; }\n  .wizard-step.complete .wizard-step-label {\n    color: #55b776; }\n  .wizard-step.active:before {\n    border-color: #b10805;\n    color: #b10805; }\n  .wizard-step.active .wizard-step-label {\n    color: #b10805; }\n  .wizard:not(.wizard-finished) .wizard-step.active:hover:before,\n  .wizard:not(.wizard-finished) .wizard-step.complete:hover:before {\n    border-color: #b10805;\n    color: #b10805; }\n  .wizard:not(.wizard-finished) .wizard-step.complete:hover + .wizard-step:after {\n    background-color: #b10805; }\n\n.wizard-success {\n  text-align: center;\n  font-size: 1.25rem;\n  padding: 1.25rem; }\n  .wizard-success .wizard-success-title {\n    font-size: 1.875rem;\n    color: #55b776; }\n  .wizard-success .wizard-success-icon {\n    color: #55b776;\n    font-size: 1.25rem;\n    border: 5px solid #55b776;\n    border-radius: 100%;\n    text-align: center;\n    width: 7.5rem;\n    height: 7.5rem;\n    margin: 1.25rem auto;\n    position: relative; }\n    .wizard-success .wizard-success-icon i {\n      position: absolute;\n      width: 100%;\n      top: 50%;\n      left: 0;\n      line-height: 0; }\n\n.wizard-error {\n  text-align: center;\n  font-size: 1.25rem;\n  padding: 1.25rem; }\n  .wizard-error .wizard-error-title {\n    font-size: 1.875rem;\n    color: #b10805; }\n  .wizard-error .wizard-error-icon {\n    color: #b10805;\n    font-size: 1.25rem;\n    border: 5px solid #b10805;\n    border-radius: 100%;\n    text-align: center;\n    width: 7.5rem;\n    height: 7.5rem;\n    margin: 1.25rem auto;\n    position: relative; }\n    .wizard-error .wizard-error-icon i {\n      position: absolute;\n      width: 100%;\n      top: 50%;\n      left: 0;\n      line-height: 0; }\n\n";
 styleInject(css$1);
 
 /** `Object#toString` result references. */
@@ -1820,7 +2083,7 @@ LazyWrapper.prototype.constructor = LazyWrapper;
  * _.times(2, _.noop);
  * // => [undefined, undefined]
  */
-function noop() {
+function noop$1() {
   // No operation performed.
 }
 
@@ -1831,7 +2094,7 @@ function noop() {
  * @param {Function} func The function to query.
  * @returns {*} Returns the metadata for `func`.
  */
-var getData = !metaMap ? noop : function(func) {
+var getData = !metaMap ? noop$1 : function(func) {
   return metaMap.get(func);
 };
 
@@ -4274,17 +4537,17 @@ var WRAP_BIND_FLAG$7 = 1,
  * bound('hi');
  * // => 'hi fred!'
  */
-var bind = baseRest(function(func, thisArg, partials) {
+var bind$1 = baseRest(function(func, thisArg, partials) {
   var bitmask = WRAP_BIND_FLAG$7;
   if (partials.length) {
-    var holders = replaceHolders(partials, getHolder(bind));
+    var holders = replaceHolders(partials, getHolder(bind$1));
     bitmask |= WRAP_PARTIAL_FLAG$3;
   }
   return createWrap(func, bitmask, thisArg, partials, holders);
 });
 
 // Assign default placeholders.
-bind.placeholder = {};
+bind$1.placeholder = {};
 
 /**
  * Binds methods of an object to the object itself, overwriting the existing
@@ -4315,7 +4578,7 @@ bind.placeholder = {};
 var bindAll = flatRest(function(object, methodNames) {
   arrayEach(methodNames, function(key) {
     key = toKey(key);
-    baseAssignValue(object, key, bind(object[key], object));
+    baseAssignValue(object, key, bind$1(object[key], object));
   });
   return object;
 });
@@ -5443,7 +5706,7 @@ function getAllKeysIn(object) {
 var DataView = getNative(root, 'DataView');
 
 /* Built-in method references that are verified to be native. */
-var Promise$1 = getNative(root, 'Promise');
+var Promise$2 = getNative(root, 'Promise');
 
 /* Built-in method references that are verified to be native. */
 var Set = getNative(root, 'Set');
@@ -5460,7 +5723,7 @@ var dataViewTag$1 = '[object DataView]';
 /** Used to detect maps, sets, and weakmaps. */
 var dataViewCtorString = toSource(DataView),
     mapCtorString = toSource(Map),
-    promiseCtorString = toSource(Promise$1),
+    promiseCtorString = toSource(Promise$2),
     setCtorString = toSource(Set),
     weakMapCtorString = toSource(WeakMap);
 
@@ -5476,7 +5739,7 @@ var getTag = baseGetTag;
 // Fallback for data views, maps, sets, and weak maps in IE 11 and promises in Node.js < 6.
 if ((DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag$1) ||
     (Map && getTag(new Map) != mapTag$1) ||
-    (Promise$1 && getTag(Promise$1.resolve()) != promiseTag) ||
+    (Promise$2 && getTag(Promise$2.resolve()) != promiseTag) ||
     (Set && getTag(new Set) != setTag$1) ||
     (WeakMap && getTag(new WeakMap) != weakMapTag$1)) {
   getTag = function(value) {
@@ -13975,7 +14238,7 @@ function reduceRight(collection, iteratee, accumulator) {
  * _.reject(users, 'active');
  * // => objects for ['barney']
  */
-function reject(collection, predicate) {
+function reject$1(collection, predicate) {
   var func = isArray(collection) ? arrayFilter : baseFilter;
   return func(collection, negate(baseIteratee(predicate, 3)));
 }
@@ -16479,7 +16742,7 @@ var INFINITY$5 = 1 / 0;
  * @param {Array} values The values to add to the set.
  * @returns {Object} Returns the new set.
  */
-var createSet = !(Set && (1 / setToArray(new Set([,-0]))[1]) == INFINITY$5) ? noop : function(values) {
+var createSet = !(Set && (1 / setToArray(new Set([,-0]))[1]) == INFINITY$5) ? noop$1 : function(values) {
   return new Set(values);
 };
 
@@ -17353,7 +17616,7 @@ var collection = {
   find, findLast, flatMap, flatMapDeep, flatMapDepth,
   forEach, forEachRight, groupBy, includes, invokeMap,
   keyBy, map, orderBy, partition, reduce,
-  reduceRight, reject, sample, sampleSize, shuffle,
+  reduceRight, reject: reject$1, sample, sampleSize, shuffle,
   size, some, sortBy
 };
 
@@ -17362,7 +17625,7 @@ var date = {
 };
 
 var func = {
-  after, ary, before, bind, bindKey,
+  after, ary, before, bind: bind$1, bindKey,
   curry, curryRight, debounce, defer, delay,
   flip, memoize, negate, once, overArgs,
   partial, partialRight, rearg, rest, spread,
@@ -17427,7 +17690,7 @@ var util = {
   attempt, bindAll, cond, conforms, constant,
   defaultTo, flow, flowRight, identity, iteratee,
   matches, matchesProperty, method, methodOf, mixin,
-  noop, nthArg, over, overEvery, overSome,
+  noop: noop$1, nthArg, over, overEvery, overSome,
   property, propertyOf, range, rangeRight, stubArray,
   stubFalse, stubObject, stubString, stubTrue, times,
   toPath, uniqueId
@@ -18432,15 +18695,15 @@ class Request {
         }, cloneDeep(RequestOptions), options);
 
         forEach(PROXY_OPTION_METHODS, (callback, key) => {
-            this[method$1(key, 'option')] = bind(callback)('$options', this);
+            this[method$1(key, 'option')] = bind$1(callback)('$options', this);
         });
 
         forEach(PROXY_OPTION_PROPERTIES, (prop) => {
             forEach(PROXY_OPTION_METHODS, (callback, key) => {
-                this[method$1(key, prop)] = bind(callback)(prop, this.$options);
+                this[method$1(key, prop)] = bind$1(callback)(prop, this.$options);
             });
 
-            this[prop] = bind(chainable, this)(prop);
+            this[prop] = bind$1(chainable, this)(prop);
         });
 
         this.reset();
@@ -18492,7 +18755,7 @@ class Request {
         this.$requestSentAt = moment();
         this.addOption('method', method$$1);
 
-        return new Promise((resolve, reject$$1) => {
+        return new Promise((resolve, reject) => {
             axios(this.$options).then(response => {
                 this.$response = response;
                 this.$responseReceivedAt = moment();
@@ -18507,7 +18770,7 @@ class Request {
                 this.$status = error.response ? error.response.status : null;
                 this.$statusText = error.response ? error.response.statusText : null;
 
-                reject$$1(error.response || error);
+                reject(error.response || error);
             });
         });
     }
@@ -18895,13 +19158,13 @@ class Model {
     create(data = {}, config = {}) {
         this.fill(data);
 
-        return new Promise((resolve, reject$$1) => {
+        return new Promise((resolve, reject) => {
             const request = this.constructor.request(this.uri(), assignIn({}, config));
             const data = !this.hasFiles() ? this.toJson() : this.toFormData();
 
             request.post(data).then(response => {
                 resolve(this.fill(response));
-            }, reject$$1);
+            }, reject);
         });
     }
 
@@ -18914,13 +19177,13 @@ class Model {
     update(data = {}, config = {}) {
         this.fill(data);
 
-        return new Promise((resolve, reject$$1) => {
+        return new Promise((resolve, reject) => {
             const request = this.constructor.request(this.uri(), config);
             const data = !this.hasFiles() ? this.toJson() : this.toFormData();
 
             request[(this.hasFiles() ? 'post' : 'put')](data).then(response => {
                 resolve(this.fill(response));
-            }, reject$$1);
+            }, reject);
         });
     }
 
@@ -18931,9 +19194,9 @@ class Model {
      * @return bool
      */
     delete(config = {}) {
-        return new Promise((resolve, reject$$1) => {
+        return new Promise((resolve, reject) => {
             if(!this.exists()) {
-                reject$$1(new Error('The model must have a primary key before it can be delete.'));
+                reject(new Error('The model must have a primary key before it can be delete.'));
             }
 
             const request = this.constructor.request(this.uri(), config);
@@ -18941,7 +19204,7 @@ class Model {
             request.delete().then(response => {
                 resolve(response);
                 //resolve(this.fill(response));
-            }, reject$$1);
+            }, reject);
         });
     }
 
@@ -19009,7 +19272,7 @@ class Model {
             uri = model.uri();
         }
 
-        return new Promise((resolve, reject$$1) => {
+        return new Promise((resolve, reject) => {
             const request = this.request(uri, config);
 
             request.get(params).then(response => {
@@ -19017,7 +19280,7 @@ class Model {
                     return new this(data);
                 }));
             }, errors => {
-                reject$$1(errors);
+                reject(errors);
             });
         });
     }
@@ -19029,12 +19292,12 @@ class Model {
      * @return bool
      */
     static find(id, config = {}) {
-        return new Promise((resolve, reject$$1) => {
+        return new Promise((resolve, reject) => {
             const model = new this;
             this.request(model.uri(id), config).get().then(response => {
                 resolve(model.initialize(response));
             }, error => {
-                reject$$1(error);
+                reject(error);
             });
         });
     }
@@ -20023,7 +20286,104 @@ function Gateway$1(key, options) {
     return instances[key];
 }
 
-var StripeCreditCard = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"form-group",class:{'was-validated': !!_vm.errors.token}},[_c('label',{staticClass:"d-block mt-3"},[_c('div',{staticClass:"text-bold mb-2"},[_vm._v("Credit Card")]),_vm._v(" "),_c('div',{staticClass:"stripe-field",class:{'activity': _vm.isLoading}},[_c('div',{staticClass:"form-control p-2",class:{'is-invalid': !!_vm.errors.token}},[_c('div',{staticClass:"stripe-field-input"})]),_vm._v(" "),_c('div',{staticClass:"stripe-field-activity"},[_c('activity-indicator',{attrs:{"size":"xs","center":""}})],1)]),_vm._v(" "),(_vm.errors.token)?_c('div',{staticClass:"invalid-feedback",domProps:{"innerHTML":_vm._s(_vm.errors.token.join('<br>'))}}):_vm._e()])])},staticRenderFns: [],
+function elapsed(milliseconds, callback, elapsedCallback) {
+    let hasElapsed = false;
+
+    function start() {
+        return setTimeout(() => {
+            hasElapsed = true;
+
+            if(isFunction(elapsedCallback)) {
+                elapsedCallback();
+            }
+        }, milliseconds)
+    }
+
+    function stop() {
+        clearTimeout(interval);
+    }
+
+    const interval = start(), promise = new Promise((resolve, reject) => {
+        function resolver(resolver, response) {
+            return resolver(response || hasElapsed);
+        }
+        callback(wrap(resolve, resolver), wrap(reject, resolver));
+    });
+
+    return promise.finally(stop, stop);
+}
+
+const CALLBACKS = {};
+
+function id(callback) {
+    return findKey(CALLBACKS, compare => {
+        return callback.toString() == compare.toString();
+    });
+}
+
+function restart(callback, milliseconds) {
+    stop(id(callback));
+    start(callback, milliseconds);
+}
+
+function stop(id) {
+    clearTimeout(id);
+    delete CALLBACKS[id];
+}
+
+function start(callback, milliseconds) {
+    return CALLBACKS[setTimeout(callback, milliseconds)] = callback;
+}
+
+function wait(milliseconds, callback) {
+    return new Promise((resolve, reject) => {
+        function resolver(resolver, response) {
+            return resolver(response);
+        }
+        restart(wrap(callback, callback => {
+            return callback(wrap(resolve, resolver), wrap(reject, resolver));
+        }), milliseconds);
+    });
+
+    return promise.finally(stop, stop);
+}
+
+
+/*
+import { wrap } from 'lodash-es';
+import { isFunction } from 'lodash-es';
+
+export default function elapsed(delay, callback, elapsedCallback) {
+    let hasElapsed = false;
+
+    function start() {
+        return setInterval(() => {
+            hasElapsed = true;
+
+            if(isFunction(elapsedCallback)) {
+                elapsedCallback();
+            }
+        }, delay)
+    }
+
+    function stop() {
+        clearInterval(interval);
+    }
+
+    const interval = start(), promise = new Promise((resolve, reject) => {
+        function resolver(resolver, response) {
+            return resolver(response || hasElapsed);
+        };
+
+        callback(wrap(resolve, resolver), wrap(reject, resolver));
+    });
+
+    return promise.finally(stop, stop);
+}
+
+ */
+
+var StripeCreditCard = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"form-group",class:{'was-validated': !!_vm.errors.token}},[(!_vm.loaded)?_c('div',{staticClass:"row my-5 py-1"},[_c('div',{staticClass:"col-xs-12"},[_c('activity-indicator',{attrs:{"size":"sm","center":true}})],1)]):_c('label',{staticClass:"d-block mt-3"},[_c('div',{staticClass:"text-bold mb-2"},[_vm._v("Credit Card")]),_vm._v(" "),_c('div',{staticClass:"stripe-field",class:{'has-activity': _vm.activity}},[_c('div',{staticClass:"form-control p-2",class:{'is-invalid': !!_vm.errors.token}},[_c('div',{staticClass:"stripe-field-input"})]),_vm._v(" "),_c('div',{staticClass:"stripe-field-activity"},[_c('activity-indicator',{attrs:{"size":"xs","center":""}})],1)]),_vm._v(" "),(_vm.errors.token)?_c('div',{staticClass:"invalid-feedback",domProps:{"innerHTML":_vm._s(_vm.errors.token.join('<br>'))}}):_vm._e()])])},staticRenderFns: [],
 
     name: 'stripe-credit-card',
 
@@ -20087,30 +20447,39 @@ var StripeCreditCard = {render: function(){var _vm=this;var _h=_vm.$createElemen
                 this.errors.token = event.error ? [event.error.message] : null;
 
                 if(event.complete) {
-                    // this.isLoading = true;
-
-                    gateway.createToken(this.$card, {
-                        currency: 'usd'
-                    }).then((result) => {
-                        // this.isLoading = false;
-
-                        if (result.error) {
-                            this.errors.token = [event.error.message];
-                        } else {
-                            this.form.token = result.token.id;
-                            this.$dispatch.request('submit:enable');
-                        }
+                    elapsed(500, (resolve, reject) => {
+                        gateway.createToken(this.$card, {
+                            currency: 'usd'
+                        }).then((result) => {
+                            wait(this.activity ? 750 : 0, (resolve, reject) => {
+                                if (result.error) {
+                                    reject(this.errors.token = [event.error.message]);
+                                } else {
+                                    this.form.token = result.token.id;
+                                    this.$dispatch.request('submit:enable');
+                                    resolve(result);
+                                }
+                            }).then(resolve, reject);
+                        });
+                    }, () => {
+                        this.activity = true;
+                    }).then(() => {
+                        this.activity = false;
+                    }, () => {
+                        this.activity = false;
                     });
                 }
             });
 
-            this.$card.mount(this.$el.querySelector('.stripe-field-input'));
+            this.loaded = true;
+            this.$nextTick(() => this.$card.mount(this.$el.querySelector('.stripe-field-input')));
         });
     },
 
     data() {
         return {
-            isLoading: false
+            activity: false,
+            loaded: false
         }
     }
 
@@ -21811,131 +22180,10 @@ var FormGroup = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
     
 }
 
-const loaded$1 = {};
-
-function element$1(url) {
-    const script = document.createElement('script');
-    script.setAttribute('src', url);
-    script.setAttribute('type', 'text/javascript');
-    script.setAttribute('charset', 'utf-8');
-    return script;
-}
-
-function append$1(script) {
-    if(document.querySelector('head')) {
-        document.querySelector('head').appendChild(script);
-    }
-    else {
-        document.querySelector('body').appendChild(script);
-    }
-
-    return script;
-}
-
-function script$1(url) {
-    if(loaded$1[url] instanceof Promise) {
-        return loaded$1[url];
-    }
-
-    return loaded$1[url] = new Promise((resolve, reject) => {
-        try {
-            if(!loaded$1[url]) {
-                append$1(element$1(url)).addEventListener('load', event => {
-                    resolve(loaded$1[url] = event);
-                });
-            }
-            else {
-                resolve(loaded$1[url]);
-            }
-        }
-        catch(e) {
-            reject(e);
-        }
-    });
-}
-
-const VueInstaller$1 = {
-    use: use$1,
-    script: script$1,
-    plugin: plugin$2,
-    plugins: plugins$1,
-    filter: filter$2,
-    filters: filters$1,
-    component: component$1,
-    components: components$1,
-    directive: directive$1,
-    directives: directives$1,
-    $plugins: {},
-    $filters: {},
-    $directives: {},
-    $components: {},
-};
-
-function use$1(plugin) {
-    if (typeof window !== 'undefined' && window.Vue) {
-        window.Vue.use(plugin);
-    }
-
-    return plugin;
-}
-
-function plugin$2(Vue, name, def) {
-    if(!VueInstaller$1.$plugins[name]) {
-        Vue.use(VueInstaller$1.$plugins[name] = def);
-    }
-}
-
-function plugins$1(Vue, plugins) {
-    forEach(plugins, (def, name) => {
-        plugin$2(Vue, name, def);
-    });
-}
-
-function filter$2(Vue, name, def) {
-    if(!VueInstaller$1.$filters[name]) {
-        Vue.use(VueInstaller$1.$filters[name] = def);
-    }
-}
-
-function filters$1(Vue, filters) {
-    forEach(filters, (def, name) => {
-        filter$2(Vue, name, def);
-    });
-}
-
-function component$1(Vue, name, def) {
-    if(!VueInstaller$1.$components[name]) {
-        Vue.component(name, VueInstaller$1.$components[name] = def);
-    }
-}
-
-function components$1(Vue, components) {
-    forEach(components, (def, name) => {
-        component$1(Vue, name, def);
-    });
-}
-
-function directive$1(Vue, name, def) {
-    if(!VueInstaller$1.$directives[name]) {
-        if(isFunction(def)) {
-            Vue.use(VueInstaller$1.$directives[name] = def);
-        }
-        else {
-            Vue.directive(name, def);
-        }
-    }
-}
-
-function directives$1(Vue, directives) {
-    forEach(directives, (def, name) => {
-        directive$1(Vue, name, def);
-    });
-}
-
-const plugin$3 = VueInstaller$1.use({
+const plugin$2 = VueInstaller.use({
 
     install(Vue, options) {
-        VueInstaller$1.components({
+        VueInstaller.components({
             FormGroup
         });
     }
@@ -22063,10 +22311,10 @@ var FormFeedback = {render: function(){var _vm=this;var _h=_vm.$createElement;va
 
 }
 
-const plugin$4 = VueInstaller$1.use({
+const plugin$3 = VueInstaller.use({
 
     install(Vue, options) {
-        VueInstaller$1.components({
+        VueInstaller.components({
             FormFeedback
         });
     }
@@ -22121,10 +22369,10 @@ var HelpText = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
 
 }
 
-const plugin$5 = VueInstaller$1.use({
+const plugin$4 = VueInstaller.use({
 
     install(Vue, options) {
-        VueInstaller$1.components({
+        VueInstaller.components({
             HelpText
         });
     }
@@ -22161,7 +22409,7 @@ var Variant = {
 
 }
 
-function MergeClasses() {
+function mergeClasses() {
     const classes = {};
 
     forEach([].slice.call(arguments), arg => {
@@ -22187,11 +22435,12 @@ const AVAILABLE_EVENTS = [
     'blur'
 ];
 
-var CreditCardField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',{on:{"click":_vm.onClick}},[_vm._t("control",[_c('div',{staticClass:"credit-card-field",class:_vm.mergeClasses(_vm.controlClasses, _vm.variantClass, _vm.classes)},[_c('div',{staticClass:"credit-card-field-icon-wrapper"},[_c('div',{staticClass:"credit-card-field-icon-card"},[_c('div',{staticClass:"credit-card-field-icon-front"},[_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-jcb","data-brand":"jcb"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-visa","data-brand":"visa"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-amex","data-brand":"amex"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"credit-card","data-brand":"unknown","width":"20","height":"18"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-discover","data-brand":"discover"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-mastercard","data-brand":"mastercard"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-diners-club","data-brand":"dinersclub"}})],1),_vm._v(" "),_c('div',{staticClass:"credit-card-field-icon-back"},[_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"credit-card-alt","width":"23.33","height":"20"}})],1)])]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-fields"},[_c('input',{directives:[{name:"focus",rawName:"v-focus.transform",modifiers:{"transform":true}},{name:"validate",rawName:"v-validate:number",value:(_vm.validateNumber),expression:"validateNumber",arg:"number"},{name:"model",rawName:"v-model",value:(_vm.card.number),expression:"card.number"}],staticClass:"credit-card-field-field credit-card-field-number",class:_vm.mergeClasses({'is-empty': !_vm.card.number, 'is-invalid': _vm.validated.number === false}),attrs:{"type":"text","placeholder":"Card number"},domProps:{"value":(_vm.card.number)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "number", $event.target.value);}}}),_vm._v(" "),_c('div',{staticClass:"credit-card-field-security-fields"},[_c('input',{directives:[{name:"focus",rawName:"v-focus"},{name:"validate",rawName:"v-validate:expiration",value:(_vm.validateExpiration),expression:"validateExpiration",arg:"expiration"},{name:"model",rawName:"v-model",value:(_vm.card.expiration),expression:"card.expiration"}],staticClass:"credit-card-field-field credit-card-field-expiration",class:_vm.mergeClasses({'is-empty': !_vm.card.expiration, 'is-invalid': _vm.validated.expiration === false}),attrs:{"type":"text","placeholder":"MM / YY","maxlength":"7"},domProps:{"value":(_vm.card.expiration)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "expiration", $event.target.value);}}}),_vm._v(" "),_c('input',{directives:[{name:"focus",rawName:"v-focus",value:(_vm.validateCvc),expression:"validateCvc"},{name:"validate",rawName:"v-validate:cvc",value:(_vm.validateCvc),expression:"validateCvc",arg:"cvc"},{name:"model",rawName:"v-model",value:(_vm.card.cvc),expression:"card.cvc"}],staticClass:"credit-card-field-field credit-card-field-cvc",class:_vm.mergeClasses({'is-empty': !_vm.card.cvc, 'is-invalid': _vm.validated.cvc === false}),attrs:{"type":"text","placeholder":"CVC","maxlength":"4","autocomplete":"off"},domProps:{"value":(_vm.card.cvc)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "cvc", $event.target.value);}}}),_vm._v(" "),_c('input',{directives:[{name:"focus",rawName:"v-focus",value:(_vm.validatePostalCode),expression:"validatePostalCode"},{name:"validate",rawName:"v-validate:postalCode",value:(_vm.validatePostalCode),expression:"validatePostalCode",arg:"postalCode"},{name:"model",rawName:"v-model",value:(_vm.card.postalCode),expression:"card.postalCode"}],staticClass:"credit-card-field-field credit-card-field-postal",class:_vm.mergeClasses({'is-empty': !_vm.card.postalCode, 'is-invalid': _vm.validated.postalCode === false}),attrs:{"type":"text","placeholder":"Zip","maxlength":"5"},domProps:{"value":(_vm.card.postalCode)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "postalCode", $event.target.value);}}})]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-placeholder-mask"},[_vm._v("Number")]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-number-mask",domProps:{"innerHTML":_vm._s(_vm.card.number)}})])])]),_vm._v(" "),_vm._t("default"),_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)},staticRenderFns: [],
+var CreditCardField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',{staticClass:"credit-card-field-wrapper",on:{"click":_vm.onClick}},[_vm._t("control",[_c('div',{staticClass:"credit-card-field",class:_vm.mergeClasses(_vm.controlClasses, _vm.variantClass, _vm.classes)},[_c('div',{staticClass:"credit-card-field-icon-wrapper"},[_c('div',{staticClass:"credit-card-field-icon-card"},[_c('div',{staticClass:"credit-card-field-icon-front"},[_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-jcb","data-brand":"jcb"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-visa","data-brand":"visa"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-amex","data-brand":"amex"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"credit-card","data-brand":"unknown","width":"20","height":"18"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-discover","data-brand":"discover"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-mastercard","data-brand":"mastercard"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-diners-club","data-brand":"dinersclub"}})],1),_vm._v(" "),_c('div',{staticClass:"credit-card-field-icon-back"},[_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"credit-card-alt","width":"23.33","height":"20"}})],1)])]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-fields"},[_c('input',{directives:[{name:"focus",rawName:"v-focus.transform",modifiers:{"transform":true}},{name:"validate",rawName:"v-validate:number",value:(_vm.validateNumber),expression:"validateNumber",arg:"number"},{name:"model",rawName:"v-model",value:(_vm.card.number),expression:"card.number"}],staticClass:"credit-card-field-field credit-card-field-number",class:_vm.mergeClasses({'is-empty': !_vm.card.number, 'is-invalid': _vm.validated.number === false}),attrs:{"type":"text","placeholder":"Card number"},domProps:{"value":(_vm.card.number)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "number", $event.target.value);}}}),_vm._v(" "),_c('div',{staticClass:"credit-card-field-security-fields"},[_c('input',{directives:[{name:"focus",rawName:"v-focus"},{name:"validate",rawName:"v-validate:expiration",value:(_vm.validateExpiration),expression:"validateExpiration",arg:"expiration"},{name:"model",rawName:"v-model",value:(_vm.card.expiration),expression:"card.expiration"}],staticClass:"credit-card-field-field credit-card-field-expiration",class:_vm.mergeClasses({'is-empty': !_vm.card.expiration, 'is-invalid': _vm.validated.expiration === false}),attrs:{"type":"text","placeholder":"MM / YY","maxlength":"7"},domProps:{"value":(_vm.card.expiration)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "expiration", $event.target.value);}}}),_vm._v(" "),_c('input',{directives:[{name:"focus",rawName:"v-focus",value:(_vm.validateCvc),expression:"validateCvc"},{name:"validate",rawName:"v-validate:cvc",value:(_vm.validateCvc),expression:"validateCvc",arg:"cvc"},{name:"model",rawName:"v-model",value:(_vm.card.cvc),expression:"card.cvc"}],staticClass:"credit-card-field-field credit-card-field-cvc",class:_vm.mergeClasses({'is-empty': !_vm.card.cvc, 'is-invalid': _vm.validated.cvc === false}),attrs:{"type":"text","placeholder":"CVC","maxlength":"4","autocomplete":"off"},domProps:{"value":(_vm.card.cvc)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "cvc", $event.target.value);}}}),_vm._v(" "),_c('input',{directives:[{name:"focus",rawName:"v-focus",value:(_vm.validatePostalCode),expression:"validatePostalCode"},{name:"validate",rawName:"v-validate:postalCode",value:(_vm.validatePostalCode),expression:"validatePostalCode",arg:"postalCode"},{name:"model",rawName:"v-model",value:(_vm.card.postalCode),expression:"card.postalCode"}],staticClass:"credit-card-field-field credit-card-field-postal",class:_vm.mergeClasses({'is-empty': !_vm.card.postalCode, 'is-invalid': _vm.validated.postalCode === false}),attrs:{"type":"text","placeholder":"Zip","maxlength":"5"},domProps:{"value":(_vm.card.postalCode)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "postalCode", $event.target.value);}}})]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-placeholder-mask"},[_vm._v("Number")]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-number-mask",domProps:{"innerHTML":_vm._s(_vm.card.number)}})])])]),_vm._v(" "),_vm._t("activity-indicator",[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.activity),expression:"activity"}],staticClass:"credit-card-field-activity"},[_c('activity-indicator',{attrs:{"size":"sm","type":"dots","center":""}})],1)]),_vm._v(" "),_vm._t("default"),_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)},staticRenderFns: [],
 
     name: 'credit-card-field',
 
     components: {
+        ActivityIndicator,
         Icon: Icon$1,
         FormGroup,
         FormFeedback,
@@ -22202,6 +22451,15 @@ var CreditCardField = {render: function(){var _vm=this;var _h=_vm.$createElement
         Variant,
         FormControl
     ],
+
+    props: {
+
+        activity: {
+            type: Boolean,
+            default: false
+        }
+
+    },
 
     directives: {
         focus: {
@@ -22268,35 +22526,6 @@ var CreditCardField = {render: function(){var _vm=this;var _h=_vm.$createElement
         }
     },
 
-    props: {
-        /*
-        focus: {
-            type: [Boolean, Function],
-            default: false
-        },
-        blur: {
-            type: [Boolean, Function],
-            default: false
-        },
-        invalid: {
-            type: [Boolean, Function],
-            default: false
-        },
-        complete: {
-            type: [Boolean, Function],
-            default: false
-        },
-        change: {
-            type: [Boolean, Function],
-            default: false
-        },
-        error: {
-            type: [Boolean, String],
-            default: false
-        }
-        */
-    },
-
     watch: {
         'card.number': function(newVal, oldVal) {
             this.validated.number = null;
@@ -22310,8 +22539,6 @@ var CreditCardField = {render: function(){var _vm=this;var _h=_vm.$createElement
         },
         'card.postalCode': function(newVal, oldVal) {
             this.validated.postalCode = null;
-        },
-        error(newVal, oldVal) {
         }
     },
 
@@ -22319,7 +22546,8 @@ var CreditCardField = {render: function(){var _vm=this;var _h=_vm.$createElement
 
         classes() {
             const classes = {
-                'text-sm': this.width < 300,
+                'has-activity': this.activity,
+                'credit-card-field-sm': this.width < 300,
                 'is-focused': this.isFocused,
                 'is-invalid': this.isInvalid()
             };
@@ -22343,7 +22571,7 @@ var CreditCardField = {render: function(){var _vm=this;var _h=_vm.$createElement
 
     methods: {
 
-        mergeClasses: MergeClasses,
+        mergeClasses: mergeClasses,
 
         addTransform(el) {
             const defaultView = (el.ownerDocument || document).defaultView;
@@ -22351,10 +22579,7 @@ var CreditCardField = {render: function(){var _vm=this;var _h=_vm.$createElement
             const parts = el.value.split(' ');
             const totalWidth = positionInfo.width;
             const computedStyle = defaultView.getComputedStyle(el);
-            const width = this.getTextWidth(parts[parts.length - 1].trim(), computedStyle.fontSize+' '+computedStyle.fontStyle+' '+computedStyle.fontFamily);
-
-            console.log(positionInfo, computedStyle, width);
-
+            const width = this.getTextWidth(parts[parts.length - 1].trim(), computedStyle);
             el.style.transform = 'translateX('+((totalWidth - width) * -1)+'px)';
         },
 
@@ -22400,13 +22625,13 @@ var CreditCardField = {render: function(){var _vm=this;var _h=_vm.$createElement
             };
         },
 
-        getTextWidth(text, font) {
+        getTextWidth(text, computedStyle) {
             // re-use canvas object for better performance
             var canvas = document.createElement("canvas");
             var context = canvas.getContext("2d");
-            context.font = font;
+            context.margin = 0;
+            context.font = computedStyle.font;
             var metrics = context.measureText(text);
-            console.log(text, metrics);
             return metrics.width;
         },
 
@@ -22542,7 +22767,7 @@ var CreditCardField = {render: function(){var _vm=this;var _h=_vm.$createElement
 
 }
 
-var AuthorizeNetCreditCard = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (!_vm.loaded)?_c('div',{staticClass:"row my-5 py-1"},[_c('div',{staticClass:"col-xs-12"},[_c('activity-indicator',{attrs:{"size":"sm","center":true}})],1)]):_c('div',{staticClass:"form-group"},[_c('div',{staticClass:"text-bold mb-2"},[_vm._v("Credit Card")]),_vm._v(" "),_c('credit-card-field',{attrs:{"error":_vm.error || _vm.errors.token},on:{"change":_vm.onChange,"complete":_vm.onComplete}})],1)},staticRenderFns: [],
+var AuthorizeNetCreditCard = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (!_vm.loaded)?_c('div',{staticClass:"row my-5 py-1"},[_c('div',{staticClass:"col-xs-12"},[_c('activity-indicator',{attrs:{"size":"sm","center":true}})],1)]):_c('div',{staticClass:"form-group"},[_c('div',{staticClass:"text-bold mb-2"},[_vm._v("Credit Card")]),_vm._v(" "),_c('credit-card-field',{attrs:{"activity":_vm.activity,"error":_vm.error || _vm.errors.token},on:{"change":_vm.onChange,"complete":_vm.onComplete}})],1)},staticRenderFns: [],
 
     name: 'authorize-net-credit-card',
 
@@ -22570,13 +22795,6 @@ var AuthorizeNetCreditCard = {render: function(){var _vm=this;var _h=_vm.$create
         }
     },
 
-    data() {
-        return {
-            error: false,
-            loaded: false
-        };
-    },
-
     methods: {
         onChange: function(event) {
             if(!event.complete) {
@@ -22584,25 +22802,34 @@ var AuthorizeNetCreditCard = {render: function(){var _vm=this;var _h=_vm.$create
             }
         },
         onComplete: function(event) {
-            Gateway$1(this.gateway).createToken({
-                cardNumber: event.card.number,
-                month: event.card.expMonth,
-                year: event.card.expYear,
-                cardCode: event.card.cvc
-            }, (event) => {
-                if(event.messages.resultCode === 'Ok') {
-                    //this.$children[0].makeValid();
-                    this.$set(this.form, 'token', event.opaqueData.dataValue);
-                    this.$set(this.form, 'tokenDescriptor', event.opaqueData.dataDescriptor);
-                    this.$dispatch.request('submit:enable');
-                }
-                else if(event.messages.resultCode === 'Error') {
-                    //this.$children[0].makeInvalid();
-                    this.error = event.messages.message[0].text;
-                    this.$dispatch.request('submit:disable');
-                }
+            elapsed(500, (resolve, reject) => {
+                Gateway$1(this.gateway).createToken({
+                    cardNumber: event.card.number,
+                    month: event.card.expMonth,
+                    year: event.card.expYear,
+                    cardCode: event.card.cvc
+                }, event => {
+                    wait(this.activity ? 750 : 0, (resolve, reject) => {
+                        if(event.messages.resultCode === 'Ok') {
+                            this.$set(this.form, 'token', event.opaqueData.dataValue);
+                            this.$set(this.form, 'tokenDescriptor', event.opaqueData.dataDescriptor);
+                            this.$dispatch.request('submit:enable');
+                            resolve(event);
+                        }
+                        else if(event.messages.resultCode === 'Error') {
+                            this.error = event.messages.message[0].text;
+                            this.$dispatch.request('submit:disable');
+                            reject(this.error);
+                        }
+                    }).then(resolve, reject);
+                });
+            }, () => {
+                this.activity = true;
+            }).then(() => {
+                this.activity = false;
+            },() => {
+                this.activity = false;
             });
-
         }
     },
 
@@ -22612,6 +22839,14 @@ var AuthorizeNetCreditCard = {render: function(){var _vm=this;var _h=_vm.$create
         Gateway$1(this.gateway).script((event) => {
             this.loaded = true;
         });
+    },
+
+    data() {
+        return {
+            error: false,
+            loaded: false,
+            activity: false
+        };
     }
 
 }
@@ -24419,309 +24654,10 @@ var HorizontalSignupForm = {render: function(){var _vm=this;var _h=_vm.$createEl
 
 }
 
-function prefix$1(subject, prefix, delimeter = '-') {
-    const prefixer = (value, key) => {
-        const string = key || value;
-
-        return [
-            prefix,
-            string.replace(new RegExp(`^${prefix}${delimeter}?`), '')
-        ].join(delimeter);
-    };
-
-    if(isBoolean(subject) || isNull(subject) || isUndefined(subject)) {
-        return subject;
-    }
-
-    if(isObject(subject)) {
-        return mapKeys(subject, prefixer);
-    }
-
-    return prefixer(subject);
-}
-
-var FormControl$1 = {
-
-    props: {
-
-        /**
-         * The autocomplete attribute value.
-         *
-         * @property String
-         */
-        autocomplete: String,
-
-        /**
-         * The field id attribute value.
-         *
-         * @property String
-         */
-        id: [Number, String],
-
-        /**
-         * The value of label element. If no value, no label will appear.
-         *
-         * @property String
-         */
-        label: [Number, String],
-
-        /**
-         * The field name attribute value.
-         *
-         * @property String
-         */
-        name: String,
-
-        /**
-         * The field id attribute value.
-         *
-         * @property String
-         */
-        value: {
-            default: null
-        },
-
-        /**
-         * The placeholder attribute value.
-         *
-         * @property String
-         */
-        placeholder: String,
-
-        /**
-         * Is the field required.
-         *
-         * @property String
-         */
-        required: Boolean,
-
-        /**
-         * Add form-group wrapper to input
-         *
-         * @property String
-         */
-        group: {
-            type: Boolean,
-            value: true
-        },
-
-        /**
-         * The regex pattern for validation.
-         *
-         * @property String
-         */
-        pattern: String,
-
-        /**
-         * An inline field validation error.
-         *
-         * @property String|Boolean
-         */
-        error: String,
-
-        /**
-         * An inline field validation errors passed as object with key/value
-         * pairs. If errors passed as an object, the form name will be used for
-         * the key.
-         *
-         * @property Object|Boolean
-         */
-        errors: {
-            type: Object,
-            default() {
-                return {}
-            }
-        },
-
-        /**
-         * Some feedback to add to the field once the field is successfully
-         * valid.
-         *
-         * @property String
-         */
-        feedback: [String, Array],
-
-        /**
-         * An array of event names that correlate with callback functions
-         *
-         * @property Function
-         */
-        bindEvents: {
-            type: Array,
-            default() {
-                return ['focus', 'blur', 'change', 'click', 'keyup', 'keydown', 'progress'];
-            }
-        },
-
-        /**
-         * The default class name assigned to the control element
-         *
-         * @property String
-         */
-        defaultControlClass: {
-            type: String,
-            default: 'form-control'
-        },
-
-        /**
-         * Hide the label for browsers, but leave it for screen readers.
-         *
-         * @property String
-         */
-        hideLabel: Boolean,
-
-        /**
-         * Additional margin/padding classes for fine control of spacing
-         *
-         * @property String
-         */
-        spacing: String,
-
-        /**
-         * The size of the form control
-         *
-         * @property String
-         */
-        size: {
-            type: String,
-            default: 'md',
-            validate: value => ['sm', 'md', 'lg'].indexOf(value) !== -1
-        },
-
-        /**
-         * Display the form field inline
-         *
-         * @property String
-         */
-        inline: Boolean,
-
-        /**
-         * If the form control is readonly, display only as text?
-         *
-         * @property String
-         */
-        plaintext: Boolean,
-
-        /**
-         * Is the form control readonly?
-         *
-         * @property String
-         */
-        readonly: Boolean,
-
-        /**
-         * Is the form control disabled?
-         *
-         * @property String
-         */
-        disabled: Boolean,
-
-        /**
-         * Some instructions to appear under the field label
-         *
-         * @property String
-         */
-        helpText: String,
-
-        /**
-         * The maxlength attribute
-         *
-         * @property String
-         */
-        maxlength: [Number, String]
-
-    },
-
-    directives: {
-        bindEvents: {
-            bind(el, binding, vnode) {
-                const events = binding.value || vnode.context.bindEvents;
-
-                forEach(events, name => {
-                    el.addEventListener(name, event => {
-                        vnode.context.$emit(name, event, this);
-                    });
-                });
-            }
-        }
-    },
-
-    methods: {
-
-        getInputField() {
-            return this.$el.querySelector('.form-control, input, select, textarea');
-        },
-
-        getFieldErrors() {
-            let errors = this.error || this.errors;
-
-            if(isObject(this.errors)) {
-                errors = this.errors[this.name || this.id];
-            }
-
-            return !errors || isArray(errors) || isObject(errors) ? errors : [errors];
-        },
-
-        updated(value, event) {
-            this.$emit(event || 'input', value);
-        }
-
-    },
-
-    computed: {
-
-        callbacks() {
-            return this.bindEvents.map(event => {
-                return {
-                    name: event,
-                    callback: this[camelCase(['on', event].join(' '))]
-                }
-            }).filter(event => !isUndefined(event.callback));
-        },
-
-        invalidFeedback() {
-            if(this.error) {
-                return this.error;
-            }
-
-            const errors = this.getFieldErrors();
-
-            return isArray(errors) ? errors.join('<br>') : errors;
-        },
-
-        validFeedback() {
-            return isArray(this.feedback) ? this.feedback.join('<br>') : this.feedback;
-        },
-
-        controlClass() {
-            return this.defaultControlClass + (this.plaintext ? '-plaintext' : '');
-        },
-
-        controlSizeClass() {
-            return prefix$1(this.size, this.controlClass);
-        },
-
-        controlClasses() {
-            return [
-                this.controlClass,
-                this.controlSizeClass,
-                (this.spacing || ''),
-                (this.invalidFeedback ? 'is-invalid' : '')
-            ].join(' ');
-        },
-
-        hasDefaultSlot () {
-            return !!this.$slots.default
-        }
-
-    }
-
-}
-
 var SurveyField = {
 
     mixins: [
-        FormControl$1
+        FormControl
     ],
 
     props: {
@@ -24769,7 +24705,7 @@ var AltEmailField = {render: function(){var _vm=this;var _h=_vm.$createElement;v
     extends: SurveyField,
 
     mixins: [
-        FormControl$1
+        FormControl
     ]
 
 }
@@ -24781,7 +24717,7 @@ var AltPhoneField = {render: function(){var _vm=this;var _h=_vm.$createElement;v
     extends: SurveyField,
 
     mixins: [
-        FormControl$1
+        FormControl
     ]
 
 }
@@ -24793,7 +24729,7 @@ var CheckboxField = {render: function(){var _vm=this;var _h=_vm.$createElement;v
     extends: SurveyField,
 
     mixins: [
-        FormControl$1
+        FormControl
     ]
 
 }
@@ -24805,7 +24741,7 @@ var CityField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
     extends: SurveyField,
 
     mixins: [
-        FormControl$1
+        FormControl
     ]
 
 }
@@ -24840,7 +24776,7 @@ var FirstField = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
     extends: SurveyField,
 
     mixins: [
-        FormControl$1
+        FormControl
     ]
 
 }
@@ -24852,7 +24788,7 @@ var InputField = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
     extends: SurveyField,
 
     mixins: [
-        FormControl$1
+        FormControl
     ]
 
 }
@@ -24864,7 +24800,7 @@ var LastField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
     extends: SurveyField,
 
     mixins: [
-        FormControl$1
+        FormControl
     ]
 
 }
@@ -24876,7 +24812,7 @@ var PrimaryEmailField = {render: function(){var _vm=this;var _h=_vm.$createEleme
     extends: SurveyField,
 
     mixins: [
-        FormControl$1
+        FormControl
     ]
 
 }
@@ -24888,7 +24824,7 @@ var PrimaryPhoneField = {render: function(){var _vm=this;var _h=_vm.$createEleme
     extends: SurveyField,
 
     mixins: [
-        FormControl$1
+        FormControl
     ]
 
 }
@@ -24900,7 +24836,7 @@ var RadioField = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
     extends: SurveyField,
 
     mixins: [
-        FormControl$1
+        FormControl
     ]
 
 }
@@ -24912,7 +24848,7 @@ var SelectField = {render: function(){var _vm=this;var _h=_vm.$createElement;var
     extends: SurveyField,
 
     mixins: [
-        FormControl$1
+        FormControl
     ]
 
 }
@@ -24924,7 +24860,7 @@ var StateField = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
     extends: SurveyField,
 
     mixins: [
-        FormControl$1
+        FormControl
     ]
 
 }
@@ -24936,7 +24872,7 @@ var StreetField = {render: function(){var _vm=this;var _h=_vm.$createElement;var
     extends: SurveyField,
 
     mixins: [
-        FormControl$1
+        FormControl
     ]
 
 }
@@ -24948,7 +24884,7 @@ var TextareaField = {render: function(){var _vm=this;var _h=_vm.$createElement;v
     extends: SurveyField,
 
     mixins: [
-        FormControl$1
+        FormControl
     ]
 
 }
@@ -24960,7 +24896,7 @@ var ZipField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c
     extends: SurveyField,
 
     mixins: [
-        FormControl$1
+        FormControl
     ]
 
 }
@@ -25286,42 +25222,12 @@ var AlertHeading = {render: function(){var _vm=this;var _h=_vm.$createElement;va
 
 }
 
-var Variant$1 = {
-
-    props: {
-
-        /**
-         * The variant attribute
-         *
-         * @property String
-         */
-        variant: {
-            type: String,
-            default: 'primary'
-        }
-
-    },
-
-    computed: {
-
-        variantClassPrefix() {
-            return this.$options.name;
-        },
-
-        variantClass() {
-            return prefix$1(this.variant, this.variantClassPrefix);
-        }
-
-    }
-
-}
-
 var ProgressBar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"progress",style:({'height': _vm.formattedHeight})},[_c('div',{staticClass:"progress-bar",class:_vm.$mergeClasses(_vm.progressClasses, _vm.variantClass),style:({'width': _vm.offsetValue + '%'}),attrs:{"role":"progressbar","aria-valuenow":_vm.offsetValue,"aria-valuemin":_vm.min,"aria-valuemax":_vm.max}},[(_vm.label)?_c('span',[_vm._v(_vm._s(_vm.offsetValue)+"%")]):_vm._e()])])},staticRenderFns: [],
 
     name: 'progress-bar',
 
     mixins: [
-        Variant$1
+        Variant
     ],
 
     props: {
@@ -25411,7 +25317,7 @@ var ProgressBar = {render: function(){var _vm=this;var _h=_vm.$createElement;var
 
 }
 
-const plugin$6 = VueInstaller.use({
+const plugin$5 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -25460,7 +25366,7 @@ var Alert = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_v
     },
 
     mixins: [
-        Variant$1
+        Variant
     ],
 
     props: {
@@ -25553,7 +25459,7 @@ var AlertLink = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
 
 }
 
-const plugin$7 = VueInstaller.use({
+const plugin$6 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -25913,171 +25819,11 @@ var BtnActivity = {render: function(){var _vm=this;var _h=_vm.$createElement;var
 
 }
 
-const plugin$8 = VueInstaller.use({
+const plugin$7 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
             BtnActivity
-        });
-    }
-
-});
-
-const COLORS$1 = [
-    'primary',
-    'secondary',
-    'success',
-    'danger',
-    'warning',
-    'info',
-    'light',
-    'dark',
-    'white',
-    'muted'
-];
-
-const props$1 = {};
-
-forEach(['border', 'text', 'bg', 'bg-gradient'], namespace => {
-    forEach(COLORS$1, color => {
-        props$1[camelCase(prefix$1(color, namespace))] = Boolean;
-    });
-});
-
-function classes$1(instance, namespace) {
-    return filter(map(COLORS$1, color => {
-        return instance[camelCase(color = prefix$1(color, namespace))] ? color : null;
-    }));
-}
-
-var Colorable$1 = {
-
-    props: props$1,
-
-    methods: {
-
-        textColor() {
-            return classes$1(this, 'text');
-        },
-
-        bgColor() {
-            return classes$1(this, 'bg');
-        },
-
-        borderColor() {
-            return classes$1(this, 'border');
-        },
-
-        bgGradientColor() {
-            return classes$1(this, 'bg-gradient');
-        }
-
-    },
-
-    computed: {
-
-        textColorClasses() {
-            return this.textColor().join(' ').trim() || null;
-        },
-
-        borderColorClasses() {
-            return this.borderColor().join(' ').trim() || null;
-        },
-
-        bgColorClasses() {
-            return this.bgColor().join(' ').trim() || null;
-        },
-
-        bgGradientColorClasses() {
-            return this.bgGradientColor().join(' ').trim() || null;
-        },
-
-        colorableClasses() {
-            const classes = {};
-
-            classes[this.textColorClasses] = !!this.textColorClasses;
-            classes[this.borderColorClasses] = !!this.borderColorClasses;
-            classes[this.bgColorClasses] = !!this.bgColorClasses;
-            classes[this.bgGradientColorClasses] = !!this.bgGradientColorClasses;
-
-            return omitBy(classes, (key, value) => {
-                return !key || !value;
-            });
-        }
-
-    }
-
-}
-
-var Screenreaders$1 = {
-
-    props: {
-
-        /**
-         * Should show only for screenreaders
-         *
-         * @property Boolean
-         */
-        srOnly: Boolean,
-
-        /**
-         * Should be focusable for screenreaders
-         *
-         * @property Boolean
-         */
-        srOnlyFocusable: Boolean
-
-    },
-
-    computed: {
-        screenreaderClasses() {
-            return {
-                'sr-only': this.srOnly,
-                'sr-only-focusable': this.srOnlyFocusable,
-            };
-        }
-    }
-
-}
-
-var HelpText$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('small',{staticClass:"form-text",class:_vm.classes},[_vm._t("default")],2)},staticRenderFns: [],
-
-    name: 'help-text',
-
-    mixins: [
-        Colorable$1,
-        Screenreaders$1
-    ],
-
-    computed: {
-        classes() {
-            return assignIn({}, this.screenreaderClasses, this.colorableClasses);
-        }
-    }
-
-}
-
-const plugin$9 = VueInstaller.use({
-
-    install(Vue, options) {
-        VueInstaller.components({
-            HelpText: HelpText$1
-        });
-    }
-
-});
-
-var FormGroup$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"form-group"},[_vm._t("default")],2)},staticRenderFns: [],
-
-    name: 'form-group'
-    
-}
-
-const plugin$10 = VueInstaller.use({
-
-    install(Vue, options) {
-        VueInstaller.components({
-            FormGroup: FormGroup$1
         });
     }
 
@@ -26088,8 +25834,8 @@ var FormLabel = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
     name: 'form-label',
 
     mixins: [
-        Colorable$1,
-        Screenreaders$1
+        Colorable,
+        Screenreaders
     ],
 
     computed: {
@@ -26100,56 +25846,11 @@ var FormLabel = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
 
 }
 
-const plugin$11 = VueInstaller.use({
+const plugin$8 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
             FormLabel
-        });
-    }
-
-});
-
-var FormFeedback$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:{'invalid-feedback': _vm.invalid, 'valid-feedback': _vm.valid && !_vm.invalid}},[_vm._t("default",[_vm._v(_vm._s(_vm.label))])],2)},staticRenderFns: [],
-
-    name: 'form-feedback',
-
-    mixins: [
-        Colorable$1
-    ],
-
-    props: {
-
-        /**
-         * The value of label element. If no value, no label will appear.
-         *
-         * @property String
-         */
-        label: String,
-
-        /**
-         * Should the feedback marked as invalid
-         *
-         * @property String
-         */
-        invalid: Boolean,
-
-        /**
-         * Should the feedback marked as invalid
-         *
-         * @property String
-         */
-        valid: Boolean
-
-    }
-
-}
-
-const plugin$12 = VueInstaller.use({
-
-    install(Vue, options) {
-        VueInstaller.components({
-            FormFeedback: FormFeedback$1
         });
     }
 
@@ -26160,15 +25861,15 @@ var InputField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;va
     name: 'input-field',
 
     mixins: [
-        Colorable$1,
-        FormControl$1
+        Colorable,
+        FormControl
     ],
 
     components: {
-        HelpText: HelpText$1,
-        FormGroup: FormGroup$1,
+        HelpText,
+        FormGroup,
         FormLabel,
-        FormFeedback: FormFeedback$1
+        FormFeedback
     },
 
     props: {
@@ -26187,7 +25888,7 @@ var InputField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;va
 
 }
 
-const plugin$13 = VueInstaller.use({
+const plugin$9 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -26311,7 +26012,7 @@ var Sizeable = {
         },
 
         sizeableClass() {
-            return prefix$1(this.size, this.sizeableClassPrefix);
+            return prefix(this.size, this.sizeableClassPrefix);
         }
 
     }
@@ -26331,7 +26032,7 @@ var InputGroup = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
     mixins: [
         HasSlots,
         Sizeable,
-        Colorable$1
+        Colorable
     ],
 
     props: {
@@ -26344,7 +26045,7 @@ var InputGroup = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
 
 }
 
-const plugin$14 = VueInstaller.use({
+const plugin$10 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -26357,13 +26058,13 @@ const plugin$14 = VueInstaller.use({
 
 });
 
-var FormControl$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c(!_vm.select ? 'input' : 'select',{directives:[{name:"bind-events",rawName:"v-bind-events",value:(_vm.bindEvents),expression:"bindEvents"}],tag:"component",class:_vm.$mergeClasses(_vm.controlClasses, _vm.colorableClasses),attrs:{"name":_vm.name,"id":_vm.id,"type":!_vm.select ? _vm.type : false,"value":_vm.value,"pattern":_vm.pattern,"required":_vm.required,"readonly":_vm.readonly,"placeholder":_vm.placeholder,"disabled":_vm.disabled || _vm.readonly,"aria-label":_vm.label,"aria-describedby":_vm.id},on:{"input":_vm.updated}})},staticRenderFns: [],
+var FormControl$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c(!_vm.select ? 'input' : 'select',{directives:[{name:"bind-events",rawName:"v-bind-events",value:(_vm.bindEvents),expression:"bindEvents"}],tag:"component",class:_vm.$mergeClasses(_vm.controlClasses, _vm.colorableClasses),attrs:{"name":_vm.name,"id":_vm.id,"type":!_vm.select ? _vm.type : false,"value":_vm.value,"pattern":_vm.pattern,"required":_vm.required,"readonly":_vm.readonly,"placeholder":_vm.placeholder,"disabled":_vm.disabled || _vm.readonly,"aria-label":_vm.label,"aria-describedby":_vm.id},on:{"input":_vm.updated}})},staticRenderFns: [],
 
     name: 'form-control',
 
     mixins: [
-        Colorable$1,
-        FormControl$1
+        Colorable,
+        FormControl
     ],
 
     props: {
@@ -26389,11 +26090,11 @@ var FormControl$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;v
 
 }
 
-const plugin$15 = VueInstaller.use({
+const plugin$11 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
-            FormControl: FormControl$2
+            FormControl: FormControl$1
         });
     }
 
@@ -26404,13 +26105,13 @@ var RadioField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;va
     name: 'radio-field',
 
     components: {
-        HelpText: HelpText$1,
-        FormFeedback: FormFeedback$1
+        HelpText,
+        FormFeedback
     },
 
     mixins: [
-        Colorable$1,
-        FormControl$1
+        Colorable,
+        FormControl
     ],
 
     model: {
@@ -26475,15 +26176,15 @@ var RadioField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;va
     computed: {
 
         labelClass() {
-            return prefix$1('label', this.controlClass);
+            return prefix('label', this.controlClass);
         },
 
         inputClass() {
-            return prefix$1('input', this.controlClass);
+            return prefix('input', this.controlClass);
         },
 
         inlineClass() {
-            return prefix$1('inline', this.controlClass);
+            return prefix('inline', this.controlClass);
         },
 
         controlClass() {
@@ -26491,18 +26192,18 @@ var RadioField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;va
         },
 
         customControlClass() {
-            return this.custom ? prefix$1(this.$options.name.replace('-field', ''), 'custom') : '';
+            return this.custom ? prefix(this.$options.name.replace('-field', ''), 'custom') : '';
         },
 
         sizeableClass() {
-            return prefix$1(this.size, 'form-control');
+            return prefix(this.size, 'form-control');
         }
 
     }
 
 }
 
-const plugin$16 = VueInstaller.use({
+const plugin$12 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -26558,7 +26259,7 @@ var CheckboxField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement
     }
 }
 
-const plugin$17 = VueInstaller.use({
+const plugin$13 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -26575,17 +26276,17 @@ var SelectField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;v
     name: 'select-field',
 
     components: {
-        HelpText: HelpText$1,
-        FormGroup: FormGroup$1,
+        HelpText,
+        FormGroup,
         FormLabel,
-        FormFeedback: FormFeedback$1
+        FormFeedback
     },
 
-    extends: FormControl$1,
+    extends: FormControl,
 
     mixins: [
-        FormControl$1,
-        Colorable$1
+        FormControl,
+        Colorable
     ],
 
     props: {
@@ -26617,7 +26318,7 @@ var SelectField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;v
 
 }
 
-const plugin$18 = VueInstaller.use({
+const plugin$14 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -26632,15 +26333,15 @@ var TextareaField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement
     name: 'textarea-field',
 
     components: {
-        HelpText: HelpText$1,
-        FormGroup: FormGroup$1,
+        HelpText,
+        FormGroup,
         FormLabel,
-        FormFeedback: FormFeedback$1
+        FormFeedback
     },
 
     mixins: [
-        Colorable$1,
-        FormControl$1
+        Colorable,
+        FormControl
     ],
 
     props: {
@@ -26664,7 +26365,7 @@ var TextareaField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement
 
 }
 
-const plugin$19 = VueInstaller.use({
+const plugin$15 = VueInstaller.use({
 
     install(Vue, options) {
         VueInstaller.components({
@@ -26674,25 +26375,9 @@ const plugin$19 = VueInstaller.use({
 
 });
 
-function MergeClasses$1(Vue, options) {
+function MergeClasses(Vue, options) {
 
-    Vue.prototype.$mergeClasses = function() {
-        const classes = {};
-
-        forEach([].slice.call(arguments), arg => {
-            if(isObject(arg)) {
-                assignIn(classes, arg);
-            }
-            else if(isArray(arg)) {
-                merge(classes, arg);
-            }
-            else if(arg) {
-                classes[arg] = true;
-            }
-        });
-
-        return classes;
-    };
+    Vue.prototype.$mergeClasses = mergeClasses;
 
 }
 
@@ -27635,7 +27320,7 @@ LazyWrapper$1.prototype.constructor = LazyWrapper$1;
  * _.times(2, _.noop);
  * // => [undefined, undefined]
  */
-function noop$1() {
+function noop$2() {
   // No operation performed.
 }
 
@@ -27646,7 +27331,7 @@ function noop$1() {
  * @param {Function} func The function to query.
  * @returns {*} Returns the metadata for `func`.
  */
-var getData$1 = !metaMap$1 ? noop$1 : function(func) {
+var getData$1 = !metaMap$1 ? noop$2 : function(func) {
   return metaMap$1.get(func);
 };
 
@@ -30555,17 +30240,17 @@ var WRAP_BIND_FLAG$7$1 = 1,
  * bound('hi');
  * // => 'hi fred!'
  */
-var bind$1 = baseRest$1(function(func, thisArg, partials) {
+var bind$2 = baseRest$1(function(func, thisArg, partials) {
   var bitmask = WRAP_BIND_FLAG$7$1;
   if (partials.length) {
-    var holders = replaceHolders$1(partials, getHolder$1(bind$1));
+    var holders = replaceHolders$1(partials, getHolder$1(bind$2));
     bitmask |= WRAP_PARTIAL_FLAG$3$1;
   }
   return createWrap$1(func, bitmask, thisArg, partials, holders);
 });
 
 // Assign default placeholders.
-bind$1.placeholder = {};
+bind$2.placeholder = {};
 
 /**
  * Binds methods of an object to the object itself, overwriting the existing
@@ -30596,7 +30281,7 @@ bind$1.placeholder = {};
 var bindAll$1 = flatRest$1(function(object, methodNames) {
   arrayEach$1(methodNames, function(key) {
     key = toKey$1(key);
-    baseAssignValue$1(object, key, bind$1(object[key], object));
+    baseAssignValue$1(object, key, bind$2(object[key], object));
   });
   return object;
 });
@@ -35298,7 +34983,7 @@ function baseFilter$1(collection, predicate) {
  * _.filter(users, 'active');
  * // => objects for ['barney']
  */
-function filter$3(collection, predicate) {
+function filter$2(collection, predicate) {
   var func = isArray$1(collection) ? arrayFilter$1 : baseFilter$1;
   return func(collection, baseIteratee$1(predicate, 3));
 }
@@ -40390,7 +40075,7 @@ function reduceRight$1(collection, iteratee, accumulator) {
  * _.reject(users, 'active');
  * // => objects for ['barney']
  */
-function reject$1(collection, predicate) {
+function reject$2(collection, predicate) {
   var func = isArray$1(collection) ? arrayFilter$1 : baseFilter$1;
   return func(collection, negate$1(baseIteratee$1(predicate, 3)));
 }
@@ -42894,7 +42579,7 @@ var INFINITY$5$1 = 1 / 0;
  * @param {Array} values The values to add to the set.
  * @returns {Object} Returns the new set.
  */
-var createSet$1 = !(Set$1 && (1 / setToArray$1(new Set$1([,-0]))[1]) == INFINITY$5$1) ? noop$1 : function(values) {
+var createSet$1 = !(Set$1 && (1 / setToArray$1(new Set$1([,-0]))[1]) == INFINITY$5$1) ? noop$2 : function(values) {
   return new Set$1(values);
 };
 
@@ -43764,11 +43449,11 @@ var array$1 = {
 };
 
 var collection$1 = {
-  countBy: countBy$1, each: forEach$1, eachRight: forEachRight$1, every: every$1, filter: filter$3,
+  countBy: countBy$1, each: forEach$1, eachRight: forEachRight$1, every: every$1, filter: filter$2,
   find: find$1, findLast: findLast$1, flatMap: flatMap$1, flatMapDeep: flatMapDeep$1, flatMapDepth: flatMapDepth$1,
   forEach: forEach$1, forEachRight: forEachRight$1, groupBy: groupBy$1, includes: includes$1, invokeMap: invokeMap$1,
   keyBy: keyBy$1, map: map$1, orderBy: orderBy$1, partition: partition$1, reduce: reduce$1,
-  reduceRight: reduceRight$1, reject: reject$1, sample: sample$1, sampleSize: sampleSize$1, shuffle: shuffle$1,
+  reduceRight: reduceRight$1, reject: reject$2, sample: sample$1, sampleSize: sampleSize$1, shuffle: shuffle$1,
   size: size$1, some: some$1, sortBy: sortBy$1
 };
 
@@ -43777,7 +43462,7 @@ var date$1 = {
 };
 
 var func$1 = {
-  after: after$1, ary: ary$1, before: before$1, bind: bind$1, bindKey: bindKey$1,
+  after: after$1, ary: ary$1, before: before$1, bind: bind$2, bindKey: bindKey$1,
   curry: curry$1, curryRight: curryRight$1, debounce: debounce$1, defer: defer$1, delay: delay$1,
   flip: flip$1, memoize: memoize$1, negate: negate$1, once: once$1, overArgs: overArgs$1,
   partial: partial$1, partialRight: partialRight$1, rearg: rearg$1, rest: rest$1, spread: spread$1,
@@ -43842,7 +43527,7 @@ var util$1 = {
   attempt: attempt$1, bindAll: bindAll$1, cond: cond$1, conforms: conforms$1, constant: constant$1,
   defaultTo: defaultTo$1, flow: flow$1, flowRight: flowRight$1, identity: identity$1, iteratee: iteratee$1,
   matches: matches$1, matchesProperty: matchesProperty$1, method: method$2, methodOf: methodOf$1, mixin: mixin$2,
-  noop: noop$1, nthArg: nthArg$1, over: over$1, overEvery: overEvery$1, overSome: overSome$1,
+  noop: noop$2, nthArg: nthArg$1, over: over$1, overEvery: overEvery$1, overSome: overSome$1,
   property: property$1, propertyOf: propertyOf$1, range: range$1, rangeRight: rangeRight$1, stubArray: stubArray$1,
   stubFalse: stubFalse$1, stubObject: stubObject$1, stubString: stubString$1, stubTrue: stubTrue$1, times: times$1,
   toPath: toPath$1, uniqueId: uniqueId$1
@@ -44598,7 +44283,7 @@ if (symIterator$1$1) {
  * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
  */
 
-function MergeClasses$2(Vue, options) {
+function MergeClasses$1(Vue, options) {
 
     Vue.prototype.$mergeClasses = function() {
         const classes = {};
@@ -47208,9 +46893,9 @@ var DataView$1$1 = _getNative(_root, 'DataView');
 var _DataView = DataView$1$1;
 
 /* Built-in method references that are verified to be native. */
-var Promise$2 = _getNative(_root, 'Promise');
+var Promise$2$1 = _getNative(_root, 'Promise');
 
-var _Promise = Promise$2;
+var _Promise = Promise$2$1;
 
 /* Built-in method references that are verified to be native. */
 var Set$1$1 = _getNative(_root, 'Set');
@@ -48669,9 +48354,9 @@ var forEach_1 = forEach$1$1;
 
 var each = forEach_1;
 
-const loaded$2 = {};
+const loaded$1 = {};
 
-function element$2(url) {
+function element$1(url) {
     const script = document.createElement('script');
     script.setAttribute('src', url);
     script.setAttribute('type', 'text/javascript');
@@ -48679,7 +48364,7 @@ function element$2(url) {
     return script;
 }
 
-function append$2(script) {
+function append$1(script) {
     if(document.querySelector('head')) {
         document.querySelector('head').appendChild(script);
     }
@@ -48690,20 +48375,20 @@ function append$2(script) {
     return script;
 }
 
-function script$2(url) {
-    if(loaded$2[url] instanceof Promise) {
-        return loaded$2[url];
+function script$1(url) {
+    if(loaded$1[url] instanceof Promise) {
+        return loaded$1[url];
     }
 
-    return loaded$2[url] = new Promise((resolve, reject) => {
+    return loaded$1[url] = new Promise((resolve, reject) => {
         try {
-            if(!loaded$2[url]) {
-                append$2(element$2(url)).addEventListener('load', event => {
-                    resolve(loaded$2[url] = event);
+            if(!loaded$1[url]) {
+                append$1(element$1(url)).addEventListener('load', event => {
+                    resolve(loaded$1[url] = event);
                 });
             }
             else {
-                resolve(loaded$2[url]);
+                resolve(loaded$1[url]);
             }
         }
         catch(e) {
@@ -48765,30 +48450,30 @@ var PlaceAutocompleteList = {
   }
 };
 
-var FormGroup$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"form-group"},[_vm._t("default")],2)},staticRenderFns: [],
+var FormGroup$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"form-group"},[_vm._t("default")],2)},staticRenderFns: [],
 
     name: 'form-group'
     
 };
 
-const VueInstaller$2 = {
-    use: use$2,
-    script: script$2,
-    plugin: plugin$20,
-    plugins: plugins$2,
+const VueInstaller$1 = {
+    use: use$1,
+    script: script$1,
+    plugin: plugin$16,
+    plugins: plugins$1,
     filter: filter$2$1,
-    filters: filters$2,
-    component: component$2,
-    components: components$2,
-    directive: directive$2,
-    directives: directives$2,
+    filters: filters$1,
+    component: component$1,
+    components: components$1,
+    directive: directive$1,
+    directives: directives$1,
     $plugins: {},
     $filters: {},
     $directives: {},
     $components: {},
 };
 
-function use$2(plugin) {
+function use$1(plugin) {
     if (typeof window !== 'undefined' && window.Vue) {
         window.Vue.use(plugin);
     }
@@ -48796,46 +48481,46 @@ function use$2(plugin) {
     return plugin;
 }
 
-function plugin$20(Vue, name, def) {
-    if(!VueInstaller$2.$plugins[name]) {
-        Vue.use(VueInstaller$2.$plugins[name] = def);
+function plugin$16(Vue, name, def) {
+    if(!VueInstaller$1.$plugins[name]) {
+        Vue.use(VueInstaller$1.$plugins[name] = def);
     }
 }
 
-function plugins$2(Vue, plugins) {
+function plugins$1(Vue, plugins) {
     forEach$1(plugins, (def, name) => {
-        plugin$20(Vue, name, def);
+        plugin$16(Vue, name, def);
     });
 }
 
 function filter$2$1(Vue, name, def) {
-    if(!VueInstaller$2.$filters[name]) {
-        Vue.use(VueInstaller$2.$filters[name] = def);
+    if(!VueInstaller$1.$filters[name]) {
+        Vue.use(VueInstaller$1.$filters[name] = def);
     }
 }
 
-function filters$2(Vue, filters) {
+function filters$1(Vue, filters) {
     forEach$1(filters, (def, name) => {
         filter$2$1(Vue, name, def);
     });
 }
 
-function component$2(Vue, name, def) {
-    if(!VueInstaller$2.$components[name]) {
-        Vue.component(name, VueInstaller$2.$components[name] = def);
+function component$1(Vue, name, def) {
+    if(!VueInstaller$1.$components[name]) {
+        Vue.component(name, VueInstaller$1.$components[name] = def);
     }
 }
 
-function components$2(Vue, components) {
+function components$1(Vue, components) {
     forEach$1(components, (def, name) => {
-        component$2(Vue, name, def);
+        component$1(Vue, name, def);
     });
 }
 
-function directive$2(Vue, name, def) {
-    if(!VueInstaller$2.$directives[name]) {
+function directive$1(Vue, name, def) {
+    if(!VueInstaller$1.$directives[name]) {
         if(isFunction$2(def)) {
-            Vue.use(VueInstaller$2.$directives[name] = def);
+            Vue.use(VueInstaller$1.$directives[name] = def);
         }
         else {
             Vue.directive(name, def);
@@ -48843,23 +48528,23 @@ function directive$2(Vue, name, def) {
     }
 }
 
-function directives$2(Vue, directives) {
+function directives$1(Vue, directives) {
     forEach$1(directives, (def, name) => {
-        directive$2(Vue, name, def);
+        directive$1(Vue, name, def);
     });
 }
 
-const plugin$1$1 = VueInstaller$2.use({
+const plugin$1$1 = VueInstaller$1.use({
 
     install(Vue, options) {
-        VueInstaller$2.components({
-            FormGroup: FormGroup$2
+        VueInstaller$1.components({
+            FormGroup: FormGroup$1
         });
     }
 
 });
 
-function prefix$2(subject, prefix, delimeter = '-') {
+function prefix$1(subject, prefix, delimeter = '-') {
     const prefixer = (value, key) => {
         const string = key || value;
 
@@ -48880,7 +48565,7 @@ function prefix$2(subject, prefix, delimeter = '-') {
     return prefixer(subject);
 }
 
-const COLORS$2 = [
+const COLORS$1 = [
     'primary',
     'secondary',
     'success',
@@ -48893,40 +48578,40 @@ const COLORS$2 = [
     'muted'
 ];
 
-const props$2 = {};
+const props$1 = {};
 
 forEach$1(['border', 'text', 'bg', 'bg-gradient'], namespace => {
-    forEach$1(COLORS$2, color => {
-        props$2[camelCase$1(prefix$2(color, namespace))] = Boolean;
+    forEach$1(COLORS$1, color => {
+        props$1[camelCase$1(prefix$1(color, namespace))] = Boolean;
     });
 });
 
-function classes$2(instance, namespace) {
-    return filter$3(map$1(COLORS$2, color => {
-        return instance[camelCase$1(color = prefix$2(color, namespace))] ? color : null;
+function classes$1(instance, namespace) {
+    return filter$2(map$1(COLORS$1, color => {
+        return instance[camelCase$1(color = prefix$1(color, namespace))] ? color : null;
     }));
 }
 
-var Colorable$2 = {
+var Colorable$1 = {
 
-    props: props$2,
+    props: props$1,
 
     methods: {
 
         textColor() {
-            return classes$2(this, 'text');
+            return classes$1(this, 'text');
         },
 
         bgColor() {
-            return classes$2(this, 'bg');
+            return classes$1(this, 'bg');
         },
 
         borderColor() {
-            return classes$2(this, 'border');
+            return classes$1(this, 'border');
         },
 
         bgGradientColor() {
-            return classes$2(this, 'bg-gradient');
+            return classes$1(this, 'bg-gradient');
         }
 
     },
@@ -48966,7 +48651,7 @@ var Colorable$2 = {
 
 };
 
-var Screenreaders$2 = {
+var Screenreaders$1 = {
 
     props: {
 
@@ -48997,13 +48682,13 @@ var Screenreaders$2 = {
 
 };
 
-var HelpText$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('small',{staticClass:"form-text",class:_vm.classes},[_vm._t("default")],2)},staticRenderFns: [],
+var HelpText$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('small',{staticClass:"form-text",class:_vm.classes},[_vm._t("default")],2)},staticRenderFns: [],
 
     name: 'help-text',
 
     mixins: [
-        Colorable$2,
-        Screenreaders$2
+        Colorable$1,
+        Screenreaders$1
     ],
 
     computed: {
@@ -49014,11 +48699,11 @@ var HelpText$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
 
 };
 
-const plugin$2$1 = VueInstaller$2.use({
+const plugin$2$1 = VueInstaller$1.use({
 
     install(Vue, options) {
-        VueInstaller$2.components({
-            HelpText: HelpText$2
+        VueInstaller$1.components({
+            HelpText: HelpText$1
         });
     }
 
@@ -49029,8 +48714,8 @@ var FormLabel$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var
     name: 'form-label',
 
     mixins: [
-        Colorable$2,
-        Screenreaders$2
+        Colorable$1,
+        Screenreaders$1
     ],
 
     computed: {
@@ -49041,22 +48726,22 @@ var FormLabel$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var
 
 };
 
-const plugin$3$1 = VueInstaller$2.use({
+const plugin$3$1 = VueInstaller$1.use({
 
     install(Vue, options) {
-        VueInstaller$2.components({
+        VueInstaller$1.components({
             FormLabel: FormLabel$1
         });
     }
 
 });
 
-var FormFeedback$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:{'invalid-feedback': _vm.invalid, 'valid-feedback': _vm.valid && !_vm.invalid}},[_vm._t("default",[_vm._v(_vm._s(_vm.label))])],2)},staticRenderFns: [],
+var FormFeedback$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:{'invalid-feedback': _vm.invalid, 'valid-feedback': _vm.valid && !_vm.invalid}},[_vm._t("default",[_vm._v(_vm._s(_vm.label))])],2)},staticRenderFns: [],
 
     name: 'form-feedback',
 
     mixins: [
-        Colorable$2
+        Colorable$1
     ],
 
     props: {
@@ -49086,17 +48771,17 @@ var FormFeedback$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;
 
 };
 
-const plugin$4$1 = VueInstaller$2.use({
+const plugin$4$1 = VueInstaller$1.use({
 
     install(Vue, options) {
-        VueInstaller$2.components({
-            FormFeedback: FormFeedback$2
+        VueInstaller$1.components({
+            FormFeedback: FormFeedback$1
         });
     }
 
 });
 
-var FormControl$3 = {
+var FormControl$2 = {
 
     props: {
 
@@ -49347,7 +49032,7 @@ var FormControl$3 = {
         },
 
         controlSizeClass() {
-            return prefix$2(this.size, this.controlClass);
+            return prefix$1(this.size, this.controlClass);
         },
 
         controlClasses() {
@@ -49372,15 +49057,15 @@ var InputField$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;va
     name: 'input-field',
 
     mixins: [
-        Colorable$2,
-        FormControl$3
+        Colorable$1,
+        FormControl$2
     ],
 
     components: {
-        HelpText: HelpText$2,
-        FormGroup: FormGroup$2,
+        HelpText: HelpText$1,
+        FormGroup: FormGroup$1,
         FormLabel: FormLabel$1,
-        FormFeedback: FormFeedback$2
+        FormFeedback: FormFeedback$1
     },
 
     props: {
@@ -49399,10 +49084,10 @@ var InputField$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;va
 
 };
 
-const plugin$5$1 = VueInstaller$2.use({
+const plugin$5$1 = VueInstaller$1.use({
 
     install(Vue, options) {
-        VueInstaller$2.components({
+        VueInstaller$1.components({
             InputField: InputField$2
         });
     }
@@ -49505,10 +49190,10 @@ var ActivityIndicator$1 = {render: function(){var _vm=this;var _h=_vm.$createEle
 
 };
 
-const plugin$6$1 = VueInstaller$2.use({
+const plugin$6$1 = VueInstaller$1.use({
 
     install(Vue, options) {
-        VueInstaller$2.components({
+        VueInstaller$1.components({
             ActivityIndicator: ActivityIndicator$1
         });
     }
@@ -49587,7 +49272,7 @@ var PlaceAutocompleteField = {
   name: 'place-autocomplete-field',
   extends: InputField$2,
   components: {
-    FormGroup: FormGroup$2,
+    FormGroup: FormGroup$1,
     InputField: InputField$2,
     ActivityIndicator: ActivityIndicator$1,
     PlaceAutocompleteList: PlaceAutocompleteList
@@ -49787,7 +49472,7 @@ var PlaceAutocompleteField = {
   mounted: function mounted() {
     var _this6 = this;
 
-    script$2('https://maps.googleapis.com/maps/api/js?key=' + this.apiKey + '&libraries=places').then(function () {
+    script$1('https://maps.googleapis.com/maps/api/js?key=' + this.apiKey + '&libraries=places').then(function () {
       _this6.$geocoder = new google.maps.Geocoder();
       _this6.$service = new google.maps.places.AutocompleteService();
     }); //this.$on('place:changed', this.placeChanged);
@@ -49879,7 +49564,7 @@ var PlaceAutocompleteListItem = {
 };
 
 function install(vue, options) {
-  Vue.use(MergeClasses$2);
+  Vue.use(MergeClasses$1);
   Vue.directive('place-autofill', PlaceAutofill);
   Vue.component('place-autocomplete-field', PlaceAutocompleteField);
   Vue.component('place-autocomplete-list', PlaceAutocompleteList);
@@ -49890,13 +49575,13 @@ if (window && window.Vue) {
   window.Vue.use(install);
 }
 
-const components$3 = {
+const components$2 = {
     Alert,
     BtnActivity,
     CheckboxField: CheckboxField$1,
-    FormControl: FormControl$2,
-    FormFeedback: FormFeedback$1,
-    FormGroup: FormGroup$1,
+    FormControl: FormControl$1,
+    FormFeedback,
+    FormGroup,
     FormLabel,
     InputField: InputField$1,
     InputGroup,
@@ -49911,11 +49596,11 @@ function install$1(Vue, options) {
     Vue.prototype.$broadcast = new BroadcastManager;
     Vue.prototype.$dispatch = Vue.prototype.$broadcast.dispatch();
 
-    forEach(components$3, (component, key) => {
+    forEach(components$2, (component, key) => {
         Vue.component(key, component);
     });
 
-    Vue.use(MergeClasses$1);
+    Vue.use(MergeClasses);
     Vue.use(install);
     Vue.component('giveworks-form', GiveworksForm);
     Vue.use(Autogrow$1);

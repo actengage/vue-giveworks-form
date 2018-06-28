@@ -22461,8 +22461,12 @@
 
                 watch: {
                     'card.number': function(newVal, oldVal) {
-                        this.validated.number = null;
                         this.brand = this.card.brand = lib$1.fns.cardType(newVal) || 'unknown';
+                        this.validated.number = null;
+
+                        if(this.$el.querySelector('.credit-card-field-lg')) {
+                            this.showSecurityFields = this.card.number.length >= 14;
+                        }
                     },
                     'card.expiration': function(newVal, oldVal) {
                         this.validated.expiration = null;
@@ -22556,6 +22560,7 @@
 
                     classes() {
                         const classes = {
+                            'show-security-fields': this.showSecurityFields,
                             'credit-card-field-sm': this.width < 300,
                             'credit-card-field-lg': this.width > 400,
                             'has-activity': this.activity,
@@ -22592,11 +22597,9 @@
                         el.style.transform = 'translateX('+((totalWidth - width) * -1)+'px)';
                     },
 
-                    shouldTransform(el) {
-                        const securityWidth = this.$el.querySelector('.credit-card-field-security-fields').offsetWidth;
-                        const totalWidth = this.$el.querySelector('.credit-card-field-number').offsetWidth - securityWidth;
-
-                        return totalWidth <= this.getTextWidth(this.card.number, el) * 1.25;
+                    shouldTransform(el, offset = 1.25) {
+                        const totalWidth = el.offsetWidth - this.$el.querySelector('.credit-card-field-security-fields').offsetWidth;
+                        return totalWidth <= this.getTextWidth(el.value, el) * offset;
                     },
 
                     getDefaultCard() {
@@ -22768,6 +22771,7 @@
                         isFocused: false,
                         focusedElement: null,
                         previousValue: null,
+                        showSecurityFields: false,
                         brand: null,
                         validated: {
                             number: null,

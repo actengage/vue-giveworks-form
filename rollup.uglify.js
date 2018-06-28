@@ -1,4 +1,4 @@
-import path from 'path';
+//import path from 'path';
 import { each } from 'lodash';
 import config from './rollup.config';
 import uglify from 'rollup-plugin-uglify-es';

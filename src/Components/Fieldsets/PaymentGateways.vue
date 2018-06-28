@@ -4,7 +4,7 @@
 
         <div class="row">
 
-            <div class="col-md-6 col-lg-4" v-for="button in buttons">
+            <div :class="classes" v-for="button in buttons">
 
                 <button
                     type="button"
@@ -67,14 +67,20 @@ export default {
         FormComponent
     ],
 
-    data() {
-        return {
-            gateway: null,
-            buttons: this.getButtons()
-        };
-    },
-
     methods: {
+
+        activate(button) {
+            this.deactivate();
+            button.active = true;
+            this.$set(this.form, 'gateway', Gateway(button.gateway).api());
+        },
+
+        deactivate() {
+            each(this.buttons, button => {
+                button.active = false;
+            });
+        },
+
         getButtons: function() {
             const buttons = [];
 
@@ -93,16 +99,20 @@ export default {
             return buttons;
         },
 
-        deactivate() {
-            each(this.buttons, button => {
-                button.active = false;
-            });
-        },
+        onResize(event) {
+            this.width = this.$el.offsetWidth;
+            return this.onResize;
+        }
 
-        activate(button) {
-            this.deactivate();
-            button.active = true;
-            this.$set(this.form, 'gateway', Gateway(button.gateway).api());
+    },
+
+    computed: {
+
+        classes() {
+            return {
+                'col-sm-6': this.width < 310,
+                'col-sm-6 col-lg-4': this.width >= 310,
+            }
         }
 
     },
@@ -114,6 +124,20 @@ export default {
         else {
             this.$dispatch.request('submit:hide');
         }
+
+        window.addEventListener('resize', this.onResize());
+    },
+
+    destroyed() {
+        window.removeEventListener('resize', this.onResize);
+    },
+
+    data() {
+        return {
+            width: null,
+            gateway: null,
+            buttons: this.getButtons()
+        };
     }
 
 }

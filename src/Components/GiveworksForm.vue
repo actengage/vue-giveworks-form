@@ -6,20 +6,18 @@
             </div>
         </div>
     </div>
-    <div v-else-if="page.id">
-        <form @submit.prevent="submit" novalidate="novalidate">
-            <component
-                :is="pageTypeComponent"
-                :orientation="orientation"
-                :submitting="submitting"
-                :form="form"
-                :errors="errors"
-                :page="page"
-            />
-        </form>
-    </div>
+    <form v-else-if="page.id"@submit.prevent="submit" novalidate="novalidate" :class="classes">
+        <component
+            :is="pageTypeComponent"
+            :orientation="orientation"
+            :submitting="submitting"
+            :form="form"
+            :errors="errors"
+            :page="page"
+        />
+    </form>
     <div v-else>
-        <activity-indicator :center="true" size="xl"/>
+        <activity-indicator :center="true" size="lg"/>
     </div>
 </template>
 
@@ -83,30 +81,38 @@ export default {
     },
 
     computed: {
+
+        classes() {
+            return {
+                'text-sm': this.width
+            }
+        },
+
         pageTypeComponent() {
             return this.orientation + '-' + this.page.special + '-form';
         }
+
     },
 
     methods: {
 
-        hide: function() {
+        hide() {
             this.$el.querySelector('[type=submit]').style.display = 'none';
         },
 
-        show: function() {
+        show() {
             this.$el.querySelector('[type=submit]').style.display = 'block';
         },
 
-        disable: function() {
+        disable() {
             this.$el.querySelector('[type=submit]').disabled = true;
         },
 
-        enable: function() {
+        enable() {
             this.$el.querySelector('[type=submit]').disabled = false;
         },
 
-        showActivity: function() {
+        showActivity() {
             const el = this.$el.querySelector('[type=submit]');
 
             if(el) {
@@ -114,7 +120,7 @@ export default {
             }
         },
 
-        hideActivity: function() {
+        hideActivity() {
             const el = this.$el.querySelector('[type=submit]');
 
             if(el) {
@@ -122,8 +128,13 @@ export default {
             }
         },
 
-        submit: function() {
+        submit() {
             this.$dispatch.request('form:submit');
+        },
+
+        onResize() {
+            this.width = this.$el.offsetWidth;
+            return this.onResize;
         }
     },
 
@@ -152,6 +163,12 @@ export default {
                 id: this.page.id
             });
         }
+
+        window.addEventListener('resize', this.onResize());
+    },
+
+    destroyed() {
+        window.removeEventListener('resize', this.onResize);
     },
 
     beforeCreate() {
@@ -260,4 +277,10 @@ export default {
 
 <style lang="scss">
 @import './node_modules/the-one-true-form/src/main.scss';
+
+.one-true-form {
+    .text-sm {
+        font-size: 15px;
+    }
+}
 </style>

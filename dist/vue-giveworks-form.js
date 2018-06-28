@@ -22531,7 +22531,7 @@
                             });
 
                             el.addEventListener('blur', event => {
-                                validate(binding.value && binding.value(el.value));
+                                el.value !== '' && validate(binding.value && binding.value(el.value));
                             });
                         }
                     }
@@ -22729,7 +22729,6 @@
 
                     onResize(event) {
                         this.width = this.$el.offsetWidth;
-
                         return this.onResize;
                     },
 
@@ -22874,7 +22873,7 @@
 
             }
 
-            var PaymentGateways = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"row"},_vm._l((_vm.buttons),function(button){return _c('div',{staticClass:"col-md-6 col-lg-4"},[_c('button',{staticClass:"btn btn-block payment-gateway-button",class:{'btn-success': button.active, 'btn-secondary': !button.active},attrs:{"type":"button"},on:{"click":function($event){_vm.activate(button);}}},[_c('icon',{class:{'mt-2 mb-1': !button.label},attrs:{"name":button.icon,"scale":button.iconScale || 2}}),_vm._v(" "),(button.label)?_c('div',{staticClass:"pb-1 small"},[_vm._v(_vm._s(button.label))]):_vm._e()],1)])})),_vm._v(" "),(!_vm.buttons || !_vm.buttons.length)?_c('div',{staticClass:"alert alert-danger"},[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-xs-2 text-center"},[_c('icon',{staticClass:"mt-2",attrs:{"name":"warning","scale":"2.25"}})],1),_vm._v(" "),_c('div',{staticClass:"col-xs-10"},[_vm._v(" There are not payment gateways configured for this site! ")])])]):_c('div',[_c('hr'),_vm._v(" "),_vm._l((_vm.buttons),function(button){return (button.active)?_c('div',[_c(button.component,{tag:"component",attrs:{"form":_vm.form,"page":_vm.page,"errors":_vm.errors,"gateway":button.gateway}})],1):_vm._e()})],2)])},staticRenderFns: [],
+            var PaymentGateways = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"row"},_vm._l((_vm.buttons),function(button){return _c('div',{class:_vm.classes},[_c('button',{staticClass:"btn btn-block payment-gateway-button",class:{'btn-success': button.active, 'btn-secondary': !button.active},attrs:{"type":"button"},on:{"click":function($event){_vm.activate(button);}}},[_c('icon',{class:{'mt-2 mb-1': !button.label},attrs:{"name":button.icon,"scale":button.iconScale || 2}}),_vm._v(" "),(button.label)?_c('div',{staticClass:"pb-1 small"},[_vm._v(_vm._s(button.label))]):_vm._e()],1)])})),_vm._v(" "),(!_vm.buttons || !_vm.buttons.length)?_c('div',{staticClass:"alert alert-danger"},[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-xs-2 text-center"},[_c('icon',{staticClass:"mt-2",attrs:{"name":"warning","scale":"2.25"}})],1),_vm._v(" "),_c('div',{staticClass:"col-xs-10"},[_vm._v(" There are not payment gateways configured for this site! ")])])]):_c('div',[_c('hr'),_vm._v(" "),_vm._l((_vm.buttons),function(button){return (button.active)?_c('div',[_c(button.component,{tag:"component",attrs:{"form":_vm.form,"page":_vm.page,"errors":_vm.errors,"gateway":button.gateway}})],1):_vm._e()})],2)])},staticRenderFns: [],
 
                 name: 'payment-gateways',
 
@@ -22890,14 +22889,20 @@
                     FormComponent
                 ],
 
-                data() {
-                    return {
-                        gateway: null,
-                        buttons: this.getButtons()
-                    };
-                },
-
                 methods: {
+
+                    activate(button) {
+                        this.deactivate();
+                        button.active = true;
+                        this.$set(this.form, 'gateway', Gateway$1(button.gateway).api());
+                    },
+
+                    deactivate() {
+                        forEach(this.buttons, button => {
+                            button.active = false;
+                        });
+                    },
+
                     getButtons: function() {
                         const buttons = [];
 
@@ -22916,16 +22921,20 @@
                         return buttons;
                     },
 
-                    deactivate() {
-                        forEach(this.buttons, button => {
-                            button.active = false;
-                        });
-                    },
+                    onResize(event) {
+                        this.width = this.$el.offsetWidth;
+                        return this.onResize;
+                    }
 
-                    activate(button) {
-                        this.deactivate();
-                        button.active = true;
-                        this.$set(this.form, 'gateway', Gateway$1(button.gateway).api());
+                },
+
+                computed: {
+
+                    classes() {
+                        return {
+                            'col-sm-6': this.width < 310,
+                            'col-sm-6 col-lg-4': this.width >= 310,
+                        }
                     }
 
                 },
@@ -22937,6 +22946,20 @@
                     else {
                         this.$dispatch.request('submit:hide');
                     }
+
+                    window.addEventListener('resize', this.onResize());
+                },
+
+                destroyed() {
+                    window.removeEventListener('resize', this.onResize);
+                },
+
+                data() {
+                    return {
+                        width: null,
+                        gateway: null,
+                        buttons: this.getButtons()
+                    };
                 }
 
             }
@@ -25011,7 +25034,7 @@
 
             }
 
-            var GiveworksForm = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.error)?_c('div',[_c('div',{staticClass:"center-wrapper"},[_c('div',{staticClass:"center-content"},[_c('http-error-response',{attrs:{"error":_vm.error}})],1)])]):(_vm.page.id)?_c('div',[_c('form',{attrs:{"novalidate":"novalidate"},on:{"submit":function($event){$event.preventDefault();return _vm.submit($event)}}},[_c(_vm.pageTypeComponent,{tag:"component",attrs:{"orientation":_vm.orientation,"submitting":_vm.submitting,"form":_vm.form,"errors":_vm.errors,"page":_vm.page}})],1)]):_c('div',[_c('activity-indicator',{attrs:{"center":true,"size":"xl"}})],1)},staticRenderFns: [],
+            var GiveworksForm = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.error)?_c('div',[_c('div',{staticClass:"center-wrapper"},[_c('div',{staticClass:"center-content"},[_c('http-error-response',{attrs:{"error":_vm.error}})],1)])]):(_vm.page.id)?_c('form',{class:_vm.classes,attrs:{"novalidate":"novalidate"},on:{"submit":function($event){$event.preventDefault();return _vm.submit($event)}}},[_c(_vm.pageTypeComponent,{tag:"component",attrs:{"orientation":_vm.orientation,"submitting":_vm.submitting,"form":_vm.form,"errors":_vm.errors,"page":_vm.page}})],1):_c('div',[_c('activity-indicator',{attrs:{"center":true,"size":"lg"}})],1)},staticRenderFns: [],
 
                 name: 'giveworks-form',
 
@@ -25051,30 +25074,38 @@
                 },
 
                 computed: {
+
+                    classes() {
+                        return {
+                            'text-sm': this.width
+                        }
+                    },
+
                     pageTypeComponent() {
                         return this.orientation + '-' + this.page.special + '-form';
                     }
+
                 },
 
                 methods: {
 
-                    hide: function() {
+                    hide() {
                         this.$el.querySelector('[type=submit]').style.display = 'none';
                     },
 
-                    show: function() {
+                    show() {
                         this.$el.querySelector('[type=submit]').style.display = 'block';
                     },
 
-                    disable: function() {
+                    disable() {
                         this.$el.querySelector('[type=submit]').disabled = true;
                     },
 
-                    enable: function() {
+                    enable() {
                         this.$el.querySelector('[type=submit]').disabled = false;
                     },
 
-                    showActivity: function() {
+                    showActivity() {
                         const el = this.$el.querySelector('[type=submit]');
 
                         if(el) {
@@ -25082,7 +25113,7 @@
                         }
                     },
 
-                    hideActivity: function() {
+                    hideActivity() {
                         const el = this.$el.querySelector('[type=submit]');
 
                         if(el) {
@@ -25090,8 +25121,13 @@
                         }
                     },
 
-                    submit: function() {
+                    submit() {
                         this.$dispatch.request('form:submit');
+                    },
+
+                    onResize() {
+                        this.width = this.$el.offsetWidth;
+                        return this.onResize;
                     }
                 },
 
@@ -25120,6 +25156,12 @@
                             id: this.page.id
                         });
                     }
+
+                    window.addEventListener('resize', this.onResize());
+                },
+
+                destroyed() {
+                    window.removeEventListener('resize', this.onResize);
                 },
 
                 beforeCreate() {

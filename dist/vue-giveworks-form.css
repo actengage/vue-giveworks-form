@@ -4719,6 +4719,9 @@ input.form-check-input {
 .btn-link .activity-indicator-spinner > div:before {
   background-color: #0275d8; }
 
+.one-true-form .text-sm {
+  font-size: 15px; }
+
 .center-wrapper {
   position: absolute;
   top: 0;

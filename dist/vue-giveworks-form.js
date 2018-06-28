@@ -22433,14 +22433,6 @@
                 return classes;
             }
 
-            const AVAILABLE_EVENTS = [
-                'change',
-                'invalid',
-                'complete',
-                'focus',
-                'blur'
-            ];
-
             var CreditCardField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',{staticClass:"credit-card-field-wrapper",on:{"click":_vm.onClick}},[_vm._t("control",[_c('div',{staticClass:"credit-card-field",class:_vm.mergeClasses(_vm.controlClasses, _vm.variantClass, _vm.classes)},[_c('div',{staticClass:"credit-card-field-icon-wrapper"},[_c('div',{staticClass:"credit-card-field-icon-card"},[_c('div',{staticClass:"credit-card-field-icon-front"},[_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-jcb","data-brand":"jcb"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-visa","data-brand":"visa"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-amex","data-brand":"amex"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"credit-card","data-brand":"unknown","width":"20","height":"18"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-discover","data-brand":"discover"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-mastercard","data-brand":"mastercard"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-diners-club","data-brand":"dinersclub"}})],1),_vm._v(" "),_c('div',{staticClass:"credit-card-field-icon-back"},[_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"credit-card-alt","width":"23.33","height":"20"}})],1)])]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-fields"},[_c('input',{directives:[{name:"focus",rawName:"v-focus.transform",modifiers:{"transform":true}},{name:"validate",rawName:"v-validate:number",value:(_vm.validateNumber),expression:"validateNumber",arg:"number"},{name:"model",rawName:"v-model",value:(_vm.card.number),expression:"card.number"}],staticClass:"credit-card-field-field credit-card-field-number",class:_vm.mergeClasses({'is-empty': !_vm.card.number, 'is-invalid': _vm.validated.number === false}),attrs:{"max":"19","type":"text","placeholder":"Card number"},domProps:{"value":(_vm.card.number)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "number", $event.target.value);}}}),_vm._v(" "),_c('div',{staticClass:"credit-card-field-security-fields"},[_c('input',{directives:[{name:"focus",rawName:"v-focus"},{name:"validate",rawName:"v-validate:expiration",value:(_vm.validateExpiration),expression:"validateExpiration",arg:"expiration"},{name:"model",rawName:"v-model",value:(_vm.card.expiration),expression:"card.expiration"}],staticClass:"credit-card-field-field credit-card-field-expiration",class:_vm.mergeClasses({'is-empty': !_vm.card.expiration, 'is-invalid': _vm.validated.expiration === false}),attrs:{"type":"text","placeholder":"MM / YY","maxlength":"7"},domProps:{"value":(_vm.card.expiration)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "expiration", $event.target.value);}}}),_vm._v(" "),_c('input',{directives:[{name:"focus",rawName:"v-focus",value:(_vm.validateCvc),expression:"validateCvc"},{name:"validate",rawName:"v-validate:cvc",value:(_vm.validateCvc),expression:"validateCvc",arg:"cvc"},{name:"model",rawName:"v-model",value:(_vm.card.cvc),expression:"card.cvc"}],staticClass:"credit-card-field-field credit-card-field-cvc",class:_vm.mergeClasses({'is-empty': !_vm.card.cvc, 'is-invalid': _vm.validated.cvc === false}),attrs:{"type":"text","placeholder":"CVC","maxlength":"4","autocomplete":"off"},domProps:{"value":(_vm.card.cvc)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "cvc", $event.target.value);}}}),_vm._v(" "),_c('input',{directives:[{name:"focus",rawName:"v-focus",value:(_vm.validatePostalCode),expression:"validatePostalCode"},{name:"validate",rawName:"v-validate:postalCode",value:(_vm.validatePostalCode),expression:"validatePostalCode",arg:"postalCode"},{name:"model",rawName:"v-model",value:(_vm.card.postalCode),expression:"card.postalCode"}],staticClass:"credit-card-field-field credit-card-field-postal",class:_vm.mergeClasses({'is-empty': !_vm.card.postalCode, 'is-invalid': _vm.validated.postalCode === false}),attrs:{"max":"5","type":"text","placeholder":"Zip","maxlength":"5"},domProps:{"value":(_vm.card.postalCode)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "postalCode", $event.target.value);}}})]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-placeholder-mask"},[_vm._v("Number")]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-number-mask",domProps:{"innerHTML":_vm._s(_vm.card.number)}})])])]),_vm._v(" "),_vm._t("activity-indicator",[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.activity),expression:"activity"}],staticClass:"credit-card-field-activity"},[_c('activity-indicator',{attrs:{"size":"sm","type":"dots","center":""}})],1)]),_vm._v(" "),_vm._t("default"),_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)},staticRenderFns: [],
 
                 name: 'credit-card-field',
@@ -22467,6 +22459,22 @@
 
                 },
 
+                watch: {
+                    'card.number': function(newVal, oldVal) {
+                        this.validated.number = null;
+                        this.brand = this.card.brand = lib$1.fns.cardType(newVal) || 'unknown';
+                    },
+                    'card.expiration': function(newVal, oldVal) {
+                        this.validated.expiration = null;
+                    },
+                    'card.cvc': function(newVal, oldVal) {
+                        this.validated.cvc = null;
+                    },
+                    'card.postalCode': function(newVal, oldVal) {
+                        this.validated.postalCode = null;
+                    }
+                },
+
                 directives: {
                     focus: {
                         bind(el, binding, vnode) {
@@ -22489,17 +22497,19 @@
                     },
                     validate: {
                         bind(el, binding, vnode) {
-                            function maxLength(isValid) {
-                                return el.getAttribute('max') && el.value.length >= parseInt(el.getAttribute('max'));
-                            }
-
                             function validate(isValid) {
                                 vnode.context.validated[binding.arg] = el.value === '' ? false : binding.value && binding.value(el.value);
                                 vnode.context.$emit(isValid ? 'valid' : 'invalid', vnode.context.getEventPayload(el, isValid));
 
-                                if(vnode.context.isComplete() && vnode.context.isValid()) {
+                                if( vnode.context.isComplete() &&
+                                    vnode.context.isValid() &&
+                                    vnode.context.hasChanged()) {
                                     vnode.context.$emit('complete', vnode.context.getEventPayload(el, isValid));
                                 }
+                            }
+
+                            function maxLength(isValid) {
+                                return el.getAttribute('max') && el.value.length >= parseInt(el.getAttribute('max'));
                             }
 
                             el.addEventListener('keydown', event => {
@@ -22511,6 +22521,8 @@
                                 else if(!el.value && event.keyCode === 8) {
                                     vnode.context.focusPrevElement(el);
                                 }
+
+                                vnode.context.previousValue = JSON.stringify(vnode.context.card);
                             });
 
                             el.addEventListener('keyup', event => {
@@ -22526,7 +22538,10 @@
                                     }
 
                                     vnode.context.$emit('input', vnode.context.card);
-                                    vnode.context.$emit('change', vnode.context.getEventPayload(el, isValid));
+
+                                    if(vnode.context.hasChanged()) {
+                                        vnode.context.$emit('change', vnode.context.getEventPayload(el, isValid));
+                                    }
                                 }
                             });
 
@@ -22534,22 +22549,6 @@
                                 el.value !== '' && validate(binding.value && binding.value(el.value));
                             });
                         }
-                    }
-                },
-
-                watch: {
-                    'card.number': function(newVal, oldVal) {
-                        this.validated.number = null;
-                        this.brand = this.card.brand = lib$1.fns.cardType(newVal) || 'unknown';
-                    },
-                    'card.expiration': function(newVal, oldVal) {
-                        this.validated.expiration = null;
-                    },
-                    'card.cvc': function(newVal, oldVal) {
-                        this.validated.cvc = null;
-                    },
-                    'card.postalCode': function(newVal, oldVal) {
-                        this.validated.postalCode = null;
                     }
                 },
 
@@ -22669,6 +22668,10 @@
                         }
                     },
 
+                    hasChanged() {
+                        return this.previousValue !== JSON.stringify(this.card);
+                    },
+
                     validateCvc(value) {
                         return lib$1.fns.validateCardCVC(value);
                     },
@@ -22752,12 +22755,6 @@
 
                     this.$emit('input', this.card);
 
-                    for(let i in AVAILABLE_EVENTS) {
-                        if(this[AVAILABLE_EVENTS[i]]) {
-                            this.$on(AVAILABLE_EVENTS[i], this[AVAILABLE_EVENTS[i]]);
-                        }
-                    }
-
                     window.addEventListener('resize', this.onResize());
                 },
 
@@ -22770,6 +22767,7 @@
                         width: null,
                         isFocused: false,
                         focusedElement: null,
+                        previousValue: null,
                         brand: null,
                         validated: {
                             number: null,

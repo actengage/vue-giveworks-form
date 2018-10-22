@@ -1,23 +1,25 @@
 <template>
-    <div v-if="error">
-        <div class="center-wrapper">
-            <div class="center-content">
-                <http-error-response :error="error" />
+    <div class="giveworks-form">
+        <div v-if="error">
+            <div class="center-wrapper">
+                <div class="center-content">
+                    <http-error-response :error="error" />
+                </div>
             </div>
         </div>
-    </div>
-    <form v-else-if="page.id"@submit.prevent="submit" novalidate="novalidate" :class="classes">
-        <component
-            :is="pageTypeComponent"
-            :orientation="orientation"
-            :submitting="submitting"
-            :form="form"
-            :errors="errors"
-            :page="page"
-        />
-    </form>
-    <div v-else>
-        <activity-indicator :center="true" size="lg"/>
+        <form v-else-if="page.id"@submit.prevent="submit" novalidate="novalidate" :class="classes">
+            <component
+                :is="pageTypeComponent"
+                :orientation="orientation"
+                :submitting="submitting"
+                :form="form"
+                :errors="errors"
+                :page="page"
+            />
+        </form>
+        <div v-else>
+            <activity-indicator :center="true" size="lg"/>
+        </div>
     </div>
 </template>
 

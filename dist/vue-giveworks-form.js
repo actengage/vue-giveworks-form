@@ -1,15 +1,17 @@
 (function (global, factory) {
-            typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('axios'), require('moment')) :
-            typeof define === 'function' && define.amd ? define(['axios', 'moment'], factory) :
-            (global.VueGiveworksForm = factory(global.axios,global.moment));
-}(this, (function (axios,moment) { 'use strict';
+            typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('axios'), require('moment'), require('vue-interface/src/Helpers/MergeClasses'), require('vue-interface/src/Plugins/MergeClasses')) :
+            typeof define === 'function' && define.amd ? define(['axios', 'moment', 'vue-interface/src/Helpers/MergeClasses', 'vue-interface/src/Plugins/MergeClasses'], factory) :
+            (global.VueGiveworksForm = factory(global.axios,global.moment,global.mergeClasses,global.mergeClasses$1));
+}(this, (function (axios,moment,mergeClasses,mergeClasses$1) { 'use strict';
 
             axios = axios && axios.hasOwnProperty('default') ? axios['default'] : axios;
             moment = moment && moment.hasOwnProperty('default') ? moment['default'] : moment;
+            mergeClasses = mergeClasses && mergeClasses.hasOwnProperty('default') ? mergeClasses['default'] : mergeClasses;
+            mergeClasses$1 = mergeClasses$1 && mergeClasses$1.hasOwnProperty('default') ? mergeClasses$1['default'] : mergeClasses$1;
 
-            var global$1 = typeof global !== "undefined" ? global :
+            var global$1 = (typeof global !== "undefined" ? global :
                         typeof self !== "undefined" ? self :
-                        typeof window !== "undefined" ? window : {}
+                        typeof window !== "undefined" ? window : {});
 
             function promiseFinally(callback) {
               var constructor = this.constructor;
@@ -273,36 +275,6 @@
             } else if (!globalNS.Promise.prototype['finally']) {
               globalNS.Promise.prototype['finally'] = promiseFinally;
             }
-
-            function styleInject(css, ref) {
-              if ( ref === void 0 ) ref = {};
-              var insertAt = ref.insertAt;
-
-              if (!css || typeof document === 'undefined') { return; }
-
-              var head = document.head || document.getElementsByTagName('head')[0];
-              var style = document.createElement('style');
-              style.type = 'text/css';
-
-              if (insertAt === 'top') {
-                if (head.firstChild) {
-                  head.insertBefore(style, head.firstChild);
-                } else {
-                  head.appendChild(style);
-                }
-              } else {
-                head.appendChild(style);
-              }
-
-              if (style.styleSheet) {
-                style.styleSheet.cssText = css;
-              } else {
-                style.appendChild(document.createTextNode(css));
-              }
-            }
-
-            var css = ".autocomplete-field {\n  position: relative; }\n  .autocomplete-field .activity-indicator {\n    right: .5rem;\n    bottom: .5rem;\n    position: absolute; }\n\n.autocomplete-list-wrapper {\n  position: absolute;\n  z-index: 10;\n  width: 100%;\n  top: 100%;\n  background: white; }\n\n.autocomplete-list {\n  margin: 0;\n  padding: 0;\n  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25); }\n\n.center-wrapper {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%; }\n\n.center-content {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  margin-right: -50%;\n  transform: translate(-50%, -50%); }\n\n.activity-indicator-dots > div {\n  border-radius: 100%;\n  display: inline-block;\n  background-color: #212529;\n  width: 0.6rem;\n  height: 0.6rem;\n  animation: activity-indicator-dots 1.4s infinite ease-in-out both; }\n\n.activity-indicator-dots > div:not(:last-child) {\n  margin-right: 0.198rem; }\n\n.activity-indicator-dots.activity-indicator-xs > div {\n  width: 0.3rem;\n  height: 0.3rem; }\n\n.activity-indicator-dots.activity-indicator-sm > div {\n  width: 0.45rem;\n  height: 0.45rem; }\n\n.activity-indicator-dots.activity-indicator-md > div {\n  width: 0.6rem;\n  height: 0.6rem; }\n\n.activity-indicator-dots.activity-indicator-lg > div {\n  width: 0.9rem;\n  height: 0.9rem; }\n\n.activity-indicator-dots.activity-indicator-xl > div {\n  width: 1.2rem;\n  height: 1.2rem; }\n\n.activity-indicator-dots > div:nth-child(1) {\n  animation-delay: 0s; }\n\n.activity-indicator-dots > div:nth-child(2) {\n  animation-delay: 0.16s; }\n\n.activity-indicator-dots > div:nth-child(3) {\n  animation-delay: 0.32s; }\n\n.activity-indicator-dots > div:nth-child(4) {\n  animation-delay: 0.48s; }\n\n.activity-indicator-dots > div:nth-child(5) {\n  animation-delay: 0.64s; }\n\n.activity-indicator-dots > div:nth-child(6) {\n  animation-delay: 0.8s; }\n\n.activity-indicator-dots > div:nth-child(7) {\n  animation-delay: 0.96s; }\n\n.activity-indicator-dots > div:nth-child(8) {\n  animation-delay: 1.12s; }\n\n.activity-indicator-dots > div:nth-child(9) {\n  animation-delay: 1.28s; }\n\n.activity-indicator-dots > div:nth-child(10) {\n  animation-delay: 1.44s; }\n\n.activity-indicator-dots > div:nth-child(11) {\n  animation-delay: 1.6s; }\n\n.activity-indicator-dots > div:nth-child(12) {\n  animation-delay: 1.76s; }\n\n.activity-indicator-dots > div:nth-child(13) {\n  animation-delay: 1.92s; }\n\n@keyframes activity-indicator-dots {\n  0%, 80%, 100% {\n    transform: scale(0); }\n  40% {\n    transform: scale(1); } }\n\n.btn-activity-indicator-dots:not(.btn-warning) .activity-indicator-dots > div {\n  background: white; }\n\n.activity-indicator-spinner {\n  position: relative;\n  width: 2.25rem;\n  height: 2.25rem; }\n  .activity-indicator-spinner > div {\n    width: 100%;\n    height: 100%;\n    position: absolute;\n    left: 0;\n    top: 0; }\n    .activity-indicator-spinner > div:before {\n      content: '';\n      display: block;\n      margin: 0 auto;\n      background-color: #212529;\n      width: 10%;\n      height: 30%;\n      border-radius: 5px;\n      animation: activity-indicator-spinner 1s infinite ease-in-out both; }\n  .activity-indicator-spinner.activity-indicator-xs {\n    width: 1.125rem;\n    height: 1.125rem; }\n  .activity-indicator-spinner.activity-indicator-sm {\n    width: 1.6875rem;\n    height: 1.6875rem; }\n  .activity-indicator-spinner.activity-indicator-md {\n    width: 2.25rem;\n    height: 2.25rem; }\n  .activity-indicator-spinner.activity-indicator-lg {\n    width: 3.375rem;\n    height: 3.375rem; }\n  .activity-indicator-spinner.activity-indicator-xl {\n    width: 4.5rem;\n    height: 4.5rem; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(1):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(1) ~ div:nth-child(1) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(1):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(1) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(2):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(2) ~ div:nth-child(1) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(2):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(2) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(2):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(2) ~ div:nth-child(2) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(2):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(2) ~ div:nth-child(2):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(1) {\n    transform: rotate(120deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(2) {\n    transform: rotate(240deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(2):before {\n      animation-delay: -0.66667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(3) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(3):before {\n      animation-delay: -0.33333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(1) {\n    transform: rotate(90deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(2) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(2):before {\n      animation-delay: -0.75s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(3) {\n    transform: rotate(270deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(3):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(4) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(4):before {\n      animation-delay: -0.25s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(1) {\n    transform: rotate(72deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(2) {\n    transform: rotate(144deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(2):before {\n      animation-delay: -0.8s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(3) {\n    transform: rotate(216deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(3):before {\n      animation-delay: -0.6s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(4) {\n    transform: rotate(288deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(4):before {\n      animation-delay: -0.4s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(5) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(5):before {\n      animation-delay: -0.2s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(1) {\n    transform: rotate(60deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(2) {\n    transform: rotate(120deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(2):before {\n      animation-delay: -0.83333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(3) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(3):before {\n      animation-delay: -0.66667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(4) {\n    transform: rotate(240deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(4):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(5) {\n    transform: rotate(300deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(5):before {\n      animation-delay: -0.33333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(6) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(6):before {\n      animation-delay: -0.16667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(1) {\n    transform: rotate(51.42857deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(2) {\n    transform: rotate(102.85714deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(2):before {\n      animation-delay: -0.85714s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(3) {\n    transform: rotate(154.28571deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(3):before {\n      animation-delay: -0.71429s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(4) {\n    transform: rotate(205.71429deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(4):before {\n      animation-delay: -0.57143s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(5) {\n    transform: rotate(257.14286deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(5):before {\n      animation-delay: -0.42857s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(6) {\n    transform: rotate(308.57143deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(6):before {\n      animation-delay: -0.28571s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(7) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(7):before {\n      animation-delay: -0.14286s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(1) {\n    transform: rotate(45deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(2) {\n    transform: rotate(90deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(2):before {\n      animation-delay: -0.875s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(3) {\n    transform: rotate(135deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(3):before {\n      animation-delay: -0.75s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(4) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(4):before {\n      animation-delay: -0.625s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(5) {\n    transform: rotate(225deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(5):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(6) {\n    transform: rotate(270deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(6):before {\n      animation-delay: -0.375s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(7) {\n    transform: rotate(315deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(7):before {\n      animation-delay: -0.25s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(8),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(8) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(8):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(8):before {\n      animation-delay: -0.125s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(1) {\n    transform: rotate(40deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(2) {\n    transform: rotate(80deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(2):before {\n      animation-delay: -0.88889s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(3) {\n    transform: rotate(120deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(3):before {\n      animation-delay: -0.77778s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(4) {\n    transform: rotate(160deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(4):before {\n      animation-delay: -0.66667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(5) {\n    transform: rotate(200deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(5):before {\n      animation-delay: -0.55556s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(6) {\n    transform: rotate(240deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(6):before {\n      animation-delay: -0.44444s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(7) {\n    transform: rotate(280deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(7):before {\n      animation-delay: -0.33333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(8),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(8) {\n    transform: rotate(320deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(8):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(8):before {\n      animation-delay: -0.22222s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(9),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(9) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(9):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(9):before {\n      animation-delay: -0.11111s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(1) {\n    transform: rotate(36deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(2) {\n    transform: rotate(72deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(2):before {\n      animation-delay: -0.9s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(3) {\n    transform: rotate(108deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(3):before {\n      animation-delay: -0.8s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(4) {\n    transform: rotate(144deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(4):before {\n      animation-delay: -0.7s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(5) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(5):before {\n      animation-delay: -0.6s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(6) {\n    transform: rotate(216deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(6):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(7) {\n    transform: rotate(252deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(7):before {\n      animation-delay: -0.4s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(8),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(8) {\n    transform: rotate(288deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(8):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(8):before {\n      animation-delay: -0.3s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(9),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(9) {\n    transform: rotate(324deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(9):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(9):before {\n      animation-delay: -0.2s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(10),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(10) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(10):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(10):before {\n      animation-delay: -0.1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(1) {\n    transform: rotate(32.72727deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(2) {\n    transform: rotate(65.45455deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(2):before {\n      animation-delay: -0.90909s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(3) {\n    transform: rotate(98.18182deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(3):before {\n      animation-delay: -0.81818s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(4) {\n    transform: rotate(130.90909deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(4):before {\n      animation-delay: -0.72727s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(5) {\n    transform: rotate(163.63636deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(5):before {\n      animation-delay: -0.63636s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(6) {\n    transform: rotate(196.36364deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(6):before {\n      animation-delay: -0.54545s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(7) {\n    transform: rotate(229.09091deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(7):before {\n      animation-delay: -0.45455s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(8),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(8) {\n    transform: rotate(261.81818deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(8):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(8):before {\n      animation-delay: -0.36364s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(9),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(9) {\n    transform: rotate(294.54545deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(9):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(9):before {\n      animation-delay: -0.27273s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(10),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(10) {\n    transform: rotate(327.27273deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(10):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(10):before {\n      animation-delay: -0.18182s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(11),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(11) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(11):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(11):before {\n      animation-delay: -0.09091s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(1) {\n    transform: rotate(30deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(2) {\n    transform: rotate(60deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(2):before {\n      animation-delay: -0.91667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(3) {\n    transform: rotate(90deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(3):before {\n      animation-delay: -0.83333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(4) {\n    transform: rotate(120deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(4):before {\n      animation-delay: -0.75s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(5) {\n    transform: rotate(150deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(5):before {\n      animation-delay: -0.66667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(6) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(6):before {\n      animation-delay: -0.58333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(7) {\n    transform: rotate(210deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(7):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(8),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(8) {\n    transform: rotate(240deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(8):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(8):before {\n      animation-delay: -0.41667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(9),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(9) {\n    transform: rotate(270deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(9):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(9):before {\n      animation-delay: -0.33333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(10),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(10) {\n    transform: rotate(300deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(10):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(10):before {\n      animation-delay: -0.25s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(11),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(11) {\n    transform: rotate(330deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(11):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(11):before {\n      animation-delay: -0.16667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(12),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(12) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(12):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(12):before {\n      animation-delay: -0.08333s; }\n\n@keyframes activity-indicator-spinner {\n  0%, 39%, 100% {\n    opacity: 0; }\n  40% {\n    opacity: 1; } }\n\n.btn-activity-indicator-spinner:not(.btn-warning) .activity-indicator-spinner > div:before {\n  background-color: white; }\n\n.autocomplete-list-item {\n  margin: 0;\n  padding: 0;\n  font-size: .8rem;\n  list-style: none; }\n  .autocomplete-list-item:not(:last-child) {\n    border-bottom: 1px solid rgba(0, 0, 0, 0.15); }\n  .autocomplete-list-item > a {\n    text-decoration: none;\n    padding: 5px;\n    display: block;\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis; }\n    .autocomplete-list-item > a:hover {\n      text-decoration: none;\n      background: rgba(0, 0, 0, 0.05); }\n\n.autocomplete-list-item-icon {\n  width: 15px;\n  height: 20px;\n  display: inline-block;\n  vertical-align: top;\n  background-size: 34px;\n  background-position: -1px -161px;\n  background-image: url(https://maps.gstatic.com/mapfiles/api-3/images/autocomplete-icons_hdpi.png); }\n\n";
-            styleInject(css);
 
             /**
              * A specialized version of `_.forEach` for arrays without support for
@@ -1385,9 +1357,6 @@
                 }
 
             }
-
-            var css$1 = "@keyframes btn-activity-in {\n  0%, 100% {\n    transform: scale(1); }\n  30% {\n    transform: scale(0.98); } }\n\n@keyframes btn-activity-out {\n  0%, 100% {\n    transform: scale(1); }\n  70% {\n    transform: scale(0.98); } }\n\n.btn-activity-top,\n.btn-activity-bottom,\n.btn-activity-left,\n.btn-activity-right {\n  position: relative;\n  transition: padding 166.5ms ease-in; }\n  .btn-activity-top .activity-indicator,\n  .btn-activity-bottom .activity-indicator,\n  .btn-activity-left .activity-indicator,\n  .btn-activity-right .activity-indicator {\n    opacity: 0;\n    position: absolute;\n    visibility: hidden;\n    transition: opacity 333ms ease-in; }\n\n.btn-activity-top .activity-indicator,\n.btn-activity-bottom .activity-indicator {\n  left: 50%;\n  margin-right: -50%;\n  transform: translateX(-50%); }\n\n.btn-activity-left .activity-indicator,\n.btn-activity-right .activity-indicator {\n  top: 50%;\n  margin-bottom: -50%;\n  transform: translateY(-50%); }\n\n.btn-activity:not(.btn-link) {\n  animation: btn-activity-in 333ms; }\n\n.btn-hide-activity:not(.btn-link) {\n  animation: btn-activity-out 333ms; }\n\n.btn-activity.btn-hide-activity .activity-indicator {\n  opacity: 0; }\n\n.btn-activity .activity-indicator {\n  opacity: 1;\n  visibility: visible;\n  position: absolute; }\n\n.btn-activity.btn-outline-primary.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #007bff; }\n\n.btn-activity.btn-outline-secondary.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #28a745; }\n\n.btn-activity.btn-outline-danger.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #dc3545; }\n\n.btn-activity.btn-outline-success.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #28a745; }\n\n.btn-activity.btn-outline-warning.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #ffc107; }\n\n.btn-activity.btn-outline-info.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #17a2b8; }\n\n.btn-activity.btn-outline-link.btn-activity-indicator-spinner .activity-indicator > div:before {\n  background-color: #007bff; }\n\n.btn-activity.btn-xs.btn-activity-top.btn-activity-indicator-dots {\n  padding-top: 1.25rem; }\n  .btn-activity.btn-xs.btn-activity-top.btn-activity-indicator-dots .activity-indicator {\n    top: 0.5rem; }\n\n.btn-activity.btn-xs.btn-activity-bottom.btn-activity-indicator-dots {\n  padding-bottom: 1.25rem; }\n  .btn-activity.btn-xs.btn-activity-bottom.btn-activity-indicator-dots .activity-indicator {\n    bottom: 0.5rem; }\n\n.btn-activity.btn-xs.btn-activity-left.btn-activity-indicator-dots {\n  padding-left: 2.33rem; }\n  .btn-activity.btn-xs.btn-activity-left.btn-activity-indicator-dots .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity.btn-xs.btn-activity-right.btn-activity-indicator-dots {\n  padding-right: 2.33rem; }\n  .btn-activity.btn-xs.btn-activity-right.btn-activity-indicator-dots .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity.btn-xs.btn-activity-indicator-dots .activity-indicator > div,\n.btn-activity.btn-xs .activity-indicator-dots > div {\n  width: 0.33333rem;\n  height: 0.33333rem; }\n\n.btn-activity.btn-xs.btn-activity-top.btn-activity-indicator-spinner {\n  padding-top: 1.66rem; }\n  .btn-activity.btn-xs.btn-activity-top.btn-activity-indicator-spinner .activity-indicator {\n    top: 0.25rem; }\n\n.btn-activity.btn-xs.btn-activity-bottom.btn-activity-indicator-spinner {\n  padding-bottom: 1.66rem; }\n  .btn-activity.btn-xs.btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator {\n    bottom: 0.25rem; }\n\n.btn-activity.btn-xs.btn-activity-left.btn-activity-indicator-spinner {\n  padding-left: 1.66rem; }\n  .btn-activity.btn-xs.btn-activity-left.btn-activity-indicator-spinner .activity-indicator {\n    left: 0.25rem; }\n\n.btn-activity.btn-xs.btn-activity-right.btn-activity-indicator-spinner {\n  padding-right: 1.66rem; }\n  .btn-activity.btn-xs.btn-activity-right.btn-activity-indicator-spinner .activity-indicator {\n    right: 0.25rem; }\n\n.btn-activity.btn-xs.btn-activity-indicator-spinner .activity-indicator,\n.btn-activity.btn-xs .activity-indicator-spinner {\n  width: 1rem;\n  height: 1rem; }\n  .btn-activity.btn-xs.btn-activity-indicator-spinner .activity-indicator > div:before,\n  .btn-activity.btn-xs .activity-indicator-spinner > div:before {\n    width: 8.4%;\n    height: 30%; }\n\n.btn-activity.btn-sm.btn-activity-top.btn-activity-indicator-dots {\n  padding-top: 1.75rem; }\n  .btn-activity.btn-sm.btn-activity-top.btn-activity-indicator-dots .activity-indicator {\n    top: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-bottom.btn-activity-indicator-dots {\n  padding-bottom: 1.75rem; }\n  .btn-activity.btn-sm.btn-activity-bottom.btn-activity-indicator-dots .activity-indicator {\n    bottom: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-left.btn-activity-indicator-dots {\n  padding-left: 3rem; }\n  .btn-activity.btn-sm.btn-activity-left.btn-activity-indicator-dots .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-right.btn-activity-indicator-dots {\n  padding-right: 3rem; }\n  .btn-activity.btn-sm.btn-activity-right.btn-activity-indicator-dots .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-indicator-dots .activity-indicator > div,\n.btn-activity.btn-sm .activity-indicator-dots > div {\n  width: 0.5rem;\n  height: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-top.btn-activity-indicator-spinner {\n  padding-top: 2rem; }\n  .btn-activity.btn-sm.btn-activity-top.btn-activity-indicator-spinner .activity-indicator {\n    top: 0.33rem; }\n\n.btn-activity.btn-sm.btn-activity-bottom.btn-activity-indicator-spinner {\n  padding-bottom: 2rem; }\n  .btn-activity.btn-sm.btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator {\n    bottom: 0.33rem; }\n\n.btn-activity.btn-sm.btn-activity-left.btn-activity-indicator-spinner {\n  padding-left: 2.5rem; }\n  .btn-activity.btn-sm.btn-activity-left.btn-activity-indicator-spinner .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-right.btn-activity-indicator-spinner {\n  padding-right: 2.5rem; }\n  .btn-activity.btn-sm.btn-activity-right.btn-activity-indicator-spinner .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity.btn-sm.btn-activity-indicator-spinner .activity-indicator,\n.btn-activity.btn-sm .activity-indicator-spinner {\n  width: 1.5rem;\n  height: 1.5rem; }\n  .btn-activity.btn-sm.btn-activity-indicator-spinner .activity-indicator > div:before,\n  .btn-activity.btn-sm .activity-indicator-spinner > div:before {\n    width: 5.6%;\n    height: 30%; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-top.btn-activity-indicator-dots, .btn-activity.btn-md.btn-activity-top.btn-activity-indicator-dots {\n  padding-top: 2rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-top.btn-activity-indicator-dots .activity-indicator, .btn-activity.btn-md.btn-activity-top.btn-activity-indicator-dots .activity-indicator {\n    top: 0.66rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-bottom.btn-activity-indicator-dots, .btn-activity.btn-md.btn-activity-bottom.btn-activity-indicator-dots {\n  padding-bottom: 2rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-bottom.btn-activity-indicator-dots .activity-indicator, .btn-activity.btn-md.btn-activity-bottom.btn-activity-indicator-dots .activity-indicator {\n    bottom: 0.66rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-left.btn-activity-indicator-dots, .btn-activity.btn-md.btn-activity-left.btn-activity-indicator-dots {\n  padding-left: 4rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-left.btn-activity-indicator-dots .activity-indicator, .btn-activity.btn-md.btn-activity-left.btn-activity-indicator-dots .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-right.btn-activity-indicator-dots, .btn-activity.btn-md.btn-activity-right.btn-activity-indicator-dots {\n  padding-right: 4rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-right.btn-activity-indicator-dots .activity-indicator, .btn-activity.btn-md.btn-activity-right.btn-activity-indicator-dots .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-indicator-dots .activity-indicator > div,\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl) .activity-indicator-dots > div, .btn-activity.btn-md.btn-activity-indicator-dots .activity-indicator > div,\n.btn-activity.btn-md .activity-indicator-dots > div {\n  width: 0.8rem;\n  height: 0.8rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-top.btn-activity-indicator-spinner, .btn-activity.btn-md.btn-activity-top.btn-activity-indicator-spinner {\n  padding-top: 2.75rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-top.btn-activity-indicator-spinner .activity-indicator, .btn-activity.btn-md.btn-activity-top.btn-activity-indicator-spinner .activity-indicator {\n    top: 0.33rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-bottom.btn-activity-indicator-spinner, .btn-activity.btn-md.btn-activity-bottom.btn-activity-indicator-spinner {\n  padding-bottom: 2.75rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator, .btn-activity.btn-md.btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator {\n    bottom: 0.33rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-left.btn-activity-indicator-spinner, .btn-activity.btn-md.btn-activity-left.btn-activity-indicator-spinner {\n  padding-left: 2.75rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-left.btn-activity-indicator-spinner .activity-indicator, .btn-activity.btn-md.btn-activity-left.btn-activity-indicator-spinner .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-right.btn-activity-indicator-spinner, .btn-activity.btn-md.btn-activity-right.btn-activity-indicator-spinner {\n  padding-right: 2.75rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-right.btn-activity-indicator-spinner .activity-indicator, .btn-activity.btn-md.btn-activity-right.btn-activity-indicator-spinner .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-indicator-spinner .activity-indicator,\n.btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl) .activity-indicator-spinner, .btn-activity.btn-md.btn-activity-indicator-spinner .activity-indicator,\n.btn-activity.btn-md .activity-indicator-spinner {\n  width: 1.75rem;\n  height: 1.75rem; }\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-indicator-spinner .activity-indicator > div:before,\n  .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl) .activity-indicator-spinner > div:before, .btn-activity.btn-md.btn-activity-indicator-spinner .activity-indicator > div:before,\n  .btn-activity.btn-md .activity-indicator-spinner > div:before {\n    width: 6.6%;\n    height: 30%; }\n\n.btn-activity.btn-lg.btn-activity-top.btn-activity-indicator-dots {\n  padding-top: 2.75rem; }\n  .btn-activity.btn-lg.btn-activity-top.btn-activity-indicator-dots .activity-indicator {\n    top: 0.66rem; }\n\n.btn-activity.btn-lg.btn-activity-bottom.btn-activity-indicator-dots {\n  padding-bottom: 2.75rem; }\n  .btn-activity.btn-lg.btn-activity-bottom.btn-activity-indicator-dots .activity-indicator {\n    bottom: 0.66rem; }\n\n.btn-activity.btn-lg.btn-activity-left.btn-activity-indicator-dots {\n  padding-left: 5rem; }\n  .btn-activity.btn-lg.btn-activity-left.btn-activity-indicator-dots .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity.btn-lg.btn-activity-right.btn-activity-indicator-dots {\n  padding-right: 5rem; }\n  .btn-activity.btn-lg.btn-activity-right.btn-activity-indicator-dots .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity.btn-lg.btn-activity-indicator-dots .activity-indicator > div,\n.btn-activity.btn-lg .activity-indicator-dots > div {\n  width: 1.1rem;\n  height: 1.1rem; }\n\n.btn-activity.btn-lg.btn-activity-top.btn-activity-indicator-spinner {\n  padding-top: 3.5rem; }\n  .btn-activity.btn-lg.btn-activity-top.btn-activity-indicator-spinner .activity-indicator {\n    top: 0.5rem; }\n\n.btn-activity.btn-lg.btn-activity-bottom.btn-activity-indicator-spinner {\n  padding-bottom: 3.5rem; }\n  .btn-activity.btn-lg.btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator {\n    bottom: 0.5rem; }\n\n.btn-activity.btn-lg.btn-activity-left.btn-activity-indicator-spinner {\n  padding-left: 3.25rem; }\n  .btn-activity.btn-lg.btn-activity-left.btn-activity-indicator-spinner .activity-indicator {\n    left: 0.5rem; }\n\n.btn-activity.btn-lg.btn-activity-right.btn-activity-indicator-spinner {\n  padding-right: 3.25rem; }\n  .btn-activity.btn-lg.btn-activity-right.btn-activity-indicator-spinner .activity-indicator {\n    right: 0.5rem; }\n\n.btn-activity.btn-lg.btn-activity-indicator-spinner .activity-indicator,\n.btn-activity.btn-lg .activity-indicator-spinner {\n  width: 2.15rem;\n  height: 2.15rem; }\n  .btn-activity.btn-lg.btn-activity-indicator-spinner .activity-indicator > div:before,\n  .btn-activity.btn-lg .activity-indicator-spinner > div:before {\n    width: 7.5%; }\n\n.btn-activity.btn-xl.btn-activity-top.btn-activity-indicator-dots {\n  padding-top: 3.75rem; }\n  .btn-activity.btn-xl.btn-activity-top.btn-activity-indicator-dots .activity-indicator {\n    top: 1rem; }\n\n.btn-activity.btn-xl.btn-activity-bottom.btn-activity-indicator-dots {\n  padding-bottom: 3.75rem; }\n  .btn-activity.btn-xl.btn-activity-bottom.btn-activity-indicator-dots .activity-indicator {\n    bottom: 1rem; }\n\n.btn-activity.btn-xl.btn-activity-left.btn-activity-indicator-dots {\n  padding-left: 6rem; }\n  .btn-activity.btn-xl.btn-activity-left.btn-activity-indicator-dots .activity-indicator {\n    left: 0.75rem; }\n\n.btn-activity.btn-xl.btn-activity-right.btn-activity-indicator-dots {\n  padding-right: 6rem; }\n  .btn-activity.btn-xl.btn-activity-right.btn-activity-indicator-dots .activity-indicator {\n    right: 0.75rem; }\n\n.btn-activity.btn-xl.btn-activity-indicator-dots .activity-indicator > div,\n.btn-activity.btn-xl .activity-indicator-dots > div {\n  width: 1.25rem;\n  height: 1.25rem; }\n\n.btn-activity.btn-xl.btn-activity-top.btn-activity-indicator-spinner {\n  padding-top: 4.25rem; }\n  .btn-activity.btn-xl.btn-activity-top.btn-activity-indicator-spinner .activity-indicator {\n    top: 0.66rem; }\n\n.btn-activity.btn-xl.btn-activity-bottom.btn-activity-indicator-spinner {\n  padding-bottom: 4.25rem; }\n  .btn-activity.btn-xl.btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator {\n    bottom: 0.66rem; }\n\n.btn-activity.btn-xl.btn-activity-left.btn-activity-indicator-spinner {\n  padding-left: 4rem; }\n  .btn-activity.btn-xl.btn-activity-left.btn-activity-indicator-spinner .activity-indicator {\n    left: 0.75rem; }\n\n.btn-activity.btn-xl.btn-activity-right.btn-activity-indicator-spinner {\n  padding-right: 4rem; }\n  .btn-activity.btn-xl.btn-activity-right.btn-activity-indicator-spinner .activity-indicator {\n    right: 0.75rem; }\n\n.btn-activity.btn-xl.btn-activity-indicator-spinner .activity-indicator,\n.btn-activity.btn-xl .activity-indicator-spinner {\n  width: 2.5rem;\n  height: 2.5rem; }\n  .btn-activity.btn-xl.btn-activity-indicator-spinner .activity-indicator > div:before,\n  .btn-activity.btn-xl .activity-indicator-spinner > div:before {\n    width: 7.5%; }\n\n.center-wrapper {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%; }\n\n.center-content {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  margin-right: -50%;\n  transform: translate(-50%, -50%); }\n\n.activity-indicator-dots > div {\n  border-radius: 100%;\n  display: inline-block;\n  background-color: #212529;\n  width: 0.6rem;\n  height: 0.6rem;\n  animation: activity-indicator-dots 1.4s infinite ease-in-out both; }\n\n.activity-indicator-dots > div:not(:last-child) {\n  margin-right: 0.198rem; }\n\n.activity-indicator-dots.activity-indicator-xs > div {\n  width: 0.3rem;\n  height: 0.3rem; }\n\n.activity-indicator-dots.activity-indicator-sm > div {\n  width: 0.45rem;\n  height: 0.45rem; }\n\n.activity-indicator-dots.activity-indicator-md > div {\n  width: 0.6rem;\n  height: 0.6rem; }\n\n.activity-indicator-dots.activity-indicator-lg > div {\n  width: 0.9rem;\n  height: 0.9rem; }\n\n.activity-indicator-dots.activity-indicator-xl > div {\n  width: 1.2rem;\n  height: 1.2rem; }\n\n.activity-indicator-dots > div:nth-child(1) {\n  animation-delay: 0s; }\n\n.activity-indicator-dots > div:nth-child(2) {\n  animation-delay: 0.16s; }\n\n.activity-indicator-dots > div:nth-child(3) {\n  animation-delay: 0.32s; }\n\n.activity-indicator-dots > div:nth-child(4) {\n  animation-delay: 0.48s; }\n\n.activity-indicator-dots > div:nth-child(5) {\n  animation-delay: 0.64s; }\n\n.activity-indicator-dots > div:nth-child(6) {\n  animation-delay: 0.8s; }\n\n.activity-indicator-dots > div:nth-child(7) {\n  animation-delay: 0.96s; }\n\n.activity-indicator-dots > div:nth-child(8) {\n  animation-delay: 1.12s; }\n\n.activity-indicator-dots > div:nth-child(9) {\n  animation-delay: 1.28s; }\n\n.activity-indicator-dots > div:nth-child(10) {\n  animation-delay: 1.44s; }\n\n.activity-indicator-dots > div:nth-child(11) {\n  animation-delay: 1.6s; }\n\n.activity-indicator-dots > div:nth-child(12) {\n  animation-delay: 1.76s; }\n\n.activity-indicator-dots > div:nth-child(13) {\n  animation-delay: 1.92s; }\n\n@keyframes activity-indicator-dots {\n  0%, 80%, 100% {\n    transform: scale(0); }\n  40% {\n    transform: scale(1); } }\n\n.btn-activity-indicator-dots:not(.btn-warning) .activity-indicator-dots > div {\n  background: white; }\n\n.activity-indicator-spinner {\n  position: relative;\n  width: 2.25rem;\n  height: 2.25rem; }\n  .activity-indicator-spinner > div {\n    width: 100%;\n    height: 100%;\n    position: absolute;\n    left: 0;\n    top: 0; }\n    .activity-indicator-spinner > div:before {\n      content: '';\n      display: block;\n      margin: 0 auto;\n      background-color: #212529;\n      width: 10%;\n      height: 30%;\n      border-radius: 5px;\n      animation: activity-indicator-spinner 1s infinite ease-in-out both; }\n  .activity-indicator-spinner.activity-indicator-xs {\n    width: 1.125rem;\n    height: 1.125rem; }\n  .activity-indicator-spinner.activity-indicator-sm {\n    width: 1.6875rem;\n    height: 1.6875rem; }\n  .activity-indicator-spinner.activity-indicator-md {\n    width: 2.25rem;\n    height: 2.25rem; }\n  .activity-indicator-spinner.activity-indicator-lg {\n    width: 3.375rem;\n    height: 3.375rem; }\n  .activity-indicator-spinner.activity-indicator-xl {\n    width: 4.5rem;\n    height: 4.5rem; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(1):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(1) ~ div:nth-child(1) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(1):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(1) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(2):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(2) ~ div:nth-child(1) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(2):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(2) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(2):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(2) ~ div:nth-child(2) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(2):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(2) ~ div:nth-child(2):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(1) {\n    transform: rotate(120deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(2) {\n    transform: rotate(240deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(2):before {\n      animation-delay: -0.66667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(3) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(3):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(3) ~ div:nth-child(3):before {\n      animation-delay: -0.33333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(1) {\n    transform: rotate(90deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(2) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(2):before {\n      animation-delay: -0.75s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(3) {\n    transform: rotate(270deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(3):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(4) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(4):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(4) ~ div:nth-child(4):before {\n      animation-delay: -0.25s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(1) {\n    transform: rotate(72deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(2) {\n    transform: rotate(144deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(2):before {\n      animation-delay: -0.8s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(3) {\n    transform: rotate(216deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(3):before {\n      animation-delay: -0.6s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(4) {\n    transform: rotate(288deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(4):before {\n      animation-delay: -0.4s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(5) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(5):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(5) ~ div:nth-child(5):before {\n      animation-delay: -0.2s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(1) {\n    transform: rotate(60deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(2) {\n    transform: rotate(120deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(2):before {\n      animation-delay: -0.83333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(3) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(3):before {\n      animation-delay: -0.66667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(4) {\n    transform: rotate(240deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(4):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(5) {\n    transform: rotate(300deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(5):before {\n      animation-delay: -0.33333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(6) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(6):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(6) ~ div:nth-child(6):before {\n      animation-delay: -0.16667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(1) {\n    transform: rotate(51.42857deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(2) {\n    transform: rotate(102.85714deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(2):before {\n      animation-delay: -0.85714s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(3) {\n    transform: rotate(154.28571deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(3):before {\n      animation-delay: -0.71429s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(4) {\n    transform: rotate(205.71429deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(4):before {\n      animation-delay: -0.57143s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(5) {\n    transform: rotate(257.14286deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(5):before {\n      animation-delay: -0.42857s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(6) {\n    transform: rotate(308.57143deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(6):before {\n      animation-delay: -0.28571s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(7) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(7):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(7) ~ div:nth-child(7):before {\n      animation-delay: -0.14286s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(1) {\n    transform: rotate(45deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(2) {\n    transform: rotate(90deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(2):before {\n      animation-delay: -0.875s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(3) {\n    transform: rotate(135deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(3):before {\n      animation-delay: -0.75s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(4) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(4):before {\n      animation-delay: -0.625s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(5) {\n    transform: rotate(225deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(5):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(6) {\n    transform: rotate(270deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(6):before {\n      animation-delay: -0.375s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(7) {\n    transform: rotate(315deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(7):before {\n      animation-delay: -0.25s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(8),\n  .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(8) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(8):nth-child(8):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(8) ~ div:nth-child(8):before {\n      animation-delay: -0.125s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(1) {\n    transform: rotate(40deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(2) {\n    transform: rotate(80deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(2):before {\n      animation-delay: -0.88889s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(3) {\n    transform: rotate(120deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(3):before {\n      animation-delay: -0.77778s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(4) {\n    transform: rotate(160deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(4):before {\n      animation-delay: -0.66667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(5) {\n    transform: rotate(200deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(5):before {\n      animation-delay: -0.55556s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(6) {\n    transform: rotate(240deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(6):before {\n      animation-delay: -0.44444s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(7) {\n    transform: rotate(280deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(7):before {\n      animation-delay: -0.33333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(8),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(8) {\n    transform: rotate(320deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(8):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(8):before {\n      animation-delay: -0.22222s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(9),\n  .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(9) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(9):nth-child(9):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(9) ~ div:nth-child(9):before {\n      animation-delay: -0.11111s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(1) {\n    transform: rotate(36deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(2) {\n    transform: rotate(72deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(2):before {\n      animation-delay: -0.9s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(3) {\n    transform: rotate(108deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(3):before {\n      animation-delay: -0.8s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(4) {\n    transform: rotate(144deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(4):before {\n      animation-delay: -0.7s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(5) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(5):before {\n      animation-delay: -0.6s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(6) {\n    transform: rotate(216deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(6):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(7) {\n    transform: rotate(252deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(7):before {\n      animation-delay: -0.4s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(8),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(8) {\n    transform: rotate(288deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(8):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(8):before {\n      animation-delay: -0.3s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(9),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(9) {\n    transform: rotate(324deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(9):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(9):before {\n      animation-delay: -0.2s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(10),\n  .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(10) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(10):nth-child(10):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(10) ~ div:nth-child(10):before {\n      animation-delay: -0.1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(1) {\n    transform: rotate(32.72727deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(2) {\n    transform: rotate(65.45455deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(2):before {\n      animation-delay: -0.90909s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(3) {\n    transform: rotate(98.18182deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(3):before {\n      animation-delay: -0.81818s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(4) {\n    transform: rotate(130.90909deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(4):before {\n      animation-delay: -0.72727s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(5) {\n    transform: rotate(163.63636deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(5):before {\n      animation-delay: -0.63636s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(6) {\n    transform: rotate(196.36364deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(6):before {\n      animation-delay: -0.54545s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(7) {\n    transform: rotate(229.09091deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(7):before {\n      animation-delay: -0.45455s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(8),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(8) {\n    transform: rotate(261.81818deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(8):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(8):before {\n      animation-delay: -0.36364s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(9),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(9) {\n    transform: rotate(294.54545deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(9):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(9):before {\n      animation-delay: -0.27273s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(10),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(10) {\n    transform: rotate(327.27273deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(10):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(10):before {\n      animation-delay: -0.18182s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(11),\n  .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(11) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(11):nth-child(11):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(11) ~ div:nth-child(11):before {\n      animation-delay: -0.09091s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(1),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(1) {\n    transform: rotate(30deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(1):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(1):before {\n      animation-delay: -1s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(2),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(2) {\n    transform: rotate(60deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(2):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(2):before {\n      animation-delay: -0.91667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(3),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(3) {\n    transform: rotate(90deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(3):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(3):before {\n      animation-delay: -0.83333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(4),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(4) {\n    transform: rotate(120deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(4):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(4):before {\n      animation-delay: -0.75s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(5),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(5) {\n    transform: rotate(150deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(5):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(5):before {\n      animation-delay: -0.66667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(6),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(6) {\n    transform: rotate(180deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(6):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(6):before {\n      animation-delay: -0.58333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(7),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(7) {\n    transform: rotate(210deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(7):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(7):before {\n      animation-delay: -0.5s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(8),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(8) {\n    transform: rotate(240deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(8):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(8):before {\n      animation-delay: -0.41667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(9),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(9) {\n    transform: rotate(270deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(9):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(9):before {\n      animation-delay: -0.33333s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(10),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(10) {\n    transform: rotate(300deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(10):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(10):before {\n      animation-delay: -0.25s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(11),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(11) {\n    transform: rotate(330deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(11):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(11):before {\n      animation-delay: -0.16667s; }\n  .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(12),\n  .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(12) {\n    transform: rotate(360deg); }\n    .activity-indicator-spinner > div:first-child:nth-last-child(12):nth-child(12):before,\n    .activity-indicator-spinner > div:first-child:nth-last-child(12) ~ div:nth-child(12):before {\n      animation-delay: -0.08333s; }\n\n@keyframes activity-indicator-spinner {\n  0%, 39%, 100% {\n    opacity: 0; }\n  40% {\n    opacity: 1; } }\n\n.btn-activity-indicator-spinner:not(.btn-warning) .activity-indicator-spinner > div:before {\n  background-color: white; }\n\n.overlay {\n  position: fixed;\n  display: flex;\n  min-height: 0;\n  top: 0;\n  left: 0;\n  z-index: -1;\n  opacity: 0;\n  width: 100%;\n  height: 100%;\n  align-items: center;\n  align-content: center;\n  justify-content: center;\n  flex-direction: column; }\n  .overlay.fade {\n    transition: opacity 333ms ease-out; }\n  .overlay.show {\n    z-index: 10000;\n    opacity: 1; }\n  .overlay .overlay-content {\n    flex: 1; }\n  .overlay .overlay-header {\n    margin-top: 1.5rem; }\n  .overlay .overlay-close {\n    font-size: 1.25rem;\n    color: #495057;\n    position: absolute;\n    top: 1rem;\n    right: 1rem;\n    z-index: 1; }\n\n.overlay-content {\n  margin: 0 auto;\n  overflow-y: auto;\n  position: relative; }\n  .overlay-content.overlay-content-center {\n    display: flex;\n    justify-content: center;\n    align-items: center; }\n    .overlay-content.overlay-content-center .overlay-body {\n      flex: 1; }\n  .overlay-content.overlay-content-fixed {\n    top: 0;\n    left: 0;\n    padding: 0;\n    height: 100%;\n    position: fixed;\n    max-width: none; }\n  .overlay-content .overlay-controls {\n    float: right;\n    position: relative;\n    top: 4px;\n    padding-right: 0;\n    padding-bottom: 1rem; }\n    .overlay-content .overlay-controls.left {\n      left: 0; }\n    .overlay-content .overlay-controls.right {\n      right: 0; }\n    .overlay-content .overlay-controls + * {\n      clear: both; }\n\n@media (max-width: 575.98px) {\n  .btn-xs-block {\n    width: 100%;\n    display: block; }\n    .btn-xs-block + .btn-xs-block {\n      margin-top: 0.5rem; } }\n\n@media (max-width: 767.98px) {\n  .btn-sm-block {\n    width: 100%;\n    display: block; }\n    .btn-sm-block + .btn-xs-block,\n    .btn-sm-block + .btn-sm-block {\n      margin-top: 0.5rem; } }\n\n@media (max-width: 991.98px) {\n  .btn-md-block {\n    width: 100%;\n    display: block; }\n    .btn-md-block + .btn-xs-block,\n    .btn-md-block + .btn-sm-block,\n    .btn-md-block + .btn-md-block {\n      margin-top: 0.5rem; } }\n\n@media (max-width: 1199.98px) {\n  .btn-lg-block {\n    width: 100%;\n    display: block; }\n    .btn-lg-block + .btn-xs-block,\n    .btn-lg-block + .btn-sm-block,\n    .btn-lg-block + .btn-md-block,\n    .btn-lg-block + .btn-lg-block {\n      margin-top: 0.5rem; } }\n\n.btn-xl-block {\n  width: 100%;\n  display: block; }\n  .btn-xl-block + .btn-xs-block,\n  .btn-xl-block + .btn-sm-block,\n  .btn-xl-block + .btn-md-block,\n  .btn-xl-block + .btn-lg-block,\n  .btn-xl-block + .btn-xl-block {\n    margin-top: 0.5rem; }\n\n.btn-file {\n  cursor: pointer;\n  position: relative; }\n  .btn-file input {\n    z-index: 1;\n    opacity: 0;\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%; }\n\n.card .card-btn-group,\n.card .btn-group.card-btn-group {\n  flex: 1;\n  display: flex;\n  align-items: center;\n  justify-content: space-between; }\n  .card .card-btn-group > .btn,\n  .card .btn-group.card-btn-group > .btn {\n    flex: 1;\n    width: 100%;\n    text-align: center;\n    border-radius: 0; }\n    .card .card-btn-group > .btn:not(:last-child)::after,\n    .card .btn-group.card-btn-group > .btn:not(:last-child)::after {\n      content: '';\n      position: absolute;\n      top: 50%;\n      right: 0;\n      padding: 1rem;\n      transform: translateY(-50%);\n      border-right: 1px solid rgba(0, 0, 0, 0.125); }\n\n.card-img,\n.card-img-top,\n.card-img-bottom {\n  color: white;\n  position: relative;\n  text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);\n  /*\n    & > :not(img) {\n        position: absolute;\n    }\n    */ }\n  .card-img .card-img-bg,\n  .card-img-top .card-img-bg,\n  .card-img-bottom .card-img-bg {\n    z-index: 0;\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background-size: cover !important;\n    background-position: center !important;\n    background-repeat: no-repeat !important; }\n    .card-img .card-img-bg > img:first-child,\n    .card-img-top .card-img-bg > img:first-child,\n    .card-img-bottom .card-img-bg > img:first-child {\n      position: absolute; }\n  .card-img .card-img-content,\n  .card-img-top .card-img-content,\n  .card-img-bottom .card-img-content {\n    flex: 1;\n    z-index: 1;\n    position: relative; }\n\n.dropzone[data-v-744e8f62] {\n  position: relative; }\n  .dropzone p[data-v-744e8f62] {\n    font-size: 18px; }\n  .dropzone .fa-image[data-v-744e8f62] {\n    font-size: 100px; }\n  .dropzone .dropzone-placeholder[data-v-744e8f62] {\n    display: none;\n    position: absolute;\n    top: 0;\n    left: 0;\n    z-index: 2;\n    width: 100%;\n    height: 100%;\n    background: white; }\n  .dropzone.is-dragging .dropzone-placeholder[data-v-744e8f62] {\n    display: block; }\n\n.file-preview {\n  width: 100%; }\n  .file-preview .file-preview-inner {\n    position: relative; }\n  .file-preview .file-preview-close {\n    top: 0;\n    right: 0;\n    padding: 0;\n    width: 24px;\n    height: 24px;\n    background: white;\n    position: absolute;\n    border-radius: 100%;\n    transform: translate(33%, -33%); }\n    .file-preview .file-preview-close i {\n      position: absolute;\n      top: 0;\n      left: 0;\n      width: 100%;\n      font-size: 24px;\n      text-align: center; }\n  .file-preview .file-preview-icon {\n    text-align: center;\n    font-size: 60px;\n    padding: 1rem; }\n  .file-preview .file-preview-thumbnail {\n    width: 100%;\n    max-width: 100%; }\n  .file-preview .file-preview-filename {\n    overflow: hidden;\n    text-align: center;\n    white-space: nowrap;\n    text-overflow: ellipsis; }\n  .file-preview .file-preview-filename,\n  .file-preview .file-preview-filesize {\n    text-align: center; }\n\n.infinite-scrolling {\n  position: relative; }\n\n.light-switch {\n  padding: 0;\n  position: relative;\n  border: none;\n  width: 3rem;\n  height: 2rem;\n  border-radius: 2rem;\n  overflow: hidden;\n  cursor: pointer;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  overflow: hidden; }\n  .light-switch.light-switch-xs {\n    padding: 0;\n    width: 1.5rem;\n    height: 1rem;\n    border-radius: 1rem; }\n    .light-switch.light-switch-xs .light-switch-handle {\n      width: 1rem;\n      height: 1rem; }\n    .light-switch.light-switch-xs .light-switch-container {\n      left: -0.5rem;\n      width: 2rem;\n      height: 1rem; }\n    .light-switch.light-switch-xs.is-active .light-switch-handle {\n      left: 0.5rem; }\n    .light-switch.light-switch-xs .light-switch-label {\n      width: 1rem;\n      height: 1rem; }\n  .light-switch.light-switch-sm {\n    padding: 0;\n    width: 2.25rem;\n    height: 1.5rem;\n    border-radius: 1.5rem; }\n    .light-switch.light-switch-sm .light-switch-handle {\n      width: 1.5rem;\n      height: 1.5rem; }\n    .light-switch.light-switch-sm .light-switch-container {\n      left: -0.75rem;\n      width: 3rem;\n      height: 1.5rem; }\n    .light-switch.light-switch-sm.is-active .light-switch-handle {\n      left: 0.75rem; }\n    .light-switch.light-switch-sm .light-switch-label {\n      width: 1.5rem;\n      height: 1.5rem; }\n  .light-switch.light-switch-md {\n    padding: 0;\n    width: 3rem;\n    height: 2rem;\n    border-radius: 2rem; }\n    .light-switch.light-switch-md .light-switch-handle {\n      width: 2rem;\n      height: 2rem; }\n    .light-switch.light-switch-md .light-switch-container {\n      left: -1rem;\n      width: 4rem;\n      height: 2rem; }\n    .light-switch.light-switch-md.is-active .light-switch-handle {\n      left: 1rem; }\n    .light-switch.light-switch-md .light-switch-label {\n      width: 2rem;\n      height: 2rem; }\n  .light-switch.light-switch-lg {\n    padding: 0;\n    width: 4.5rem;\n    height: 3rem;\n    border-radius: 3rem; }\n    .light-switch.light-switch-lg .light-switch-handle {\n      width: 3rem;\n      height: 3rem; }\n    .light-switch.light-switch-lg .light-switch-container {\n      left: -1.5rem;\n      width: 6rem;\n      height: 3rem; }\n    .light-switch.light-switch-lg.is-active .light-switch-handle {\n      left: 1.5rem; }\n    .light-switch.light-switch-lg .light-switch-label {\n      width: 3rem;\n      height: 3rem; }\n  .light-switch.light-switch-xl {\n    padding: 0;\n    width: 6rem;\n    height: 4rem;\n    border-radius: 4rem; }\n    .light-switch.light-switch-xl .light-switch-handle {\n      width: 4rem;\n      height: 4rem; }\n    .light-switch.light-switch-xl .light-switch-container {\n      left: -2rem;\n      width: 8rem;\n      height: 4rem; }\n    .light-switch.light-switch-xl.is-active .light-switch-handle {\n      left: 2rem; }\n    .light-switch.light-switch-xl .light-switch-label {\n      width: 4rem;\n      height: 4rem; }\n  .light-switch .valid-feedback {\n    display: none;\n    width: 100%;\n    margin-top: 0.25rem;\n    font-size: 80%;\n    color: #28a745; }\n  .light-switch .valid-tooltip {\n    position: absolute;\n    top: 100%;\n    z-index: 5;\n    display: none;\n    max-width: 100%;\n    padding: .5rem;\n    margin-top: .1rem;\n    font-size: .875rem;\n    line-height: 1;\n    color: #fff;\n    background-color: rgba(40, 167, 69, 0.8);\n    border-radius: .2rem; }\n  .was-validated .light-switch .form-control:valid, .light-switch .form-control.is-valid, .was-validated\n  .light-switch .custom-select:valid,\n  .light-switch .custom-select.is-valid {\n    border-color: #28a745; }\n    .was-validated .light-switch .form-control:valid:focus, .light-switch .form-control.is-valid:focus, .was-validated\n    .light-switch .custom-select:valid:focus,\n    .light-switch .custom-select.is-valid:focus {\n      border-color: #28a745;\n      box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25); }\n    .was-validated .light-switch .form-control:valid ~ .valid-feedback,\n    .was-validated .light-switch .form-control:valid ~ .valid-tooltip, .light-switch .form-control.is-valid ~ .valid-feedback,\n    .light-switch .form-control.is-valid ~ .valid-tooltip, .was-validated\n    .light-switch .custom-select:valid ~ .valid-feedback,\n    .was-validated\n    .light-switch .custom-select:valid ~ .valid-tooltip,\n    .light-switch .custom-select.is-valid ~ .valid-feedback,\n    .light-switch .custom-select.is-valid ~ .valid-tooltip {\n      display: block; }\n  .was-validated .light-switch .form-control-file:valid ~ .valid-feedback,\n  .was-validated .light-switch .form-control-file:valid ~ .valid-tooltip, .light-switch .form-control-file.is-valid ~ .valid-feedback,\n  .light-switch .form-control-file.is-valid ~ .valid-tooltip {\n    display: block; }\n  .was-validated .light-switch .form-check-input:valid ~ .form-check-label, .light-switch .form-check-input.is-valid ~ .form-check-label {\n    color: #28a745; }\n  .was-validated .light-switch .form-check-input:valid ~ .valid-feedback,\n  .was-validated .light-switch .form-check-input:valid ~ .valid-tooltip, .light-switch .form-check-input.is-valid ~ .valid-feedback,\n  .light-switch .form-check-input.is-valid ~ .valid-tooltip {\n    display: block; }\n  .was-validated .light-switch .custom-control-input:valid ~ .custom-control-label, .light-switch .custom-control-input.is-valid ~ .custom-control-label {\n    color: #28a745; }\n    .was-validated .light-switch .custom-control-input:valid ~ .custom-control-label::before, .light-switch .custom-control-input.is-valid ~ .custom-control-label::before {\n      background-color: #71dd8a; }\n  .was-validated .light-switch .custom-control-input:valid ~ .valid-feedback,\n  .was-validated .light-switch .custom-control-input:valid ~ .valid-tooltip, .light-switch .custom-control-input.is-valid ~ .valid-feedback,\n  .light-switch .custom-control-input.is-valid ~ .valid-tooltip {\n    display: block; }\n  .was-validated .light-switch .custom-control-input:valid:checked ~ .custom-control-label::before, .light-switch .custom-control-input.is-valid:checked ~ .custom-control-label::before {\n    background-color: #34ce57; }\n  .was-validated .light-switch .custom-control-input:valid:focus ~ .custom-control-label::before, .light-switch .custom-control-input.is-valid:focus ~ .custom-control-label::before {\n    box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(40, 167, 69, 0.25); }\n  .was-validated .light-switch .custom-file-input:valid ~ .custom-file-label, .light-switch .custom-file-input.is-valid ~ .custom-file-label {\n    border-color: #28a745; }\n    .was-validated .light-switch .custom-file-input:valid ~ .custom-file-label::before, .light-switch .custom-file-input.is-valid ~ .custom-file-label::before {\n      border-color: inherit; }\n  .was-validated .light-switch .custom-file-input:valid ~ .valid-feedback,\n  .was-validated .light-switch .custom-file-input:valid ~ .valid-tooltip, .light-switch .custom-file-input.is-valid ~ .valid-feedback,\n  .light-switch .custom-file-input.is-valid ~ .valid-tooltip {\n    display: block; }\n  .was-validated .light-switch .custom-file-input:valid:focus ~ .custom-file-label, .light-switch .custom-file-input.is-valid:focus ~ .custom-file-label {\n    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25); }\n  .light-switch .invalid-feedback {\n    display: none;\n    width: 100%;\n    margin-top: 0.25rem;\n    font-size: 80%;\n    color: #dc3545; }\n  .light-switch .invalid-tooltip {\n    position: absolute;\n    top: 100%;\n    z-index: 5;\n    display: none;\n    max-width: 100%;\n    padding: .5rem;\n    margin-top: .1rem;\n    font-size: .875rem;\n    line-height: 1;\n    color: #fff;\n    background-color: rgba(220, 53, 69, 0.8);\n    border-radius: .2rem; }\n  .was-validated .light-switch .form-control:invalid, .light-switch .form-control.is-invalid, .was-validated\n  .light-switch .custom-select:invalid,\n  .light-switch .custom-select.is-invalid {\n    border-color: #dc3545; }\n    .was-validated .light-switch .form-control:invalid:focus, .light-switch .form-control.is-invalid:focus, .was-validated\n    .light-switch .custom-select:invalid:focus,\n    .light-switch .custom-select.is-invalid:focus {\n      border-color: #dc3545;\n      box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25); }\n    .was-validated .light-switch .form-control:invalid ~ .invalid-feedback,\n    .was-validated .light-switch .form-control:invalid ~ .invalid-tooltip, .light-switch .form-control.is-invalid ~ .invalid-feedback,\n    .light-switch .form-control.is-invalid ~ .invalid-tooltip, .was-validated\n    .light-switch .custom-select:invalid ~ .invalid-feedback,\n    .was-validated\n    .light-switch .custom-select:invalid ~ .invalid-tooltip,\n    .light-switch .custom-select.is-invalid ~ .invalid-feedback,\n    .light-switch .custom-select.is-invalid ~ .invalid-tooltip {\n      display: block; }\n  .was-validated .light-switch .form-control-file:invalid ~ .invalid-feedback,\n  .was-validated .light-switch .form-control-file:invalid ~ .invalid-tooltip, .light-switch .form-control-file.is-invalid ~ .invalid-feedback,\n  .light-switch .form-control-file.is-invalid ~ .invalid-tooltip {\n    display: block; }\n  .was-validated .light-switch .form-check-input:invalid ~ .form-check-label, .light-switch .form-check-input.is-invalid ~ .form-check-label {\n    color: #dc3545; }\n  .was-validated .light-switch .form-check-input:invalid ~ .invalid-feedback,\n  .was-validated .light-switch .form-check-input:invalid ~ .invalid-tooltip, .light-switch .form-check-input.is-invalid ~ .invalid-feedback,\n  .light-switch .form-check-input.is-invalid ~ .invalid-tooltip {\n    display: block; }\n  .was-validated .light-switch .custom-control-input:invalid ~ .custom-control-label, .light-switch .custom-control-input.is-invalid ~ .custom-control-label {\n    color: #dc3545; }\n    .was-validated .light-switch .custom-control-input:invalid ~ .custom-control-label::before, .light-switch .custom-control-input.is-invalid ~ .custom-control-label::before {\n      background-color: #efa2a9; }\n  .was-validated .light-switch .custom-control-input:invalid ~ .invalid-feedback,\n  .was-validated .light-switch .custom-control-input:invalid ~ .invalid-tooltip, .light-switch .custom-control-input.is-invalid ~ .invalid-feedback,\n  .light-switch .custom-control-input.is-invalid ~ .invalid-tooltip {\n    display: block; }\n  .was-validated .light-switch .custom-control-input:invalid:checked ~ .custom-control-label::before, .light-switch .custom-control-input.is-invalid:checked ~ .custom-control-label::before {\n    background-color: #e4606d; }\n  .was-validated .light-switch .custom-control-input:invalid:focus ~ .custom-control-label::before, .light-switch .custom-control-input.is-invalid:focus ~ .custom-control-label::before {\n    box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(220, 53, 69, 0.25); }\n  .was-validated .light-switch .custom-file-input:invalid ~ .custom-file-label, .light-switch .custom-file-input.is-invalid ~ .custom-file-label {\n    border-color: #dc3545; }\n    .was-validated .light-switch .custom-file-input:invalid ~ .custom-file-label::before, .light-switch .custom-file-input.is-invalid ~ .custom-file-label::before {\n      border-color: inherit; }\n  .was-validated .light-switch .custom-file-input:invalid ~ .invalid-feedback,\n  .was-validated .light-switch .custom-file-input:invalid ~ .invalid-tooltip, .light-switch .custom-file-input.is-invalid ~ .invalid-feedback,\n  .light-switch .custom-file-input.is-invalid ~ .invalid-tooltip {\n    display: block; }\n  .was-validated .light-switch .custom-file-input:invalid:focus ~ .custom-file-label, .light-switch .custom-file-input.is-invalid:focus ~ .custom-file-label {\n    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25); }\n  .light-switch.is-invalid {\n    border: 1px solid #dc3545; }\n    .light-switch.is-invalid:not(.is-active) .light-switch-handle {\n      background: #dc3545; }\n    .light-switch.is-invalid .light-switch-label.on-value {\n      left: 0; }\n    .light-switch.is-invalid .light-switch-label.off-value {\n      right: 0; }\n  .light-switch .light-switch-handle {\n    top: 0;\n    left: 0;\n    z-index: 1;\n    position: absolute;\n    border-radius: 100%;\n    transition: left 0.33333s ease;\n    width: 2rem;\n    height: 2rem;\n    background: white;\n    background-image: radial-gradient(white, #fafafa 50%, white 75%);\n    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.1); }\n  .light-switch .light-switch-container {\n    position: relative;\n    left: -1rem;\n    top: 0rem;\n    width: 4rem;\n    height: 2rem;\n    transition: left 0.33333s ease; }\n  .light-switch:not(.is-active):not(.is-dragging) .on-value {\n    visibility: hidden; }\n  .light-switch.is-active:not(.is-dragging) .off-value {\n    visibility: hidden; }\n  .light-switch.is-active .light-switch-handle {\n    left: 1rem; }\n  .light-switch.is-active .light-switch-container {\n    left: 0; }\n  .light-switch .light-switch-label {\n    position: absolute;\n    width: 2rem;\n    height: 2rem; }\n    .light-switch .light-switch-label.on-value {\n      left: 0;\n      background: #00b007; }\n    .light-switch .light-switch-label.off-value {\n      right: 0;\n      background: #ebedef; }\n\n.slide-deck {\n  height: auto;\n  position: relative;\n  transition: all .5s ease;\n  /*\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    */\n  /*\n    .slide-fade-forward-leave-active,\n    .slide-fade-forward-leave-to {\n        z-index: 1;\n        transform: translateX(-100%);\n    }\n\n    .slide-fade-forward-enter-active,\n    .slide-fade-backward-enter-active {\n        z-index: 2;\n        transition: all 2s ease-out;\n    }\n    .slide-fade-forward-leave-active,\n    .slide-fade-backward-leave-active {\n        z-index: 1;\n        transition: all 2s cubic-bezier(1.0, 0.5, 0.8, 1.0);\n    }\n\n    .slide-fade-forward-enter,\n    .slide-fade-forward-leave-to,\n    .slide-fade-backward-enter,\n    .slide-fade-backward-leave-to {\n        position: absolute !important;\n        top: 0;\n        width: 100%;\n        opacity: 0;\n    }\n\n    .slide-fade-forward-enter,\n    .slide-fade-forward-leave-to {\n        right: 0;\n    }\n\n    .slide-fade-forward-enter,\n    .slide-fade-forward-leave-to {\n        transform: translateX(100%);\n    }\n\n    .slide-fade-backward-enter,\n    .slide-fade-backward-leave-to {\n        transform: translateX(100%);\n    }\n    */ }\n  .slide-deck.slide-deck-flex {\n    display: flex;\n    align-items: center;\n    justify-content: center; }\n    .slide-deck.slide-deck-flex .slide-deck-content {\n      flex: 1; }\n  .slide-deck .slide-deck-controls {\n    position: absolute;\n    left: 50%;\n    bottom: 1rem;\n    transform: translateX(-50%); }\n  .slide-deck .slide-forward-enter-active,\n  .slide-deck .slide-forward-leave-active,\n  .slide-deck .slide-backward-enter-active,\n  .slide-deck .slide-backward-leave-active {\n    opacity: 0;\n    transition: all .5s ease; }\n  .slide-deck .slide-forward-enter-active,\n  .slide-deck .slide-backward-enter-active {\n    position: absolute;\n    top: 0;\n    width: 100%; }\n  .slide-deck .slide-forward-enter-active {\n    left: 0; }\n  .slide-deck .slide-backward-enter-active {\n    right: 0; }\n  .slide-deck .slide-forward-enter-active,\n  .slide-deck .slide-backward-leave-to {\n    transform: translateX(100%); }\n  .slide-deck .slide-forward-leave-to,\n  .slide-deck .slide-backward-enter-active {\n    transform: translateX(-100%); }\n  .slide-deck .slide-forward-enter-to,\n  .slide-deck .slide-backward-enter-to {\n    opacity: 1;\n    transform: translateX(0); }\n\n.slide-deck-controls .slide-deck-control-icon {\n  color: #fff;\n  font-size: 1rem; }\n  .slide-deck-controls .slide-deck-control-icon:not(:last-child) {\n    margin-right: 0.5rem; }\n\n.slide-deck-controls .slide-deck-control-icon.is-active {\n  color: #007bff; }\n\n.thumbnail-list {\n  width: 100%;\n  display: flex; }\n  .thumbnail-list:not(.thumbnail-list-grid) > * {\n    padding-right: 10px;\n    padding-bottom: 10px; }\n  .thumbnail-list.thumbnail-list-fill, .thumbnail-list.thumbnail-list-wrap {\n    flex-flow: row wrap; }\n  .thumbnail-list.thumbnail-list-noflex > * {\n    flex: 0; }\n  .thumbnail-list.thumbnail-list-fill > * {\n    flex: 1 0 auto; }\n  .thumbnail-list.thumbnail-list-wrap > * {\n    flex: 0 0 auto; }\n  .thumbnail-list.thumbnail-list-flex > * {\n    flex: 1; }\n\n.thumbnail-list-item {\n  max-width: 100%;\n  max-height: 100%;\n  /*\n    &:not(:only-child) {\n        margin-right: 10px;\n        margin-bottom: 10px;\n    }\n\n    &:nth-child(2n) {\n        opacity: .25;\n    }\n    */ }\n  .thumbnail-list-item > img {\n    max-width: 100%; }\n    .thumbnail-list-item > img.img-fluid {\n      width: 100%; }\n\n.wizard .slide-deck-content {\n  margin: 1rem; }\n\n.wizard .wizard-content {\n  overflow: hidden; }\n\n.wizard .wizard-buttons {\n  border-top: 1px solid #7d7d7d;\n  padding-top: 1rem;\n  margin-top: 1rem; }\n\n.wizard-buttons {\n  display: flex;\n  justify-content: space-between; }\n.wizard-progress {\n  justify-content: space-between;\n  align-items: center;\n  padding: 30px 0;\n  counter-reset: step; }\n\n/*\n.wizard-progress-wrapper {\n    width: 100%;\n    padding: 30px 0;\n\n    &:after {\n        visibility: hidden;\n        display: block;\n        font-size: 0;\n        content: \" \";\n        clear: both;\n        height: 0;\n    }\n}\n*/\n.wizard-step {\n  cursor: default;\n  display: inline-block;\n  list-style-type: none;\n  font-size: 1rem;\n  position: relative;\n  text-align: center;\n  text-transform: uppercase; }\n  .wizard-step:before {\n    width: 40px;\n    height: 40px;\n    content: counter(step);\n    counter-increment: step;\n    line-height: 36px;\n    font-size: 15px;\n    display: block;\n    text-align: center;\n    margin: 0 auto 10px auto;\n    border-radius: 50%;\n    background-color: white;\n    position: relative;\n    z-index: 1;\n    border: 2px solid #008cc0;\n    color: #008cc0; }\n  .wizard-step:after {\n    width: 100%;\n    height: 2px;\n    content: '';\n    position: absolute;\n    background-color: #7d7d7d;\n    top: 20px;\n    left: -50%; }\n  .wizard-step:first-child:after {\n    content: none; }\n  .wizard-step, .wizard-step:hover {\n    color: #7d7d7d;\n    text-decoration: none; }\n    .wizard-step:not(.disabled), .wizard-step:hover:not(.disabled) {\n      cursor: pointer; }\n  .wizard-step .wizard-step-label {\n    color: #008cc0; }\n  .wizard-step.disabled {\n    cursor: default; }\n    .wizard-step.disabled:before {\n      color: #7d7d7d;\n      border-color: #7d7d7d; }\n    .wizard-step.disabled .wizard-step-label {\n      color: #7d7d7d; }\n  .wizard-step.complete:before {\n    border-color: #55b776;\n    color: #55b776; }\n  .wizard-step.complete:before {\n    font-family: FontAwesome;\n    content: \"\\f00c\";\n    line-height: 40px; }\n  .wizard-step.complete + .wizard-step:after {\n    background-color: #55b776; }\n  .wizard-step.complete .wizard-step-label {\n    color: #55b776; }\n  .wizard-step.active:before {\n    border-color: #b10805;\n    color: #b10805; }\n  .wizard-step.active .wizard-step-label {\n    color: #b10805; }\n  .wizard:not(.wizard-finished) .wizard-step.active:hover:before,\n  .wizard:not(.wizard-finished) .wizard-step.complete:hover:before {\n    border-color: #b10805;\n    color: #b10805; }\n  .wizard:not(.wizard-finished) .wizard-step.complete:hover + .wizard-step:after {\n    background-color: #b10805; }\n\n.wizard-success {\n  text-align: center;\n  font-size: 1.25rem;\n  padding: 1.25rem; }\n  .wizard-success .wizard-success-title {\n    font-size: 1.875rem;\n    color: #55b776; }\n  .wizard-success .wizard-success-icon {\n    color: #55b776;\n    font-size: 1.25rem;\n    border: 5px solid #55b776;\n    border-radius: 100%;\n    text-align: center;\n    width: 7.5rem;\n    height: 7.5rem;\n    margin: 1.25rem auto;\n    position: relative; }\n    .wizard-success .wizard-success-icon i {\n      position: absolute;\n      width: 100%;\n      top: 50%;\n      left: 0;\n      line-height: 0; }\n\n.wizard-error {\n  text-align: center;\n  font-size: 1.25rem;\n  padding: 1.25rem; }\n  .wizard-error .wizard-error-title {\n    font-size: 1.875rem;\n    color: #b10805; }\n  .wizard-error .wizard-error-icon {\n    color: #b10805;\n    font-size: 1.25rem;\n    border: 5px solid #b10805;\n    border-radius: 100%;\n    text-align: center;\n    width: 7.5rem;\n    height: 7.5rem;\n    margin: 1.25rem auto;\n    position: relative; }\n    .wizard-error .wizard-error-icon i {\n      position: absolute;\n      width: 100%;\n      top: 50%;\n      left: 0;\n      line-height: 0; }\n\n";
-            styleInject(css$1);
 
             /** `Object#toString` result references. */
             var symbolTag = '[object Symbol]';
@@ -5011,7 +4980,7 @@
             }
 
             /** Used to detect strings that need a more robust regexp to match words. */
-            var reHasUnicodeWord = /[a-z][A-Z]|[A-Z]{2,}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]/;
+            var reHasUnicodeWord = /[a-z][A-Z]|[A-Z]{2}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]/;
 
             /**
              * Checks if `string` contains a word composed of Unicode symbols.
@@ -7916,9 +7885,11 @@
              * @returns {*} Returns the property value.
              */
             function safeGet(object, key) {
-              return key == '__proto__'
-                ? undefined
-                : object[key];
+              if (key == '__proto__') {
+                return;
+              }
+
+              return object[key];
             }
 
             /**
@@ -8009,7 +7980,7 @@
                   if (isArguments(objValue)) {
                     newValue = toPlainObject(objValue);
                   }
-                  else if (!isObject(objValue) || (srcIndex && isFunction(objValue))) {
+                  else if (!isObject(objValue) || isFunction(objValue)) {
                     newValue = initCloneObject(srcValue);
                   }
                 }
@@ -17848,7 +17819,7 @@
              */
 
             /** Used as the semantic version number. */
-            var VERSION = '4.17.10';
+            var VERSION = '4.17.11';
 
             /** Used to compose bitmasks for function metadata. */
             var WRAP_BIND_KEY_FLAG$6 = 2;
@@ -18472,7 +18443,6 @@
                 /*
                 // `url` is the server URL that will be used for the request
 
-
                 // `method` is the request method to be used when making the request
                 method: 'get', // default
 
@@ -18601,7 +18571,7 @@
 
             function transformRequest(transformer, context) {
                 if(!isFunction(transformer)) {
-                    throw new Error('The transformer must be a defined as a function with two arguments: [data, headers].');
+                    throw new Error('The transformer must be defined as a function with two arguments (data, headers).');
                 }
 
                 (context || RequestOptions.transformRequest).push(transformer);
@@ -18609,7 +18579,7 @@
 
             function transformResponse(transformer, context) {
                 if(!isFunction(transformer)) {
-                    throw new Error('The transformer must be a defined as a function with one arguments: [data].');
+                    throw new Error('The transformer must be defined as a function (data).');
                 }
 
                 (context || RequestOptions.transformResponse).push(transformer);
@@ -18698,7 +18668,11 @@
                         data: {},
                         headers: {},
                         params: {},
-                    }, cloneDeep(RequestOptions), options);
+                    }, cloneDeep(RequestOptions), options, {
+                        cancelToken: new axios.CancelToken(cancel => {
+                            this.$cancel = cancel;
+                        })
+                    });
 
                     forEach(PROXY_OPTION_METHODS, (callback, key) => {
                         this[method$1(key, 'option')] = bind$1(callback)('$options', this);
@@ -18738,6 +18712,10 @@
 
                 failed() {
                     return this.hasResponse() && !!this.$error;
+                }
+
+                cancel() {
+                    !this.$response && this.$cancel();
                 }
 
                 get(params = {}, headers = {}) {
@@ -18834,9 +18812,10 @@
                  * @return void
                  */
                 constructor(data = {}, params = {}) {
+                    this.$request = null;
                     this.$key = this.key();
-                    this.$properties = this.properties();
                     this.$files = this.files();
+                    this.$properties = this.properties();
 
                     forEach(params, (value, key) => {
                         this[key] = value;
@@ -18881,8 +18860,7 @@
                         (this.endpoint() || ''),
                         (this.exists() ? this.id() : null)
                     ].concat([].slice.call(arguments)))
-                    .join('/')
-                    .replace(/^\//, '');
+                    .join('/');
                 }
 
                 /**
@@ -18995,6 +18973,15 @@
                  */
                 getOriginalValue(key) {
                     return this.$changed[key] || this.$attributes[key];
+                }
+
+                /**
+                 * Get the Request object.
+                 *
+                 * @return {mixed}
+                 */
+                getRequest() {
+                    return this.$request;
                 }
 
                 /**
@@ -19146,6 +19133,16 @@
                 }
 
                 /**
+                 * Cancel the current request
+                 *
+                 * @param data object
+                 * @return bool
+                 */
+                cancel() {
+                    this.$request && this.$request.cancel();
+                }
+
+                /**
                  * Save the model to the database
                  *
                  * @param data object
@@ -19165,10 +19162,10 @@
                     this.fill(data);
 
                     return new Promise((resolve, reject) => {
-                        const request = this.constructor.request(this.uri(), assignIn({}, config));
                         const data = !this.hasFiles() ? this.toJson() : this.toFormData();
 
-                        request.post(data).then(response => {
+                        this.$request = this.constructor.request(this.uri(), Object.assign({}, config));
+                        this.$request.post(data).then(response => {
                             resolve(this.fill(response));
                         }, reject);
                     });
@@ -19184,10 +19181,10 @@
                     this.fill(data);
 
                     return new Promise((resolve, reject) => {
-                        const request = this.constructor.request(this.uri(), config);
                         const data = !this.hasFiles() ? this.toJson() : this.toFormData();
 
-                        request[(this.hasFiles() ? 'post' : 'put')](data).then(response => {
+                        this.$request = this.constructor.request(this.uri(), config);
+                        this.$request[(this.hasFiles() ? 'post' : 'put')](data).then(response => {
                             resolve(this.fill(response));
                         }, reject);
                     });
@@ -19196,8 +19193,8 @@
                 /**
                  * Delete an existing model
                  *
-                 * @param data object
-                 * @return bool
+                 * @param  {object} config
+                 * @return {bool}
                  */
                 delete(config = {}) {
                     return new Promise((resolve, reject) => {
@@ -19205,13 +19202,24 @@
                             reject(new Error('The model must have a primary key before it can be delete.'));
                         }
 
-                        const request = this.constructor.request(this.uri(), config);
-
-                        request.delete().then(response => {
+                        this.$request = this.constructor.request(this.uri(), config);
+                        this.$request.delete().then(response => {
                             resolve(response);
-                            //resolve(this.fill(response));
                         }, reject);
                     });
+                }
+
+                /**
+                 * Cancel the current HTTP request if one exists.
+                 *
+                 * @return {self}
+                 */
+                cancel() {
+                    if(this.$request) {
+                        this.$request.cancel();
+                    }
+
+                    return this;
                 }
 
                 /**
@@ -19271,20 +19279,17 @@
                  * @param data object
                  * @return bool
                  */
-                static search(uri, params = {}, config = {}) {
+                static search(params = {}, config = {}) {
                     const model = new this;
 
-                    if(!uri) {
-                        uri = model.uri();
-                    }
-
                     return new Promise((resolve, reject) => {
-                        const request = this.request(uri, config);
-
-                        request.get(params).then(response => {
-                            resolve(map(response.data, data => {
+                        model.$request = this.request(config.uri || model.uri(), config);
+                        model.$request.get(params).then(response => {
+                            response.data = response.data.map(data => {
                                 return new this(data);
-                            }));
+                            });
+
+                            resolve(response);
                         }, errors => {
                             reject(errors);
                         });
@@ -19300,7 +19305,8 @@
                 static find(id, config = {}) {
                     return new Promise((resolve, reject) => {
                         const model = new this;
-                        this.request(model.uri(id), config).get().then(response => {
+                        model.$request = this.request(model.uri(id), config);
+                        model.$request.get().then(response => {
                             resolve(model.initialize(response));
                         }, error => {
                             reject(error);
@@ -19452,7 +19458,7 @@
                 })
             }
 
-            var ActivityIndicator = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.center)?_c('div',{staticClass:"center-wrapper",class:{'position-relative': _vm.relative, 'position-fixed': _vm.fixed},style:({minHeight: _vm.unit(this.minHeight), minWidth: _vm.unit(this.minWidth)})},[_c('div',{staticClass:"center-content"},[_c(_vm.component,{tag:"component",attrs:{"size":_vm.size,"prefix":_vm.prefix}})],1)]):_c(_vm.component,{tag:"component",style:({minHeight: _vm.unit(this.minHeight), minWidth: _vm.unit(this.minWidth)}),attrs:{"size":_vm.size,"prefix":_vm.prefix}})},staticRenderFns: [],
+            var ActivityIndicator = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.center)?_c('div',{staticClass:"center-wrapper",class:{'position-relative': _vm.relative, 'position-fixed': _vm.fixed},style:(_vm.style)},[_c('div',{staticClass:"center-content d-flex flex-column align-items-center"},[_c(_vm.component,{tag:"component",attrs:{"size":_vm.size,"prefix":_vm.prefix}}),_vm._v(" "),(_vm.label)?_c('div',{staticClass:"activity-indicator-label",domProps:{"innerHTML":_vm._s(_vm.label)}}):_vm._e()],1)]):_c('div',{staticClass:"d-flex flex-column justify-content-center align-items-center",style:(_vm.style)},[_c(_vm.component,{tag:"component",attrs:{"size":_vm.size,"prefix":_vm.prefix}}),_vm._v(" "),(_vm.label)?_c('div',{staticClass:"activity-indicator-label",domProps:{"innerHTML":_vm._s(_vm.label)}}):_vm._e()],1)},staticRenderFns: [],
 
                 name: 'activity-indicator',
 
@@ -19464,6 +19470,8 @@
 
                     fixed: Boolean,
 
+                    label: String,
+
                     relative: Boolean,
 
                     type: {
@@ -19471,7 +19479,15 @@
                         default: 'dots'
                     },
 
+                    height: [String, Number],
+
+                    maxHeight: [String, Number],
+
                     minHeight: [String, Number],
+
+                    width: [String, Number],
+
+                    maxWidth: [String, Number],
 
                     minWidth: [String, Number]
 
@@ -19482,15 +19498,18 @@
                     ActivityIndicatorSpinner
                 },
 
-                methods: {
-
-                    unit(value) {
-                        return unit(value);
-                    }
-
-                },
-
                 computed: {
+
+                    style() {
+                        return {
+                            width: unit(this.width),
+                            maxWidth: unit(this.maxWidth),
+                            minWidth: unit(this.minWidth),
+                            height: unit(this.height),
+                            maxHeight: unit(this.maxHeight),
+                            minHeight: unit(this.minHeight)
+                        }
+                    },
 
                     component() {
                         return kebabCase(this.prefix + this.type.replace(this.prefix, ''));
@@ -19499,7 +19518,7 @@
 
             }
 
-            const loaded = {};
+            const LOADED_SCRIPTS = {};
 
             function element(url) {
                 const script = document.createElement('script');
@@ -19521,20 +19540,20 @@
             }
 
             function script(url) {
-                if(loaded[url] instanceof Promise) {
-                    return loaded[url];
+                if(LOADED_SCRIPTS[url] instanceof Promise) {
+                    return LOADED_SCRIPTS[url];
+                }
+                else if(LOADED_SCRIPTS[url] || document.querySelector(`script[src="${url}"]`)) {
+                    return new Promise((resolve, reject) => {
+                        resolve(LOADED_SCRIPTS[url]);
+                    });
                 }
 
-                return loaded[url] = new Promise((resolve, reject) => {
+                return LOADED_SCRIPTS[url] = new Promise((resolve, reject) => {
                     try {
-                        if(!loaded[url]) {
-                            append(element(url)).addEventListener('load', event => {
-                                resolve(loaded[url] = event);
-                            });
-                        }
-                        else {
-                            resolve(loaded[url]);
-                        }
+                        append(element(url)).addEventListener('load', event => {
+                            resolve(LOADED_SCRIPTS[url] = event);
+                        });
                     }
                     catch(e) {
                         reject(e);
@@ -19816,24 +19835,71 @@
 
             }
 
+            function assign$1 (obj, ...sources) {
+              sources.forEach(source => {
+                for (let key in source) {
+                  if (source.hasOwnProperty(key)) {
+                    obj[key] = source[key];
+                  }
+                }
+              });
+
+              return obj
+            }
+
             let icons = {};
 
-            var Icon = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('svg',{class:_vm.klass,style:(_vm.style),attrs:{"version":"1.1","role":_vm.label ? 'img' : 'presentation',"aria-label":_vm.label,"x":_vm.x,"y":_vm.y,"width":_vm.width,"height":_vm.height,"viewBox":_vm.box}},[_vm._t("default",[(_vm.icon && _vm.icon.paths)?_vm._l((_vm.icon.paths),function(path,i){return _c('path',_vm._b({key:`path-${i}`},'path',path,false))}):_vm._e(),_vm._v(" "),(_vm.icon && _vm.icon.polygons)?_vm._l((_vm.icon.polygons),function(polygon,i){return _c('polygon',_vm._b({key:`polygon-${i}`},'polygon',polygon,false))}):_vm._e(),_vm._v(" "),(_vm.icon && _vm.icon.raw)?[_c('g',{domProps:{"innerHTML":_vm._s(_vm.raw)}})]:_vm._e()])],2)},staticRenderFns: [],
-              name: 'icon',
+            var Icon = {
+              name: 'fa-icon',
+              render (h) {
+                if (this.name === null) {
+                  return h()
+                }
+
+                let options = {
+                  class: this.klass,
+                  style: this.style,
+                  attrs: {
+                    role: this.label ? 'img' : 'presentation',
+                    'aria-label': this.label || null,
+                    x: this.x,
+                    y: this.y,
+                    width: this.width,
+                    height: this.height,
+                    viewBox: this.box
+                  }
+                };
+
+                if (this.raw) {
+                  options.domProps = {
+                    innerHTML: this.raw
+                  };
+                }
+
+                return h(
+                  'svg',
+                  options,
+                  this.raw && this.icon ? null : (this.$slots.default || [
+                    ...this.icon.paths.map((path, i) => h('path', {
+                      attrs: path,
+                      key: `path-${i}`
+                    })),
+                    ...this.icon.polygons.map((polygon, i) => h('polygon', {
+                      attrs: polygon,
+                      key: `polygon-${i}`
+                    }))
+                  ]))
+              },
               props: {
                 name: {
                   type: String,
                   validator (val) {
-                    if (val) {
-                      if (!(val in icons)) {
-                        console.warn(`Invalid prop: prop "name" is referring to an unregistered icon "${val}".` +
-                          `\nPlease make sure you have imported this icon before using it.`);
-                        return false
-                      }
-                      return true
+                    if (val && !(val in icons)) {
+                      console.warn(`Invalid prop: prop "name" is referring to an unregistered icon "${val}".` +
+                        `\nPlease make sure you have imported this icon before using it.`);
+                      return false
                     }
-                    console.warn(`Invalid prop: prop "name" is required.`);
-                    return false
+                    return true
                   }
                 },
                 scale: [Number, String],
@@ -19873,7 +19939,8 @@
                     'fa-flip-horizontal': this.flip === 'horizontal',
                     'fa-flip-vertical': this.flip === 'vertical',
                     'fa-inverse': this.inverse,
-                    'fa-pulse': this.pulse
+                    'fa-pulse': this.pulse,
+                    [this.$options.name]: true
                   }
                 },
                 icon () {
@@ -19934,15 +20001,20 @@
                 }
               },
               mounted () {
+                if (!this.name && this.name !== null && this.$children.length === 0) {
+                  console.warn(`Invalid prop: prop "name" is required.`);
+                  return
+                }
+
                 if (this.icon) {
                   return
                 }
-                this.$children.forEach(child => {
-                  child.outerScale = this.normalizedScale;
-                });
+
                 let width = 0;
                 let height = 0;
                 this.$children.forEach(child => {
+                  child.outerScale = this.normalizedScale;
+
                   width = Math.max(width, child.width);
                   height = Math.max(height, child.height);
                 });
@@ -19956,22 +20028,25 @@
               register (data) {
                 for (let name in data) {
                   let icon = data[name];
+                  let {
+                    paths = [],
+                    d,
+                    polygons = [],
+                    points
+                  } = icon;
 
-                  if (!icon.paths) {
-                    icon.paths = [];
-                  }
-                  if (icon.d) {
-                    icon.paths.push({ d: icon.d });
-                  }
-
-                  if (!icon.polygons) {
-                    icon.polygons = [];
-                  }
-                  if (icon.points) {
-                    icon.polygons.push({ points: icon.points });
+                  if (d) {
+                    paths.push({ d });
                   }
 
-                  icons[name] = icon;
+                  if (points) {
+                    polygons.push({ points });
+                  }
+
+                  icons[name] = assign$1({}, icon, {
+                    paths,
+                    polygons
+                  });
                 }
               },
               icons
@@ -22011,7 +22086,7 @@
                     bindEvents: {
                         type: Array,
                         default() {
-                            return ['focus', 'blur', 'change', 'click', 'keyup', 'keydown', 'progress'];
+                            return ['focus', 'blur', 'change', 'click', 'keyup', 'keydown', 'progress', 'paste'];
                         }
                     },
 
@@ -22101,7 +22176,7 @@
 
                             forEach(events, name => {
                                 el.addEventListener(name, event => {
-                                    vnode.context.$emit(name, event, this);
+                                    vnode.context.$emit(name, event);
                                 });
                             });
                         }
@@ -22109,6 +22184,18 @@
                 },
 
                 methods: {
+
+                    blur() {
+                        if(this.getInputField()) {
+                            this.getInputField().blur();
+                        }
+                    },
+
+                    focus() {
+                        if(this.getInputField()) {
+                            this.getInputField().focus();
+                        }
+                    },
 
                     getInputField() {
                         return this.$el.querySelector('.form-control, input, select, textarea');
@@ -22122,10 +22209,6 @@
                         }
 
                         return !errors || isArray(errors) || isObject(errors) ? errors : [errors];
-                    },
-
-                    updated(value, event) {
-                        this.$emit(event || 'input', value);
                     }
 
                 },
@@ -22413,24 +22496,6 @@
 
                 }
 
-            }
-
-            function mergeClasses() {
-                const classes = {};
-
-                forEach([].slice.call(arguments), arg => {
-                    if(isObject(arg)) {
-                        assignIn(classes, arg);
-                    }
-                    else if(isArray(arg)) {
-                        merge(classes, arg);
-                    }
-                    else if(arg) {
-                        classes[arg] = true;
-                    }
-                });
-
-                return classes;
             }
 
             var CreditCardField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',{staticClass:"credit-card-field-wrapper",on:{"click":_vm.onClick}},[_vm._t("control",[_c('div',{staticClass:"credit-card-field",class:_vm.mergeClasses(_vm.controlClasses, _vm.variantClass, _vm.classes)},[_c('div',{staticClass:"credit-card-field-icon-wrapper"},[_c('div',{staticClass:"credit-card-field-icon-card"},[_c('div',{staticClass:"credit-card-field-icon-front"},[_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-jcb","data-brand":"jcb"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-visa","data-brand":"visa"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-amex","data-brand":"amex"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"credit-card","data-brand":"unknown","width":"20","height":"18"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-discover","data-brand":"discover"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-mastercard","data-brand":"mastercard"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-diners-club","data-brand":"dinersclub"}})],1),_vm._v(" "),_c('div',{staticClass:"credit-card-field-icon-back"},[_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"credit-card-alt","width":"23.33","height":"20"}})],1)])]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-fields"},[_c('input',{directives:[{name:"focus",rawName:"v-focus.transform",modifiers:{"transform":true}},{name:"validate",rawName:"v-validate:number",value:(_vm.validateNumber),expression:"validateNumber",arg:"number"},{name:"model",rawName:"v-model",value:(_vm.card.number),expression:"card.number"}],staticClass:"credit-card-field-field credit-card-field-number",class:_vm.mergeClasses({'is-empty': !_vm.card.number, 'is-invalid': _vm.validated.number === false}),attrs:{"max":"19","type":"text","placeholder":"Card number"},domProps:{"value":(_vm.card.number)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "number", $event.target.value);}}}),_vm._v(" "),_c('div',{staticClass:"credit-card-field-security-fields"},[_c('input',{directives:[{name:"focus",rawName:"v-focus"},{name:"validate",rawName:"v-validate:expiration",value:(_vm.validateExpiration),expression:"validateExpiration",arg:"expiration"},{name:"model",rawName:"v-model",value:(_vm.card.expiration),expression:"card.expiration"}],staticClass:"credit-card-field-field credit-card-field-expiration",class:_vm.mergeClasses({'is-empty': !_vm.card.expiration, 'is-invalid': _vm.validated.expiration === false}),attrs:{"type":"text","placeholder":"MM / YY","maxlength":"7"},domProps:{"value":(_vm.card.expiration)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "expiration", $event.target.value);}}}),_vm._v(" "),_c('input',{directives:[{name:"focus",rawName:"v-focus",value:(_vm.validateCvc),expression:"validateCvc"},{name:"validate",rawName:"v-validate:cvc",value:(_vm.validateCvc),expression:"validateCvc",arg:"cvc"},{name:"model",rawName:"v-model",value:(_vm.card.cvc),expression:"card.cvc"}],staticClass:"credit-card-field-field credit-card-field-cvc",class:_vm.mergeClasses({'is-empty': !_vm.card.cvc, 'is-invalid': _vm.validated.cvc === false}),attrs:{"type":"text","placeholder":"CVC","maxlength":"4","autocomplete":"off"},domProps:{"value":(_vm.card.cvc)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "cvc", $event.target.value);}}}),_vm._v(" "),_c('input',{directives:[{name:"focus",rawName:"v-focus",value:(_vm.validatePostalCode),expression:"validatePostalCode"},{name:"validate",rawName:"v-validate:postalCode",value:(_vm.validatePostalCode),expression:"validatePostalCode",arg:"postalCode"},{name:"model",rawName:"v-model",value:(_vm.card.postalCode),expression:"card.postalCode"}],staticClass:"credit-card-field-field credit-card-field-postal",class:_vm.mergeClasses({'is-empty': !_vm.card.postalCode, 'is-invalid': _vm.validated.postalCode === false}),attrs:{"max":"5","type":"text","placeholder":"Zip","maxlength":"5"},domProps:{"value":(_vm.card.postalCode)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "postalCode", $event.target.value);}}})]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-placeholder-mask"},[_vm._v("Number")]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-number-mask",domProps:{"innerHTML":_vm._s(_vm.card.number)}})])])]),_vm._v(" "),_vm._t("activity-indicator",[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.activity),expression:"activity"}],staticClass:"credit-card-field-activity"},[_c('activity-indicator',{attrs:{"size":"sm","type":"dots","center":""}})],1)]),_vm._v(" "),_vm._t("default"),_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)},staticRenderFns: [],
@@ -25036,7 +25101,7 @@
 
             }
 
-            var GiveworksForm = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.error)?_c('div',[_c('div',{staticClass:"center-wrapper"},[_c('div',{staticClass:"center-content"},[_c('http-error-response',{attrs:{"error":_vm.error}})],1)])]):(_vm.page.id)?_c('form',{class:_vm.classes,attrs:{"novalidate":"novalidate"},on:{"submit":function($event){$event.preventDefault();return _vm.submit($event)}}},[_c(_vm.pageTypeComponent,{tag:"component",attrs:{"orientation":_vm.orientation,"submitting":_vm.submitting,"form":_vm.form,"errors":_vm.errors,"page":_vm.page}})],1):_c('div',[_c('activity-indicator',{attrs:{"center":true,"size":"lg"}})],1)},staticRenderFns: [],
+            var GiveworksForm = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"giveworks-form"},[(_vm.error)?_c('div',[_c('div',{staticClass:"center-wrapper"},[_c('div',{staticClass:"center-content"},[_c('http-error-response',{attrs:{"error":_vm.error}})],1)])]):(_vm.page.id)?_c('form',{class:_vm.classes,attrs:{"novalidate":"novalidate"},on:{"submit":function($event){$event.preventDefault();return _vm.submit($event)}}},[_c(_vm.pageTypeComponent,{tag:"component",attrs:{"orientation":_vm.orientation,"submitting":_vm.submitting,"form":_vm.form,"errors":_vm.errors,"page":_vm.page}})],1):_c('div',[_c('activity-indicator',{attrs:{"center":true,"size":"lg"}})],1)])},staticRenderFns: [],
 
                 name: 'giveworks-form',
 
@@ -25289,15 +25354,50 @@
 
             }
 
-            var ProgressBar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"progress",style:({'height': _vm.formattedHeight})},[_c('div',{staticClass:"progress-bar",class:_vm.$mergeClasses(_vm.progressClasses, _vm.variantClass),style:({'width': _vm.offsetValue + '%'}),attrs:{"role":"progressbar","aria-valuenow":_vm.offsetValue,"aria-valuemin":_vm.min,"aria-valuemax":_vm.max}},[(_vm.label)?_c('span',[_vm._v(_vm._s(_vm.offsetValue)+"%")]):_vm._e()])])},staticRenderFns: [],
+            var MergeClasses = {
+
+                methods: {
+
+                    mergeClasses() {
+                        const classes = {};
+
+                        forEach([].slice.call(arguments), arg => {
+                            if(isObject(arg)) {
+                                assignIn(classes, arg);
+                            }
+                            else if(isArray(arg)) {
+                                merge(classes, arg);
+                            }
+                            else if(arg) {
+                                classes[arg] = true;
+                            }
+                        });
+
+                        return classes;
+                    }
+
+                }
+
+            }
+
+            var ProgressBar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"progress",style:({'height': _vm.formattedHeight})},[_c('div',{staticClass:"progress-bar",class:_vm.mergeClasses(_vm.progressClasses, _vm.variantClass),style:(_vm.styles),attrs:{"role":"progressbar","aria-valuenow":_vm.offsetValue,"aria-valuemin":_vm.min,"aria-valuemax":_vm.max}},[(!!_vm.label)?_c('span',[(_vm.label !== true)?[_vm._v(_vm._s(_vm.label))]:_vm._e(),_vm._v(" "+_vm._s(_vm.offsetValue)+"%")],2):_c('span',[_vm._t("default")],2)])])},staticRenderFns: [],
 
                 name: 'progress-bar',
 
                 mixins: [
-                    Variant
+                    Variant,
+                    MergeClasses
                 ],
 
                 props: {
+
+                    /**
+                     * A custom color to be applied inline in the styles vs a contextual
+                     * variant.
+                     *
+                     * @property String
+                     */
+                    color: String,
 
                     /**
                      * The progress bar percentage value
@@ -25321,7 +25421,7 @@
                      *
                      * @property String
                      */
-                    label: Boolean,
+                    label: [String, Boolean],
 
                     /**
                      * Should the progress bar appear with stripes
@@ -25378,6 +25478,13 @@
                             'progress-bar-striped': this.striped,
                             'progress-bar-animated': this.animated
                         };
+                    },
+
+                    styles() {
+                        return {
+                            width: `${this.offsetValue}%`,
+                            background: `${this.color} !important`
+                        };
                     }
 
                 }
@@ -25422,7 +25529,7 @@
                 });
             }
 
-            var Alert = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"alert",class:_vm.$mergeClasses(_vm.variantClass, {show: _vm.isVisible, fade: _vm.fade}),attrs:{"role":"alert"}},[(_vm.title || _vm.heading)?_c('alert-heading',[_vm._v(_vm._s(_vm.title || _vm.heading))]):_vm._e(),_vm._v(" "),_vm._t("default"),_vm._v(" "),(_vm.dismissible)?_c('alert-close',{on:{"click":function($event){_vm.dismiss();}}}):_vm._e(),_vm._v(" "),(typeof _vm.show === 'number')?_c('progress-bar',{staticClass:"my-3",attrs:{"variant":_vm.variant,"height":5,"value":_vm.dismissCount,"max":_vm.show}}):_vm._e()],2)},staticRenderFns: [],
+            var Alert = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"alert",class:_vm.mergeClasses(_vm.variantClass, {show: _vm.isVisible, fade: _vm.fade}),attrs:{"role":"alert"}},[(_vm.title || _vm.heading)?_c('alert-heading',[_vm._v(_vm._s(_vm.title || _vm.heading))]):_vm._e(),_vm._v(" "),_vm._t("default"),_vm._v(" "),(_vm.dismissible)?_c('alert-close',{on:{"click":function($event){_vm.dismiss();}}}):_vm._e(),_vm._v(" "),(typeof _vm.show === 'number')?_c('progress-bar',{staticClass:"my-3",attrs:{"variant":_vm.variant,"height":5,"value":_vm.dismissCount,"max":_vm.show}}):_vm._e()],2)},staticRenderFns: [],
 
                 name: 'alert',
 
@@ -25433,7 +25540,8 @@
                 },
 
                 mixins: [
-                    Variant
+                    Variant,
+                    MergeClasses
                 ],
 
                 props: {
@@ -25588,8 +25696,8 @@
                 return parseInt(str.replace(/[^\d.]+/g, ''));
             }
 
-            function input(div, event) {
-                div.innerHTML = event.target.value.replace(/(?:\r\n|\r|\n)/g, '<br />');
+            function input(div, el) {
+                div.innerHTML = el.value.replace(/(?:\r\n|\r|\n)/g, '<br />');
             }
 
             function height(el) {
@@ -25628,15 +25736,15 @@
                 const minHeight = height(el);
 
                 el.addEventListener('input', event => {
-                    input(div, event);
+                    input(div, event.target);
                     resize(el, div, minHeight, maxHeight);
                 });
 
                 document.body.appendChild(div);
 
-                el.dispatchEvent(new Event('input'));
+                input(div, el);
+                resize(el, div, minHeight, maxHeight);
             }
-
 
             var Autogrow = {
 
@@ -25652,10 +25760,6 @@
                     init(el, binding.value);
                 }
 
-            }
-
-            function Autogrow$1(Vue, options) {
-                Vue.directive('autogrow', Autogrow);
             }
 
             const convertAnimationDelayToInt = function(delay) {
@@ -25842,7 +25946,7 @@
                      * @return void
                      */
                     onClick(event) {
-                        this.$emit('click', event, this);
+                        this.$emit('click', event);
                     }
 
                 },
@@ -25923,23 +26027,35 @@
 
             });
 
-            var InputField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',[_vm._t("label",[(_vm.label || _vm.hasDefaultSlot)?_c('form-label',{attrs:{"for":_vm.id},domProps:{"innerHTML":_vm._s(_vm.label)}}):_vm._e()]),_vm._v(" "),_vm._t("control",[_c('input',{directives:[{name:"bind-events",rawName:"v-bind-events",value:(_vm.bindEvents),expression:"bindEvents"}],class:_vm.$mergeClasses(_vm.controlClasses, _vm.colorableClasses),attrs:{"id":_vm.id,"type":_vm.type,"name":_vm.name,"pattern":_vm.pattern,"readonly":_vm.readonly,"required":_vm.required,"maxlength":_vm.maxlength,"placeholder":_vm.placeholder,"disabled":_vm.disabled || _vm.readonly,"aria-label":_vm.label,"aria-describedby":_vm.id,"autocomplete":_vm.autocomplete},domProps:{"value":_vm.value},on:{"input":function($event){_vm.updated($event.target.value);}}})]),_vm._v(" "),_vm._t("default"),_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)},staticRenderFns: [],
+            var InputField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',{staticClass:"input-field",class:{'has-activity': _vm.activity}},[_vm._t("label",[(_vm.label || _vm.hasDefaultSlot)?_c('form-label',{ref:"label",attrs:{"for":_vm.id},domProps:{"innerHTML":_vm._s(_vm.label)}}):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"position-relative"},[_vm._t("control",[_c('input',{directives:[{name:"bind-events",rawName:"v-bind-events",value:(_vm.bindEvents),expression:"bindEvents"}],ref:"control",class:_vm.mergeClasses(_vm.controlClasses, _vm.colorableClasses),attrs:{"id":_vm.id,"type":_vm.type,"name":_vm.name,"pattern":_vm.pattern,"readonly":_vm.readonly,"required":_vm.required,"maxlength":_vm.maxlength,"placeholder":_vm.placeholder,"disabled":_vm.disabled || _vm.readonly,"aria-label":_vm.label,"aria-describedby":_vm.id,"autocomplete":_vm.autocomplete},domProps:{"value":_vm.value},on:{"input":function($event){_vm.$emit('input', $event.target.value);}}})]),_vm._v(" "),_vm._t("activity",[_c('transition',{attrs:{"name":"slide-fade"}},[(_vm.activity)?_c('activity-indicator',{key:"test",ref:"activity",attrs:{"type":"dots","size":_vm.size}}):_vm._e()],1)]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{ref:"feedback",attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):(_vm.invalidFeedback)?_c('form-feedback',{ref:"feedback",attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2),_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{ref:"help",domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()])],2)},staticRenderFns: [],
 
                 name: 'input-field',
 
                 mixins: [
                     Colorable,
-                    FormControl
+                    FormControl,
+                    MergeClasses
                 ],
 
                 components: {
                     HelpText,
                     FormGroup,
                     FormLabel,
-                    FormFeedback
+                    FormFeedback,
+                    ActivityIndicator
                 },
 
                 props: {
+
+                    /**
+                     * Show type activity indicator.
+                     *
+                     * @property Boolean
+                     */
+                    activity: {
+                        type: Boolean,
+                        default: false
+                    },
 
                     /**
                      * The type attribute
@@ -25964,64 +26080,6 @@
                 }
 
             });
-
-            var InputGroupText = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',{staticClass:"input-group-text",attrs:{"id":_vm.id}},[_vm._t("default",[_vm._v(_vm._s(_vm.text))])],2)},staticRenderFns: [],
-
-                name: 'input-group-text',
-
-                props: {
-
-                    /**
-                     * The id attribute
-                     *
-                     * @property String
-                     */
-                    id: String,
-
-                    /**
-                     * The type attribute
-                     *
-                     * @property String
-                     */
-                    text: [Array, Number, String]
-
-                }
-
-            }
-
-            var InputGroupAppend = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"input-group-append"},[(_vm.text)?_c('input-group-text',[_vm._t("default")],2):_vm._t("default")],2)},staticRenderFns: [],
-
-                name: 'input-group-append',
-
-                props: {
-
-                    /**
-                     * The type attribute
-                     *
-                     * @property String
-                     */
-                    text: Boolean
-
-                }
-
-            }
-
-            var InputGroupPrepend = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"input-group-prepend"},[(_vm.text)?_c('input-group-text',[_vm._t("default")],2):_vm._t("default")],2)},staticRenderFns: [],
-
-                name: 'input-group-prepend',
-
-                props: {
-
-                    /**
-                     * The type attribute
-                     *
-                     * @property String
-                     */
-                    text: Boolean
-
-                }
-
-            }
 
             var HasSlots = {
 
@@ -26086,7 +26144,65 @@
 
             }
 
-            var InputGroup = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"input-group",class:_vm.$mergeClasses(_vm.colorableClasses, _vm.sizeableClass)},[_vm._t("prepend",[(_vm.prepend instanceof Array)?[_c('input-group-prepend',_vm._l((_vm.prepend),function(value){return _c('input-group-text',{attrs:{"text":value}})}))]:(_vm.prepend)?[_c('input-group-prepend',{attrs:{"text":""}},[_vm._v(_vm._s(_vm.prepend))])]:_vm._e()]),_vm._v(" "),_vm._t("default"),_vm._v(" "),_vm._t("append",[(_vm.append instanceof Array)?[_c('input-group-append',_vm._l((_vm.append),function(value){return _c('input-group-text',{attrs:{"text":value}})}))]:(_vm.append)?[_c('input-group-append',{attrs:{"text":""}},[_vm._v(_vm._s(_vm.append))])]:_vm._e()])],2)},staticRenderFns: [],
+            var InputGroupText = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',{staticClass:"input-group-text",attrs:{"id":_vm.id}},[_vm._t("default",[_vm._v(_vm._s(_vm.text))])],2)},staticRenderFns: [],
+
+                name: 'input-group-text',
+
+                props: {
+
+                    /**
+                     * The id attribute
+                     *
+                     * @property String
+                     */
+                    id: String,
+
+                    /**
+                     * The type attribute
+                     *
+                     * @property String
+                     */
+                    text: [Array, Number, String]
+
+                }
+
+            }
+
+            var InputGroupAppend = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"input-group-append"},[(_vm.text)?_c('input-group-text',[_vm._t("default")],2):_vm._t("default")],2)},staticRenderFns: [],
+
+                name: 'input-group-append',
+
+                props: {
+
+                    /**
+                     * The type attribute
+                     *
+                     * @property String
+                     */
+                    text: Boolean
+
+                }
+
+            }
+
+            var InputGroupPrepend = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"input-group-prepend"},[(_vm.text)?_c('input-group-text',[_vm._t("default")],2):_vm._t("default")],2)},staticRenderFns: [],
+
+                name: 'input-group-prepend',
+
+                props: {
+
+                    /**
+                     * The type attribute
+                     *
+                     * @property String
+                     */
+                    text: Boolean
+
+                }
+
+            }
+
+            var InputGroup = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"input-group",class:_vm.mergeClasses(_vm.colorableClasses, _vm.sizeableClass)},[_vm._t("prepend",[(_vm.prepend instanceof Array)?[_c('input-group-prepend',_vm._l((_vm.prepend),function(value){return _c('input-group-text',{attrs:{"text":value}})}))]:(_vm.prepend)?[_c('input-group-prepend',{attrs:{"text":""}},[_vm._v(_vm._s(_vm.prepend))])]:_vm._e()]),_vm._v(" "),_vm._t("default"),_vm._v(" "),_vm._t("append",[(_vm.append instanceof Array)?[_c('input-group-append',_vm._l((_vm.append),function(value){return _c('input-group-text',{attrs:{"text":value}})}))]:(_vm.append)?[_c('input-group-append',{attrs:{"text":""}},[_vm._v(_vm._s(_vm.append))])]:_vm._e()])],2)},staticRenderFns: [],
 
                 name: 'input-group',
 
@@ -26099,7 +26215,8 @@
                 mixins: [
                     HasSlots,
                     Sizeable,
-                    Colorable
+                    Colorable,
+                    MergeClasses
                 ],
 
                 props: {
@@ -26125,13 +26242,14 @@
 
             });
 
-            var FormControl$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c(!_vm.select ? 'input' : 'select',{directives:[{name:"bind-events",rawName:"v-bind-events",value:(_vm.bindEvents),expression:"bindEvents"}],tag:"component",class:_vm.$mergeClasses(_vm.controlClasses, _vm.colorableClasses),attrs:{"name":_vm.name,"id":_vm.id,"type":!_vm.select ? _vm.type : false,"value":_vm.value,"pattern":_vm.pattern,"required":_vm.required,"readonly":_vm.readonly,"placeholder":_vm.placeholder,"disabled":_vm.disabled || _vm.readonly,"aria-label":_vm.label,"aria-describedby":_vm.id},on:{"input":_vm.updated}})},staticRenderFns: [],
+            var FormControl$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c(!_vm.select ? 'input' : 'select',{directives:[{name:"bind-events",rawName:"v-bind-events",value:(_vm.bindEvents),expression:"bindEvents"}],tag:"component",class:_vm.mergeClasses(_vm.controlClasses, _vm.colorableClasses),attrs:{"name":_vm.name,"id":_vm.id,"type":!_vm.select ? _vm.type : false,"value":_vm.value,"pattern":_vm.pattern,"required":_vm.required,"readonly":_vm.readonly,"placeholder":_vm.placeholder,"disabled":_vm.disabled || _vm.readonly,"aria-label":_vm.label,"aria-describedby":_vm.id}})},staticRenderFns: [],
 
                 name: 'form-control',
 
                 mixins: [
                     Colorable,
-                    FormControl
+                    FormControl,
+                    MergeClasses
                 ],
 
                 props: {
@@ -26167,7 +26285,7 @@
 
             });
 
-            var RadioField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.$mergeClasses(_vm.controlClass, _vm.customControlClass, _vm.sizeableClass, _vm.inline ? _vm.inlineClass : '')},[(_vm.custom && _vm.id)?[_c('input',{directives:[{name:"bind-events",rawName:"v-bind-events"}],class:_vm.$mergeClasses(_vm.inputClass, (_vm.invalidFeedback ? 'is-invalid' : '')),attrs:{"type":"radio","name":_vm.name,"id":_vm.id,"required":_vm.required,"disabled":_vm.disabled || _vm.readonly,"readonly":_vm.readonly,"pattern":_vm.pattern},domProps:{"value":_vm.value,"checked":_vm.checkedValue === _vm.value || _vm.checked},on:{"change":function($event){_vm.updated($event.target.value, 'change');}}}),_vm._v(" "),_c('label',{class:_vm.$mergeClasses(_vm.labelClass, _vm.colorableClasses),attrs:{"for":_vm.id}},[_vm._t("default",[_vm._v(_vm._s(_vm.label))]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)]:[_c('label',{class:_vm.$mergeClasses(_vm.labelClass, _vm.colorableClasses),attrs:{"for":_vm.id}},[_c('input',{directives:[{name:"bind-events",rawName:"v-bind-events"}],class:_vm.$mergeClasses(_vm.inputClass, (_vm.invalidFeedback ? 'is-invalid' : '')),attrs:{"type":"radio","name":_vm.name,"id":_vm.id,"required":_vm.required,"disabled":_vm.disabled || _vm.readonly,"readonly":_vm.readonly,"pattern":_vm.pattern},domProps:{"value":_vm.value,"checked":_vm.checkedValue === _vm.value || _vm.checked},on:{"change":function($event){_vm.updated($event.target.value, 'change');}}}),_vm._v(" "),_vm._t("default",[_vm._v(_vm._s(_vm.label))]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)],_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()])],2)},staticRenderFns: [],
+            var RadioField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.mergeClasses(_vm.controlClass, _vm.customControlClass, _vm.sizeableClass, _vm.inline ? _vm.inlineClass : '')},[(_vm.custom && _vm.id)?[_c('input',{directives:[{name:"bind-events",rawName:"v-bind-events"}],class:_vm.mergeClasses(_vm.inputClass, (_vm.invalidFeedback ? 'is-invalid' : '')),attrs:{"type":"radio","name":_vm.name,"id":_vm.id,"required":_vm.required,"disabled":_vm.disabled || _vm.readonly,"readonly":_vm.readonly,"pattern":_vm.pattern},domProps:{"value":_vm.value,"checked":_vm.checkedValue === _vm.value || _vm.checked},on:{"change":function($event){_vm.$emit('change', $event.target.value);}}}),_vm._v(" "),_c('label',{class:_vm.mergeClasses(_vm.labelClass, _vm.colorableClasses),attrs:{"for":_vm.id}},[_vm._t("default",[_vm._v(_vm._s(_vm.label))]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)]:[_c('label',{class:_vm.mergeClasses(_vm.labelClass, _vm.colorableClasses),attrs:{"for":_vm.id}},[_c('input',{directives:[{name:"bind-events",rawName:"v-bind-events"}],class:_vm.mergeClasses(_vm.inputClass, (_vm.invalidFeedback ? 'is-invalid' : '')),attrs:{"type":"radio","name":_vm.name,"id":_vm.id,"required":_vm.required,"disabled":_vm.disabled || _vm.readonly,"readonly":_vm.readonly,"pattern":_vm.pattern},domProps:{"value":_vm.value,"checked":_vm.checkedValue === _vm.value || _vm.checked},on:{"change":function($event){_vm.$emit('change', $event.target.value);}}}),_vm._v(" "),_vm._t("default",[_vm._v(_vm._s(_vm.label))]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)],_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()])],2)},staticRenderFns: [],
 
                 name: 'radio-field',
 
@@ -26178,7 +26296,8 @@
 
                 mixins: [
                     Colorable,
-                    FormControl
+                    FormControl,
+                    MergeClasses
                 ],
 
                 model: {
@@ -26280,11 +26399,15 @@
 
             });
 
-            var CheckboxField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.$mergeClasses(_vm.controlClass, _vm.customControlClass, _vm.sizeableClass, _vm.inline ? _vm.inlineClass : '')},[(_vm.custom && _vm.id)?[_c('input',{directives:[{name:"bind-events",rawName:"v-bind-events"}],class:_vm.$mergeClasses(_vm.inputClass, (_vm.invalidFeedback ? 'is-invalid' : '')),attrs:{"type":"checkbox","name":_vm.name,"id":_vm.id,"required":_vm.required,"disabled":_vm.disabled || _vm.readonly,"readonly":_vm.readonly,"pattern":_vm.pattern},domProps:{"value":_vm.value,"checked":_vm.checkedValues.indexOf(_vm.value) !== -1 || _vm.checked},on:{"change":function($event){_vm.updated($event.target.value, 'change');}}}),_vm._v(" "),_c('label',{class:_vm.$mergeClasses(_vm.labelClass, _vm.colorableClasses),attrs:{"for":_vm.id}},[_vm._t("default",[_vm._v(_vm._s(_vm.label))]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)]:[_c('label',{class:_vm.$mergeClasses(_vm.labelClass, _vm.colorableClasses),attrs:{"for":_vm.id}},[_c('input',{directives:[{name:"bind-events",rawName:"v-bind-events"}],class:_vm.$mergeClasses(_vm.inputClass, (_vm.invalidFeedback ? 'is-invalid' : '')),attrs:{"type":"checkbox","name":_vm.name,"id":_vm.id,"required":_vm.required,"disabled":_vm.disabled || _vm.readonly,"readonly":_vm.readonly,"pattern":_vm.pattern},domProps:{"value":_vm.value,"checked":_vm.checkedValues.indexOf(_vm.value) !== -1 || _vm.checked},on:{"change":function($event){_vm.updated($event.target.value, 'change');}}}),_vm._v(" "),_vm._t("default",[_vm._v(_vm._s(_vm.label))]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)],_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()])],2)},staticRenderFns: [],
+            var CheckboxField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.mergeClasses(_vm.controlClass, _vm.customControlClass, _vm.sizeableClass, _vm.inline ? _vm.inlineClass : '')},[(_vm.custom && _vm.id)?[_c('input',{directives:[{name:"bind-events",rawName:"v-bind-events"}],class:_vm.mergeClasses(_vm.inputClass, (_vm.invalidFeedback ? 'is-invalid' : '')),attrs:{"type":"checkbox","name":_vm.name,"id":_vm.id,"required":_vm.required,"disabled":_vm.disabled || _vm.readonly,"readonly":_vm.readonly,"pattern":_vm.pattern},domProps:{"value":_vm.value,"checked":_vm.checkedValues.indexOf(_vm.value) !== -1 || _vm.checked},on:{"change":function($event){_vm.update($event.target.value);}}}),_vm._v(" "),_c('label',{class:_vm.mergeClasses(_vm.labelClass, _vm.colorableClasses),attrs:{"for":_vm.id}},[_vm._t("default",[_vm._v(_vm._s(_vm.label))]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)]:[_c('label',{class:_vm.mergeClasses(_vm.labelClass, _vm.colorableClasses),attrs:{"for":_vm.id}},[_c('input',{directives:[{name:"bind-events",rawName:"v-bind-events"}],class:_vm.mergeClasses(_vm.inputClass, (_vm.invalidFeedback ? 'is-invalid' : '')),attrs:{"type":"checkbox","name":_vm.name,"id":_vm.id,"required":_vm.required,"disabled":_vm.disabled || _vm.readonly,"readonly":_vm.readonly,"pattern":_vm.pattern},domProps:{"value":_vm.value,"checked":_vm.checkedValues.indexOf(_vm.value) !== -1 || _vm.checked},on:{"change":function($event){_vm.update($event.target.value);}}}),_vm._v(" "),_vm._t("default",[_vm._v(_vm._s(_vm.label))]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)],_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()])],2)},staticRenderFns: [],
 
                 name: 'checkbox-field',
 
                 extends: RadioField$1,
+
+                mixins: [
+                    MergeClasses
+                ],
 
                 model: {
                     event: 'change',
@@ -26309,7 +26432,7 @@
 
                 methods: {
 
-                    updated(value) {
+                    update(value) {
                         const checked = this.checkedValues.slice(0);
                         const index = this.checkedValues.indexOf(value);
 
@@ -26338,7 +26461,7 @@
 
             const CUSTOM_SELECT_PREFIX = 'custom-select-';
 
-            var SelectField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',[_vm._t("label",[(_vm.label)?_c('form-label',{attrs:{"for":_vm.id},domProps:{"innerHTML":_vm._s(_vm.label)}}):_vm._e()]),_vm._v(" "),_vm._t("control",[_c('select',{class:_vm.$mergeClasses(_vm.controlClasses, _vm.colorableClasses),attrs:{"id":_vm.id,"name":_vm.name,"required":_vm.required,"disabled":_vm.disabled || _vm.readonly,"readonly":_vm.readonly,"pattern":_vm.pattern},domProps:{"value":_vm.value},on:{"input":function($event){_vm.updated($event.target.value);}}},[_vm._t("default")],2)]),_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)},staticRenderFns: [],
+            var SelectField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',[_vm._t("label",[(_vm.label)?_c('form-label',{attrs:{"for":_vm.id},domProps:{"innerHTML":_vm._s(_vm.label)}}):_vm._e()]),_vm._v(" "),_vm._t("control",[_c('select',{class:_vm.mergeClasses(_vm.controlClasses, _vm.colorableClasses),attrs:{"id":_vm.id,"name":_vm.name,"required":_vm.required,"disabled":_vm.disabled || _vm.readonly,"readonly":_vm.readonly,"pattern":_vm.pattern},domProps:{"value":_vm.value},on:{"input":function($event){_vm.$emit('input', $event.target.value);}}},[_vm._t("default")],2)]),_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)},staticRenderFns: [],
 
                 name: 'select-field',
 
@@ -26352,8 +26475,9 @@
                 extends: FormControl,
 
                 mixins: [
+                    Colorable,
                     FormControl,
-                    Colorable
+                    MergeClasses
                 ],
 
                 props: {
@@ -26395,7 +26519,7 @@
 
             });
 
-            var TextareaField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',[_vm._t("label",[(_vm.label || _vm.hasDefaultSlot)?_c('form-label',{attrs:{"for":_vm.id}},[_vm._t("default",[_vm._v(_vm._s(_vm.label))])],2):_vm._e()]),_vm._v(" "),_vm._t("control",[_c('textarea',{directives:[{name:"bind-events",rawName:"v-bind-events",value:(_vm.bindEvents),expression:"bindEvents"}],class:_vm.$mergeClasses(_vm.controlClasses, _vm.colorableClasses),attrs:{"id":_vm.id,"rows":_vm.rows,"errors":_vm.errors,"pattern":_vm.pattern,"readonly":_vm.readonly,"required":_vm.required,"maxlength":_vm.maxlength,"placeholder":_vm.placeholder,"disabled":_vm.disabled || _vm.readonly},domProps:{"value":_vm.value},on:{"input":function($event){_vm.updated($event.target.value);}}})]),_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)},staticRenderFns: [],
+            var TextareaField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',[_vm._t("label",[(_vm.label || _vm.hasDefaultSlot)?_c('form-label',{attrs:{"for":_vm.id}},[_vm._t("default",[_vm._v(_vm._s(_vm.label))])],2):_vm._e()]),_vm._v(" "),_vm._t("control",[_c('div',{staticClass:"position-relative"},[_c('textarea',{directives:[{name:"bind-events",rawName:"v-bind-events",value:(_vm.bindEvents),expression:"bindEvents"}],class:_vm.mergeClasses(_vm.controlClasses, _vm.colorableClasses),attrs:{"id":_vm.id,"rows":_vm.rows,"errors":_vm.errors,"pattern":_vm.pattern,"readonly":_vm.readonly,"required":_vm.required,"maxlength":_vm.maxlength,"placeholder":_vm.placeholder,"disabled":_vm.disabled || _vm.readonly},domProps:{"value":_vm.value},on:{"input":function($event){_vm.$emit('input', $event.target.value);}}}),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)]),_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()])],2)},staticRenderFns: [],
 
                 name: 'textarea-field',
 
@@ -26408,7 +26532,8 @@
 
                 mixins: [
                     Colorable,
-                    FormControl
+                    FormControl,
+                    MergeClasses
                 ],
 
                 props: {
@@ -26441,12 +26566,6 @@
                 }
 
             });
-
-            function MergeClasses(Vue, options) {
-
-                Vue.prototype.$mergeClasses = mergeClasses;
-
-            }
 
             var global$1$1 = typeof global$1 !== "undefined" ? global$1 :
                         typeof self !== "undefined" ? self :
@@ -29142,7 +29261,7 @@
              * _.assign({ 'a': 0 }, new Foo, new Bar);
              * // => { 'a': 1, 'c': 3 }
              */
-            var assign$1 = createAssigner$1(function(object, source) {
+            var assign$2 = createAssigner$1(function(object, source) {
               if (isPrototype$1(source) || isArrayLike$1(source)) {
                 copyObject$1(source, keys$1(source), object);
                 return;
@@ -43562,7 +43681,7 @@
             };
 
             var object$1 = {
-              assign: assign$1, assignIn: assignIn$1, assignInWith: assignInWith$1, assignWith: assignWith$1, at: at$1,
+              assign: assign$2, assignIn: assignIn$1, assignInWith: assignInWith$1, assignWith: assignWith$1, at: at$1,
               create: create$1, defaults: defaults$1, defaultsDeep: defaultsDeep$1, entries: toPairs$1, entriesIn: toPairsIn$1,
               extend: assignIn$1, extendWith: assignInWith$1, findKey: findKey$1, findLastKey: findLastKey$1, forIn: forIn$1,
               forInRight: forInRight$1, forOwn: forOwn$1, forOwnRight: forOwnRight$1, functions: functions$1, functionsIn: functionsIn$1,
@@ -48421,7 +48540,7 @@
 
             var each = forEach_1;
 
-            const loaded$1 = {};
+            const loaded = {};
 
             function element$1(url) {
                 const script = document.createElement('script');
@@ -48443,19 +48562,19 @@
             }
 
             function script$1(url) {
-                if(loaded$1[url] instanceof Promise) {
-                    return loaded$1[url];
+                if(loaded[url] instanceof Promise) {
+                    return loaded[url];
                 }
 
-                return loaded$1[url] = new Promise((resolve, reject) => {
+                return loaded[url] = new Promise((resolve, reject) => {
                     try {
-                        if(!loaded$1[url]) {
+                        if(!loaded[url]) {
                             append$1(element$1(url)).addEventListener('load', event => {
-                                resolve(loaded$1[url] = event);
+                                resolve(loaded[url] = event);
                             });
                         }
                         else {
-                            resolve(loaded$1[url]);
+                            resolve(loaded[url]);
                         }
                     }
                     catch(e) {
@@ -49667,10 +49786,10 @@
                     Vue.component(key, component);
                 });
 
-                Vue.use(MergeClasses);
+                Vue.use(mergeClasses$1);
                 Vue.use(install);
                 Vue.component('giveworks-form', GiveworksForm);
-                Vue.use(Autogrow$1);
+                Vue.use(Autogrow);
 
                 if(window && window.Vue) {
                     const data = (

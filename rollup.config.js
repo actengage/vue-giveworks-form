@@ -1,4 +1,5 @@
 import fs from 'fs';
+import cssnano from 'cssnano';
 import pkg from "./package.json";
 //import { merge } from 'lodash';
 import { kebabCase } from 'lodash';
@@ -9,15 +10,15 @@ import json from 'rollup-plugin-json';
 import alias from 'rollup-plugin-alias';
 import babel from 'rollup-plugin-babel';
 import serve from 'rollup-plugin-serve';
+import postcss from 'rollup-plugin-postcss';
 import replace from 'rollup-plugin-replace';
 import progress from 'rollup-plugin-progress';
 import commonjs from 'rollup-plugin-commonjs';
+import prepend from 'postcss-prepend-selector';
 import resolve from 'rollup-plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import globals from 'rollup-plugin-node-globals';
 import builtins from 'rollup-plugin-node-builtins';
-
-import postcss from 'rollup-plugin-postcss';
 
 // The type of package Rollup should create
 const PACKAGE_FORMAT = 'umd';
@@ -108,9 +109,14 @@ const plugins = [
         scss: {
             indentedSyntax: false
         },
-        css: function(style, styles, compiler) {
-            fs.writeFileSync(`${DIST}${FILENAME}.css`, style);
-        }
+        css: `${DIST}${FILENAME}.css`
+    }),
+    postcss({
+        extract: `${DIST}${FILENAME}.css`,
+        plugins: [
+            prepend({ selector: '.giveworks-form ' }),
+            cssnano()
+        ]
     }),
     babel({
         exclude: NODE_MODULES,
@@ -125,7 +131,6 @@ const plugins = [
     commonjs({
         include: NODE_MODULES
     }),
-    postcss(),
     globals(),
     builtins()
 ];

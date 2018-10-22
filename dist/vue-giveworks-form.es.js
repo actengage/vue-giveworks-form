@@ -1,7 +1,5 @@
 import axios from 'axios';
 import moment from 'moment';
-import mergeClasses from 'vue-interface/src/Helpers/MergeClasses';
-import mergeClasses$1 from 'vue-interface/src/Plugins/MergeClasses';
 
 var global$1 = (typeof global !== "undefined" ? global :
             typeof self !== "undefined" ? self :
@@ -18437,6 +18435,7 @@ var RequestOptions = {
     /*
     // `url` is the server URL that will be used for the request
 
+
     // `method` is the request method to be used when making the request
     method: 'get', // default
 
@@ -18565,7 +18564,7 @@ var RequestOptions = {
 
 function transformRequest(transformer, context) {
     if(!isFunction(transformer)) {
-        throw new Error('The transformer must be defined as a function with two arguments (data, headers).');
+        throw new Error('The transformer must be a defined as a function with two arguments: [data, headers].');
     }
 
     (context || RequestOptions.transformRequest).push(transformer);
@@ -18573,7 +18572,7 @@ function transformRequest(transformer, context) {
 
 function transformResponse(transformer, context) {
     if(!isFunction(transformer)) {
-        throw new Error('The transformer must be defined as a function (data).');
+        throw new Error('The transformer must be a defined as a function with one arguments: [data].');
     }
 
     (context || RequestOptions.transformResponse).push(transformer);
@@ -18662,11 +18661,7 @@ class Request {
             data: {},
             headers: {},
             params: {},
-        }, cloneDeep(RequestOptions), options, {
-            cancelToken: new axios.CancelToken(cancel => {
-                this.$cancel = cancel;
-            })
-        });
+        }, cloneDeep(RequestOptions), options);
 
         forEach(PROXY_OPTION_METHODS, (callback, key) => {
             this[method$1(key, 'option')] = bind$1(callback)('$options', this);
@@ -18706,10 +18701,6 @@ class Request {
 
     failed() {
         return this.hasResponse() && !!this.$error;
-    }
-
-    cancel() {
-        !this.$response && this.$cancel();
     }
 
     get(params = {}, headers = {}) {
@@ -18806,10 +18797,9 @@ class Model {
      * @return void
      */
     constructor(data = {}, params = {}) {
-        this.$request = null;
         this.$key = this.key();
-        this.$files = this.files();
         this.$properties = this.properties();
+        this.$files = this.files();
 
         forEach(params, (value, key) => {
             this[key] = value;
@@ -18854,7 +18844,8 @@ class Model {
             (this.endpoint() || ''),
             (this.exists() ? this.id() : null)
         ].concat([].slice.call(arguments)))
-        .join('/');
+        .join('/')
+        .replace(/^\//, '');
     }
 
     /**
@@ -18967,15 +18958,6 @@ class Model {
      */
     getOriginalValue(key) {
         return this.$changed[key] || this.$attributes[key];
-    }
-
-    /**
-     * Get the Request object.
-     *
-     * @return {mixed}
-     */
-    getRequest() {
-        return this.$request;
     }
 
     /**
@@ -19127,16 +19109,6 @@ class Model {
     }
 
     /**
-     * Cancel the current request
-     *
-     * @param data object
-     * @return bool
-     */
-    cancel() {
-        this.$request && this.$request.cancel();
-    }
-
-    /**
      * Save the model to the database
      *
      * @param data object
@@ -19156,10 +19128,10 @@ class Model {
         this.fill(data);
 
         return new Promise((resolve, reject) => {
+            const request = this.constructor.request(this.uri(), assignIn({}, config));
             const data = !this.hasFiles() ? this.toJson() : this.toFormData();
 
-            this.$request = this.constructor.request(this.uri(), Object.assign({}, config));
-            this.$request.post(data).then(response => {
+            request.post(data).then(response => {
                 resolve(this.fill(response));
             }, reject);
         });
@@ -19175,10 +19147,10 @@ class Model {
         this.fill(data);
 
         return new Promise((resolve, reject) => {
+            const request = this.constructor.request(this.uri(), config);
             const data = !this.hasFiles() ? this.toJson() : this.toFormData();
 
-            this.$request = this.constructor.request(this.uri(), config);
-            this.$request[(this.hasFiles() ? 'post' : 'put')](data).then(response => {
+            request[(this.hasFiles() ? 'post' : 'put')](data).then(response => {
                 resolve(this.fill(response));
             }, reject);
         });
@@ -19187,8 +19159,8 @@ class Model {
     /**
      * Delete an existing model
      *
-     * @param  {object} config
-     * @return {bool}
+     * @param data object
+     * @return bool
      */
     delete(config = {}) {
         return new Promise((resolve, reject) => {
@@ -19196,24 +19168,13 @@ class Model {
                 reject(new Error('The model must have a primary key before it can be delete.'));
             }
 
-            this.$request = this.constructor.request(this.uri(), config);
-            this.$request.delete().then(response => {
+            const request = this.constructor.request(this.uri(), config);
+
+            request.delete().then(response => {
                 resolve(response);
+                //resolve(this.fill(response));
             }, reject);
         });
-    }
-
-    /**
-     * Cancel the current HTTP request if one exists.
-     *
-     * @return {self}
-     */
-    cancel() {
-        if(this.$request) {
-            this.$request.cancel();
-        }
-
-        return this;
     }
 
     /**
@@ -19273,17 +19234,20 @@ class Model {
      * @param data object
      * @return bool
      */
-    static search(params = {}, config = {}) {
+    static search(uri, params = {}, config = {}) {
         const model = new this;
 
-        return new Promise((resolve, reject) => {
-            model.$request = this.request(config.uri || model.uri(), config);
-            model.$request.get(params).then(response => {
-                response.data = response.data.map(data => {
-                    return new this(data);
-                });
+        if(!uri) {
+            uri = model.uri();
+        }
 
-                resolve(response);
+        return new Promise((resolve, reject) => {
+            const request = this.request(uri, config);
+
+            request.get(params).then(response => {
+                resolve(map(response.data, data => {
+                    return new this(data);
+                }));
             }, errors => {
                 reject(errors);
             });
@@ -19299,8 +19263,7 @@ class Model {
     static find(id, config = {}) {
         return new Promise((resolve, reject) => {
             const model = new this;
-            model.$request = this.request(model.uri(id), config);
-            model.$request.get().then(response => {
+            this.request(model.uri(id), config).get().then(response => {
                 resolve(model.initialize(response));
             }, error => {
                 reject(error);
@@ -19452,7 +19415,7 @@ var ActivityIndicatorSpinner = {
     })
 }
 
-var ActivityIndicator = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.center)?_c('div',{staticClass:"center-wrapper",class:{'position-relative': _vm.relative, 'position-fixed': _vm.fixed},style:(_vm.style)},[_c('div',{staticClass:"center-content d-flex flex-column align-items-center"},[_c(_vm.component,{tag:"component",attrs:{"size":_vm.size,"prefix":_vm.prefix}}),_vm._v(" "),(_vm.label)?_c('div',{staticClass:"activity-indicator-label",domProps:{"innerHTML":_vm._s(_vm.label)}}):_vm._e()],1)]):_c('div',{staticClass:"d-flex flex-column justify-content-center align-items-center",style:(_vm.style)},[_c(_vm.component,{tag:"component",attrs:{"size":_vm.size,"prefix":_vm.prefix}}),_vm._v(" "),(_vm.label)?_c('div',{staticClass:"activity-indicator-label",domProps:{"innerHTML":_vm._s(_vm.label)}}):_vm._e()],1)},staticRenderFns: [],
+var ActivityIndicator = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.center)?_c('div',{staticClass:"center-wrapper",class:{'position-relative': _vm.relative, 'position-fixed': _vm.fixed},style:({minHeight: _vm.unit(this.minHeight), minWidth: _vm.unit(this.minWidth)})},[_c('div',{staticClass:"center-content"},[_c(_vm.component,{tag:"component",attrs:{"size":_vm.size,"prefix":_vm.prefix}})],1)]):_c(_vm.component,{tag:"component",style:({minHeight: _vm.unit(this.minHeight), minWidth: _vm.unit(this.minWidth)}),attrs:{"size":_vm.size,"prefix":_vm.prefix}})},staticRenderFns: [],
 
     name: 'activity-indicator',
 
@@ -19464,8 +19427,6 @@ var ActivityIndicator = {render: function(){var _vm=this;var _h=_vm.$createEleme
 
         fixed: Boolean,
 
-        label: String,
-
         relative: Boolean,
 
         type: {
@@ -19473,15 +19434,7 @@ var ActivityIndicator = {render: function(){var _vm=this;var _h=_vm.$createEleme
             default: 'dots'
         },
 
-        height: [String, Number],
-
-        maxHeight: [String, Number],
-
         minHeight: [String, Number],
-
-        width: [String, Number],
-
-        maxWidth: [String, Number],
 
         minWidth: [String, Number]
 
@@ -19492,18 +19445,15 @@ var ActivityIndicator = {render: function(){var _vm=this;var _h=_vm.$createEleme
         ActivityIndicatorSpinner
     },
 
-    computed: {
+    methods: {
 
-        style() {
-            return {
-                width: unit(this.width),
-                maxWidth: unit(this.maxWidth),
-                minWidth: unit(this.minWidth),
-                height: unit(this.height),
-                maxHeight: unit(this.maxHeight),
-                minHeight: unit(this.minHeight)
-            }
-        },
+        unit(value) {
+            return unit(value);
+        }
+
+    },
+
+    computed: {
 
         component() {
             return kebabCase(this.prefix + this.type.replace(this.prefix, ''));
@@ -19512,7 +19462,7 @@ var ActivityIndicator = {render: function(){var _vm=this;var _h=_vm.$createEleme
 
 }
 
-const LOADED_SCRIPTS = {};
+const loaded = {};
 
 function element(url) {
     const script = document.createElement('script');
@@ -19534,20 +19484,20 @@ function append(script) {
 }
 
 function script(url) {
-    if(LOADED_SCRIPTS[url] instanceof Promise) {
-        return LOADED_SCRIPTS[url];
-    }
-    else if(LOADED_SCRIPTS[url] || document.querySelector(`script[src="${url}"]`)) {
-        return new Promise((resolve, reject) => {
-            resolve(LOADED_SCRIPTS[url]);
-        });
+    if(loaded[url] instanceof Promise) {
+        return loaded[url];
     }
 
-    return LOADED_SCRIPTS[url] = new Promise((resolve, reject) => {
+    return loaded[url] = new Promise((resolve, reject) => {
         try {
-            append(element(url)).addEventListener('load', event => {
-                resolve(LOADED_SCRIPTS[url] = event);
-            });
+            if(!loaded[url]) {
+                append(element(url)).addEventListener('load', event => {
+                    resolve(loaded[url] = event);
+                });
+            }
+            else {
+                resolve(loaded[url]);
+            }
         }
         catch(e) {
             reject(e);
@@ -22080,7 +22030,7 @@ var FormControl = {
         bindEvents: {
             type: Array,
             default() {
-                return ['focus', 'blur', 'change', 'click', 'keyup', 'keydown', 'progress', 'paste'];
+                return ['focus', 'blur', 'change', 'click', 'keyup', 'keydown', 'progress'];
             }
         },
 
@@ -22170,7 +22120,7 @@ var FormControl = {
 
                 forEach(events, name => {
                     el.addEventListener(name, event => {
-                        vnode.context.$emit(name, event);
+                        vnode.context.$emit(name, event, this);
                     });
                 });
             }
@@ -22178,18 +22128,6 @@ var FormControl = {
     },
 
     methods: {
-
-        blur() {
-            if(this.getInputField()) {
-                this.getInputField().blur();
-            }
-        },
-
-        focus() {
-            if(this.getInputField()) {
-                this.getInputField().focus();
-            }
-        },
 
         getInputField() {
             return this.$el.querySelector('.form-control, input, select, textarea');
@@ -22203,6 +22141,10 @@ var FormControl = {
             }
 
             return !errors || isArray(errors) || isObject(errors) ? errors : [errors];
+        },
+
+        updated(value, event) {
+            this.$emit(event || 'input', value);
         }
 
     },
@@ -22490,6 +22432,24 @@ var Variant = {
 
     }
 
+}
+
+function mergeClasses() {
+    const classes = {};
+
+    forEach([].slice.call(arguments), arg => {
+        if(isObject(arg)) {
+            assignIn(classes, arg);
+        }
+        else if(isArray(arg)) {
+            merge(classes, arg);
+        }
+        else if(arg) {
+            classes[arg] = true;
+        }
+    });
+
+    return classes;
 }
 
 var CreditCardField = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',{staticClass:"credit-card-field-wrapper",on:{"click":_vm.onClick}},[_vm._t("control",[_c('div',{staticClass:"credit-card-field",class:_vm.mergeClasses(_vm.controlClasses, _vm.variantClass, _vm.classes)},[_c('div',{staticClass:"credit-card-field-icon-wrapper"},[_c('div',{staticClass:"credit-card-field-icon-card"},[_c('div',{staticClass:"credit-card-field-icon-front"},[_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-jcb","data-brand":"jcb"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-visa","data-brand":"visa"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-amex","data-brand":"amex"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"credit-card","data-brand":"unknown","width":"20","height":"18"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-discover","data-brand":"discover"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-mastercard","data-brand":"mastercard"}}),_vm._v(" "),_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"cc-diners-club","data-brand":"dinersclub"}})],1),_vm._v(" "),_c('div',{staticClass:"credit-card-field-icon-back"},[_c('icon',{staticClass:"credit-card-field-icon",attrs:{"name":"credit-card-alt","width":"23.33","height":"20"}})],1)])]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-fields"},[_c('input',{directives:[{name:"focus",rawName:"v-focus.transform",modifiers:{"transform":true}},{name:"validate",rawName:"v-validate:number",value:(_vm.validateNumber),expression:"validateNumber",arg:"number"},{name:"model",rawName:"v-model",value:(_vm.card.number),expression:"card.number"}],staticClass:"credit-card-field-field credit-card-field-number",class:_vm.mergeClasses({'is-empty': !_vm.card.number, 'is-invalid': _vm.validated.number === false}),attrs:{"max":"19","type":"text","placeholder":"Card number"},domProps:{"value":(_vm.card.number)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "number", $event.target.value);}}}),_vm._v(" "),_c('div',{staticClass:"credit-card-field-security-fields"},[_c('input',{directives:[{name:"focus",rawName:"v-focus"},{name:"validate",rawName:"v-validate:expiration",value:(_vm.validateExpiration),expression:"validateExpiration",arg:"expiration"},{name:"model",rawName:"v-model",value:(_vm.card.expiration),expression:"card.expiration"}],staticClass:"credit-card-field-field credit-card-field-expiration",class:_vm.mergeClasses({'is-empty': !_vm.card.expiration, 'is-invalid': _vm.validated.expiration === false}),attrs:{"type":"text","placeholder":"MM / YY","maxlength":"7"},domProps:{"value":(_vm.card.expiration)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "expiration", $event.target.value);}}}),_vm._v(" "),_c('input',{directives:[{name:"focus",rawName:"v-focus",value:(_vm.validateCvc),expression:"validateCvc"},{name:"validate",rawName:"v-validate:cvc",value:(_vm.validateCvc),expression:"validateCvc",arg:"cvc"},{name:"model",rawName:"v-model",value:(_vm.card.cvc),expression:"card.cvc"}],staticClass:"credit-card-field-field credit-card-field-cvc",class:_vm.mergeClasses({'is-empty': !_vm.card.cvc, 'is-invalid': _vm.validated.cvc === false}),attrs:{"type":"text","placeholder":"CVC","maxlength":"4","autocomplete":"off"},domProps:{"value":(_vm.card.cvc)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "cvc", $event.target.value);}}}),_vm._v(" "),_c('input',{directives:[{name:"focus",rawName:"v-focus",value:(_vm.validatePostalCode),expression:"validatePostalCode"},{name:"validate",rawName:"v-validate:postalCode",value:(_vm.validatePostalCode),expression:"validatePostalCode",arg:"postalCode"},{name:"model",rawName:"v-model",value:(_vm.card.postalCode),expression:"card.postalCode"}],staticClass:"credit-card-field-field credit-card-field-postal",class:_vm.mergeClasses({'is-empty': !_vm.card.postalCode, 'is-invalid': _vm.validated.postalCode === false}),attrs:{"max":"5","type":"text","placeholder":"Zip","maxlength":"5"},domProps:{"value":(_vm.card.postalCode)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.card, "postalCode", $event.target.value);}}})]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-placeholder-mask"},[_vm._v("Number")]),_vm._v(" "),_c('div',{staticClass:"credit-card-field-number-mask",domProps:{"innerHTML":_vm._s(_vm.card.number)}})])])]),_vm._v(" "),_vm._t("activity-indicator",[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.activity),expression:"activity"}],staticClass:"credit-card-field-activity"},[_c('activity-indicator',{attrs:{"size":"sm","type":"dots","center":""}})],1)]),_vm._v(" "),_vm._t("default"),_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)},staticRenderFns: [],
@@ -25348,50 +25308,15 @@ var AlertHeading = {render: function(){var _vm=this;var _h=_vm.$createElement;va
 
 }
 
-var MergeClasses = {
-
-    methods: {
-
-        mergeClasses() {
-            const classes = {};
-
-            forEach([].slice.call(arguments), arg => {
-                if(isObject(arg)) {
-                    assignIn(classes, arg);
-                }
-                else if(isArray(arg)) {
-                    merge(classes, arg);
-                }
-                else if(arg) {
-                    classes[arg] = true;
-                }
-            });
-
-            return classes;
-        }
-
-    }
-
-}
-
-var ProgressBar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"progress",style:({'height': _vm.formattedHeight})},[_c('div',{staticClass:"progress-bar",class:_vm.mergeClasses(_vm.progressClasses, _vm.variantClass),style:(_vm.styles),attrs:{"role":"progressbar","aria-valuenow":_vm.offsetValue,"aria-valuemin":_vm.min,"aria-valuemax":_vm.max}},[(!!_vm.label)?_c('span',[(_vm.label !== true)?[_vm._v(_vm._s(_vm.label))]:_vm._e(),_vm._v(" "+_vm._s(_vm.offsetValue)+"%")],2):_c('span',[_vm._t("default")],2)])])},staticRenderFns: [],
+var ProgressBar = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"progress",style:({'height': _vm.formattedHeight})},[_c('div',{staticClass:"progress-bar",class:_vm.$mergeClasses(_vm.progressClasses, _vm.variantClass),style:({'width': _vm.offsetValue + '%'}),attrs:{"role":"progressbar","aria-valuenow":_vm.offsetValue,"aria-valuemin":_vm.min,"aria-valuemax":_vm.max}},[(_vm.label)?_c('span',[_vm._v(_vm._s(_vm.offsetValue)+"%")]):_vm._e()])])},staticRenderFns: [],
 
     name: 'progress-bar',
 
     mixins: [
-        Variant,
-        MergeClasses
+        Variant
     ],
 
     props: {
-
-        /**
-         * A custom color to be applied inline in the styles vs a contextual
-         * variant.
-         *
-         * @property String
-         */
-        color: String,
 
         /**
          * The progress bar percentage value
@@ -25415,7 +25340,7 @@ var ProgressBar = {render: function(){var _vm=this;var _h=_vm.$createElement;var
          *
          * @property String
          */
-        label: [String, Boolean],
+        label: Boolean,
 
         /**
          * Should the progress bar appear with stripes
@@ -25472,13 +25397,6 @@ var ProgressBar = {render: function(){var _vm=this;var _h=_vm.$createElement;var
                 'progress-bar-striped': this.striped,
                 'progress-bar-animated': this.animated
             };
-        },
-
-        styles() {
-            return {
-                width: `${this.offsetValue}%`,
-                background: `${this.color} !important`
-            };
         }
 
     }
@@ -25523,7 +25441,7 @@ function transition(el) {
     });
 }
 
-var Alert = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"alert",class:_vm.mergeClasses(_vm.variantClass, {show: _vm.isVisible, fade: _vm.fade}),attrs:{"role":"alert"}},[(_vm.title || _vm.heading)?_c('alert-heading',[_vm._v(_vm._s(_vm.title || _vm.heading))]):_vm._e(),_vm._v(" "),_vm._t("default"),_vm._v(" "),(_vm.dismissible)?_c('alert-close',{on:{"click":function($event){_vm.dismiss();}}}):_vm._e(),_vm._v(" "),(typeof _vm.show === 'number')?_c('progress-bar',{staticClass:"my-3",attrs:{"variant":_vm.variant,"height":5,"value":_vm.dismissCount,"max":_vm.show}}):_vm._e()],2)},staticRenderFns: [],
+var Alert = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"alert",class:_vm.$mergeClasses(_vm.variantClass, {show: _vm.isVisible, fade: _vm.fade}),attrs:{"role":"alert"}},[(_vm.title || _vm.heading)?_c('alert-heading',[_vm._v(_vm._s(_vm.title || _vm.heading))]):_vm._e(),_vm._v(" "),_vm._t("default"),_vm._v(" "),(_vm.dismissible)?_c('alert-close',{on:{"click":function($event){_vm.dismiss();}}}):_vm._e(),_vm._v(" "),(typeof _vm.show === 'number')?_c('progress-bar',{staticClass:"my-3",attrs:{"variant":_vm.variant,"height":5,"value":_vm.dismissCount,"max":_vm.show}}):_vm._e()],2)},staticRenderFns: [],
 
     name: 'alert',
 
@@ -25534,8 +25452,7 @@ var Alert = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_v
     },
 
     mixins: [
-        Variant,
-        MergeClasses
+        Variant
     ],
 
     props: {
@@ -25690,8 +25607,8 @@ function int(str) {
     return parseInt(str.replace(/[^\d.]+/g, ''));
 }
 
-function input(div, el) {
-    div.innerHTML = el.value.replace(/(?:\r\n|\r|\n)/g, '<br />');
+function input(div, event) {
+    div.innerHTML = event.target.value.replace(/(?:\r\n|\r|\n)/g, '<br />');
 }
 
 function height(el) {
@@ -25730,15 +25647,15 @@ function init(el, maxHeight) {
     const minHeight = height(el);
 
     el.addEventListener('input', event => {
-        input(div, event.target);
+        input(div, event);
         resize(el, div, minHeight, maxHeight);
     });
 
     document.body.appendChild(div);
 
-    input(div, el);
-    resize(el, div, minHeight, maxHeight);
+    el.dispatchEvent(new Event('input'));
 }
+
 
 var Autogrow = {
 
@@ -25754,6 +25671,10 @@ var Autogrow = {
         init(el, binding.value);
     }
 
+}
+
+function Autogrow$1(Vue, options) {
+    Vue.directive('autogrow', Autogrow);
 }
 
 const convertAnimationDelayToInt = function(delay) {
@@ -25940,7 +25861,7 @@ var BtnActivity = {render: function(){var _vm=this;var _h=_vm.$createElement;var
          * @return void
          */
         onClick(event) {
-            this.$emit('click', event);
+            this.$emit('click', event, this);
         }
 
     },
@@ -26021,35 +25942,23 @@ const plugin$8 = VueInstaller.use({
 
 });
 
-var InputField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',{staticClass:"input-field",class:{'has-activity': _vm.activity}},[_vm._t("label",[(_vm.label || _vm.hasDefaultSlot)?_c('form-label',{ref:"label",attrs:{"for":_vm.id},domProps:{"innerHTML":_vm._s(_vm.label)}}):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"position-relative"},[_vm._t("control",[_c('input',{directives:[{name:"bind-events",rawName:"v-bind-events",value:(_vm.bindEvents),expression:"bindEvents"}],ref:"control",class:_vm.mergeClasses(_vm.controlClasses, _vm.colorableClasses),attrs:{"id":_vm.id,"type":_vm.type,"name":_vm.name,"pattern":_vm.pattern,"readonly":_vm.readonly,"required":_vm.required,"maxlength":_vm.maxlength,"placeholder":_vm.placeholder,"disabled":_vm.disabled || _vm.readonly,"aria-label":_vm.label,"aria-describedby":_vm.id,"autocomplete":_vm.autocomplete},domProps:{"value":_vm.value},on:{"input":function($event){_vm.$emit('input', $event.target.value);}}})]),_vm._v(" "),_vm._t("activity",[_c('transition',{attrs:{"name":"slide-fade"}},[(_vm.activity)?_c('activity-indicator',{key:"test",ref:"activity",attrs:{"type":"dots","size":_vm.size}}):_vm._e()],1)]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{ref:"feedback",attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):(_vm.invalidFeedback)?_c('form-feedback',{ref:"feedback",attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2),_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{ref:"help",domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()])],2)},staticRenderFns: [],
+var InputField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',[_vm._t("label",[(_vm.label || _vm.hasDefaultSlot)?_c('form-label',{attrs:{"for":_vm.id},domProps:{"innerHTML":_vm._s(_vm.label)}}):_vm._e()]),_vm._v(" "),_vm._t("control",[_c('input',{directives:[{name:"bind-events",rawName:"v-bind-events",value:(_vm.bindEvents),expression:"bindEvents"}],class:_vm.$mergeClasses(_vm.controlClasses, _vm.colorableClasses),attrs:{"id":_vm.id,"type":_vm.type,"name":_vm.name,"pattern":_vm.pattern,"readonly":_vm.readonly,"required":_vm.required,"maxlength":_vm.maxlength,"placeholder":_vm.placeholder,"disabled":_vm.disabled || _vm.readonly,"aria-label":_vm.label,"aria-describedby":_vm.id,"autocomplete":_vm.autocomplete},domProps:{"value":_vm.value},on:{"input":function($event){_vm.updated($event.target.value);}}})]),_vm._v(" "),_vm._t("default"),_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)},staticRenderFns: [],
 
     name: 'input-field',
 
     mixins: [
         Colorable,
-        FormControl,
-        MergeClasses
+        FormControl
     ],
 
     components: {
         HelpText,
         FormGroup,
         FormLabel,
-        FormFeedback,
-        ActivityIndicator
+        FormFeedback
     },
 
     props: {
-
-        /**
-         * Show type activity indicator.
-         *
-         * @property Boolean
-         */
-        activity: {
-            type: Boolean,
-            default: false
-        },
 
         /**
          * The type attribute
@@ -26074,6 +25983,64 @@ const plugin$9 = VueInstaller.use({
     }
 
 });
+
+var InputGroupText = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',{staticClass:"input-group-text",attrs:{"id":_vm.id}},[_vm._t("default",[_vm._v(_vm._s(_vm.text))])],2)},staticRenderFns: [],
+
+    name: 'input-group-text',
+
+    props: {
+
+        /**
+         * The id attribute
+         *
+         * @property String
+         */
+        id: String,
+
+        /**
+         * The type attribute
+         *
+         * @property String
+         */
+        text: [Array, Number, String]
+
+    }
+
+}
+
+var InputGroupAppend = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"input-group-append"},[(_vm.text)?_c('input-group-text',[_vm._t("default")],2):_vm._t("default")],2)},staticRenderFns: [],
+
+    name: 'input-group-append',
+
+    props: {
+
+        /**
+         * The type attribute
+         *
+         * @property String
+         */
+        text: Boolean
+
+    }
+
+}
+
+var InputGroupPrepend = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"input-group-prepend"},[(_vm.text)?_c('input-group-text',[_vm._t("default")],2):_vm._t("default")],2)},staticRenderFns: [],
+
+    name: 'input-group-prepend',
+
+    props: {
+
+        /**
+         * The type attribute
+         *
+         * @property String
+         */
+        text: Boolean
+
+    }
+
+}
 
 var HasSlots = {
 
@@ -26138,65 +26105,7 @@ var Sizeable = {
 
 }
 
-var InputGroupText = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',{staticClass:"input-group-text",attrs:{"id":_vm.id}},[_vm._t("default",[_vm._v(_vm._s(_vm.text))])],2)},staticRenderFns: [],
-
-    name: 'input-group-text',
-
-    props: {
-
-        /**
-         * The id attribute
-         *
-         * @property String
-         */
-        id: String,
-
-        /**
-         * The type attribute
-         *
-         * @property String
-         */
-        text: [Array, Number, String]
-
-    }
-
-}
-
-var InputGroupAppend = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"input-group-append"},[(_vm.text)?_c('input-group-text',[_vm._t("default")],2):_vm._t("default")],2)},staticRenderFns: [],
-
-    name: 'input-group-append',
-
-    props: {
-
-        /**
-         * The type attribute
-         *
-         * @property String
-         */
-        text: Boolean
-
-    }
-
-}
-
-var InputGroupPrepend = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"input-group-prepend"},[(_vm.text)?_c('input-group-text',[_vm._t("default")],2):_vm._t("default")],2)},staticRenderFns: [],
-
-    name: 'input-group-prepend',
-
-    props: {
-
-        /**
-         * The type attribute
-         *
-         * @property String
-         */
-        text: Boolean
-
-    }
-
-}
-
-var InputGroup = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"input-group",class:_vm.mergeClasses(_vm.colorableClasses, _vm.sizeableClass)},[_vm._t("prepend",[(_vm.prepend instanceof Array)?[_c('input-group-prepend',_vm._l((_vm.prepend),function(value){return _c('input-group-text',{attrs:{"text":value}})}))]:(_vm.prepend)?[_c('input-group-prepend',{attrs:{"text":""}},[_vm._v(_vm._s(_vm.prepend))])]:_vm._e()]),_vm._v(" "),_vm._t("default"),_vm._v(" "),_vm._t("append",[(_vm.append instanceof Array)?[_c('input-group-append',_vm._l((_vm.append),function(value){return _c('input-group-text',{attrs:{"text":value}})}))]:(_vm.append)?[_c('input-group-append',{attrs:{"text":""}},[_vm._v(_vm._s(_vm.append))])]:_vm._e()])],2)},staticRenderFns: [],
+var InputGroup = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"input-group",class:_vm.$mergeClasses(_vm.colorableClasses, _vm.sizeableClass)},[_vm._t("prepend",[(_vm.prepend instanceof Array)?[_c('input-group-prepend',_vm._l((_vm.prepend),function(value){return _c('input-group-text',{attrs:{"text":value}})}))]:(_vm.prepend)?[_c('input-group-prepend',{attrs:{"text":""}},[_vm._v(_vm._s(_vm.prepend))])]:_vm._e()]),_vm._v(" "),_vm._t("default"),_vm._v(" "),_vm._t("append",[(_vm.append instanceof Array)?[_c('input-group-append',_vm._l((_vm.append),function(value){return _c('input-group-text',{attrs:{"text":value}})}))]:(_vm.append)?[_c('input-group-append',{attrs:{"text":""}},[_vm._v(_vm._s(_vm.append))])]:_vm._e()])],2)},staticRenderFns: [],
 
     name: 'input-group',
 
@@ -26209,8 +26118,7 @@ var InputGroup = {render: function(){var _vm=this;var _h=_vm.$createElement;var 
     mixins: [
         HasSlots,
         Sizeable,
-        Colorable,
-        MergeClasses
+        Colorable
     ],
 
     props: {
@@ -26236,14 +26144,13 @@ const plugin$10 = VueInstaller.use({
 
 });
 
-var FormControl$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c(!_vm.select ? 'input' : 'select',{directives:[{name:"bind-events",rawName:"v-bind-events",value:(_vm.bindEvents),expression:"bindEvents"}],tag:"component",class:_vm.mergeClasses(_vm.controlClasses, _vm.colorableClasses),attrs:{"name":_vm.name,"id":_vm.id,"type":!_vm.select ? _vm.type : false,"value":_vm.value,"pattern":_vm.pattern,"required":_vm.required,"readonly":_vm.readonly,"placeholder":_vm.placeholder,"disabled":_vm.disabled || _vm.readonly,"aria-label":_vm.label,"aria-describedby":_vm.id}})},staticRenderFns: [],
+var FormControl$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c(!_vm.select ? 'input' : 'select',{directives:[{name:"bind-events",rawName:"v-bind-events",value:(_vm.bindEvents),expression:"bindEvents"}],tag:"component",class:_vm.$mergeClasses(_vm.controlClasses, _vm.colorableClasses),attrs:{"name":_vm.name,"id":_vm.id,"type":!_vm.select ? _vm.type : false,"value":_vm.value,"pattern":_vm.pattern,"required":_vm.required,"readonly":_vm.readonly,"placeholder":_vm.placeholder,"disabled":_vm.disabled || _vm.readonly,"aria-label":_vm.label,"aria-describedby":_vm.id},on:{"input":_vm.updated}})},staticRenderFns: [],
 
     name: 'form-control',
 
     mixins: [
         Colorable,
-        FormControl,
-        MergeClasses
+        FormControl
     ],
 
     props: {
@@ -26279,7 +26186,7 @@ const plugin$11 = VueInstaller.use({
 
 });
 
-var RadioField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.mergeClasses(_vm.controlClass, _vm.customControlClass, _vm.sizeableClass, _vm.inline ? _vm.inlineClass : '')},[(_vm.custom && _vm.id)?[_c('input',{directives:[{name:"bind-events",rawName:"v-bind-events"}],class:_vm.mergeClasses(_vm.inputClass, (_vm.invalidFeedback ? 'is-invalid' : '')),attrs:{"type":"radio","name":_vm.name,"id":_vm.id,"required":_vm.required,"disabled":_vm.disabled || _vm.readonly,"readonly":_vm.readonly,"pattern":_vm.pattern},domProps:{"value":_vm.value,"checked":_vm.checkedValue === _vm.value || _vm.checked},on:{"change":function($event){_vm.$emit('change', $event.target.value);}}}),_vm._v(" "),_c('label',{class:_vm.mergeClasses(_vm.labelClass, _vm.colorableClasses),attrs:{"for":_vm.id}},[_vm._t("default",[_vm._v(_vm._s(_vm.label))]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)]:[_c('label',{class:_vm.mergeClasses(_vm.labelClass, _vm.colorableClasses),attrs:{"for":_vm.id}},[_c('input',{directives:[{name:"bind-events",rawName:"v-bind-events"}],class:_vm.mergeClasses(_vm.inputClass, (_vm.invalidFeedback ? 'is-invalid' : '')),attrs:{"type":"radio","name":_vm.name,"id":_vm.id,"required":_vm.required,"disabled":_vm.disabled || _vm.readonly,"readonly":_vm.readonly,"pattern":_vm.pattern},domProps:{"value":_vm.value,"checked":_vm.checkedValue === _vm.value || _vm.checked},on:{"change":function($event){_vm.$emit('change', $event.target.value);}}}),_vm._v(" "),_vm._t("default",[_vm._v(_vm._s(_vm.label))]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)],_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()])],2)},staticRenderFns: [],
+var RadioField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.$mergeClasses(_vm.controlClass, _vm.customControlClass, _vm.sizeableClass, _vm.inline ? _vm.inlineClass : '')},[(_vm.custom && _vm.id)?[_c('input',{directives:[{name:"bind-events",rawName:"v-bind-events"}],class:_vm.$mergeClasses(_vm.inputClass, (_vm.invalidFeedback ? 'is-invalid' : '')),attrs:{"type":"radio","name":_vm.name,"id":_vm.id,"required":_vm.required,"disabled":_vm.disabled || _vm.readonly,"readonly":_vm.readonly,"pattern":_vm.pattern},domProps:{"value":_vm.value,"checked":_vm.checkedValue === _vm.value || _vm.checked},on:{"change":function($event){_vm.updated($event.target.value, 'change');}}}),_vm._v(" "),_c('label',{class:_vm.$mergeClasses(_vm.labelClass, _vm.colorableClasses),attrs:{"for":_vm.id}},[_vm._t("default",[_vm._v(_vm._s(_vm.label))]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)]:[_c('label',{class:_vm.$mergeClasses(_vm.labelClass, _vm.colorableClasses),attrs:{"for":_vm.id}},[_c('input',{directives:[{name:"bind-events",rawName:"v-bind-events"}],class:_vm.$mergeClasses(_vm.inputClass, (_vm.invalidFeedback ? 'is-invalid' : '')),attrs:{"type":"radio","name":_vm.name,"id":_vm.id,"required":_vm.required,"disabled":_vm.disabled || _vm.readonly,"readonly":_vm.readonly,"pattern":_vm.pattern},domProps:{"value":_vm.value,"checked":_vm.checkedValue === _vm.value || _vm.checked},on:{"change":function($event){_vm.updated($event.target.value, 'change');}}}),_vm._v(" "),_vm._t("default",[_vm._v(_vm._s(_vm.label))]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)],_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()])],2)},staticRenderFns: [],
 
     name: 'radio-field',
 
@@ -26290,8 +26197,7 @@ var RadioField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;va
 
     mixins: [
         Colorable,
-        FormControl,
-        MergeClasses
+        FormControl
     ],
 
     model: {
@@ -26393,15 +26299,11 @@ const plugin$12 = VueInstaller.use({
 
 });
 
-var CheckboxField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.mergeClasses(_vm.controlClass, _vm.customControlClass, _vm.sizeableClass, _vm.inline ? _vm.inlineClass : '')},[(_vm.custom && _vm.id)?[_c('input',{directives:[{name:"bind-events",rawName:"v-bind-events"}],class:_vm.mergeClasses(_vm.inputClass, (_vm.invalidFeedback ? 'is-invalid' : '')),attrs:{"type":"checkbox","name":_vm.name,"id":_vm.id,"required":_vm.required,"disabled":_vm.disabled || _vm.readonly,"readonly":_vm.readonly,"pattern":_vm.pattern},domProps:{"value":_vm.value,"checked":_vm.checkedValues.indexOf(_vm.value) !== -1 || _vm.checked},on:{"change":function($event){_vm.update($event.target.value);}}}),_vm._v(" "),_c('label',{class:_vm.mergeClasses(_vm.labelClass, _vm.colorableClasses),attrs:{"for":_vm.id}},[_vm._t("default",[_vm._v(_vm._s(_vm.label))]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)]:[_c('label',{class:_vm.mergeClasses(_vm.labelClass, _vm.colorableClasses),attrs:{"for":_vm.id}},[_c('input',{directives:[{name:"bind-events",rawName:"v-bind-events"}],class:_vm.mergeClasses(_vm.inputClass, (_vm.invalidFeedback ? 'is-invalid' : '')),attrs:{"type":"checkbox","name":_vm.name,"id":_vm.id,"required":_vm.required,"disabled":_vm.disabled || _vm.readonly,"readonly":_vm.readonly,"pattern":_vm.pattern},domProps:{"value":_vm.value,"checked":_vm.checkedValues.indexOf(_vm.value) !== -1 || _vm.checked},on:{"change":function($event){_vm.update($event.target.value);}}}),_vm._v(" "),_vm._t("default",[_vm._v(_vm._s(_vm.label))]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)],_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()])],2)},staticRenderFns: [],
+var CheckboxField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.$mergeClasses(_vm.controlClass, _vm.customControlClass, _vm.sizeableClass, _vm.inline ? _vm.inlineClass : '')},[(_vm.custom && _vm.id)?[_c('input',{directives:[{name:"bind-events",rawName:"v-bind-events"}],class:_vm.$mergeClasses(_vm.inputClass, (_vm.invalidFeedback ? 'is-invalid' : '')),attrs:{"type":"checkbox","name":_vm.name,"id":_vm.id,"required":_vm.required,"disabled":_vm.disabled || _vm.readonly,"readonly":_vm.readonly,"pattern":_vm.pattern},domProps:{"value":_vm.value,"checked":_vm.checkedValues.indexOf(_vm.value) !== -1 || _vm.checked},on:{"change":function($event){_vm.updated($event.target.value, 'change');}}}),_vm._v(" "),_c('label',{class:_vm.$mergeClasses(_vm.labelClass, _vm.colorableClasses),attrs:{"for":_vm.id}},[_vm._t("default",[_vm._v(_vm._s(_vm.label))]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)]:[_c('label',{class:_vm.$mergeClasses(_vm.labelClass, _vm.colorableClasses),attrs:{"for":_vm.id}},[_c('input',{directives:[{name:"bind-events",rawName:"v-bind-events"}],class:_vm.$mergeClasses(_vm.inputClass, (_vm.invalidFeedback ? 'is-invalid' : '')),attrs:{"type":"checkbox","name":_vm.name,"id":_vm.id,"required":_vm.required,"disabled":_vm.disabled || _vm.readonly,"readonly":_vm.readonly,"pattern":_vm.pattern},domProps:{"value":_vm.value,"checked":_vm.checkedValues.indexOf(_vm.value) !== -1 || _vm.checked},on:{"change":function($event){_vm.updated($event.target.value, 'change');}}}),_vm._v(" "),_vm._t("default",[_vm._v(_vm._s(_vm.label))]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)],_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()])],2)},staticRenderFns: [],
 
     name: 'checkbox-field',
 
     extends: RadioField$1,
-
-    mixins: [
-        MergeClasses
-    ],
 
     model: {
         event: 'change',
@@ -26426,7 +26328,7 @@ var CheckboxField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement
 
     methods: {
 
-        update(value) {
+        updated(value) {
             const checked = this.checkedValues.slice(0);
             const index = this.checkedValues.indexOf(value);
 
@@ -26455,7 +26357,7 @@ const plugin$13 = VueInstaller.use({
 
 const CUSTOM_SELECT_PREFIX = 'custom-select-';
 
-var SelectField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',[_vm._t("label",[(_vm.label)?_c('form-label',{attrs:{"for":_vm.id},domProps:{"innerHTML":_vm._s(_vm.label)}}):_vm._e()]),_vm._v(" "),_vm._t("control",[_c('select',{class:_vm.mergeClasses(_vm.controlClasses, _vm.colorableClasses),attrs:{"id":_vm.id,"name":_vm.name,"required":_vm.required,"disabled":_vm.disabled || _vm.readonly,"readonly":_vm.readonly,"pattern":_vm.pattern},domProps:{"value":_vm.value},on:{"input":function($event){_vm.$emit('input', $event.target.value);}}},[_vm._t("default")],2)]),_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)},staticRenderFns: [],
+var SelectField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',[_vm._t("label",[(_vm.label)?_c('form-label',{attrs:{"for":_vm.id},domProps:{"innerHTML":_vm._s(_vm.label)}}):_vm._e()]),_vm._v(" "),_vm._t("control",[_c('select',{class:_vm.$mergeClasses(_vm.controlClasses, _vm.colorableClasses),attrs:{"id":_vm.id,"name":_vm.name,"required":_vm.required,"disabled":_vm.disabled || _vm.readonly,"readonly":_vm.readonly,"pattern":_vm.pattern},domProps:{"value":_vm.value},on:{"input":function($event){_vm.updated($event.target.value);}}},[_vm._t("default")],2)]),_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)},staticRenderFns: [],
 
     name: 'select-field',
 
@@ -26469,9 +26371,8 @@ var SelectField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;v
     extends: FormControl,
 
     mixins: [
-        Colorable,
         FormControl,
-        MergeClasses
+        Colorable
     ],
 
     props: {
@@ -26513,7 +26414,7 @@ const plugin$14 = VueInstaller.use({
 
 });
 
-var TextareaField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',[_vm._t("label",[(_vm.label || _vm.hasDefaultSlot)?_c('form-label',{attrs:{"for":_vm.id}},[_vm._t("default",[_vm._v(_vm._s(_vm.label))])],2):_vm._e()]),_vm._v(" "),_vm._t("control",[_c('div',{staticClass:"position-relative"},[_c('textarea',{directives:[{name:"bind-events",rawName:"v-bind-events",value:(_vm.bindEvents),expression:"bindEvents"}],class:_vm.mergeClasses(_vm.controlClasses, _vm.colorableClasses),attrs:{"id":_vm.id,"rows":_vm.rows,"errors":_vm.errors,"pattern":_vm.pattern,"readonly":_vm.readonly,"required":_vm.required,"maxlength":_vm.maxlength,"placeholder":_vm.placeholder,"disabled":_vm.disabled || _vm.readonly},domProps:{"value":_vm.value},on:{"input":function($event){_vm.$emit('input', $event.target.value);}}}),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)]),_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()])],2)},staticRenderFns: [],
+var TextareaField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',[_vm._t("label",[(_vm.label || _vm.hasDefaultSlot)?_c('form-label',{attrs:{"for":_vm.id}},[_vm._t("default",[_vm._v(_vm._s(_vm.label))])],2):_vm._e()]),_vm._v(" "),_vm._t("control",[_c('textarea',{directives:[{name:"bind-events",rawName:"v-bind-events",value:(_vm.bindEvents),expression:"bindEvents"}],class:_vm.$mergeClasses(_vm.controlClasses, _vm.colorableClasses),attrs:{"id":_vm.id,"rows":_vm.rows,"errors":_vm.errors,"pattern":_vm.pattern,"readonly":_vm.readonly,"required":_vm.required,"maxlength":_vm.maxlength,"placeholder":_vm.placeholder,"disabled":_vm.disabled || _vm.readonly},domProps:{"value":_vm.value},on:{"input":function($event){_vm.updated($event.target.value);}}})]),_vm._v(" "),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()]),_vm._v(" "),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),_vm._v(" "),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)},staticRenderFns: [],
 
     name: 'textarea-field',
 
@@ -26526,8 +26427,7 @@ var TextareaField$1 = {render: function(){var _vm=this;var _h=_vm.$createElement
 
     mixins: [
         Colorable,
-        FormControl,
-        MergeClasses
+        FormControl
     ],
 
     props: {
@@ -26560,6 +26460,12 @@ const plugin$15 = VueInstaller.use({
     }
 
 });
+
+function MergeClasses(Vue, options) {
+
+    Vue.prototype.$mergeClasses = mergeClasses;
+
+}
 
 var global$1$1 = typeof global$1 !== "undefined" ? global$1 :
             typeof self !== "undefined" ? self :
@@ -48534,7 +48440,7 @@ var forEach_1 = forEach$1$1;
 
 var each = forEach_1;
 
-const loaded = {};
+const loaded$1 = {};
 
 function element$1(url) {
     const script = document.createElement('script');
@@ -48556,19 +48462,19 @@ function append$1(script) {
 }
 
 function script$1(url) {
-    if(loaded[url] instanceof Promise) {
-        return loaded[url];
+    if(loaded$1[url] instanceof Promise) {
+        return loaded$1[url];
     }
 
-    return loaded[url] = new Promise((resolve, reject) => {
+    return loaded$1[url] = new Promise((resolve, reject) => {
         try {
-            if(!loaded[url]) {
+            if(!loaded$1[url]) {
                 append$1(element$1(url)).addEventListener('load', event => {
-                    resolve(loaded[url] = event);
+                    resolve(loaded$1[url] = event);
                 });
             }
             else {
-                resolve(loaded[url]);
+                resolve(loaded$1[url]);
             }
         }
         catch(e) {
@@ -49780,10 +49686,10 @@ function install$1(Vue, options) {
         Vue.component(key, component);
     });
 
-    Vue.use(mergeClasses$1);
+    Vue.use(MergeClasses);
     Vue.use(install);
     Vue.component('giveworks-form', GiveworksForm);
-    Vue.use(Autogrow);
+    Vue.use(Autogrow$1);
 
     if(window && window.Vue) {
         const data = (

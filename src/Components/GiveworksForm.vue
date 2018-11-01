@@ -262,14 +262,14 @@ export default {
 
     data() {
         return {
-            form: {
-                recurring: 0
-            },
             errors: {},
             error: null,
             model: false,
             submitting: false,
-            page: this.data || {}
+            page: this.data || {},
+            form: {
+                recurring: 0
+            }
         };
     }
 
@@ -277,9 +277,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import 'node_modules/the-one-true-form/src/main';
-@import 'node_modules/vue-interface/dist/vue-interface';
-@import 'node_modules/vue-place-autocomplete/dist/vue-place-autocomplete';
+@import 'node_modules/the-one-true-form/src/main.scss';
 
 .one-true-form {
     .text-sm {

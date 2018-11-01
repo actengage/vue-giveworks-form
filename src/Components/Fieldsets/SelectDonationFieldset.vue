@@ -59,7 +59,7 @@
             <div v-else>
                 Please note that this will be a monthly recurring donation. The amount you select will be charged automatically once each month on or about the {{ chargeDate }}.  You may cancel your donation at any time by contacting us.
             </div>
-        </div>
+        </alert>
 
     </fieldset>
 

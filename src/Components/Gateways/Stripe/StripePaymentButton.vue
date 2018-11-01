@@ -6,13 +6,13 @@
                 <div class="row">
                     <div class="col-xs-2">
                         <div class="mr-6">
-                            <icon v-if="card.brand === 'Visa'" name="cc-visa" scale="3.5"></icon>
-                            <icon v-else-if="card.brand === 'MasterCard'" name="cc-mastercard" scale="3.5"></icon>
-                            <icon v-else-if="card.brand === 'American Express'" name="cc-amex" scale="3.5"></icon>
-                            <icon v-else-if="card.brand === 'Discover'" name="cc-discover" scale="3.5"></icon>
-                            <icon v-else-if="card.brand === 'JCB'" name="cc-jcb" scale="3.5"></icon>
-                            <icon v-else-if="card.brand === 'Diners Club'" name="cc-diners-club" scale="3.5"></icon>
-                            <icon v-else name="credit-card" scale="3.5"></icon>
+                            <icon v-if="card.brand === 'Visa'" :icon="['fab', 'cc-visa']" scale="3.5"/>
+                            <icon v-else-if="card.brand === 'MasterCard'" :icon="['fab', 'cc-mastercard']" scale="3.5"/>
+                            <icon v-else-if="card.brand === 'American Express'" :icon="['fab', 'cc-amex']" scale="3.5"/>
+                            <icon v-else-if="card.brand === 'Discover'" :icon="['fab', 'cc-discover']" scale="3.5"/>
+                            <icon v-else-if="card.brand === 'JCB'" :icon="['fab', 'cc-jcb']" scale="3.5"/>
+                            <icon v-else-if="card.brand === 'Diners Club'" :icon="['fab', 'cc-diners-club']" scale="3.5"/>
+                            <icon v-else :icon="['far', 'credit-card']" scale="3.5"/>
                         </div>
                     </div>
                     <div class="col-xs-10">
@@ -27,41 +27,35 @@
 
             <div v-if="!loaded || submitting" class="row my-5 py-1">
                 <div class="col-xs-12">
-                    <activity-indicator size="sm" :center="true"></activity-indicator>
+                    <activity-indicator size="sm" :center="true"/>
                 </div>
             </div>
 
             <div v-else>
-                <div class="stripe-payment-button mt-2 mb-4"></div>
+                <div class="stripe-payment-button mt-2 mb-4"/>
             </div>
         </div>
 
-        <div v-else class="alert alert-danger">
+        <alert v-else variant="danger">
             <div class="row">
                 <div class="col-xs-3 text-center">
-                    <icon name="warning" scale="2" class="mt-2"></icon>
+                    <icon icon="exclamation-triangle" scale="2" class="mt-2"/>
                 </div>
                 <div class="col-xs-9">
                     {{ error.message }}
                 </div>
             </div>
-        </div>
+        </alert>
 
     </div>
 
 </template>
 
 <script>
-import 'vue-awesome/icons/credit-card';
-import 'vue-awesome/icons/brands/cc-jcb';
-import 'vue-awesome/icons/brands/cc-visa';
-import 'vue-awesome/icons/brands/cc-amex';
-import 'vue-awesome/icons/brands/cc-discover';
-import 'vue-awesome/icons/brands/cc-mastercard';
-import 'vue-awesome/icons/exclamation-triangle';
-import 'vue-awesome/icons/brands/cc-diners-club';
+import '@/Config/Icons';
 import Gateway from '@/Components/Gateways/Gateway';
-import Icon from 'vue-awesome/components/Icon';
+import Alert from 'vue-interface/src/Components/Alert';
+import { FontAwesomeIcon as Icon } from '@fortawesome/vue-fontawesome';
 import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
 
 export default {
@@ -70,6 +64,7 @@ export default {
 
     components: {
         Icon,
+        Alert,
         ActivityIndicator
     },
 
@@ -113,11 +108,11 @@ export default {
     },
 
     updated() {
-        if(this.loaded && !this.submitting && !this.error) {
+        if (this.loaded && !this.submitting && !this.error) {
             try {
                 this.$paymentRequestButton.mount(this.$el.querySelector('.stripe-payment-button'));
             }
-            catch(error) {
+            catch (error) {
                 this.card = false;
                 this.error = error;
                 this.form.token = null;
@@ -127,7 +122,7 @@ export default {
 
     created() {
         this.$dispatch.request('form').then(form => {
-            if(form.$card) {
+            if (form.$card) {
                 this.card = form.$card;
             }
         });
@@ -142,7 +137,7 @@ export default {
     },
 
     beforeDestroy() {
-        if(this.card) {
+        if (this.card) {
             this.$dispatch.request('form').then(form => {
                 form.$card = this.card;
             });
@@ -154,7 +149,6 @@ export default {
     },
 
     mounted() {
-        const el = this.$el.querySelector('.stripe-payment-button');
         const gateway = Gateway(this.gateway);
 
         this.$dispatch.request('submit:hide');
@@ -164,13 +158,13 @@ export default {
             this.$paymentRequestButton = gateway.paymentRequestButton(this.$paymentRequest);
 
             this.$paymentRequestButton.on('click', (event) => {
-                if(this.form.token) {
+                if (this.form.token) {
                     this.$dispatch.request('form:submit');
                 }
             });
 
             this.$paymentRequest.on('cancel', (event) => {
-                if(!this.changingCard) {
+                if (!this.changingCard) {
                     this.card = false;
                     this.form.token = null;
                 }
@@ -184,7 +178,7 @@ export default {
                 this.card = event.token.card;
                 this.form.token = event.token.id;
 
-                if(!this.changingCard) {
+                if (!this.changingCard) {
                     this.$dispatch.request('form:submit');
                 }
                 else {
@@ -198,5 +192,5 @@ export default {
         });
     }
 
-}
+};
 </script>

@@ -17,6 +17,7 @@
 <script>
 import SurveyField from './SurveyField';
 import FormControl from 'vue-interface/src/Mixins/FormControl';
+import InputField from 'vue-interface/src/Components/InputField';
 
 export default {
 
@@ -26,7 +27,11 @@ export default {
 
     mixins: [
         FormControl
-    ]
+    ],
 
-}
+    components: {
+        InputField
+    }
+
+};
 </script>

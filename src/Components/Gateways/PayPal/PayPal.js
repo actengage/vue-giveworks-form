@@ -1,10 +1,7 @@
 import Api from '../Api';
-import App from '@/Config/App';
-import 'vue-awesome/icons/brands/paypal';
 import script from 'vue-interface/src/Helpers/Script';
 
 export default class PayPal extends Api {
-
     api() {
         return 'App\\SiteApis\\Gateways\\PayPal';
     }
@@ -18,7 +15,7 @@ export default class PayPal extends Api {
     }
 
     paypal() {
-        if(!this._paypal) {
+        if (!this._paypal) {
             this._paypal = window.paypal;
         }
 
@@ -107,7 +104,6 @@ export default class PayPal extends Api {
     }
 
     script(success, error) {
-        script('https://www.paypalobjects.com/api/checkout.js').then(success, error)
+        script('https://www.paypalobjects.com/api/checkout.js').then(success, error);
     }
-
- }
+}

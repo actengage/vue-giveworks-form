@@ -3,7 +3,6 @@ import App from '@/Config/App';
 import script from 'vue-interface/src/Helpers/Script';
 
 export default class AuthorizetNet extends Api {
-
     api() {
         return 'App\\SiteApis\\Gateways\\AuthorizeNet';
     }
@@ -27,7 +26,7 @@ export default class AuthorizetNet extends Api {
     }
 
     accept() {
-        if(!this._accept) {
+        if (!this._accept) {
             this._accept = window.Accept;
         }
 
@@ -35,11 +34,10 @@ export default class AuthorizetNet extends Api {
     }
 
     script(success, error) {
-        const url = App.debug ? // Is app in developer mode?
-            'https://jstest.authorize.net/v1/Accept.js' : // Developer
-            'https://js.authorize.net/v1/Accept.js'; // Production;
+        const url = App.debug // Is app in developer mode?
+            ? 'https://jstest.authorize.net/v1/Accept.js' // Developer
+            : 'https://js.authorize.net/v1/Accept.js'; // Production;
 
         script(url).then(success, error);
     }
-
- }
+}

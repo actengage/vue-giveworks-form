@@ -14,7 +14,6 @@
                 <payment-info-fieldset :form="form" :errors="errors" :page="page" :submitting="submitting"/>
             </div>
         </div>
-
     </div>
 
 </template>
@@ -37,5 +36,5 @@ export default {
         FormComponent
     ]
 
-}
+};
 </script>

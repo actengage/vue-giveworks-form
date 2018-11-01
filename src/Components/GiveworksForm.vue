@@ -24,13 +24,12 @@
 </template>
 
 <script>
-import 'vue-interface/dist/vue-interface.css';
-import each from 'lodash-es/each';
 import Page from '@/Models/Page';
 import HttpConfig from '@/Config/Http';
 import HttpErrorResponse from './HttpErrorResponse';
 import Request from 'vue-interface/src/Http/Request';
 import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
+// import { each } from 'vue-interface/src/Helpers/Functions';
 
 import {
     HorizontalDonationForm,
@@ -87,7 +86,7 @@ export default {
         classes() {
             return {
                 'text-sm': this.width
-            }
+            };
         },
 
         pageTypeComponent() {
@@ -117,7 +116,7 @@ export default {
         showActivity() {
             const el = this.$el.querySelector('[type=submit]');
 
-            if(el) {
+            if (el) {
                 el.dispatchEvent(new Event('activity:show'));
             }
         },
@@ -125,7 +124,7 @@ export default {
         hideActivity() {
             const el = this.$el.querySelector('[type=submit]');
 
-            if(el) {
+            if (el) {
                 el.dispatchEvent(new Event('activity:hide'));
             }
         },
@@ -141,16 +140,14 @@ export default {
     },
 
     created() {
-        Request.option(HttpConfig);
-        Request.option({
-            headers: {
-                Authorization: 'Bearer ' + this.apiKey
-            }
-        });
+        Request.defaults = HttpConfig;
+        Request.defaults.headers = {
+            Authorization: 'Bearer ' + this.apiKey
+        };
     },
 
     mounted() {
-        if(!this.page.id) {
+        if (!this.page.id) {
             Page.find(this.pageId).then(model => {
                 this.page = model.toJson();
                 this.model = new Page({
@@ -174,23 +171,25 @@ export default {
     },
 
     beforeCreate() {
+        /*
         const replies = {
             'submit:show': 'show',
             'submit:hide': 'hide',
             'submit:enable': 'enable',
-            'submit:disable': 'disable',
+            'submit:disable': 'disable'
         };
 
         each(replies, (method, name) => {
-            this.$dispatch.reply(name, (resolve, reject) =>  {
+            this.$dispatch.reply(name, (resolve, reject) => {
                 try {
                     resolve(this[method]());
                 }
-                catch(error) {
+                catch (error) {
                     reject(error);
                 }
             });
         });
+        */
 
         this.$dispatch.reply('form', (resolve, reject) => {
             resolve(this);
@@ -206,13 +205,13 @@ export default {
 
                 resolve(location);
             }
-            catch(e) {
+            catch (e) {
                 reject(e);
             }
         });
 
         this.$dispatch.reply('form:submit', (resolve, reject) => {
-            if(!this.submitting) {
+            if (!this.submitting) {
                 this.showActivity();
                 this.errors = {};
                 this.submitting = true;
@@ -244,7 +243,7 @@ export default {
         });
 
         this.$dispatch.on('form:submit', data => {
-            if(this.$el.querySelector(':focus')) {
+            if (this.$el.querySelector(':focus')) {
                 this.$el.querySelector(':focus').blur();
             }
         });
@@ -274,11 +273,13 @@ export default {
         };
     }
 
-}
+};
 </script>
 
 <style lang="scss">
-@import './node_modules/the-one-true-form/src/main.scss';
+@import 'node_modules/the-one-true-form/src/main';
+@import 'node_modules/vue-interface/dist/vue-interface';
+@import 'node_modules/vue-place-autocomplete/dist/vue-place-autocomplete';
 
 .one-true-form {
     .text-sm {

@@ -89,6 +89,10 @@
 
 <script>
 import FormComponent from '@/Mixins/FormComponent';
+import InputField from 'vue-interface/src/Components/InputField';
+import BtnActivity from 'vue-interface/src/Components/BtnActivity';
+import TextareaField from 'vue-interface/src/Components/TextareaField';
+import { PlaceAutofill, PlaceAutocompleteField } from 'vue-place-autocomplete';
 
 export default {
 
@@ -97,6 +101,17 @@ export default {
     mixins: [
         FormComponent
     ],
+
+    components: {
+        BtnActivity,
+        InputField,
+        TextareaField,
+        PlaceAutocompleteField
+    },
+
+    directives: {
+        PlaceAutofill
+    },
 
     props: {
         submitting: Boolean
@@ -110,5 +125,5 @@ export default {
 
     }
 
-}
+};
 </script>

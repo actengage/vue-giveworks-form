@@ -7,7 +7,6 @@
 </template>
 
 <script>
-import chunk from 'lodash-es/chunk';
 import GoToWebinar from './Apis/GoToWebinar';
 import FormComponent from '@/Mixins/FormComponent';
 import VerticalSignupForm from './VerticalSignupForm';
@@ -24,5 +23,5 @@ export default {
         FormComponent
     ]
 
-}
+};
 </script>

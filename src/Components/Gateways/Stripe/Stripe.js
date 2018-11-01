@@ -1,53 +1,27 @@
 import Api from '../Api';
-import '@/Icons/apple-pay';
-import extend from 'lodash-es/extend';
-import 'vue-awesome/icons/regular/credit-card';
-import 'vue-awesome/icons/brands/google-wallet';
 import script from 'vue-interface/src/Helpers/Script';
-import Icon from 'vue-awesome/components/Icon';
+import { extend } from 'vue-interface/src/Helpers/Functions';
 
 export default class Stripe extends Api {
-
     api() {
         return 'App\\SiteApis\\Gateways\\Stripe';
     }
 
     buttons() {
         return [{
-            icon: 'regular/credit-card',
+            icon: ['far', 'credit-card'],
             label: 'Credit Card',
             component: 'stripe-credit-card'
-        },{
-            icon: 'brands/apple-pay',
+        }, {
+            icon: 'apple-pay',
             iconScale: 3.5,
             component: 'stripe-payment-button'
-        },{
-            icon: 'brands/google-wallet',
+        }, {
+            icon: 'google-wallet',
             iconScale: 1.5,
             label: 'Wallet',
             component: 'stripe-payment-button'
         }];
-
-        /*
-        //if(this.options.apple_pay) {
-            buttons.push({
-                icon: 'apple-pay',
-                iconScale: 3,
-                component: 'stripe-payment-button'
-            });
-        //}
-
-        //if(this.options.payment_stripe) {
-            buttons.push({
-                icon: 'google-wallet',
-                iconScale: 1.5,
-                label: 'Wallet',
-                component: 'stripe-payment-button'
-            });
-        //}
-
-        return buttons;
-        */
     }
 
     paymentRequest(amount, label) {
@@ -56,7 +30,7 @@ export default class Stripe extends Api {
             currency: 'usd',
             total: {
                 label: label,
-                amount: amount,
+                amount: amount
             }
         });
     }
@@ -95,7 +69,7 @@ export default class Stripe extends Api {
             }
         };
 
-        return this.elements().create('card', extend({style: style}, options));
+        return this.elements().create('card', extend({ style: style }, options));
     }
 
     elements() {
@@ -103,7 +77,7 @@ export default class Stripe extends Api {
     }
 
     stripe() {
-        if(!this.options.publishable_key) {
+        if (!this.options.publishable_key) {
             throw new Error('This site API was authenticated using an older version of Giveworks. To use new version of Giveworks you must setup your Stripe account again.');
         }
 
@@ -113,5 +87,4 @@ export default class Stripe extends Api {
     script(success, error) {
         script('https://js.stripe.com/v3/').then(success, error);
     }
-
 }

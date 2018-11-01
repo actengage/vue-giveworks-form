@@ -1,6 +1,6 @@
 <template>
 
-    <form-group :class="{'is-invalid': !!invalidFeedback}">
+    <div class="form-group" :class="{'is-invalid': !!invalidFeedback}">
 
         <label>
             {{question.question}}
@@ -28,13 +28,15 @@
             <form-feedback v-if="invalidFeedback" v-html="invalidFeedback" invalid />
         </slot>
 
-    </form-group>
+    </div>
 
 </template>
 
 <script>
 import SurveyField from './SurveyField';
 import FormControl from 'vue-interface/src/Mixins/FormControl';
+import FormFeedback from 'vue-interface/src/Components/FormFeedback';
+import CheckboxField from 'vue-interface/src/Components/CheckboxField';
 
 export default {
 
@@ -44,7 +46,12 @@ export default {
 
     mixins: [
         FormControl
-    ]
+    ],
 
-}
+    components: {
+        FormFeedback,
+        CheckboxField
+    }
+
+};
 </script>

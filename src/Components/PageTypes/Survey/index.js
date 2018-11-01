@@ -4,4 +4,4 @@ import HorizontalSurveyForm from './HorizontalSurveyForm';
 export {
     VerticalSurveyForm,
     HorizontalSurveyForm
-}
+};

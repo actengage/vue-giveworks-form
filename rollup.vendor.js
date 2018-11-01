@@ -9,7 +9,6 @@ export default [{
     },
     globals: {
         'vue': 'Vue',
-        '_': 'lodash-es',
         'axios': 'axios',
         'moment': 'moment'
     },

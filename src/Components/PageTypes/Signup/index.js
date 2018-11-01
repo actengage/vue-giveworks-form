@@ -4,4 +4,4 @@ import HorizontalSignupForm from './HorizontalSignupForm';
 export {
     VerticalSignupForm,
     HorizontalSignupForm
-}
+};

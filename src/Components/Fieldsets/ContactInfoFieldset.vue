@@ -51,7 +51,7 @@
     		<legend v-if="legends">Employment Information</legend>
 
 			<p v-if="!recurring">
-                <small class="text-muted" v-html="employmentOccurMessage"></small>
+                <small class="text-muted" v-html="employmentOccurMessage"/>
 			</p>
 
     		<div class="row" v-if="!isRetired">
@@ -66,7 +66,7 @@
             <div class="form-group">
                 <label class="custom-control custom-checkbox">
                     <input v-model="form.retired" type="checkbox" name="retired" value="1" class="custom-control-input" @change="setRetired($event.target.checked)">
-                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-indicator"/>
                     <small class="custom-control-label text-muted form-text">I'm retired</small>
                 </label>
             </div>
@@ -78,13 +78,12 @@
 </template>
 
 <script>
-import map from 'lodash-es/map';
-import each from 'lodash-es/each';
-import filter from 'lodash-es/filter';
-import compact from 'lodash-es/compact';
-import findIndex from 'lodash-es/findIndex';
 import States from '@/Config/States';
 import FormComponent from '@/Mixins/FormComponent';
+import InputField from 'vue-interface/src/Components/InputField';
+import SelectField from 'vue-interface/src/Components/SelectField';
+import PlaceAutofill from 'vue-place-autocomplete/src/PlaceAutofill';
+import PlaceAutocompleteField from 'vue-place-autocomplete/src/PlaceAutocompleteField';
 
 export default {
 
@@ -93,6 +92,16 @@ export default {
     mixins: [
         FormComponent
     ],
+
+    components: {
+        InputField,
+        SelectField,
+        PlaceAutocompleteField
+    },
+
+    directives: {
+        PlaceAutofill
+    },
 
     props: {
         address: Boolean,
@@ -127,23 +136,6 @@ export default {
 
     methods: {
 
-        onAutofill(place) {
-            const addressComponents = {
-                'address': ['street_number', 'route'],
-                'city': ['sublocality', 'locality'],
-                'state': ['administrative_area_level_1'],
-                'zip': ['postal_code']
-            };
-
-            each(addressComponents, (parts, field) => {
-                const part = compact(map(place.address_components, component => {
-                    return findIndex(component.types, part => {
-                        return parts.indexOf(part) !== -1;
-                    }) !== -1 ? component.short_name : null;
-                })).join(' ');
-            });
-        },
-
         setRetired(isChecked) {
             this.occupation = this.employer = isChecked ? 'Retired' : '';
         }
@@ -160,5 +152,5 @@ export default {
         this.$dispatch.off('place:changed');
     }
 
-}
+};
 </script>

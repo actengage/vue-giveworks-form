@@ -1,7 +1,6 @@
 import fs from 'fs';
 import cssnano from 'cssnano';
 import pkg from "./package.json";
-//import { merge } from 'lodash';
 import { kebabCase } from 'lodash';
 import { camelCase } from 'lodash';
 import { upperFirst } from 'lodash';
@@ -12,6 +11,7 @@ import babel from 'rollup-plugin-babel';
 import serve from 'rollup-plugin-serve';
 import postcss from 'rollup-plugin-postcss';
 import replace from 'rollup-plugin-replace';
+import { eslint } from 'rollup-plugin-eslint';
 import progress from 'rollup-plugin-progress';
 import commonjs from 'rollup-plugin-commonjs';
 import prepend from 'postcss-prepend-selector';
@@ -82,7 +82,6 @@ const OUTPUT_GLOBALS = {
     'vue': 'Vue',
     'axios': 'axios',
     'moment': 'moment',
-    '_': 'lodash'
 };
 
 // Define an array of external packages to not include in the bundle
@@ -105,19 +104,22 @@ const plugins = [
         resolve: ['.js', '.vue'],
         '@': `${SRC}`
     }),
+    eslint(),
     vue({
         scss: {
             indentedSyntax: false
         },
         css: `${DIST}${FILENAME}.css`
     }),
+    /*
     postcss({
         extract: `${DIST}${FILENAME}.css`,
         plugins: [
-            prepend({ selector: '.giveworks-form ' }),
-            cssnano()
+            prepend({ selector: '.one-true-form ' }),
+            // cssnano()
         ]
     }),
+    */
     babel({
         exclude: NODE_MODULES,
         include: [

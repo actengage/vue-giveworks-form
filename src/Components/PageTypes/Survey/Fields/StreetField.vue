@@ -21,6 +21,7 @@
 <script>
 import SurveyField from './SurveyField';
 import FormControl from 'vue-interface/src/Mixins/FormControl';
+import { PlaceAutofill, PlaceAutocompleteField } from 'vue-place-autocomplete';
 
 export default {
 
@@ -30,7 +31,15 @@ export default {
 
     mixins: [
         FormControl
-    ]
+    ],
 
-}
+    components: {
+        PlaceAutocompleteField
+    },
+
+    directives: {
+        PlaceAutofill
+    }
+
+};
 </script>

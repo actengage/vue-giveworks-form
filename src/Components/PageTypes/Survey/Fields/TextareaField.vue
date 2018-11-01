@@ -15,7 +15,9 @@
 
 <script>
 import SurveyField from './SurveyField';
+import Autogrow from 'vue-interface/src/Directives/Autogrow';
 import FormControl from 'vue-interface/src/Mixins/FormControl';
+import TextareaField from 'vue-interface/src/Components/TextareaField';
 
 export default {
 
@@ -25,7 +27,15 @@ export default {
 
     mixins: [
         FormControl
-    ]
+    ],
 
-}
+    components: {
+        TextareaField
+    },
+
+    directives: {
+        Autogrow
+    }
+
+};
 </script>

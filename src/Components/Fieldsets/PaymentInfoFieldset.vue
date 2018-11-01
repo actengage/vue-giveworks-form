@@ -4,7 +4,7 @@
 
         <legend>Payment Information</legend>
 
-        <payment-gateways :form="form" :errors="errors" :page="page"></payment-gateways>
+        <payment-gateways :form="form" :errors="errors" :page="page"/>
 
         <textarea-field v-if="page.options.add_comment" v-autogrow v-model="form.comment" id="comment" :label="commentMessage"/>
 
@@ -13,27 +13,30 @@
         <div v-if="page.options.add_optin">
             <label class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" v-model="form.optin" checked>
-                <span class="custom-control-indicator"></span>
-                <small v-html="optinMessage" class="custom-control-label text-muted form-text"></small>
+                <span class="custom-control-indicator"/>
+                <small v-html="optinMessage" class="custom-control-label text-muted form-text"/>
             </label>
         </div>
 
-        <div v-if="page.site.disclaimer" class="mt-3"><small class="text-muted" v-html="page.site.disclaimer"></small></div>
+        <div v-if="page.site.disclaimer" class="mt-3"><small class="text-muted" v-html="page.site.disclaimer"/></div>
 
     </fieldset>
 
 </template>
 
 <script>
-
-import FormComponent from '@/Mixins/FormComponent';
 import PaymentGateways from './PaymentGateways';
+import FormComponent from '@/Mixins/FormComponent';
+import BtnActivity from 'vue-interface/src/Components/BtnActivity';
+import TextareaField from 'vue-interface/src/Components/TextareaField';
 
 export default {
 
     name: 'payment-info-fieldset',
 
     components: {
+        BtnActivity,
+        TextareaField,
         PaymentGateways
     },
 
@@ -41,6 +44,5 @@ export default {
         FormComponent
     ]
 
-}
-
+};
 </script>

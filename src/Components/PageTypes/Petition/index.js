@@ -4,4 +4,4 @@ import HorizontalPetitionForm from './HorizontalPetitionForm';
 export {
     VerticalPetitionForm,
     HorizontalPetitionForm
-}
+};

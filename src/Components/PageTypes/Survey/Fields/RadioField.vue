@@ -3,8 +3,7 @@
     <form-group :class="{'is-invalid': !!invalidFeedback}">
 
         <label>
-            {{question.question}}
-            <sup v-if="question.required">*</sup>
+            {{question.question}} <sup v-if="question.required">*</sup>
         </label>
 
         <radio-field
@@ -35,6 +34,8 @@
 <script>
 import SurveyField from './SurveyField';
 import FormControl from 'vue-interface/src/Mixins/FormControl';
+import RadioField from 'vue-interface/src/Components/RadioField';
+import FormFeedback from 'vue-interface/src/Components/FormFeedback';
 
 export default {
 
@@ -44,7 +45,12 @@ export default {
 
     mixins: [
         FormControl
-    ]
+    ],
 
-}
+    components: {
+        RadioField,
+        FormFeedback
+    }
+
+};
 </script>

@@ -5,34 +5,32 @@
         <div class="row">
 
             <div :class="classes" v-for="button in buttons">
-
                 <button
                     type="button"
                     class="btn btn-block payment-gateway-button"
                     :class="{'btn-success': button.active, 'btn-secondary': !button.active}"
                     @click="activate(button)">
-                    <icon :name="button.icon" :scale="button.iconScale || 2" :class="{'mt-2 mb-1': !button.label}"></icon>
+                    <icon :icon="typeof button.icon === 'string' ? ['far', button.icon]: button.icon" :scale="button.iconScale || 2" :class="{'mt-2 mb-1': !button.label}"/>
                     <div v-if="button.label" class="pb-1 small">{{ button.label }}</div>
                 </button>
-
             </div>
-
         </div>
 
-        <div v-if="!buttons || !buttons.length" class="alert alert-danger">
+        <alert v-if="!buttons || !buttons.length" variant="danger">
             <div class="row">
                 <div class="col-xs-2 text-center">
-                    <icon name="warning" scale="2.25" class="mt-2"></icon>
+                    <icon icon="exclamation-triangle" scale="2.25" class="mt-2"/>
                 </div>
                 <div class="col-xs-10">
                     There are not payment gateways configured for this site!
                 </div>
             </div>
-        </div>
+        </alert>
+
         <div v-else>
             <hr>
             <div v-if="button.active" v-for="button in buttons">
-                <component :is="button.component" :form="form" :page="page" :errors="errors" :gateway="button.gateway"></component>
+                <component :is="button.component" :form="form" :page="page" :errors="errors" :gateway="button.gateway"/>
             </div>
         </div>
 
@@ -41,11 +39,10 @@
 </template>
 
 <script>
-import each from 'lodash-es/each';
-import merge from 'lodash-es/merge';
-import Gateway from '@/Components/Gateways/Gateway';
 import FormComponent from '@/Mixins/FormComponent';
-import Icon from 'vue-awesome/components/Icon';
+import Gateway from '@/Components/Gateways/Gateway';
+import Alert from 'vue-interface/src/Components/Alert';
+import { FontAwesomeIcon as Icon } from '@fortawesome/vue-fontawesome';
 import StripeCreditCard from '@/Components/Gateways/Stripe/StripeCreditCard';
 import PaypalPaymentButton from '@/Components/Gateways/PayPal/PayPalPaymentButton';
 import StripePaymentButton from '@/Components/Gateways/Stripe/StripePaymentButton';
@@ -57,10 +54,11 @@ export default {
 
     components: {
         Icon,
+        Alert,
         StripeCreditCard,
         StripePaymentButton,
         PaypalPaymentButton,
-        AuthorizeNetCreditCard,
+        AuthorizeNetCreditCard
     },
 
     mixins: [
@@ -76,7 +74,7 @@ export default {
         },
 
         deactivate() {
-            each(this.buttons, button => {
+            this.buttons.forEach(button => {
                 button.active = false;
             });
         },
@@ -84,12 +82,12 @@ export default {
         getButtons: function() {
             const buttons = [];
 
-            each(this.page.site.gateways, gateway => {
-                if(!Gateway(gateway).buttons) {
-                    throw new Error(Gateway(gateway).api()+' doesn\'t have a required buttons() method.');
+            this.page.site.gateways.forEach(gateway => {
+                if (!Gateway(gateway).buttons) {
+                    throw new Error(Gateway(gateway).api() + ' doesn\'t have a required buttons() method.');
                 }
 
-                each(Gateway(gateway).buttons(), button => {
+                Gateway(gateway).buttons().forEach(button => {
                     button.active = false;
                     button.gateway = gateway;
                     buttons.push(button);
@@ -111,14 +109,14 @@ export default {
         classes() {
             return {
                 'col-sm-6': this.width < 310,
-                'col-sm-6 col-lg-4': this.width >= 310,
-            }
+                'col-sm-6 col-lg-4': this.width >= 310
+            };
         }
 
     },
 
     mounted() {
-        if(this.buttons && this.buttons[0]) {
+        if (this.buttons && this.buttons[0]) {
             this.activate(this.buttons[0]);
         }
         else {
@@ -140,8 +138,7 @@ export default {
         };
     }
 
-}
-
+};
 </script>
 
 <style lang="scss">

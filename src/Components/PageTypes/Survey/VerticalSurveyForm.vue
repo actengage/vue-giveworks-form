@@ -26,6 +26,7 @@
 <script>
 import AltEmailField from './Fields/AltEmailField';
 import AltPhoneField from './Fields/AltPhoneField';
+import BtnActivity from 'vue-interface/src/Components/BtnActivity';
 import CheckboxField from './Fields/CheckboxField';
 import CityField from './Fields/CityField';
 import DollarAmountField from './Fields/DollarAmountField';
@@ -66,6 +67,7 @@ export default {
     components: {
         AltEmailField,
         AltPhoneField,
+        BtnActivity,
         CheckboxField,
         CityField,
         DollarAmountField,
@@ -94,5 +96,5 @@ export default {
 
     }
 
-}
+};
 </script>

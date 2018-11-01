@@ -4,7 +4,7 @@
 
         <div v-if="!loaded" class="row my-5 py-1">
             <div class="col-xs-12">
-                <activity-indicator size="sm" :center="true"></activity-indicator>
+                <activity-indicator size="sm" :center="true"/>
             </div>
         </div>
 
@@ -12,22 +12,22 @@
             <div class="text-bold mb-2">Credit Card</div>
             <div class="stripe-field" :class="{'has-activity': activity}">
                 <div class="form-control p-2" :class="{'is-invalid': !!errors.token}">
-                    <div class="stripe-field-input"></div>
+                    <div class="stripe-field-input"/>
                 </div>
                 <div class="stripe-field-activity">
                     <activity-indicator size="xs" center/>
                 </div>
             </div>
-            <div class="invalid-feedback" v-if="errors.token" v-html="errors.token.join('<br>')"></div>
+            <div class="invalid-feedback" v-if="errors.token" v-html="errors.token.join('<br>')"/>
         </label>
     </div>
 
 </template>
 
 <script>
+import wait from 'vue-interface/src/Helpers/Wait';
 import Gateway from '@/Components/Gateways/Gateway';
 import elapsed from 'vue-interface/src/Helpers/Elapsed';
-import wait from 'vue-interface/src/Helpers/Wait';
 import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
 
 export default {
@@ -85,7 +85,7 @@ export default {
                     }
                 });
             }
-            catch(e) {
+            catch (e) {
                 this.$dispatch.emit('error', e);
                 throw e;
             }
@@ -93,7 +93,7 @@ export default {
             this.$card.addEventListener('change', (event) => {
                 this.errors.token = event.error ? [event.error.message] : null;
 
-                if(event.complete) {
+                if (event.complete) {
                     elapsed(500, (resolve, reject) => {
                         gateway.createToken(this.$card, {
                             currency: 'usd'
@@ -101,7 +101,8 @@ export default {
                             wait(this.activity ? 750 : 0, (resolve, reject) => {
                                 if (result.error) {
                                     reject(this.errors.token = [event.error.message]);
-                                } else {
+                                }
+                                else {
                                     this.form.token = result.token.id;
                                     this.$dispatch.request('submit:enable');
                                     resolve(result);
@@ -127,10 +128,10 @@ export default {
         return {
             activity: false,
             loaded: false
-        }
+        };
     }
 
-}
+};
 </script>
 
 <style lang="scss">

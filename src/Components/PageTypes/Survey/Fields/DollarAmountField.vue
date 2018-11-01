@@ -1,6 +1,6 @@
 <template>
 
-    <form-group>
+    <div class="form-group">
 
         <fieldset>
 
@@ -29,13 +29,15 @@
 
         </fieldset>
 
-    </form-group>
+    </div>
 
 </template>
 
 <script>
-import chunk from 'lodash-es/chunk';
 import SurveyField from './SurveyField';
+import InputGroup from 'vue-interface/src/Components/InputGroup';
+import RadioField from 'vue-interface/src/Components/RadioField';
+import { chunk } from 'vue-interface/src/Helpers/Functions';
 
 export default {
 
@@ -43,13 +45,17 @@ export default {
 
     extends: SurveyField,
 
+    components: {
+        InputGroup,
+        RadioField
+    },
+
     computed: {
 
-
         amounts() {
-            const values = this.question.answers ?
-                this.question.answers.split('|') :
-                this.page.site.config.giveworks.ask_amounts;
+            const values = this.question.answers
+                ? this.question.answers.split('|')
+                : this.page.site.config.giveworks.ask_amounts;
 
             return chunk(values.filter(value => {
                 return value >= (parseFloat(this.page.options.min_amount) || 0);
@@ -58,5 +64,5 @@ export default {
 
     }
 
-}
+};
 </script>

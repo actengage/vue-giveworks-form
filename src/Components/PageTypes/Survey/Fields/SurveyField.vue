@@ -1,6 +1,6 @@
 <script>
-import isFunction from 'lodash-es/isFunction';
 import FormControl from 'vue-interface/src/Mixins/FormControl';
+import { isFunction } from 'vue-interface/src/Helpers/Functions';
 
 export default {
 
@@ -36,7 +36,7 @@ export default {
 
         changed(el, binding, vnode) {
             el.addEventListener('change', event => {
-                if(event.target.checked && isFunction(binding.value)) {
+                if (event.target.checked && isFunction(binding.value)) {
                     binding.value(el);
                 }
             });
@@ -44,5 +44,5 @@ export default {
 
     }
 
-}
+};
 </script>

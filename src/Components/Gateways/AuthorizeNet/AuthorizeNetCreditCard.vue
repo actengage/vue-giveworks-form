@@ -2,7 +2,7 @@
 
     <div v-if="!loaded" class="row my-5 py-1">
         <div class="col-xs-12">
-            <activity-indicator size="sm" :center="true"></activity-indicator>
+            <activity-indicator size="sm" :center="true"/>
         </div>
     </div>
 
@@ -15,10 +15,10 @@
 
 <script>
 import Gateway from '@/Components/Gateways/Gateway';
-import elapsed from 'vue-interface/src/Helpers/Elapsed';
 import wait from 'vue-interface/src/Helpers/Wait';
+import elapsed from 'vue-interface/src/Helpers/Elapsed';
+import CreditCardField from 'vue-credit-card-field/src/CreditCardField';
 import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
-import CreditCardField from 'vue-credit-card-field/src/Components/CreditCardField';
 
 export default {
 
@@ -50,7 +50,7 @@ export default {
 
     methods: {
         onChange: function(event) {
-            if(!event.complete) {
+            if (!event.complete) {
                 this.$dispatch.request('submit:disable');
             }
         },
@@ -63,13 +63,13 @@ export default {
                     cardCode: event.card.cvc
                 }, event => {
                     wait(this.activity ? 750 : 0, (resolve, reject) => {
-                        if(event.messages.resultCode === 'Ok') {
+                        if (event.messages.resultCode === 'Ok') {
                             this.$set(this.form, 'token', event.opaqueData.dataValue);
                             this.$set(this.form, 'tokenDescriptor', event.opaqueData.dataDescriptor);
                             this.$dispatch.request('submit:enable');
                             resolve(event);
                         }
-                        else if(event.messages.resultCode === 'Error') {
+                        else if (event.messages.resultCode === 'Error') {
                             this.error = event.messages.message[0].text;
                             this.$dispatch.request('submit:disable');
                             reject(this.error);
@@ -80,7 +80,7 @@ export default {
                 this.activity = true;
             }).then(() => {
                 this.activity = false;
-            },() => {
+            }, () => {
                 this.activity = false;
             });
         }
@@ -102,5 +102,5 @@ export default {
         };
     }
 
-}
+};
 </script>

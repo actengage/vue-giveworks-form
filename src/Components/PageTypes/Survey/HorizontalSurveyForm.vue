@@ -32,8 +32,9 @@
 </template>
 
 <script>
-import chunk from 'lodash-es/chunk';
 import VerticalSurveyForm from './VerticalSurveyForm';
+import { chunk } from 'vue-interface/src/Helpers/Functions';
+import BtnActivity from 'vue-interface/src/Components/BtnActivity';
 
 const RESERVED_FIELDS = [
     'email',
@@ -49,6 +50,10 @@ const RESERVED_FIELDS = [
 export default {
 
     extends: VerticalSurveyForm,
+
+    components: {
+        BtnActivity
+    },
 
     methods: {
 
@@ -66,5 +71,5 @@ export default {
 
     }
 
-}
+};
 </script>

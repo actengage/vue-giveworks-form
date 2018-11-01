@@ -6,10 +6,15 @@
 
 <script>
 import unit from 'vue-interface/src/Helpers/Unit';
+import Alert from 'vue-interface/src/Components/Alert';
 
 export default {
 
     name: 'http-error-response',
+
+    components: {
+        Alert
+    },
 
     props: {
 
@@ -45,7 +50,7 @@ export default {
         },
 
         formattedMessage() {
-            if(this.error.data && this.error.data.message) {
+            if (this.error.data && this.error.data.message) {
                 return this.error.data.message;
             }
 
@@ -54,5 +59,5 @@ export default {
 
     }
 
-}
+};
 </script>

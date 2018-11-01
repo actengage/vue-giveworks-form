@@ -11,16 +11,16 @@ const Gateways = {
 const instances = {};
 
 export default function(key, options) {
-    if(typeof key === 'object') {
+    if (typeof key === 'object') {
         options = key.options;
         key = key.name;
     }
 
-    if(!instances[key]) {
+    if (!instances[key]) {
         const Api = Gateways[key];
 
-        if(!Api) {
-            throw new Error('"'+key+'" is not in the list of supported gateways. Open /Gateways/Gateway.vue and add it to the list.');
+        if (!Api) {
+            throw new Error('"' + key + '" is not in the list of supported gateways. Open /Gateways/Gateway.vue and add it to the list.');
         }
 
         instances[key] = new Api(options);

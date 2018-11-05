@@ -7,6 +7,8 @@ import { upperFirst } from 'lodash';
 
 // PostCSS plugin imports
 import cssnano from 'cssnano';
+import prepend from 'postcss-prepend-selector';
+import purgecss from '@fullhuman/postcss-purgecss';
 
 // Build specific overrides
 export const BUILD_OPTIONS = {
@@ -108,5 +110,9 @@ export const EXTRACT_CSS = !!argv.configExtractCss || (
 
 // The defined PostCSS plugins that should be used. `null` values will be filtered.
 export const POSTCSS_PLUGINS = [
-    MINIFY ? cssnano() : null
+    prepend({selector: '.one-true-form '}),
+    MINIFY ? cssnano() : null,
+    MINIFY ? purgecss({
+        content: ['./src/**/*.vue']
+    }) : null
 ];

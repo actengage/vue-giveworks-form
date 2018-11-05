@@ -22,11 +22,6 @@ export default class Stripe extends Api {
             label: 'Wallet',
             size: '2x',
             component: 'stripe-payment-button'
-        }, {
-            icon: ['fab', 'paypal'],
-            label: 'PayPal',
-            size: '2x',
-            component: 'stripe-payment-button'
         }];
     }
 

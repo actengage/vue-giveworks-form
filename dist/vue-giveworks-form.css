@@ -6859,6 +6859,12 @@
     transform: translate(25%, -50%);
 }
 
+.one-true-form .paypal-payment-button.disabled,
+.one-true-form .paypal-payment-button:disabled {
+    opacity: .5;
+}
+
+
 .one-true-form .stripe-field {
   position: relative;
 }
@@ -6882,12 +6888,6 @@
 .one-true-form .stripe-field.has-activity .stripe-field-activity {
     opacity: 1;
 }
-
-.one-true-form .paypal-payment-button.disabled,
-.one-true-form .paypal-payment-button:disabled {
-    opacity: .5;
-}
-
 
 .one-true-form .autocomplete-list-item {
   margin: 0;

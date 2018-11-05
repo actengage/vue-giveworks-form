@@ -149,8 +149,6 @@ export default {
     mounted() {
         if (!this.page.id) {
             Page.find(this.pageId).then(model => {
-                console.log(model);
-
                 this.page = model.toJson();
                 this.model = new Page({
                     id: this.page.id

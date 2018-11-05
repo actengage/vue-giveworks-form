@@ -5663,88 +5663,6 @@
     line-height: 1rem;
 }
 
-.one-true-form .activity-indicator-dots > div {
-  border-radius: 100%;
-  display: inline-block;
-  background-color: #212529;
-  width: 0.6rem;
-  height: 0.6rem;
-  animation: activity-indicator-dots 1.4s infinite ease-in-out both;
-}
-.one-true-form .activity-indicator-dots > div:not(:last-child) {
-  margin-right: 0.198rem;
-}
-.one-true-form .activity-indicator-dots.activity-indicator-xs > div {
-  width: 0.3rem;
-  height: 0.3rem;
-}
-.one-true-form .activity-indicator-dots.activity-indicator-sm > div {
-  width: 0.45rem;
-  height: 0.45rem;
-}
-.one-true-form .activity-indicator-dots.activity-indicator-md > div {
-  width: 0.6rem;
-  height: 0.6rem;
-}
-.one-true-form .activity-indicator-dots.activity-indicator-lg > div {
-  width: 0.9rem;
-  height: 0.9rem;
-}
-.one-true-form .activity-indicator-dots.activity-indicator-xl > div {
-  width: 1.2rem;
-  height: 1.2rem;
-}
-.one-true-form .activity-indicator-dots > div:nth-child(1) {
-  animation-delay: 0s;
-}
-.one-true-form .activity-indicator-dots > div:nth-child(2) {
-  animation-delay: 0.16s;
-}
-.one-true-form .activity-indicator-dots > div:nth-child(3) {
-  animation-delay: 0.32s;
-}
-.one-true-form .activity-indicator-dots > div:nth-child(4) {
-  animation-delay: 0.48s;
-}
-.one-true-form .activity-indicator-dots > div:nth-child(5) {
-  animation-delay: 0.64s;
-}
-.one-true-form .activity-indicator-dots > div:nth-child(6) {
-  animation-delay: 0.8s;
-}
-.one-true-form .activity-indicator-dots > div:nth-child(7) {
-  animation-delay: 0.96s;
-}
-.one-true-form .activity-indicator-dots > div:nth-child(8) {
-  animation-delay: 1.12s;
-}
-.one-true-form .activity-indicator-dots > div:nth-child(9) {
-  animation-delay: 1.28s;
-}
-.one-true-form .activity-indicator-dots > div:nth-child(10) {
-  animation-delay: 1.44s;
-}
-.one-true-form .activity-indicator-dots > div:nth-child(11) {
-  animation-delay: 1.6s;
-}
-.one-true-form .activity-indicator-dots > div:nth-child(12) {
-  animation-delay: 1.76s;
-}
-.one-true-form .activity-indicator-dots > div:nth-child(13) {
-  animation-delay: 1.92s;
-}
-@keyframes activity-indicator-dots {
-0%, 80%, 100% {
-    transform: scale(0);
-}
-40% {
-    transform: scale(1);
-}
-}
-.one-true-form .btn-activity-indicator-dots:not(.btn-warning) .activity-indicator-dots > div {
-  background: white;
-}
-
 .one-true-form .activity-indicator-spinner {
   position: relative;
   width: 2.25rem;
@@ -6423,6 +6341,88 @@
   background-color: white;
 }
 
+.one-true-form .activity-indicator-dots > div {
+  border-radius: 100%;
+  display: inline-block;
+  background-color: #212529;
+  width: 0.6rem;
+  height: 0.6rem;
+  animation: activity-indicator-dots 1.4s infinite ease-in-out both;
+}
+.one-true-form .activity-indicator-dots > div:not(:last-child) {
+  margin-right: 0.198rem;
+}
+.one-true-form .activity-indicator-dots.activity-indicator-xs > div {
+  width: 0.3rem;
+  height: 0.3rem;
+}
+.one-true-form .activity-indicator-dots.activity-indicator-sm > div {
+  width: 0.45rem;
+  height: 0.45rem;
+}
+.one-true-form .activity-indicator-dots.activity-indicator-md > div {
+  width: 0.6rem;
+  height: 0.6rem;
+}
+.one-true-form .activity-indicator-dots.activity-indicator-lg > div {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+.one-true-form .activity-indicator-dots.activity-indicator-xl > div {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+.one-true-form .activity-indicator-dots > div:nth-child(1) {
+  animation-delay: 0s;
+}
+.one-true-form .activity-indicator-dots > div:nth-child(2) {
+  animation-delay: 0.16s;
+}
+.one-true-form .activity-indicator-dots > div:nth-child(3) {
+  animation-delay: 0.32s;
+}
+.one-true-form .activity-indicator-dots > div:nth-child(4) {
+  animation-delay: 0.48s;
+}
+.one-true-form .activity-indicator-dots > div:nth-child(5) {
+  animation-delay: 0.64s;
+}
+.one-true-form .activity-indicator-dots > div:nth-child(6) {
+  animation-delay: 0.8s;
+}
+.one-true-form .activity-indicator-dots > div:nth-child(7) {
+  animation-delay: 0.96s;
+}
+.one-true-form .activity-indicator-dots > div:nth-child(8) {
+  animation-delay: 1.12s;
+}
+.one-true-form .activity-indicator-dots > div:nth-child(9) {
+  animation-delay: 1.28s;
+}
+.one-true-form .activity-indicator-dots > div:nth-child(10) {
+  animation-delay: 1.44s;
+}
+.one-true-form .activity-indicator-dots > div:nth-child(11) {
+  animation-delay: 1.6s;
+}
+.one-true-form .activity-indicator-dots > div:nth-child(12) {
+  animation-delay: 1.76s;
+}
+.one-true-form .activity-indicator-dots > div:nth-child(13) {
+  animation-delay: 1.92s;
+}
+@keyframes activity-indicator-dots {
+0%, 80%, 100% {
+    transform: scale(0);
+}
+40% {
+    transform: scale(1);
+}
+}
+.one-true-form .btn-activity-indicator-dots:not(.btn-warning) .activity-indicator-dots > div {
+  background: white;
+}
+
 @keyframes btn-activity-in {
 0%, 100% {
     transform: scale(1);
@@ -6859,12 +6859,6 @@
     transform: translate(25%, -50%);
 }
 
-.one-true-form .paypal-payment-button.disabled,
-.one-true-form .paypal-payment-button:disabled {
-    opacity: .5;
-}
-
-
 .one-true-form .stripe-field {
   position: relative;
 }
@@ -6888,6 +6882,12 @@
 .one-true-form .stripe-field.has-activity .stripe-field-activity {
     opacity: 1;
 }
+
+.one-true-form .paypal-payment-button.disabled,
+.one-true-form .paypal-payment-button:disabled {
+    opacity: .5;
+}
+
 
 .one-true-form .autocomplete-list-item {
   margin: 0;

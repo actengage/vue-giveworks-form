@@ -1,8 +1,10 @@
+import path from 'path';
 import vue from 'rollup-plugin-vue';
 import json from 'rollup-plugin-json';
 import alias from 'rollup-plugin-alias';
 import babel from 'rollup-plugin-babel';
 import serve from 'rollup-plugin-serve';
+import license from 'rollup-plugin-license';
 import postcss from 'rollup-plugin-postcss';
 import replace from 'rollup-plugin-replace';
 import uglify from 'rollup-plugin-uglify-es';
@@ -57,11 +59,13 @@ if(WATCH) {
  */
 export default (config = {}) => {
     const plugins = [
+        // rollup-plugin-alias
         alias({
             resolve: ['.js', '.vue'],
             '@': `${SRC}`,
             'moment': 'moment/src/moment'
         }),
+
         // rollup-plugin-resolve
         resolve(Object.assign({
             main: true,
@@ -104,11 +108,25 @@ export default (config = {}) => {
             'process.env.LIVERELOAD_OPTIONS': JSON.stringify(LIVERELOAD_OPTIONS)
         }, config.replace)),
 
+        // rollup-plugin-license
+        license(Object.assign({
+            sourceMap: true,
+            banner: {
+                file: path.join(__dirname, 'BANNER'),
+                encoding: 'utf-8'
+            },
+            thirdParty: {
+                output: path.join(__dirname, 'dependencies.txt'),
+                includePrivate: false, // Default is false.
+                encoding: 'utf-8', // Default is utf-8.
+            },
+        }, config.license)),
+
         // rollup-plugin-json
         json(config.json),
 
         // rollup-plugin-globals
-        globals(config.globals),
+        // globals(config.globals),
 
         // rollup-plugin-builtins
         builtins(config.builtins),

@@ -1,4 +1,6 @@
 import plugins from './build/plugins';
+import polyfill from './build/config/polyfill';
+import vendor from './build/config/vendor';
 
 import {
     BUILD_OPTIONS,
@@ -41,4 +43,4 @@ export default [{
     watch: WATCH_OPTIONS,
     external: EXTERNAL,
     plugins: plugins(BUILD_OPTIONS.es)
-}];
+}, polyfill, vendor];

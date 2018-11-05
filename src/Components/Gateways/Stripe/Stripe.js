@@ -11,15 +11,21 @@ export default class Stripe extends Api {
         return [{
             icon: ['far', 'credit-card'],
             label: 'Credit Card',
+            size: '2x',
             component: 'stripe-credit-card'
         }, {
-            icon: 'apple-pay',
-            iconScale: 3.5,
+            icon: ['fab', 'apple-pay'],
+            size: '3x',
             component: 'stripe-payment-button'
         }, {
-            icon: 'google-wallet',
-            iconScale: 1.5,
+            icon: ['fab', 'google-wallet'],
             label: 'Wallet',
+            size: '2x',
+            component: 'stripe-payment-button'
+        }, {
+            icon: ['fab', 'paypal'],
+            label: 'PayPal',
+            size: '2x',
             component: 'stripe-payment-button'
         }];
     }

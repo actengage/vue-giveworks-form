@@ -20,9 +20,9 @@
 
 <script>
 import FormComponent from '@/Mixins/FormComponent';
-import ContactInfoFieldset from '@/Components/Fieldsets/ContactInfoFieldset';
-import PaymentInfoFieldset from '@/Components/Fieldsets/PaymentInfoFieldset';
-import SelectDonationFieldset from '@/Components/Fieldsets/SelectDonationFieldset';
+import ContactInfoFieldset from '../../Fieldsets/ContactInfoFieldset';
+import PaymentInfoFieldset from '../../Fieldsets/PaymentInfoFieldset';
+import SelectDonationFieldset from '../../Fieldsets/SelectDonationFieldset';
 
 export default {
 

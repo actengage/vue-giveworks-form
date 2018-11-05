@@ -7,7 +7,7 @@
                 </div>
             </div>
         </div>
-        <form v-else-if="page.id"@submit.prevent="submit" novalidate="novalidate" :class="classes">
+        <form v-else-if="page.id" @submit.prevent="submit" novalidate="novalidate" :class="classes">
             <component
                 :is="pageTypeComponent"
                 :orientation="orientation"
@@ -28,8 +28,8 @@ import Page from '@/Models/Page';
 import HttpConfig from '@/Config/Http';
 import HttpErrorResponse from './HttpErrorResponse';
 import Request from 'vue-interface/src/Http/Request';
+import { each } from 'vue-interface/src/Helpers/Functions';
 import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
-// import { each } from 'vue-interface/src/Helpers/Functions';
 
 import {
     HorizontalDonationForm,
@@ -142,13 +142,15 @@ export default {
     created() {
         Request.defaults = HttpConfig;
         Request.defaults.headers = {
-            Authorization: 'Bearer ' + this.apiKey
+            'Authorization': `Bearer ${this.apiKey}`
         };
     },
 
     mounted() {
         if (!this.page.id) {
             Page.find(this.pageId).then(model => {
+                console.log(model);
+
                 this.page = model.toJson();
                 this.model = new Page({
                     id: this.page.id
@@ -171,7 +173,6 @@ export default {
     },
 
     beforeCreate() {
-        /*
         const replies = {
             'submit:show': 'show',
             'submit:hide': 'hide',
@@ -189,7 +190,6 @@ export default {
                 }
             });
         });
-        */
 
         this.$dispatch.reply('form', (resolve, reject) => {
             resolve(this);
@@ -217,7 +217,7 @@ export default {
                 this.submitting = true;
                 this.$dispatch.emit('form:submit', this.form, this);
 
-                return this.model.fill(this.form).create(this.form)
+                return this.model.save(this.form, { method: 'post' })
                     .then(response => {
                         this.submitting = false;
                         this.$dispatch.emit('form:submit:complete', true, response, this);

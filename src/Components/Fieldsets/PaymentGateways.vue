@@ -10,7 +10,7 @@
                     class="btn btn-block payment-gateway-button"
                     :class="{'btn-success': button.active, 'btn-secondary': !button.active}"
                     @click="activate(button)">
-                    <icon :icon="typeof button.icon === 'string' ? ['far', button.icon]: button.icon" :scale="button.iconScale || 2" :class="{'mt-2 mb-1': !button.label}"/>
+                    <icon :icon="typeof button.icon === 'string' ? ['far', button.icon]: button.icon" :size="button.size || 'lg'" :class="{'mt-2 mb-1': !button.label}"/>
                     <div v-if="button.label" class="pb-1 small">{{ button.label }}</div>
                 </button>
             </div>

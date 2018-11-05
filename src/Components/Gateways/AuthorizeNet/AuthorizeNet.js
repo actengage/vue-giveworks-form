@@ -9,7 +9,7 @@ export default class AuthorizetNet extends Api {
 
     buttons() {
         return [{
-            icon: 'credit-card',
+            icon: ['far', 'credit-card'],
             label: 'Credit Card',
             component: 'authorize-net-credit-card'
         }];

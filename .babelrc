@@ -11,8 +11,8 @@
         },
         "development": {
             "presets": [
-                ["@babel/env", {
-                    "modules": false
+                ["vue", {
+
                 }]
             ]
         }

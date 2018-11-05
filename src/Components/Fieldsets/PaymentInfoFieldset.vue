@@ -26,7 +26,7 @@
 
 <script>
 import PaymentGateways from './PaymentGateways';
-import FormComponent from '@/Mixins/FormComponent';
+import FormComponent from '../../Mixins/FormComponent';
 import BtnActivity from 'vue-interface/src/Components/BtnActivity';
 import TextareaField from 'vue-interface/src/Components/TextareaField';
 

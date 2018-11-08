@@ -5,4 +5,4 @@ export const SRC = `${__dirname}/src/`;
 export const DIST = `${__dirname}/dist/`;
 
 // The node_modules directory path
-export const NODE_MODULES =  `${__dirname}/node_modules/**`;
+export const NODE_MODULES = `${__dirname}/node_modules/**`;

@@ -3,15 +3,17 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Vertical Petition Form Example</title>
+        <title>Form Component Example</title>
     </head>
     <body>
         <div id="app" class="giveworks-form">
             <div class="container">
-                <input-field label="First Name" name="first" :form="form"/>
+                <input-field v-model="form.text" label="Name" name="text" id="text" placeholder="Enter your name..."></input-field>
+                <input-field v-model="form.email" label="Email Field" type="email" name="text" id="text" placeholder="you@example.com"></input-field>
             </div>
         </div>
 
+        <!-- Include the css file -->
         <link rel="stylesheet" href="../../dist/vue-giveworks-form.css">
 
         <!-- VueGiveworksForm dependencies -->
@@ -21,6 +23,7 @@
         <!-- VueGiveworksForm Library -->
         <script type="text/javascript" src="../../dist/vue-giveworks-form.js"></script>
 
+        <!-- Instantiate a Vue instance -->
         <script type="text/javascript">
             new Vue({
                 el: '#app',

@@ -1,6 +1,6 @@
 {
     "name": "vue-giveworks-form",
-    "version": "0.1.153",
+    "version": "0.1.154",
     "description": "A Vue.js component for building and submitting Giveworks form.",
     "license": "End-User License Agreement",
     "main": "./dist/vue-giveworks-form.js",
@@ -20,7 +20,7 @@
         "the-one-true-form": "^1.1.17",
         "vue": "^2.5.17",
         "vue-credit-card-field": "^0.2.0",
-        "vue-interface": "^0.2.15",
+        "vue-interface": "^0.2.19",
         "vue-place-autocomplete": "^0.2.0"
     },
     "devDependencies": {

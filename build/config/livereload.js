@@ -1,9 +1,9 @@
 import fs from 'fs';
-import * as paths from './paths';
+import { SRC } from './paths';
 
 export default {
-    watch: paths.SRC,
-    port: 35730,
+    watch: SRC,
+    port: 35731,
     https: {
         key: fs.readFileSync('./livereload.key'),
         cert: fs.readFileSync('./livereload.crt'),

@@ -1,5 +1,10 @@
-@import './node_modules/bootstrap/scss/bootstrap.scss';
+// Components
+@import '_variables';
+@import '_forms';
+
+// Bootstrap
+@import "node_modules/bootstrap/scss/bootstrap";
 
 .giveworks-form {
-    font-family: sans-serif;
+    font-family: $font-family-base;
 }

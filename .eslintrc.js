@@ -18,7 +18,17 @@ module.exports = {
     },
     // add your custom rules here
     rules: {
+        // Ensure no space after keywords like if.
+        'keyword-spacing': ["error", {
+            "overrides": {
+                "if": { "after": false },
+                "for": { "after": false },
+                "while": { "after": false }
+            }
+        }],
+        // Use alternative brace style
         'brace-style': ['error', 'stroustrup'],
+        // No spaces before parens
         'space-before-function-paren': ['error', 'never'],
         // Indent for tabs because spaces suck
         'indent': ['error', 4],

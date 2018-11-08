@@ -50,7 +50,7 @@ export default {
 
     methods: {
         onChange: function(event) {
-            if (!event.complete) {
+            if(!event.complete) {
                 this.$dispatch.request('submit:disable');
             }
         },
@@ -63,13 +63,13 @@ export default {
                     cardCode: event.card.cvc
                 }, event => {
                     wait(this.activity ? 750 : 0, (resolve, reject) => {
-                        if (event.messages.resultCode === 'Ok') {
+                        if(event.messages.resultCode === 'Ok') {
                             this.$set(this.form, 'token', event.opaqueData.dataValue);
                             this.$set(this.form, 'tokenDescriptor', event.opaqueData.dataDescriptor);
                             this.$dispatch.request('submit:enable');
                             resolve(event);
                         }
-                        else if (event.messages.resultCode === 'Error') {
+                        else if(event.messages.resultCode === 'Error') {
                             this.error = event.messages.message[0].text;
                             this.$dispatch.request('submit:disable');
                             reject(this.error);

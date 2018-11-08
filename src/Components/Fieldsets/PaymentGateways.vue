@@ -83,7 +83,7 @@ export default {
             const buttons = [];
 
             this.page.site.gateways.forEach(gateway => {
-                if (!Gateway(gateway).buttons) {
+                if(!Gateway(gateway).buttons) {
                     throw new Error(Gateway(gateway).api() + ' doesn\'t have a required buttons() method.');
                 }
 
@@ -116,7 +116,7 @@ export default {
     },
 
     mounted() {
-        if (this.buttons && this.buttons[0]) {
+        if(this.buttons && this.buttons[0]) {
             this.activate(this.buttons[0]);
         }
         else {

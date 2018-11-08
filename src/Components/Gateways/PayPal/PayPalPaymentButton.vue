@@ -100,11 +100,11 @@ export default {
         error: function() {
             const errors = [];
 
-            if (this.errors.payerId) {
+            if(this.errors.payerId) {
                 errors.push(this.errors.payerId.join('<b>'));
             }
 
-            if (this.errors.paymentId) {
+            if(this.errors.paymentId) {
                 errors.push(this.errors.paymentId.join('<b>'));
             }
 
@@ -113,21 +113,21 @@ export default {
     },
 
     updated() {
-        if (this.shouldMountButton()) {
+        if(this.shouldMountButton()) {
             const button = Gateway(this.gateway).button('.paypal-payment-button', this.$dispatch);
 
             this.$dispatch.on('paypal:click', data => {
-                if (this.hasPaymentInfo()) {
+                if(this.hasPaymentInfo()) {
                     this.$dispatch.request('form:submit');
                 }
             });
 
             this.$dispatch.on('paypal:validate', actions => {
-                if (this.form.recurring) {
+                if(this.form.recurring) {
                     actions.disable();
                 }
 
-                if (this.$unwatchAmount) {
+                if(this.$unwatchAmount) {
                     this.$unwatchAmount();
                 }
 
@@ -136,15 +136,15 @@ export default {
                     actions[!this.form.recurring && value ? 'enable' : 'disable']();
                 });
 
-                if (this.$unwatchRecurring) {
+                if(this.$unwatchRecurring) {
                     this.$unwatchRecurring();
                 }
 
                 this.$unwatchRecurring = this.$watch('form.recurring', value => {
-                    if (value) {
+                    if(value) {
                         actions.disable();
                     }
-                    else if (this.form.amount) {
+                    else if(this.form.amount) {
                         actions.enable();
                     }
                 });
@@ -163,9 +163,9 @@ export default {
         this.$prevFormSubmitReply = this.$dispatch.getReply('form:submit');
 
         this.$dispatch.reply('form:submit', (resolve, reject) => {
-            if (this.hasPaymentInfo()) {
+            if(this.hasPaymentInfo()) {
                 this.$prevFormSubmitReply.handle(response => {
-                    if (response.data.recur) {
+                    if(response.data.recur) {
                         this.$dispatch.request('form:redirect', response.data.meta.redirect_url);
                     }
                     else {
@@ -195,11 +195,11 @@ export default {
     },
 
     beforeDestroy() {
-        if (this.$unwatchAmount) {
+        if(this.$unwatchAmount) {
             this.$unwatchAmount();
         }
 
-        if (this.$unwatchRecurring) {
+        if(this.$unwatchRecurring) {
             this.$unwatchRecurring();
         }
 

@@ -78,7 +78,7 @@ export default class Stripe extends Api {
     }
 
     stripe() {
-        if (!this.options.publishable_key) {
+        if(!this.options.publishable_key) {
             throw new Error('This site API was authenticated using an older version of Giveworks. To use new version of Giveworks you must setup your Stripe account again.');
         }
 

@@ -15,7 +15,7 @@ export default class PayPal extends Api {
     }
 
     paypal() {
-        if (!this._paypal) {
+        if(!this._paypal) {
             this._paypal = window.paypal;
         }
 

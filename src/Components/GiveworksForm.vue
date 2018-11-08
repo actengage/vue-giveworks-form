@@ -31,6 +31,7 @@ import Request from 'vue-interface/src/Http/Request';
 import { each } from 'vue-interface/src/Helpers/Functions';
 import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
 
+/*
 import {
     HorizontalDonationForm,
     VerticalDonationForm,
@@ -41,6 +42,7 @@ import {
     HorizontalSurveyForm,
     VerticalSurveyForm
 } from './PageTypes';
+*/
 
 export default {
 
@@ -48,6 +50,7 @@ export default {
 
     components: {
         ActivityIndicator,
+        /*
         HorizontalDonationForm,
         VerticalDonationForm,
         HorizontalPetitionForm,
@@ -56,6 +59,7 @@ export default {
         VerticalSignupForm,
         HorizontalSurveyForm,
         VerticalSurveyForm,
+        */
         HttpErrorResponse
     },
 
@@ -116,7 +120,7 @@ export default {
         showActivity() {
             const el = this.$el.querySelector('[type=submit]');
 
-            if (el) {
+            if(el) {
                 el.dispatchEvent(new Event('activity:show'));
             }
         },
@@ -124,7 +128,7 @@ export default {
         hideActivity() {
             const el = this.$el.querySelector('[type=submit]');
 
-            if (el) {
+            if(el) {
                 el.dispatchEvent(new Event('activity:hide'));
             }
         },
@@ -147,7 +151,7 @@ export default {
     },
 
     mounted() {
-        if (!this.page.id) {
+        if(!this.page.id) {
             Page.find(this.pageId).then(model => {
                 this.page = model.toJson();
                 this.model = new Page({
@@ -209,7 +213,7 @@ export default {
         });
 
         this.$dispatch.reply('form:submit', (resolve, reject) => {
-            if (!this.submitting) {
+            if(!this.submitting) {
                 this.showActivity();
                 this.errors = {};
                 this.submitting = true;
@@ -241,7 +245,7 @@ export default {
         });
 
         this.$dispatch.on('form:submit', data => {
-            if (this.$el.querySelector(':focus')) {
+            if(this.$el.querySelector(':focus')) {
                 this.$el.querySelector(':focus').blur();
             }
         });
@@ -273,13 +277,3 @@ export default {
 
 };
 </script>
-
-<style lang="scss">
-@import 'node_modules/the-one-true-form/src/main.scss';
-
-.one-true-form {
-    .text-sm {
-        font-size: 15px;
-    }
-}
-</style>

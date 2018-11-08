@@ -108,7 +108,7 @@ export default {
     },
 
     updated() {
-        if (this.loaded && !this.submitting && !this.error) {
+        if(this.loaded && !this.submitting && !this.error) {
             try {
                 this.$paymentRequestButton.mount(this.$el.querySelector('.stripe-payment-button'));
             }
@@ -122,7 +122,7 @@ export default {
 
     created() {
         this.$dispatch.request('form').then(form => {
-            if (form.$card) {
+            if(form.$card) {
                 this.card = form.$card;
             }
         });
@@ -137,7 +137,7 @@ export default {
     },
 
     beforeDestroy() {
-        if (this.card) {
+        if(this.card) {
             this.$dispatch.request('form').then(form => {
                 form.$card = this.card;
             });
@@ -158,13 +158,13 @@ export default {
             this.$paymentRequestButton = gateway.paymentRequestButton(this.$paymentRequest);
 
             this.$paymentRequestButton.on('click', (event) => {
-                if (this.form.token) {
+                if(this.form.token) {
                     this.$dispatch.request('form:submit');
                 }
             });
 
             this.$paymentRequest.on('cancel', (event) => {
-                if (!this.changingCard) {
+                if(!this.changingCard) {
                     this.card = false;
                     this.form.token = null;
                 }
@@ -178,7 +178,7 @@ export default {
                 this.card = event.token.card;
                 this.form.token = event.token.id;
 
-                if (!this.changingCard) {
+                if(!this.changingCard) {
                     this.$dispatch.request('form:submit');
                 }
                 else {

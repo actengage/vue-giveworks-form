@@ -1,6 +1,6 @@
 {
     "name": "vue-giveworks-form",
-    "version": "0.1.154",
+    "version": "0.1.153",
     "description": "A Vue.js component for building and submitting Giveworks form.",
     "license": "End-User License Agreement",
     "main": "./dist/vue-giveworks-form.js",
@@ -20,6 +20,7 @@
         "the-one-true-form": "^1.1.17",
         "vue": "^2.5.17",
         "vue-credit-card-field": "^0.2.0",
+        "vue-interface": "^0.2.15",
         "vue-place-autocomplete": "^0.2.0"
     },
     "devDependencies": {
@@ -56,6 +57,7 @@
         "rollup-plugin-alias": "^1.4.0",
         "rollup-plugin-babel": "^4.0.3",
         "rollup-plugin-commonjs": "^9.2.0",
+        "rollup-plugin-css-only": "^0.4.0",
         "rollup-plugin-eslint": "^5.0.0",
         "rollup-plugin-json": "^3.1.0",
         "rollup-plugin-license": "^0.7.0",
@@ -70,7 +72,6 @@
         "rollup-plugin-serve": "^0.6.0",
         "rollup-plugin-uglify-es": "0.0.1",
         "rollup-plugin-vue": "github:objectivehtml/rollup-plugin-vue#patch-1",
-        "vue-interface": "^0.2.12",
         "vue-jest": "^3.0.0",
         "vue-jest-utils": "^0.2.0",
         "vue-server-renderer": "^2.5.17",
@@ -81,8 +82,8 @@
         "build": "./node_modules/.bin/rollup -c",
         "dev": "./node_modules/.bin/rollup -c --watch",
         "commit": "git add -A && git commit -m $npm_package_version;",
-        "lint": "./node_modules/.bin/eslint src/** --ext .js --ext .vue",
-        "fix": "./node_modules/.bin/eslint src/** --ext .js --ext .vue --fix",
+        "lint": "./node_modules/.bin/eslint src --ext .js --ext .vue",
+        "fix": "./node_modules/.bin/eslint src --ext .js --ext .vue --fix",
         "release-patch": "npm version patch --no-git-tag-version; npm run release;",
         "release-minor": "npm version minor --no-git-tag-version; npm run release;",
         "release-major": "npm version major --no-git-tag-version; npm run release;",

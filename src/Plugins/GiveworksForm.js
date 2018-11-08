@@ -7,7 +7,7 @@ export default function install(Vue, options) {
 
     Vue.component('giveworks-form', GiveworksForm);
 
-    if (window && window.Vue) {
+    if(window && window.Vue) {
         const data = (
             window.GiveworksFormOptions && window.GiveworksFormOptions.data
         ) ? window.GiveworksFormOptions.data : {};

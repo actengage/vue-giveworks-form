@@ -50,7 +50,7 @@ export default {
         },
 
         formattedMessage() {
-            if (this.error.data && this.error.data.message) {
+            if(this.error.data && this.error.data.message) {
                 return this.error.data.message;
             }
 

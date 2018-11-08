@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Vertical Petition Form Example</title>
+    </head>
+    <body>
+        <div id="app" class="giveworks-form">
+            <div class="container">
+                <input-field label="First Name" name="first" :form="form"/>
+            </div>
+        </div>
+
+        <link rel="stylesheet" href="../../dist/vue-giveworks-form.css">
+
+        <!-- VueGiveworksForm dependencies -->
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios@0.18.0/dist/axios.min.js"></script>
+
+        <!-- VueGiveworksForm Library -->
+        <script type="text/javascript" src="../../dist/vue-giveworks-form.js"></script>
+
+        <script type="text/javascript">
+            new Vue({
+                el: '#app',
+                data() {
+                    return {
+                        form: {},
+                        errors: null
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>

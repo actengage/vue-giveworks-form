@@ -1,7 +1,7 @@
 import fs from 'fs';
 
 export default {
-    open: true,
+    open: false,
     port: 10001,
     contentBase: './',
     host: 'localhost',

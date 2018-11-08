@@ -3,7 +3,7 @@ import * as paths from './paths';
 
 export default {
     watch: paths.SRC,
-    port: 35729,
+    port: 35730,
     https: {
         key: fs.readFileSync('./livereload.key'),
         cert: fs.readFileSync('./livereload.crt'),

@@ -10,7 +10,7 @@ export default [
         content: [`${SRC}Components/**/*.vue`]
     }) : null,
     prepend({
-        selector: '.one-true-form '
+        selector: '.giveworks-form '
     }),
     MINIFY ? cssnano() : null,
 ];

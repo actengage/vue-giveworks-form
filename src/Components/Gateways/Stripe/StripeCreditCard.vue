@@ -93,13 +93,13 @@ export default {
             this.$card.addEventListener('change', (event) => {
                 this.errors.token = event.error ? [event.error.message] : null;
 
-                if (event.complete) {
+                if(event.complete) {
                     elapsed(500, (resolve, reject) => {
                         gateway.createToken(this.$card, {
                             currency: 'usd'
                         }).then((result) => {
                             wait(this.activity ? 750 : 0, (resolve, reject) => {
-                                if (result.error) {
+                                if(result.error) {
                                     reject(this.errors.token = [event.error.message]);
                                 }
                                 else {

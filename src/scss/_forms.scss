@@ -1,3 +1,416 @@
-.form-group {
-    font-family: $font-family-base;
+@import '_variables.scss';
+
+$custom-control-color: $input-color;
+
+$custom-control-bg: $input-bg;
+
+$custom-control-box-shadow: $input-box-shadow;
+
+$custom-control-disabled-bg: $input-disabled-bg;
+
+$custom-control-padding-y: $input-padding-y + ($input-padding-y / 2);
+$custom-control-padding-x: $input-padding-x;
+
+$custom-control-padding-y: $input-padding-y + ($input-padding-y / 2) !default;
+$custom-control-padding-x: $input-padding-x !default;
+$custom-control-line-height: $input-line-height !default;
+
+$custom-control-padding-y-sm: $input-padding-y-sm + ($input-padding-y-lg / 2) !default;
+$custom-control-padding-x-sm: $input-padding-x-sm * 1.25 !default;
+$custom-control-line-height-sm: $input-line-height-sm !default;
+
+$custom-control-padding-y-lg: $input-padding-y-lg + ($input-padding-y-lg / 2) !default;
+$custom-control-padding-x-lg: $input-padding-x-lg !default;
+$custom-control-line-height-lg: $input-line-height-lg !default;
+
+$custom-control-border-width: $input-border-width;
+$custom-control-border-color: $input-border-color;
+
+$custom-control-border-radius: $input-border-radius;
+$custom-control-border-radius-lg: $input-border-radius-lg !default;
+$custom-control-border-radius-sm: $input-border-radius-sm !default;
+
+$custom-control-height-border: $input-border-width * 2 !default;
+
+$custom-control-height-inner: (($font-size-base * $input-line-height) * 1.25) + ($input-padding-y * 2) !default;
+$custom-control-height: calc(#{$custom-control-height-inner} + #{$custom-control-height-border}) !default;
+
+$custom-control-height-inner-sm: (($font-size-sm * $input-line-height-sm) * 1.25) + ($input-padding-y-sm * 2) !default;
+$custom-control-height-sm: calc(#{$custom-control-height-inner-sm} + #{$custom-control-height-border}) !default;
+
+$custom-control-height-inner-lg: (($font-size-lg * $input-line-height-lg) * 1.25) + ($input-padding-y-lg * 2) !default;
+$custom-control-height-lg: calc(#{$custom-control-height-inner-lg} + #{$custom-control-height-border}) !default;
+
+$custom-control-label-font-size: $font-size-base * .75;
+$custom-control-label-font-size-sm: $font-size-sm * .75;
+$custom-control-label-font-size-lg: $font-size-lg * .75;
+
+$custom-control-line-height: $input-line-height !default;
+
+$custom-control-placeholder-color: $input-placeholder-color;
+
+$custom-control-transition: $input-transition, padding .15s ease-out;
+
+
+.custom-select-field,
+.custom-input-field {
+    label {
+        color: $input-placeholder-color;
+    }
+
+    &.is-invalid {
+        &.custom-input-field .custom-control,
+        &.custom-select-field .form-group-inner {
+            border-color: $danger;
+        }
+
+        &.has-focus.custom-input-field .custom-control,
+        &.has-focus.custom-select-field .form-group-inner {
+            border-color: $danger;
+            box-shadow: 0 0 0 $input-focus-width rgba($danger, .25);
+        }
+
+        &:not(.is-empty) > label {
+            color: $danger;
+        }
+
+        .invalid-feedback  {
+            display: block;
+        }
+    }
+
+    &.is-valid {
+        &.custom-input-field .custom-control,
+        &.custom-select-field .form-group-inner {
+            border-color: $success;
+        }
+
+        &.has-focus.custom-input-field .custom-control,
+        &.has-focus.custom-select-field .form-group-inner {
+            border-color: $success;
+            box-shadow: 0 0 0 $input-focus-width rgba($success, .25);
+        }
+
+        &:not(.is-empty) > label {
+            color: $success;
+        }
+
+        .invalid-feedback  {
+            display: block;
+        }
+    }
+}
+
+.custom-select-field .form-group-inner,
+.custom-input-field .custom-control {
+    display: block;
+    width: 100%;
+    transition: padding .15s ease-out;
+    height: $custom-control-height;
+    padding: $custom-control-padding-y $custom-control-padding-x;
+    font-size: $font-size-base;
+    line-height: $custom-control-line-height;
+    color: $custom-control-color;
+    background-color: $custom-control-bg;
+    background-clip: padding-box;
+    border: $custom-control-border-width solid $custom-control-border-color;
+
+    // Note: This has no effect on <select>s in some browsers, due to the limited stylability of `<select>`s in CSS.
+    @if $enable-rounded {
+        // Manually use the if/else instead of the mixin to account for iOS override
+        border-radius: $custom-control-border-radius;
+    } @else {
+        // Otherwise undo the iOS default
+        border-radius: 0;
+    }
+
+    @include box-shadow($custom-control-box-shadow);
+    @include transition($custom-control-transition);
+
+    // Unstyle the caret on `<select>`s in IE10+.
+    &::-ms-expand {
+        background-color: transparent;
+        border: 0;
+    }
+
+    // Customize the `:focus` state to imitate native WebKit styles.
+    @include form-control-focus();
+
+    // Placeholder
+    &::placeholder {
+        transition: opacity .15s ease-out;
+        // Override Firefox's unusual default opacity; see https://github.com/twbs/bootstrap/pull/11526.
+        opacity: 1;
+    }
+
+    // Disabled and read-only inputs
+    //
+    // HTML5 says that controls under a fieldset > legend:first-child won't be
+    // disabled if the fieldset is disabled. Due to implementation difficulty, we
+    // don't honor that edge case; we style them as disabled anyway.
+    &:disabled,
+    &[readonly] {
+        background-color: $custom-control-disabled-bg;
+        // iOS fix for unreadable disabled content; see https://github.com/twbs/bootstrap/issues/11655.
+        opacity: 1;
+    }
+}
+
+// Custom Select
+
+.custom-select-field {
+
+    & > label {
+        z-index: 1;
+        margin: 0;
+        top: $custom-control-height-inner / 2;
+        position: absolute;
+        font-size: $font-size-base;
+        line-height: $font-size-base;
+        transform: translateY(-50%);
+        transition: all .15s ease-out;
+        padding: 0 $custom-control-padding-x 0;
+    }
+
+    .form-group-inner {
+        &::after {
+            z-index: 0;
+            position: absolute;
+            top: 0;
+            right: 0;
+            content: '';
+            width: 2.3rem;
+            height: 66.6666%;
+            transform: translateY(25%);
+            border-left: $custom-control-border-color 1px solid;
+            background-size: .666rem .666rem;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMCAxNi42IiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAzMCAxNi42Ij48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0iIzZjNzU3ZCIgZD0iTTMwIDBMMTUgMTYuNiAwIDBoMzB6Ii8+PC9zdmc+);
+        }
+    }
+
+    &.is-invalid .form-group-inner::after {
+        border-color: $danger;
+        background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMCAxNi42IiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAzMCAxNi42Ij48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0iI2RjMzU0NSIgZD0iTTMwIDBMMTUgMTYuNiAwIDBoMzB6Ii8+PC9zdmc+);
+    }
+
+    &.is-valid .form-group-inner::after {
+        border-color: $success;
+        background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMCAxNi42IiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAzMCAxNi42Ij48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0iIzI4YTc0NSIgZD0iTTMwIDBMMTUgMTYuNiAwIDBoMzB6Ii8+PC9zdmc+);
+    }
+
+    &.has-focus .form-group-inner {
+        color: $input-focus-color;
+        background-color: $input-focus-bg;
+        border-color: $input-focus-border-color;
+        outline: none;
+        // Avoid using mixin so we can pass custom focus shadow properly
+        @if $enable-shadows {
+            box-shadow: $input-box-shadow, $input-focus-box-shadow;
+        } @else {
+            box-shadow: $input-focus-box-shadow;
+        }
+    }
+
+    &:not(.is-empty) {
+        label {
+            top: 0;
+            opacity: 1;
+            transform: none;
+            font-size: $custom-control-label-font-size;
+            line-height: $custom-control-label-font-size;
+            padding: $custom-control-padding-y / 1.5 $custom-control-padding-x 0;
+        }
+
+        .custom-select {
+            padding-top: $custom-control-label-font-size * 1.25;
+        }
+    }
+
+    // Form control sizing
+    //
+    // Build on `.form-control` with modifier classes to decrease or increase the
+    // height and font-size of form controls
+    &.custom-select-field-sm {
+        & > label {
+            padding: 0 $custom-control-padding-x-sm;
+            font-size: $font-size-sm;
+            line-height: $font-size-sm;
+            @include border-radius($custom-control-border-radius-sm);
+        }
+
+        &.is-empty > label {
+            font-size: $font-size-sm;
+            top: calc(#{$custom-control-height-sm} / 2);
+        }
+
+        &:not(.is-empty) > label {
+            font-size: $custom-control-label-font-size-sm;
+            padding: $custom-control-padding-y-sm / 2 $custom-control-padding-x-sm 0;
+        }
+
+        .form-group-inner {
+            height: $custom-control-height-sm;
+            padding: $custom-control-padding-y-sm $custom-control-padding-x-sm;
+
+            &::after {
+                width: 2rem;
+                background-size: .5rem .5rem;
+            }
+
+            .custom-select {
+                padding-left: $custom-control-padding-x-sm;
+            }
+        }
+    }
+
+    &.custom-select-field-lg {
+        & > label {
+            padding: 0 $custom-control-padding-x-lg;
+            font-size: $font-size-lg;
+            line-height: $font-size-lg;
+            // transform: translateY($custom-control-height-lg);
+            @include border-radius($custom-control-border-radius-lg);
+        }
+
+        &.is-empty > label {
+            font-size: $font-size-lg;
+            top: calc(#{$custom-control-height-lg} / 2);
+        }
+
+        &:not(.is-empty) {
+            & > label {
+                font-size: $custom-control-label-font-size-lg;
+                padding: $custom-control-padding-y-lg / 4 $custom-control-padding-x-lg 0;
+            }
+
+            .custom-select {
+                font-size: $custom-control-label-font-size-lg * 1.25;
+            }
+        }
+
+        .form-group-inner {
+            height: $custom-control-height-lg;
+            padding: $custom-control-padding-y-lg $custom-control-padding-x-lg;
+
+            &::after {
+                width: 2.8rem;
+                background-size: 1rem 1rem;
+            }
+
+            .custom-select {
+                padding-left: $custom-control-padding-x-lg;
+            }
+        }
+    }
+
+    .custom-select {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: none;
+        margin: 0;
+        padding: 0 $custom-control-padding-x;
+        border: 0;
+        z-index: 1;
+        transition: all .15s ease-out;
+
+        &:focus {
+            background: none;
+            border-color: none;
+            outline: none;
+            box-shadow: none;
+        }
+    }
+}
+
+// Custom Input
+
+.custom-input-field {
+    position: relative;
+
+    & > label {
+        margin: 0;
+        opacity: 0;
+        z-index: -1;
+        width: 100%;
+        line-height: 1em;
+        position: absolute;
+        transition: all .15s ease-out;
+        font-size: $custom-control-label-font-size;
+        transform: translateY($custom-control-label-font-size / 2);
+        padding: $custom-control-padding-y $custom-control-padding-x * 1.1 $custom-control-padding-y / 2;
+    }
+
+    &:not(.is-empty), &.is-empty.has-changed {
+        .custom-control::placeholder {
+            opacity: 0;
+        }
+
+        label {
+            z-index: 1;
+            opacity: 1;
+            transform: none;
+
+            & + .form-group-inner .custom-control {
+                padding-top: $custom-control-label-font-size * 2;
+            }
+        }
+    }
+
+    &.custom-input-field-sm {
+        label {
+            font-size: $custom-control-label-font-size-sm;
+            padding: $custom-control-padding-y-sm / 1.25 $custom-control-padding-x-sm * 1.1 $custom-control-padding-y-sm / 2;
+        }
+
+        &:not(.is-empty), &.is-empty.has-changed {
+            .form-group-inner .custom-control {
+                padding-top: $custom-control-label-font-size-sm * 1.75;
+            }
+        }
+    }
+
+    &.custom-input-field-lg {
+        label {
+            font-size: $custom-control-label-font-size-lg;
+            padding: $custom-control-padding-y-lg / 1.25 $custom-control-padding-x-lg * 1.05 $custom-control-padding-y-lg / 2;
+        }
+
+        &:not(.is-empty), &.is-empty.has-changed {
+            .form-group-inner .custom-control {
+                padding-top: $custom-control-label-font-size-lg * 2;
+            }
+        }
+    }
+
+    &.is-valid .valid-feedback,
+    &.is-invalid .invalid-feedback  {
+        display: block;
+    }
+
+    .custom-control {
+        // Form control sizing
+        //
+        // Build on `.form-control` with modifier classes to decrease or increase the
+        // height and font-size of form controls
+        &.custom-control-sm {
+            height: $custom-control-height-sm;
+            padding: $custom-control-padding-y-sm $custom-control-padding-x-sm;
+            font-size: $custom-control-label-font-size-sm * 1.25;
+            line-height: $custom-control-line-height-sm;
+            @include border-radius($custom-control-border-radius-sm);
+        }
+
+        &.custom-control-lg {
+            height: $custom-control-height-lg;
+            padding: $custom-control-padding-y-lg $custom-control-padding-x-lg;
+            font-size: $custom-control-label-font-size-lg * 1.25;
+            line-height: $custom-control-line-height-lg;
+            @include border-radius($custom-control-border-radius-lg);
+        }
+    }
 }

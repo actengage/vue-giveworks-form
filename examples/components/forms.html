@@ -8,8 +8,74 @@
     <body>
         <div id="app" class="giveworks-form">
             <div class="container">
-                <input-field v-model="form.text" label="Name" name="text" id="text" placeholder="Enter your name..."></input-field>
-                <input-field v-model="form.email" label="Email Field" type="email" name="text" id="text" placeholder="you@example.com"></input-field>
+                <h3>Custom Input</h3>
+
+                <input-field custom v-model="form.custom_text" label="Text Field" placeholder="Enter some text..."></input-field>
+                <input-field custom v-model="form.custom_email" label="Email Field" type="email" placeholder="you@example.com"></input-field>
+                <input-field custom label="Help Text" help-text="This is some help text." placeholder="Help Text"></input-field>
+
+                <h4>Sizes</h4>
+
+                <input-field custom v-model="form.custom_sm" label="Small" size="sm" placeholder="Small"></input-field>
+                <input-field custom v-model="form.custom_md" label="Medium" placeholder="Medium"></input-field>
+                <input-field custom v-model="form.custom_lg" label="Large" size="lg" placeholder="Large"></input-field>
+
+                <h3>Validation</h3>
+
+                <input-field custom label="Text Field" placeholder="Enter some text..." error="Test"></input-field>
+
+                <input-field custom label="Text Field" placeholder="Enter some text..." class="is-valid"></input-field>
+
+                <hr>
+
+                <h3>Custom Select</h3>
+
+                <select-field custom v-model="form.custom_select" label="Select Field">
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select-field>
+
+                <select-field custom label="Help Text" help-text="This is some help text." invalid>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select-field>
+
+                <h4>Sizes</h4>
+
+                <select-field custom v-model="form.custom_select_sm" label="Small" size="sm">
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select-field>
+
+                <select-field custom v-model="form.custom_select_md" label="Medium">
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select-field>
+
+                <select-field custom v-model="form.custom_select_lg" label="Large" size="lg">
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select-field>
+
+                <h3>Validation</h3>
+
+                <select-field custom label="Invalid" error="This is a sample error." invalid>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select-field>
+
+                <select-field custom label="Valid" class="is-valid">
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select-field>
+
             </div>
         </div>
 
@@ -29,7 +95,14 @@
                 el: '#app',
                 data() {
                     return {
-                        form: {},
+                        form: {
+                            custom_sm: 'small',
+                            custom_md: 'medium',
+                            custom_lg: 'large',
+                            custom_text: 'test',
+                            custom_email: 'test@test.com',
+                            // custom_select_md: '2'
+                        },
                         errors: null
                     }
                 }

@@ -1,4 +1,7 @@
+import './scss/_variables.scss';
+import './scss/_forms.scss';
 import './scss/main.scss';
+
 import * as Fields from './Components/Fields';
 
 // import 'es6-object-assign';

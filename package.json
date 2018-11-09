@@ -20,7 +20,7 @@
         "the-one-true-form": "^1.1.17",
         "vue": "^2.5.17",
         "vue-credit-card-field": "^0.2.0",
-        "vue-interface": "^0.2.19",
+        "vue-interface": "^0.2.38",
         "vue-place-autocomplete": "^0.2.0"
     },
     "devDependencies": {
@@ -32,6 +32,7 @@
         "@babel/preset-react": "^7.0.0",
         "@fullhuman/postcss-purgecss": "^1.1.0",
         "@vue/test-utils": "^1.0.0-beta.25",
+        "autoprefixer": "^9.3.1",
         "babel-eslint": "^10.0.1",
         "babel-jest": "^23.6.0",
         "babel-preset-vue": "^2.0.2",

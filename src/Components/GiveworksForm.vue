@@ -9,11 +9,9 @@
         </div>
         <form v-else-if="page.id" @submit.prevent="submit" novalidate="novalidate" :class="classes">
             <component
+                ref="type"
                 :is="pageTypeComponent"
                 :orientation="orientation"
-                :submitting="submitting"
-                :form="form"
-                :errors="errors"
                 :page="page"
             />
         </form>
@@ -24,25 +22,15 @@
 </template>
 
 <script>
-import Page from '@/Models/Page';
-import HttpConfig from '@/Config/Http';
+import Page from '../Models/Page';
+import HttpConfig from '../Config/Http';
+import Donation from './Types/Donation';
+import Petition from './Types/Petition';
+import Signup from './Types/Signup';
+import Survey from './Types/Survey';
 import HttpErrorResponse from './HttpErrorResponse';
 import Request from 'vue-interface/src/Http/Request';
-import { each } from 'vue-interface/src/Helpers/Functions';
 import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
-
-/*
-import {
-    HorizontalDonationForm,
-    VerticalDonationForm,
-    HorizontalPetitionForm,
-    VerticalPetitionForm,
-    HorizontalSignupForm,
-    VerticalSignupForm,
-    HorizontalSurveyForm,
-    VerticalSurveyForm
-} from './PageTypes';
-*/
 
 export default {
 
@@ -50,17 +38,11 @@ export default {
 
     components: {
         ActivityIndicator,
-        /*
-        HorizontalDonationForm,
-        VerticalDonationForm,
-        HorizontalPetitionForm,
-        VerticalPetitionForm,
-        HorizontalSignupForm,
-        VerticalSignupForm,
-        HorizontalSurveyForm,
-        VerticalSurveyForm,
-        */
-        HttpErrorResponse
+        HttpErrorResponse,
+        Donation,
+        Petition,
+        Signup,
+        Survey
     },
 
     props: {
@@ -94,7 +76,7 @@ export default {
         },
 
         pageTypeComponent() {
-            return this.orientation + '-' + this.page.special + '-form';
+            return this.page.special;
         }
 
     },
@@ -133,8 +115,8 @@ export default {
             }
         },
 
-        submit() {
-            this.$dispatch.request('form:submit');
+        submit(e) {
+            this.$refs.type.submit(e);
         },
 
         onResize() {
@@ -154,16 +136,8 @@ export default {
         if(!this.page.id) {
             Page.find(this.pageId).then(model => {
                 this.page = model.toJson();
-                this.model = new Page({
-                    id: this.page.id
-                });
             }, error => {
                 this.error = error;
-            });
-        }
-        else {
-            this.model = new Page({
-                id: this.page.id
             });
         }
 
@@ -175,6 +149,7 @@ export default {
     },
 
     beforeCreate() {
+        /*
         const replies = {
             'submit:show': 'show',
             'submit:hide': 'hide',
@@ -249,9 +224,11 @@ export default {
                 this.$el.querySelector(':focus').blur();
             }
         });
+        */
     },
 
     beforeDestroy() {
+        /*
         this.$dispatch.off('error');
         this.$dispatch.off('form:submit');
         this.$dispatch.stopReply('form:submit');
@@ -260,18 +237,13 @@ export default {
         this.$dispatch.stopReply('submit:disable');
         this.$dispatch.stopReply('submit:show');
         this.$dispatch.stopReply('submit:hide');
+        */
     },
 
     data() {
         return {
-            errors: {},
             error: null,
-            model: false,
-            submitting: false,
-            page: this.data || {},
-            form: {
-                recurring: 0
-            }
+            page: this.data || {}
         };
     }
 

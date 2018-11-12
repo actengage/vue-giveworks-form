@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import PaymentGateways from './PaymentGateways';
 import FormComponent from '../../Mixins/FormComponent';
+import PaymentGateways from '../Gateways/PaymentGateways';
 import BtnActivity from 'vue-interface/src/Components/BtnActivity';
 import TextareaField from 'vue-interface/src/Components/TextareaField';
 

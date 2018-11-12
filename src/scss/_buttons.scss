@@ -1,0 +1,17 @@
+@import '_variables.scss';
+
+.payment-buttons {
+    .payment-buttons-grid {
+        display: grid;
+        grid-gap: .25rem;
+        grid-template-columns: repeat(3, 1fr);
+
+        .btn {
+            padding: 1rem;
+        }
+    }
+
+    .input-group div:not(.input-group-prepend):not(.input-group-append) {
+        flex: 1;
+    }
+}

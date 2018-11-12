@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Form Component Example</title>
+    </head>
+    <body>
+        <div id="app" class="giveworks-form">
+            <div class="container">
+
+                <h3>Custom Input</h3>
+
+                <payment-buttons v-model="amount" :amounts="[10, 20, 50, 100, 500, 1000]"></payment-buttons>
+
+            </div>
+        </div>
+
+        <!-- Include the css file -->
+        <link rel="stylesheet" href="../../dist/vue-giveworks-form.css">
+
+        <!-- VueGiveworksForm dependencies -->
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios@0.18.0/dist/axios.min.js"></script>
+
+        <!-- VueGiveworksForm Library -->
+        <script type="text/javascript" src="../../dist/vue-giveworks-form.install.js"></script>
+
+        <!-- Instantiate a Vue instance -->
+        <script type="text/javascript">
+            new Vue({
+                el: '#app',
+                data() {
+                    return {
+                        amount: null
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>

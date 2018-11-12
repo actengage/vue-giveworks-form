@@ -1,14 +1,12 @@
 export default {
 
     props: {
-        submitting: Boolean,
         page: {
             type: Object,
             required: true
         },
         form: {
-            type: Object,
-            required: true
+            type: Object
         },
         errors: {
             type: [Boolean, Object],

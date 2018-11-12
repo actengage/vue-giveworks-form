@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import Gateway from '@/Components/Gateways/Gateway';
+import Gateway from '../Gateway';
 import wait from 'vue-interface/src/Helpers/Wait';
 import elapsed from 'vue-interface/src/Helpers/Elapsed';
 import CreditCardField from 'vue-credit-card-field/src/CreditCardField';
@@ -50,8 +50,8 @@ export default {
 
     methods: {
         onChange: function(event) {
-            if(!event.complete) {
-                this.$dispatch.request('submit:disable');
+            if(!event || !event.complete) {
+                // this.$dispatch.request('submit:disable');
             }
         },
         onComplete: function(event) {
@@ -66,12 +66,12 @@ export default {
                         if(event.messages.resultCode === 'Ok') {
                             this.$set(this.form, 'token', event.opaqueData.dataValue);
                             this.$set(this.form, 'tokenDescriptor', event.opaqueData.dataDescriptor);
-                            this.$dispatch.request('submit:enable');
+                            // this.$dispatch.request('submit:enable');
                             resolve(event);
                         }
                         else if(event.messages.resultCode === 'Error') {
                             this.error = event.messages.message[0].text;
-                            this.$dispatch.request('submit:disable');
+                            // this.$dispatch.request('submit:disable');
                             reject(this.error);
                         }
                     }).then(resolve, reject);
@@ -87,7 +87,7 @@ export default {
     },
 
     mounted() {
-        this.$dispatch.request('submit:disable');
+        // this.$dispatch.request('submit:disable');
 
         Gateway(this.gateway).script((event) => {
             this.loaded = true;

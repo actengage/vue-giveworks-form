@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import '@/Config/Icons';
-import Gateway from '@/Components/Gateways/Gateway';
+import '../../../Config/Icons';
+import Gateway from '../Gateway';
 import Alert from 'vue-interface/src/Components/Alert';
 import { FontAwesomeIcon as Icon } from '@fortawesome/vue-fontawesome';
 import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
@@ -114,8 +114,9 @@ export default {
 
     updated() {
         if(this.shouldMountButton()) {
-            const button = Gateway(this.gateway).button('.paypal-payment-button', this.$dispatch);
+            Gateway(this.gateway).button('.paypal-payment-button'/*, this.$dispatch */);
 
+            /*
             this.$dispatch.on('paypal:click', data => {
                 if(this.hasPaymentInfo()) {
                     this.$dispatch.request('form:submit');
@@ -156,12 +157,14 @@ export default {
                 this.$dispatch.request('form:submit');
                 this.$dispatch.request('paypal:disable');
             });
+            */
         }
     },
 
     beforeCreate() {
-        this.$prevFormSubmitReply = this.$dispatch.getReply('form:submit');
+        // this.$prevFormSubmitReply = this.$dispatch.getReply('form:submit');
 
+        /*
         this.$dispatch.reply('form:submit', (resolve, reject) => {
             if(this.hasPaymentInfo()) {
                 this.$prevFormSubmitReply.handle(response => {
@@ -184,10 +187,11 @@ export default {
         this.$submitCompleteEvent = this.$dispatch.on('form:submit:error', response => {
             this.submitting = false;
         });
+        */
     },
 
     mounted() {
-        this.$dispatch.request('submit:hide');
+        // this.$dispatch.request('submit:hide');
 
         Gateway(this.gateway).script((event) => {
             this.loaded = true;
@@ -203,11 +207,11 @@ export default {
             this.$unwatchRecurring();
         }
 
-        this.$dispatch.request('submit:show');
-        this.$dispatch.off('paypal:authorize');
-        this.$dispatch.off(this.$submitEvent);
-        this.$dispatch.off(this.$submitCompleteEvent);
-        this.$dispatch.setReply(this.$prevFormSubmitReply);
+        // this.$dispatch.request('submit:show');
+        // this.$dispatch.off('paypal:authorize');
+        // this.$dispatch.off(this.$submitEvent);
+        // this.$dispatch.off(this.$submitCompleteEvent);
+        // this.$dispatch.setReply(this.$prevFormSubmitReply);
     }
 
 };

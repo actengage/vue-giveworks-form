@@ -1,52 +1,75 @@
+.giveworks-form .payment-buttons .payment-buttons-grid {
+  display: grid;
+  grid-gap: .25rem;
+  grid-template-columns: repeat(3, 1fr); }
+  .giveworks-form .payment-buttons .payment-buttons-grid .btn {
+    padding: 1rem; }
+
+.giveworks-form .payment-buttons .input-group div:not(.input-group-prepend):not(.input-group-append) {
+  flex: 1; }
 
 .giveworks-form .custom-select-field label,
-.giveworks-form .custom-input-field label {
+.giveworks-form .custom-input-field label,
+.giveworks-form .custom-textarea-field label {
   color: #6c757d; }
 
 .giveworks-form .custom-select-field.is-invalid.custom-input-field .custom-control,
 .giveworks-form .custom-select-field.is-invalid.custom-select-field .form-group-inner,
 .giveworks-form .custom-input-field.is-invalid.custom-input-field .custom-control,
-.giveworks-form .custom-input-field.is-invalid.custom-select-field .form-group-inner {
+.giveworks-form .custom-input-field.is-invalid.custom-select-field .form-group-inner,
+.giveworks-form .custom-textarea-field.is-invalid.custom-input-field .custom-control,
+.giveworks-form .custom-textarea-field.is-invalid.custom-select-field .form-group-inner {
   border-color: #dc3545; }
 
 .giveworks-form .custom-select-field.is-invalid.has-focus.custom-input-field .custom-control,
 .giveworks-form .custom-select-field.is-invalid.has-focus.custom-select-field .form-group-inner,
 .giveworks-form .custom-input-field.is-invalid.has-focus.custom-input-field .custom-control,
-.giveworks-form .custom-input-field.is-invalid.has-focus.custom-select-field .form-group-inner {
+.giveworks-form .custom-input-field.is-invalid.has-focus.custom-select-field .form-group-inner,
+.giveworks-form .custom-textarea-field.is-invalid.has-focus.custom-input-field .custom-control,
+.giveworks-form .custom-textarea-field.is-invalid.has-focus.custom-select-field .form-group-inner {
   border-color: #dc3545;
   box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25); }
 
-.giveworks-form .custom-select-field.is-invalid:not(.is-empty) > label,
-.giveworks-form .custom-input-field.is-invalid:not(.is-empty) > label {
+.giveworks-form .custom-select-field.is-invalid label,
+.giveworks-form .custom-input-field.is-invalid label,
+.giveworks-form .custom-textarea-field.is-invalid label {
   color: #dc3545; }
 
 .giveworks-form .custom-select-field.is-invalid .invalid-feedback,
-.giveworks-form .custom-input-field.is-invalid .invalid-feedback {
+.giveworks-form .custom-input-field.is-invalid .invalid-feedback,
+.giveworks-form .custom-textarea-field.is-invalid .invalid-feedback {
   display: block; }
 
 .giveworks-form .custom-select-field.is-valid.custom-input-field .custom-control,
 .giveworks-form .custom-select-field.is-valid.custom-select-field .form-group-inner,
 .giveworks-form .custom-input-field.is-valid.custom-input-field .custom-control,
-.giveworks-form .custom-input-field.is-valid.custom-select-field .form-group-inner {
+.giveworks-form .custom-input-field.is-valid.custom-select-field .form-group-inner,
+.giveworks-form .custom-textarea-field.is-valid.custom-input-field .custom-control,
+.giveworks-form .custom-textarea-field.is-valid.custom-select-field .form-group-inner {
   border-color: #28a745; }
 
 .giveworks-form .custom-select-field.is-valid.has-focus.custom-input-field .custom-control,
 .giveworks-form .custom-select-field.is-valid.has-focus.custom-select-field .form-group-inner,
 .giveworks-form .custom-input-field.is-valid.has-focus.custom-input-field .custom-control,
-.giveworks-form .custom-input-field.is-valid.has-focus.custom-select-field .form-group-inner {
+.giveworks-form .custom-input-field.is-valid.has-focus.custom-select-field .form-group-inner,
+.giveworks-form .custom-textarea-field.is-valid.has-focus.custom-input-field .custom-control,
+.giveworks-form .custom-textarea-field.is-valid.has-focus.custom-select-field .form-group-inner {
   border-color: #28a745;
   box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25); }
 
 .giveworks-form .custom-select-field.is-valid:not(.is-empty) > label,
-.giveworks-form .custom-input-field.is-valid:not(.is-empty) > label {
+.giveworks-form .custom-input-field.is-valid:not(.is-empty) > label,
+.giveworks-form .custom-textarea-field.is-valid:not(.is-empty) > label {
   color: #28a745; }
 
 .giveworks-form .custom-select-field.is-valid .invalid-feedback,
-.giveworks-form .custom-input-field.is-valid .invalid-feedback {
+.giveworks-form .custom-input-field.is-valid .invalid-feedback,
+.giveworks-form .custom-textarea-field.is-valid .invalid-feedback {
   display: block; }
 
 .giveworks-form .custom-select-field .form-group-inner,
-.giveworks-form .custom-input-field .custom-control {
+.giveworks-form .custom-input-field .custom-control,
+.giveworks-form .custom-textarea-field .custom-control {
   display: block;
   width: 100%;
   transition: padding .15s ease-out;
@@ -62,36 +85,59 @@
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, padding 0.15s ease-out; }
   @media screen and (prefers-reduced-motion: reduce) {
     .giveworks-form .custom-select-field .form-group-inner,
-    .giveworks-form .custom-input-field .custom-control {
+    .giveworks-form .custom-input-field .custom-control,
+    .giveworks-form .custom-textarea-field .custom-control {
       transition: none; } }
   .giveworks-form .custom-select-field .form-group-inner::-ms-expand,
-  .giveworks-form .custom-input-field .custom-control::-ms-expand {
+  .giveworks-form .custom-input-field .custom-control::-ms-expand,
+  .giveworks-form .custom-textarea-field .custom-control::-ms-expand {
     background-color: transparent;
     border: 0; }
   .giveworks-form .custom-select-field .form-group-inner:focus,
-  .giveworks-form .custom-input-field .custom-control:focus {
+  .giveworks-form .custom-input-field .custom-control:focus,
+  .giveworks-form .custom-textarea-field .custom-control:focus {
     color: #495057;
     background-color: #fff;
     border-color: #80bdff;
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
   .giveworks-form .custom-select-field .form-group-inner::-webkit-input-placeholder,
-  .giveworks-form .custom-input-field .custom-control::-webkit-input-placeholder {
+  .giveworks-form .custom-input-field .custom-control::-webkit-input-placeholder,
+  .giveworks-form .custom-textarea-field .custom-control::-webkit-input-placeholder {
     transition: opacity .15s ease-out;
     opacity: 1; }
   .giveworks-form .custom-select-field .form-group-inner:-ms-input-placeholder,
-  .giveworks-form .custom-input-field .custom-control:-ms-input-placeholder {
+  .giveworks-form .custom-input-field .custom-control:-ms-input-placeholder,
+  .giveworks-form .custom-textarea-field .custom-control:-ms-input-placeholder {
     transition: opacity .15s ease-out;
     opacity: 1; }
   .giveworks-form .custom-select-field .form-group-inner::-ms-input-placeholder,
-  .giveworks-form .custom-input-field .custom-control::-ms-input-placeholder {
+  .giveworks-form .custom-input-field .custom-control::-ms-input-placeholder,
+  .giveworks-form .custom-textarea-field .custom-control::-ms-input-placeholder {
     transition: opacity .15s ease-out;
     opacity: 1; }
   .giveworks-form .custom-select-field .form-group-inner::placeholder,
-  .giveworks-form .custom-input-field .custom-control::placeholder {
+  .giveworks-form .custom-input-field .custom-control::placeholder,
+  .giveworks-form .custom-textarea-field .custom-control::placeholder {
     transition: opacity .15s ease-out;
     opacity: 1; }
-  .giveworks-form .custom-select-field .form-group-inner:disabled, .giveworks-form .custom-select-field .form-group-inner[readonly], .giveworks-form .custom-input-field .custom-control:disabled, .giveworks-form .custom-input-field .custom-control[readonly] {
+  .giveworks-form .custom-select-field .form-group-inner.is-invalid::-webkit-input-placeholder,
+  .giveworks-form .custom-input-field .custom-control.is-invalid::-webkit-input-placeholder,
+  .giveworks-form .custom-textarea-field .custom-control.is-invalid::-webkit-input-placeholder {
+    color: #dc3545; }
+  .giveworks-form .custom-select-field .form-group-inner.is-invalid:-ms-input-placeholder,
+  .giveworks-form .custom-input-field .custom-control.is-invalid:-ms-input-placeholder,
+  .giveworks-form .custom-textarea-field .custom-control.is-invalid:-ms-input-placeholder {
+    color: #dc3545; }
+  .giveworks-form .custom-select-field .form-group-inner.is-invalid::-ms-input-placeholder,
+  .giveworks-form .custom-input-field .custom-control.is-invalid::-ms-input-placeholder,
+  .giveworks-form .custom-textarea-field .custom-control.is-invalid::-ms-input-placeholder {
+    color: #dc3545; }
+  .giveworks-form .custom-select-field .form-group-inner.is-invalid::placeholder,
+  .giveworks-form .custom-input-field .custom-control.is-invalid::placeholder,
+  .giveworks-form .custom-textarea-field .custom-control.is-invalid::placeholder {
+    color: #dc3545; }
+  .giveworks-form .custom-select-field .form-group-inner:disabled, .giveworks-form .custom-select-field .form-group-inner[readonly], .giveworks-form .custom-input-field .custom-control:disabled, .giveworks-form .custom-input-field .custom-control[readonly], .giveworks-form .custom-textarea-field .custom-control:disabled, .giveworks-form .custom-textarea-field .custom-control[readonly] {
     background-color: #e9ecef;
     opacity: 1; }
 
@@ -217,13 +263,14 @@
     outline: none;
     box-shadow: none; }
 
-.giveworks-form .custom-input-field {
+.giveworks-form .custom-input-field,
+.giveworks-form .custom-textarea-field {
   position: relative; }
-  .giveworks-form .custom-input-field > label {
+  .giveworks-form .custom-input-field > label,
+  .giveworks-form .custom-textarea-field > label {
     margin: 0;
     opacity: 0;
     z-index: -1;
-    width: 100%;
     line-height: 1em;
     position: absolute;
     transition: all .15s ease-out;
@@ -231,66 +278,99 @@
     -webkit-transform: translateY(0.375rem);
             transform: translateY(0.375rem);
     padding: 0.5625rem 0.825rem 0.28125rem; }
-  .giveworks-form .custom-input-field:not(.is-empty) .custom-control::-webkit-input-placeholder, .giveworks-form .custom-input-field.is-empty.has-changed .custom-control::-webkit-input-placeholder {
+  .giveworks-form .custom-input-field:not(.is-empty) .custom-control::-webkit-input-placeholder, .giveworks-form .custom-input-field.is-empty.has-changed .custom-control::-webkit-input-placeholder, .giveworks-form .custom-textarea-field:not(.is-empty) .custom-control::-webkit-input-placeholder, .giveworks-form .custom-textarea-field.is-empty.has-changed .custom-control::-webkit-input-placeholder {
     opacity: 0; }
-  .giveworks-form .custom-input-field:not(.is-empty) .custom-control:-ms-input-placeholder, .giveworks-form .custom-input-field.is-empty.has-changed .custom-control:-ms-input-placeholder {
+  .giveworks-form .custom-input-field:not(.is-empty) .custom-control:-ms-input-placeholder, .giveworks-form .custom-input-field.is-empty.has-changed .custom-control:-ms-input-placeholder, .giveworks-form .custom-textarea-field:not(.is-empty) .custom-control:-ms-input-placeholder, .giveworks-form .custom-textarea-field.is-empty.has-changed .custom-control:-ms-input-placeholder {
     opacity: 0; }
-  .giveworks-form .custom-input-field:not(.is-empty) .custom-control::-ms-input-placeholder, .giveworks-form .custom-input-field.is-empty.has-changed .custom-control::-ms-input-placeholder {
+  .giveworks-form .custom-input-field:not(.is-empty) .custom-control::-ms-input-placeholder, .giveworks-form .custom-input-field.is-empty.has-changed .custom-control::-ms-input-placeholder, .giveworks-form .custom-textarea-field:not(.is-empty) .custom-control::-ms-input-placeholder, .giveworks-form .custom-textarea-field.is-empty.has-changed .custom-control::-ms-input-placeholder {
     opacity: 0; }
-  .giveworks-form .custom-input-field:not(.is-empty) .custom-control::placeholder, .giveworks-form .custom-input-field.is-empty.has-changed .custom-control::placeholder {
+  .giveworks-form .custom-input-field:not(.is-empty) .custom-control::placeholder, .giveworks-form .custom-input-field.is-empty.has-changed .custom-control::placeholder, .giveworks-form .custom-textarea-field:not(.is-empty) .custom-control::placeholder, .giveworks-form .custom-textarea-field.is-empty.has-changed .custom-control::placeholder {
     opacity: 0; }
-  .giveworks-form .custom-input-field:not(.is-empty) label, .giveworks-form .custom-input-field.is-empty.has-changed label {
+  .giveworks-form .custom-input-field:not(.is-empty) label, .giveworks-form .custom-input-field.is-empty.has-changed label, .giveworks-form .custom-textarea-field:not(.is-empty) label, .giveworks-form .custom-textarea-field.is-empty.has-changed label {
     z-index: 1;
     opacity: 1;
     -webkit-transform: none;
             transform: none; }
-    .giveworks-form .custom-input-field:not(.is-empty) label + .form-group-inner .custom-control, .giveworks-form .custom-input-field.is-empty.has-changed label + .form-group-inner .custom-control {
+    .giveworks-form .custom-input-field:not(.is-empty) label + .form-group-inner .custom-control, .giveworks-form .custom-input-field.is-empty.has-changed label + .form-group-inner .custom-control, .giveworks-form .custom-textarea-field:not(.is-empty) label + .form-group-inner .custom-control, .giveworks-form .custom-textarea-field.is-empty.has-changed label + .form-group-inner .custom-control {
       padding-top: 1.5rem; }
-  .giveworks-form .custom-input-field.custom-input-field-sm label {
+  .giveworks-form .custom-input-field.custom-textarea-field:not(.is-empty) textarea,
+  .giveworks-form .custom-input-field.custom-textarea-field.is-empty.has-changed textarea,
+  .giveworks-form .custom-textarea-field.custom-textarea-field:not(.is-empty) textarea,
+  .giveworks-form .custom-textarea-field.custom-textarea-field.is-empty.has-changed textarea {
+    padding-top: 1.125rem; }
+  .giveworks-form .custom-input-field.custom-input-field-sm label,
+  .giveworks-form .custom-textarea-field.custom-input-field-sm label {
     font-size: 0.65625rem;
     padding: 0.4rem 0.6875rem 0.25rem; }
-  .giveworks-form .custom-input-field.custom-input-field-sm:not(.is-empty) .form-group-inner .custom-control, .giveworks-form .custom-input-field.custom-input-field-sm.is-empty.has-changed .form-group-inner .custom-control {
+  .giveworks-form .custom-input-field.custom-input-field-sm:not(.is-empty) .form-group-inner .custom-control, .giveworks-form .custom-input-field.custom-input-field-sm.is-empty.has-changed .form-group-inner .custom-control, .giveworks-form .custom-textarea-field.custom-input-field-sm:not(.is-empty) .form-group-inner .custom-control, .giveworks-form .custom-textarea-field.custom-input-field-sm.is-empty.has-changed .form-group-inner .custom-control {
     padding-top: 1.14844rem; }
-  .giveworks-form .custom-input-field.custom-input-field-lg label {
+  .giveworks-form .custom-input-field.custom-input-field-lg label,
+  .giveworks-form .custom-textarea-field.custom-input-field-lg label {
     font-size: 0.9375rem;
     padding: 0.6rem 1.05rem 0.375rem; }
-  .giveworks-form .custom-input-field.custom-input-field-lg:not(.is-empty) .form-group-inner .custom-control, .giveworks-form .custom-input-field.custom-input-field-lg.is-empty.has-changed .form-group-inner .custom-control {
+  .giveworks-form .custom-input-field.custom-input-field-lg:not(.is-empty) .form-group-inner .custom-control, .giveworks-form .custom-input-field.custom-input-field-lg.is-empty.has-changed .form-group-inner .custom-control, .giveworks-form .custom-textarea-field.custom-input-field-lg:not(.is-empty) .form-group-inner .custom-control, .giveworks-form .custom-textarea-field.custom-input-field-lg.is-empty.has-changed .form-group-inner .custom-control {
     padding-top: 1.875rem; }
   .giveworks-form .custom-input-field.is-valid .valid-feedback,
-  .giveworks-form .custom-input-field.is-invalid .invalid-feedback {
+  .giveworks-form .custom-input-field.is-invalid .invalid-feedback,
+  .giveworks-form .custom-textarea-field.is-valid .valid-feedback,
+  .giveworks-form .custom-textarea-field.is-invalid .invalid-feedback {
     display: block; }
-  .giveworks-form .custom-input-field .custom-control.custom-control-sm {
+  .giveworks-form .custom-input-field .custom-control.custom-control-sm,
+  .giveworks-form .custom-textarea-field .custom-control.custom-control-sm {
     height: calc(2.14062rem + 2px);
     padding: 0.5rem 0.625rem;
     font-size: 0.82031rem;
     line-height: 1.5;
     border-radius: 0.2rem; }
-  .giveworks-form .custom-input-field .custom-control.custom-control-lg {
+  .giveworks-form .custom-input-field .custom-control.custom-control-lg,
+  .giveworks-form .custom-textarea-field .custom-control.custom-control-lg {
     height: calc(3.34375rem + 2px);
     padding: 0.75rem 1rem;
     font-size: 1.17188rem;
     line-height: 1.5;
     border-radius: 0.3rem; }
 
+.giveworks-form .input-group .input-group-append,
+.giveworks-form .input-group .input-group-prepend {
+  position: relative; }
+  .giveworks-form .input-group .input-group-append::after,
+  .giveworks-form .input-group .input-group-prepend::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    padding: .75rem;
+    -webkit-transform: translateY(-50%);
+            transform: translateY(-50%); }
 
-.giveworks-form .has-activity {
-  /* For IE10 */
-}
-.giveworks-form .has-activity select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-.giveworks-form .has-activity select::-ms-expand {
-    display: none;
-}
+.giveworks-form .input-group .input-group-prepend .input-group-text {
+  border-right: 0; }
 
-.giveworks-form .input-field .slide-fade-enter,
-.giveworks-form .input-field .slide-fade-leave-to {
-  opacity: 1;
-  -webkit-transform: translate(25%, -50%);
-          transform: translate(25%, -50%);
-}
+.giveworks-form .input-group .input-group-prepend::after {
+  right: 0;
+  border-right: 1px solid #ced4da; }
+
+.giveworks-form .input-group .input-group-append .input-group-text {
+  border-left: 0; }
+
+.giveworks-form .input-group .input-group-append::after {
+  left: 0;
+  border-left: 1px solid #ced4da; }
+
+.giveworks-form .input-group > div:not(.input-group-prepend):not(.input-group-append):not(:last-child) .form-control,
+.giveworks-form .input-group > div:not(.input-group-prepend):not(.input-group-append):not(:last-child) .custom-control,
+.giveworks-form .input-group > div:not(.input-group-prepend):not(.input-group-append):not(:last-child) .custom-select {
+  border-right: 0; }
+
+.giveworks-form .input-group > div:not(.input-group-prepend):not(.input-group-append):not(:first-child) .form-control,
+.giveworks-form .input-group > div:not(.input-group-prepend):not(.input-group-append):not(:first-child) .custom-control,
+.giveworks-form .input-group > div:not(.input-group-prepend):not(.input-group-append):not(:first-child) .custom-select {
+  border-left: 0; }
+
+.giveworks-form .input-group .input-group-text {
+  background: inherit; }
+
+
 /*!
  * Bootstrap v4.1.3 (https://getbootstrap.com/)
  * Copyright 2011-2018 The Bootstrap Authors
@@ -6599,16 +6679,546 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; }
 
 
-.giveworks-form .form-group, .giveworks-form .form-group .form-group-inner {
-  position: relative;
+@-webkit-keyframes btn-activity-in {
+0%, 100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
 }
-.giveworks-form .form-group .activity-indicator {
-  position: absolute;
-  right: 0;
+30% {
+    -webkit-transform: scale(0.98);
+            transform: scale(0.98);
+}
+}
+@keyframes btn-activity-in {
+0%, 100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+}
+30% {
+    -webkit-transform: scale(0.98);
+            transform: scale(0.98);
+}
+}
+@-webkit-keyframes btn-activity-out {
+0%, 100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+}
+70% {
+    -webkit-transform: scale(0.98);
+            transform: scale(0.98);
+}
+}
+@keyframes btn-activity-out {
+0%, 100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+}
+70% {
+    -webkit-transform: scale(0.98);
+            transform: scale(0.98);
+}
+}
+.giveworks-form .btn-activity-top,
+.giveworks-form .btn-activity-bottom,
+.giveworks-form .btn-activity-left,
+.giveworks-form .btn-activity-right {
+  position: relative;
+  transition: padding 166.5ms ease-in;
+}
+.giveworks-form .btn-activity-top .activity-indicator,
+  .giveworks-form .btn-activity-bottom .activity-indicator,
+  .giveworks-form .btn-activity-left .activity-indicator,
+  .giveworks-form .btn-activity-right .activity-indicator {
+    opacity: 0;
+    position: absolute;
+    visibility: hidden;
+    transition: opacity 333ms ease-in;
+}
+.giveworks-form .btn-activity-top .activity-indicator,
+.giveworks-form .btn-activity-bottom .activity-indicator {
+  left: 50%;
+  margin-right: -50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.giveworks-form .btn-activity-left .activity-indicator,
+.giveworks-form .btn-activity-right .activity-indicator {
   top: 50%;
-  -webkit-transform: translate(-1rem, -50%);
-          transform: translate(-1rem, -50%);
-  transition: all .25s ease-in;
+  margin-bottom: -50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.giveworks-form .btn-activity:not(.btn-link) {
+  -webkit-animation: btn-activity-in 333ms;
+          animation: btn-activity-in 333ms;
+}
+.giveworks-form .btn-hide-activity:not(.btn-link) {
+  -webkit-animation: btn-activity-out 333ms;
+          animation: btn-activity-out 333ms;
+}
+.giveworks-form .btn-activity.btn-hide-activity .activity-indicator {
+  opacity: 0;
+}
+.giveworks-form .btn-activity .activity-indicator {
+  opacity: 1;
+  visibility: visible;
+  position: absolute;
+}
+.giveworks-form .btn-activity.btn-outline-primary.btn-activity-indicator-spinner .activity-indicator > div:before {
+  background-color: #007bff;
+}
+.giveworks-form .btn-activity.btn-outline-secondary.btn-activity-indicator-spinner .activity-indicator > div:before {
+  background-color: #28a745;
+}
+.giveworks-form .btn-activity.btn-outline-danger.btn-activity-indicator-spinner .activity-indicator > div:before {
+  background-color: #dc3545;
+}
+.giveworks-form .btn-activity.btn-outline-success.btn-activity-indicator-spinner .activity-indicator > div:before {
+  background-color: #28a745;
+}
+.giveworks-form .btn-activity.btn-outline-warning.btn-activity-indicator-spinner .activity-indicator > div:before {
+  background-color: #ffc107;
+}
+.giveworks-form .btn-activity.btn-outline-info.btn-activity-indicator-spinner .activity-indicator > div:before {
+  background-color: #17a2b8;
+}
+.giveworks-form .btn-activity.btn-outline-link.btn-activity-indicator-spinner .activity-indicator > div:before {
+  background-color: #007bff;
+}
+.giveworks-form .btn-activity.btn-xs.btn-activity-top.btn-activity-indicator-dots {
+  padding-top: 1.25rem;
+}
+.giveworks-form .btn-activity.btn-xs.btn-activity-top.btn-activity-indicator-dots .activity-indicator {
+    top: 0.5rem;
+}
+.giveworks-form .btn-activity.btn-xs.btn-activity-bottom.btn-activity-indicator-dots {
+  padding-bottom: 1.25rem;
+}
+.giveworks-form .btn-activity.btn-xs.btn-activity-bottom.btn-activity-indicator-dots .activity-indicator {
+    bottom: 0.5rem;
+}
+.giveworks-form .btn-activity.btn-xs.btn-activity-left.btn-activity-indicator-dots {
+  padding-left: 2.33rem;
+}
+.giveworks-form .btn-activity.btn-xs.btn-activity-left.btn-activity-indicator-dots .activity-indicator {
+    left: 0.5rem;
+}
+.giveworks-form .btn-activity.btn-xs.btn-activity-right.btn-activity-indicator-dots {
+  padding-right: 2.33rem;
+}
+.giveworks-form .btn-activity.btn-xs.btn-activity-right.btn-activity-indicator-dots .activity-indicator {
+    right: 0.5rem;
+}
+.giveworks-form .btn-activity.btn-xs.btn-activity-indicator-dots .activity-indicator > div,
+.giveworks-form .btn-activity.btn-xs .activity-indicator-dots > div {
+  width: 0.33333rem;
+  height: 0.33333rem;
+}
+.giveworks-form .btn-activity.btn-xs.btn-activity-top.btn-activity-indicator-spinner {
+  padding-top: 1.66rem;
+}
+.giveworks-form .btn-activity.btn-xs.btn-activity-top.btn-activity-indicator-spinner .activity-indicator {
+    top: 0.25rem;
+}
+.giveworks-form .btn-activity.btn-xs.btn-activity-bottom.btn-activity-indicator-spinner {
+  padding-bottom: 1.66rem;
+}
+.giveworks-form .btn-activity.btn-xs.btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator {
+    bottom: 0.25rem;
+}
+.giveworks-form .btn-activity.btn-xs.btn-activity-left.btn-activity-indicator-spinner {
+  padding-left: 1.66rem;
+}
+.giveworks-form .btn-activity.btn-xs.btn-activity-left.btn-activity-indicator-spinner .activity-indicator {
+    left: 0.25rem;
+}
+.giveworks-form .btn-activity.btn-xs.btn-activity-right.btn-activity-indicator-spinner {
+  padding-right: 1.66rem;
+}
+.giveworks-form .btn-activity.btn-xs.btn-activity-right.btn-activity-indicator-spinner .activity-indicator {
+    right: 0.25rem;
+}
+.giveworks-form .btn-activity.btn-xs.btn-activity-indicator-spinner .activity-indicator,
+.giveworks-form .btn-activity.btn-xs .activity-indicator-spinner {
+  width: 1rem;
+  height: 1rem;
+}
+.giveworks-form .btn-activity.btn-xs.btn-activity-indicator-spinner .activity-indicator > div:before,
+  .giveworks-form .btn-activity.btn-xs .activity-indicator-spinner > div:before {
+    width: 8.4%;
+    height: 30%;
+}
+.giveworks-form .btn-activity.btn-sm.btn-activity-top.btn-activity-indicator-dots {
+  padding-top: 1.75rem;
+}
+.giveworks-form .btn-activity.btn-sm.btn-activity-top.btn-activity-indicator-dots .activity-indicator {
+    top: 0.5rem;
+}
+.giveworks-form .btn-activity.btn-sm.btn-activity-bottom.btn-activity-indicator-dots {
+  padding-bottom: 1.75rem;
+}
+.giveworks-form .btn-activity.btn-sm.btn-activity-bottom.btn-activity-indicator-dots .activity-indicator {
+    bottom: 0.5rem;
+}
+.giveworks-form .btn-activity.btn-sm.btn-activity-left.btn-activity-indicator-dots {
+  padding-left: 3rem;
+}
+.giveworks-form .btn-activity.btn-sm.btn-activity-left.btn-activity-indicator-dots .activity-indicator {
+    left: 0.5rem;
+}
+.giveworks-form .btn-activity.btn-sm.btn-activity-right.btn-activity-indicator-dots {
+  padding-right: 3rem;
+}
+.giveworks-form .btn-activity.btn-sm.btn-activity-right.btn-activity-indicator-dots .activity-indicator {
+    right: 0.5rem;
+}
+.giveworks-form .btn-activity.btn-sm.btn-activity-indicator-dots .activity-indicator > div,
+.giveworks-form .btn-activity.btn-sm .activity-indicator-dots > div {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+.giveworks-form .btn-activity.btn-sm.btn-activity-top.btn-activity-indicator-spinner {
+  padding-top: 2rem;
+}
+.giveworks-form .btn-activity.btn-sm.btn-activity-top.btn-activity-indicator-spinner .activity-indicator {
+    top: 0.33rem;
+}
+.giveworks-form .btn-activity.btn-sm.btn-activity-bottom.btn-activity-indicator-spinner {
+  padding-bottom: 2rem;
+}
+.giveworks-form .btn-activity.btn-sm.btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator {
+    bottom: 0.33rem;
+}
+.giveworks-form .btn-activity.btn-sm.btn-activity-left.btn-activity-indicator-spinner {
+  padding-left: 2.5rem;
+}
+.giveworks-form .btn-activity.btn-sm.btn-activity-left.btn-activity-indicator-spinner .activity-indicator {
+    left: 0.5rem;
+}
+.giveworks-form .btn-activity.btn-sm.btn-activity-right.btn-activity-indicator-spinner {
+  padding-right: 2.5rem;
+}
+.giveworks-form .btn-activity.btn-sm.btn-activity-right.btn-activity-indicator-spinner .activity-indicator {
+    right: 0.5rem;
+}
+.giveworks-form .btn-activity.btn-sm.btn-activity-indicator-spinner .activity-indicator,
+.giveworks-form .btn-activity.btn-sm .activity-indicator-spinner {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.giveworks-form .btn-activity.btn-sm.btn-activity-indicator-spinner .activity-indicator > div:before,
+  .giveworks-form .btn-activity.btn-sm .activity-indicator-spinner > div:before {
+    width: 5.6%;
+    height: 30%;
+}
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-top.btn-activity-indicator-dots, .giveworks-form .btn-activity.btn-md.btn-activity-top.btn-activity-indicator-dots {
+  padding-top: 2rem;
+}
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-top.btn-activity-indicator-dots .activity-indicator, .giveworks-form .btn-activity.btn-md.btn-activity-top.btn-activity-indicator-dots .activity-indicator {
+    top: 0.66rem;
+}
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-bottom.btn-activity-indicator-dots, .giveworks-form .btn-activity.btn-md.btn-activity-bottom.btn-activity-indicator-dots {
+  padding-bottom: 2rem;
+}
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-bottom.btn-activity-indicator-dots .activity-indicator, .giveworks-form .btn-activity.btn-md.btn-activity-bottom.btn-activity-indicator-dots .activity-indicator {
+    bottom: 0.66rem;
+}
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-left.btn-activity-indicator-dots, .giveworks-form .btn-activity.btn-md.btn-activity-left.btn-activity-indicator-dots {
+  padding-left: 4rem;
+}
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-left.btn-activity-indicator-dots .activity-indicator, .giveworks-form .btn-activity.btn-md.btn-activity-left.btn-activity-indicator-dots .activity-indicator {
+    left: 0.5rem;
+}
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-right.btn-activity-indicator-dots, .giveworks-form .btn-activity.btn-md.btn-activity-right.btn-activity-indicator-dots {
+  padding-right: 4rem;
+}
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-right.btn-activity-indicator-dots .activity-indicator, .giveworks-form .btn-activity.btn-md.btn-activity-right.btn-activity-indicator-dots .activity-indicator {
+    right: 0.5rem;
+}
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-indicator-dots .activity-indicator > div,
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl) .activity-indicator-dots > div,
+.giveworks-form .btn-activity.btn-md.btn-activity-indicator-dots .activity-indicator > div,
+.giveworks-form .btn-activity.btn-md .activity-indicator-dots > div {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-top.btn-activity-indicator-spinner, .giveworks-form .btn-activity.btn-md.btn-activity-top.btn-activity-indicator-spinner {
+  padding-top: 2.75rem;
+}
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-top.btn-activity-indicator-spinner .activity-indicator, .giveworks-form .btn-activity.btn-md.btn-activity-top.btn-activity-indicator-spinner .activity-indicator {
+    top: 0.33rem;
+}
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-bottom.btn-activity-indicator-spinner, .giveworks-form .btn-activity.btn-md.btn-activity-bottom.btn-activity-indicator-spinner {
+  padding-bottom: 2.75rem;
+}
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator, .giveworks-form .btn-activity.btn-md.btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator {
+    bottom: 0.33rem;
+}
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-left.btn-activity-indicator-spinner, .giveworks-form .btn-activity.btn-md.btn-activity-left.btn-activity-indicator-spinner {
+  padding-left: 2.75rem;
+}
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-left.btn-activity-indicator-spinner .activity-indicator, .giveworks-form .btn-activity.btn-md.btn-activity-left.btn-activity-indicator-spinner .activity-indicator {
+    left: 0.5rem;
+}
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-right.btn-activity-indicator-spinner, .giveworks-form .btn-activity.btn-md.btn-activity-right.btn-activity-indicator-spinner {
+  padding-right: 2.75rem;
+}
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-right.btn-activity-indicator-spinner .activity-indicator, .giveworks-form .btn-activity.btn-md.btn-activity-right.btn-activity-indicator-spinner .activity-indicator {
+    right: 0.5rem;
+}
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-indicator-spinner .activity-indicator,
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl) .activity-indicator-spinner,
+.giveworks-form .btn-activity.btn-md.btn-activity-indicator-spinner .activity-indicator,
+.giveworks-form .btn-activity.btn-md .activity-indicator-spinner {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+.giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl).btn-activity-indicator-spinner .activity-indicator > div:before,
+  .giveworks-form .btn-activity:not(.btn-xs):not(.btn-sm):not(.btn-md):not(.btn-lg):not(.btn-xl) .activity-indicator-spinner > div:before,
+  .giveworks-form .btn-activity.btn-md.btn-activity-indicator-spinner .activity-indicator > div:before,
+  .giveworks-form .btn-activity.btn-md .activity-indicator-spinner > div:before {
+    width: 6.6%;
+    height: 30%;
+}
+.giveworks-form .btn-activity.btn-lg.btn-activity-top.btn-activity-indicator-dots {
+  padding-top: 2.75rem;
+}
+.giveworks-form .btn-activity.btn-lg.btn-activity-top.btn-activity-indicator-dots .activity-indicator {
+    top: 0.66rem;
+}
+.giveworks-form .btn-activity.btn-lg.btn-activity-bottom.btn-activity-indicator-dots {
+  padding-bottom: 2.75rem;
+}
+.giveworks-form .btn-activity.btn-lg.btn-activity-bottom.btn-activity-indicator-dots .activity-indicator {
+    bottom: 0.66rem;
+}
+.giveworks-form .btn-activity.btn-lg.btn-activity-left.btn-activity-indicator-dots {
+  padding-left: 5rem;
+}
+.giveworks-form .btn-activity.btn-lg.btn-activity-left.btn-activity-indicator-dots .activity-indicator {
+    left: 0.5rem;
+}
+.giveworks-form .btn-activity.btn-lg.btn-activity-right.btn-activity-indicator-dots {
+  padding-right: 5rem;
+}
+.giveworks-form .btn-activity.btn-lg.btn-activity-right.btn-activity-indicator-dots .activity-indicator {
+    right: 0.5rem;
+}
+.giveworks-form .btn-activity.btn-lg.btn-activity-indicator-dots .activity-indicator > div,
+.giveworks-form .btn-activity.btn-lg .activity-indicator-dots > div {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+.giveworks-form .btn-activity.btn-lg.btn-activity-top.btn-activity-indicator-spinner {
+  padding-top: 3.5rem;
+}
+.giveworks-form .btn-activity.btn-lg.btn-activity-top.btn-activity-indicator-spinner .activity-indicator {
+    top: 0.5rem;
+}
+.giveworks-form .btn-activity.btn-lg.btn-activity-bottom.btn-activity-indicator-spinner {
+  padding-bottom: 3.5rem;
+}
+.giveworks-form .btn-activity.btn-lg.btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator {
+    bottom: 0.5rem;
+}
+.giveworks-form .btn-activity.btn-lg.btn-activity-left.btn-activity-indicator-spinner {
+  padding-left: 3.25rem;
+}
+.giveworks-form .btn-activity.btn-lg.btn-activity-left.btn-activity-indicator-spinner .activity-indicator {
+    left: 0.5rem;
+}
+.giveworks-form .btn-activity.btn-lg.btn-activity-right.btn-activity-indicator-spinner {
+  padding-right: 3.25rem;
+}
+.giveworks-form .btn-activity.btn-lg.btn-activity-right.btn-activity-indicator-spinner .activity-indicator {
+    right: 0.5rem;
+}
+.giveworks-form .btn-activity.btn-lg.btn-activity-indicator-spinner .activity-indicator,
+.giveworks-form .btn-activity.btn-lg .activity-indicator-spinner {
+  width: 2.15rem;
+  height: 2.15rem;
+}
+.giveworks-form .btn-activity.btn-lg.btn-activity-indicator-spinner .activity-indicator > div:before,
+  .giveworks-form .btn-activity.btn-lg .activity-indicator-spinner > div:before {
+    width: 7.5%;
+}
+.giveworks-form .btn-activity.btn-xl.btn-activity-top.btn-activity-indicator-dots {
+  padding-top: 3.75rem;
+}
+.giveworks-form .btn-activity.btn-xl.btn-activity-top.btn-activity-indicator-dots .activity-indicator {
+    top: 1rem;
+}
+.giveworks-form .btn-activity.btn-xl.btn-activity-bottom.btn-activity-indicator-dots {
+  padding-bottom: 3.75rem;
+}
+.giveworks-form .btn-activity.btn-xl.btn-activity-bottom.btn-activity-indicator-dots .activity-indicator {
+    bottom: 1rem;
+}
+.giveworks-form .btn-activity.btn-xl.btn-activity-left.btn-activity-indicator-dots {
+  padding-left: 6rem;
+}
+.giveworks-form .btn-activity.btn-xl.btn-activity-left.btn-activity-indicator-dots .activity-indicator {
+    left: 0.75rem;
+}
+.giveworks-form .btn-activity.btn-xl.btn-activity-right.btn-activity-indicator-dots {
+  padding-right: 6rem;
+}
+.giveworks-form .btn-activity.btn-xl.btn-activity-right.btn-activity-indicator-dots .activity-indicator {
+    right: 0.75rem;
+}
+.giveworks-form .btn-activity.btn-xl.btn-activity-indicator-dots .activity-indicator > div,
+.giveworks-form .btn-activity.btn-xl .activity-indicator-dots > div {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.giveworks-form .btn-activity.btn-xl.btn-activity-top.btn-activity-indicator-spinner {
+  padding-top: 4.25rem;
+}
+.giveworks-form .btn-activity.btn-xl.btn-activity-top.btn-activity-indicator-spinner .activity-indicator {
+    top: 0.66rem;
+}
+.giveworks-form .btn-activity.btn-xl.btn-activity-bottom.btn-activity-indicator-spinner {
+  padding-bottom: 4.25rem;
+}
+.giveworks-form .btn-activity.btn-xl.btn-activity-bottom.btn-activity-indicator-spinner .activity-indicator {
+    bottom: 0.66rem;
+}
+.giveworks-form .btn-activity.btn-xl.btn-activity-left.btn-activity-indicator-spinner {
+  padding-left: 4rem;
+}
+.giveworks-form .btn-activity.btn-xl.btn-activity-left.btn-activity-indicator-spinner .activity-indicator {
+    left: 0.75rem;
+}
+.giveworks-form .btn-activity.btn-xl.btn-activity-right.btn-activity-indicator-spinner {
+  padding-right: 4rem;
+}
+.giveworks-form .btn-activity.btn-xl.btn-activity-right.btn-activity-indicator-spinner .activity-indicator {
+    right: 0.75rem;
+}
+.giveworks-form .btn-activity.btn-xl.btn-activity-indicator-spinner .activity-indicator,
+.giveworks-form .btn-activity.btn-xl .activity-indicator-spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+.giveworks-form .btn-activity.btn-xl.btn-activity-indicator-spinner .activity-indicator > div:before,
+  .giveworks-form .btn-activity.btn-xl .activity-indicator-spinner > div:before {
+    width: 7.5%;
+}
+
+.giveworks-form .payment-gateway-button {
+  height: 85px;
+}
+.giveworks-form .payment-gateway-button .small {
+    line-height: 1rem;
+}
+
+.giveworks-form .activity-indicator-dots > div {
+  border-radius: 100%;
+  display: inline-block;
+  background-color: #212529;
+  width: 0.6rem;
+  height: 0.6rem;
+  -webkit-animation: activity-indicator-dots 1.4s infinite ease-in-out both;
+          animation: activity-indicator-dots 1.4s infinite ease-in-out both;
+}
+.giveworks-form .activity-indicator-dots > div:not(:last-child) {
+  margin-right: 0.198rem;
+}
+.giveworks-form .activity-indicator-dots.activity-indicator-xs > div {
+  width: 0.3rem;
+  height: 0.3rem;
+}
+.giveworks-form .activity-indicator-dots.activity-indicator-sm > div {
+  width: 0.45rem;
+  height: 0.45rem;
+}
+.giveworks-form .activity-indicator-dots.activity-indicator-md > div {
+  width: 0.6rem;
+  height: 0.6rem;
+}
+.giveworks-form .activity-indicator-dots.activity-indicator-lg > div {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+.giveworks-form .activity-indicator-dots.activity-indicator-xl > div {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(1) {
+  -webkit-animation-delay: 0s;
+          animation-delay: 0s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(2) {
+  -webkit-animation-delay: 0.16s;
+          animation-delay: 0.16s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(3) {
+  -webkit-animation-delay: 0.32s;
+          animation-delay: 0.32s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(4) {
+  -webkit-animation-delay: 0.48s;
+          animation-delay: 0.48s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(5) {
+  -webkit-animation-delay: 0.64s;
+          animation-delay: 0.64s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(6) {
+  -webkit-animation-delay: 0.8s;
+          animation-delay: 0.8s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(7) {
+  -webkit-animation-delay: 0.96s;
+          animation-delay: 0.96s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(8) {
+  -webkit-animation-delay: 1.12s;
+          animation-delay: 1.12s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(9) {
+  -webkit-animation-delay: 1.28s;
+          animation-delay: 1.28s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(10) {
+  -webkit-animation-delay: 1.44s;
+          animation-delay: 1.44s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(11) {
+  -webkit-animation-delay: 1.6s;
+          animation-delay: 1.6s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(12) {
+  -webkit-animation-delay: 1.76s;
+          animation-delay: 1.76s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(13) {
+  -webkit-animation-delay: 1.92s;
+          animation-delay: 1.92s;
+}
+@-webkit-keyframes activity-indicator-dots {
+0%, 80%, 100% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+}
+40% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+}
+}
+@keyframes activity-indicator-dots {
+0%, 80%, 100% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+}
+40% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+}
+}
+.giveworks-form .btn-activity-indicator-dots:not(.btn-warning) .activity-indicator-dots > div {
+  background: white;
 }
 
 .giveworks-form .activity-indicator-spinner {
@@ -7454,110 +8064,455 @@
   background-color: white;
 }
 
-.giveworks-form .activity-indicator-dots > div {
-  border-radius: 100%;
-  display: inline-block;
-  background-color: #212529;
-  width: 0.6rem;
-  height: 0.6rem;
-  -webkit-animation: activity-indicator-dots 1.4s infinite ease-in-out both;
-          animation: activity-indicator-dots 1.4s infinite ease-in-out both;
+.giveworks-form .autocomplete-field {
+  position: relative;
 }
-.giveworks-form .activity-indicator-dots > div:not(:last-child) {
-  margin-right: 0.198rem;
+.giveworks-form .autocomplete-field .activity-indicator {
+    right: .5rem;
+    bottom: .5rem;
+    position: absolute;
 }
-.giveworks-form .activity-indicator-dots.activity-indicator-xs > div {
-  width: 0.3rem;
-  height: 0.3rem;
-}
-.giveworks-form .activity-indicator-dots.activity-indicator-sm > div {
-  width: 0.45rem;
-  height: 0.45rem;
-}
-.giveworks-form .activity-indicator-dots.activity-indicator-md > div {
-  width: 0.6rem;
-  height: 0.6rem;
-}
-.giveworks-form .activity-indicator-dots.activity-indicator-lg > div {
-  width: 0.9rem;
-  height: 0.9rem;
-}
-.giveworks-form .activity-indicator-dots.activity-indicator-xl > div {
-  width: 1.2rem;
-  height: 1.2rem;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(1) {
-  -webkit-animation-delay: 0s;
-          animation-delay: 0s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(2) {
-  -webkit-animation-delay: 0.16s;
-          animation-delay: 0.16s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(3) {
-  -webkit-animation-delay: 0.32s;
-          animation-delay: 0.32s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(4) {
-  -webkit-animation-delay: 0.48s;
-          animation-delay: 0.48s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(5) {
-  -webkit-animation-delay: 0.64s;
-          animation-delay: 0.64s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(6) {
-  -webkit-animation-delay: 0.8s;
-          animation-delay: 0.8s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(7) {
-  -webkit-animation-delay: 0.96s;
-          animation-delay: 0.96s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(8) {
-  -webkit-animation-delay: 1.12s;
-          animation-delay: 1.12s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(9) {
-  -webkit-animation-delay: 1.28s;
-          animation-delay: 1.28s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(10) {
-  -webkit-animation-delay: 1.44s;
-          animation-delay: 1.44s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(11) {
-  -webkit-animation-delay: 1.6s;
-          animation-delay: 1.6s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(12) {
-  -webkit-animation-delay: 1.76s;
-          animation-delay: 1.76s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(13) {
-  -webkit-animation-delay: 1.92s;
-          animation-delay: 1.92s;
-}
-@-webkit-keyframes activity-indicator-dots {
-0%, 80%, 100% {
-    -webkit-transform: scale(0);
-            transform: scale(0);
-}
-40% {
-    -webkit-transform: scale(1);
-            transform: scale(1);
-}
-}
-@keyframes activity-indicator-dots {
-0%, 80%, 100% {
-    -webkit-transform: scale(0);
-            transform: scale(0);
-}
-40% {
-    -webkit-transform: scale(1);
-            transform: scale(1);
-}
-}
-.giveworks-form .btn-activity-indicator-dots:not(.btn-warning) .activity-indicator-dots > div {
+.giveworks-form .autocomplete-list-wrapper {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  top: 100%;
   background: white;
+}
+.giveworks-form .autocomplete-list {
+  margin: 0;
+  padding: 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+}
+
+.giveworks-form .input-field .slide-fade-enter,
+.giveworks-form .input-field .slide-fade-leave-to {
+  opacity: 1;
+  -webkit-transform: translate(25%, -50%);
+          transform: translate(25%, -50%);
+}
+
+.giveworks-form .has-activity {
+  /* For IE10 */
+}
+.giveworks-form .has-activity select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+.giveworks-form .has-activity select::-ms-expand {
+    display: none;
+}
+
+.giveworks-form .input-group > div:not(:first-child) .form-control,
+.giveworks-form .input-group > div:not(:first-child) .custom-control,
+.giveworks-form .input-group > div:not(:first-child) .custom-select {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.giveworks-form .input-group > div:not(:last-child) .form-control,
+.giveworks-form .input-group > div:not(:last-child) .custom-control,
+.giveworks-form .input-group > div:not(:last-child) .custom-select {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.giveworks-form .paypal-payment-button.disabled,
+.giveworks-form .paypal-payment-button:disabled {
+    opacity: .5;
+}
+
+
+.giveworks-form .stripe-field {
+  position: relative;
+}
+.giveworks-form .stripe-field .form-control {
+    width: 100%;
+    transition: all .15s ease-in-out;
+}
+.giveworks-form .stripe-field .stripe-field-activity {
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+    height: 100%;
+    width: 35px;
+    transition: all .15s ease-in-out;
+}
+.giveworks-form .stripe-field.has-activity .form-control {
+    width: calc(100% - 35px);
+}
+.giveworks-form .stripe-field.has-activity .stripe-field-activity {
+    opacity: 1;
+}
+
+.giveworks-form .form-group, .giveworks-form .form-group .form-group-inner {
+  position: relative;
+}
+.giveworks-form .form-group .activity-indicator {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  -webkit-transform: translate(-1rem, -50%);
+          transform: translate(-1rem, -50%);
+  transition: all .25s ease-in;
+}
+
+@media (max-width: 575.98px) {
+.giveworks-form .btn-xs-block {
+    width: 100%;
+    display: block;
+}
+.giveworks-form .btn-xs-block + .btn-xs-block {
+      margin-top: 0.5rem;
+}
+}
+@media (max-width: 767.98px) {
+.giveworks-form .btn-sm-block {
+    width: 100%;
+    display: block;
+}
+.giveworks-form .btn-sm-block + .btn-xs-block,
+    .giveworks-form .btn-sm-block + .btn-sm-block {
+      margin-top: 0.5rem;
+}
+}
+@media (max-width: 991.98px) {
+.giveworks-form .btn-md-block {
+    width: 100%;
+    display: block;
+}
+.giveworks-form .btn-md-block + .btn-xs-block,
+    .giveworks-form .btn-md-block + .btn-sm-block,
+    .giveworks-form .btn-md-block + .btn-md-block {
+      margin-top: 0.5rem;
+}
+}
+@media (max-width: 1199.98px) {
+.giveworks-form .btn-lg-block {
+    width: 100%;
+    display: block;
+}
+.giveworks-form .btn-lg-block + .btn-xs-block,
+    .giveworks-form .btn-lg-block + .btn-sm-block,
+    .giveworks-form .btn-lg-block + .btn-md-block,
+    .giveworks-form .btn-lg-block + .btn-lg-block {
+      margin-top: 0.5rem;
+}
+}
+.giveworks-form .btn-xl-block {
+  width: 100%;
+  display: block;
+}
+.giveworks-form .btn-xl-block + .btn-xs-block,
+  .giveworks-form .btn-xl-block + .btn-sm-block,
+  .giveworks-form .btn-xl-block + .btn-md-block,
+  .giveworks-form .btn-xl-block + .btn-lg-block,
+  .giveworks-form .btn-xl-block + .btn-xl-block {
+    margin-top: 0.5rem;
+}
+
+.giveworks-form .autocomplete-list-item {
+  margin: 0;
+  padding: 0;
+  font-size: .8rem;
+  list-style: none;
+}
+.giveworks-form .autocomplete-list-item:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+.giveworks-form .autocomplete-list-item > a {
+    text-decoration: none;
+    padding: 5px;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.giveworks-form .autocomplete-list-item > a:hover {
+      text-decoration: none;
+      background: rgba(0, 0, 0, 0.05);
+}
+.giveworks-form .autocomplete-list-item-icon {
+  width: 15px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: top;
+  background-size: 34px;
+  background-position: -1px -161px;
+  background-image: url(https://maps.gstatic.com/mapfiles/api-3/images/autocomplete-icons_hdpi.png);
+}
+
+.giveworks-form .credit-card-field-wrapper {
+  position: relative;
+}
+.giveworks-form .credit-card-field-wrapper .credit-card-field-activity {
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 3em;
+    height: 100%;
+    transition: opacity .15s ease-in-out;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field {
+    box-sizing: border-box;
+    overflow: hidden;
+    position: relative;
+    background: white;
+    transition: width .333s ease-in-out;
+    /*
+        &.text-sm .credit-card-field-field,
+        &.text-sm .credit-card-field-number-mask,
+        &.text-sm .credit-card-field-placeholder-mask {
+            font-size: .85em;
+            line-height: .85em;
+        }
+
+        &.text-sm .credit-card-field-security-fields {
+            width: calc(11em * .85);
+        }
+
+        &.text-sm:not(.is-focused) .credit-card-field-security-fields,
+        &.text-sm.is-focused-number .credit-card-field-security-fields {
+            transform: translateX(calc(-4.5em * .85));
+        }
+        */
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.has-activity {
+      width: calc(100% - 3em);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.has-activity + .credit-card-field-activity {
+        opacity: 1;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.form-control-sm {
+      min-height: calc((0.25rem * 2) + (0.875rem * 1.5) + (1px * 2));
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.form-control-md {
+      min-height: calc((0.375rem * 2) + (1rem * 1.5) + (1px * 2));
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.form-control-lg {
+      min-height: calc((0.5rem * 2) + (1.25rem * 1.5) + (1px * 2));
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field ::-webkit-input-placeholder {
+      color: #adb5bd;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field ::-moz-placeholder {
+      color: #adb5bd;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field :-ms-input-placeholder {
+      color: #adb5bd;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field :-moz-placeholder {
+      color: #ced4da;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field + .invalid-feedback {
+      display: block;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-sm {
+      font-size: .95em;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-sm .credit-card-field-icon-wrapper {
+        width: .5em;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-sm .credit-card-field-number,
+      .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-sm .credit-card-field-fields {
+        width: calc(100% - .5em);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-sm .credit-card-field-icon-card {
+        display: none;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-sm .credit-card-field-fields {
+        left: .5em;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-lg.is-focused-number:not(.show-security-fields) .credit-card-field-security-fields {
+      -webkit-transform: translateX(-7.5em);
+              transform: translateX(-7.5em);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-fields {
+      position: absolute;
+      top: 50%;
+      width: calc(100% - 2.5em);
+      -webkit-transform: translateY(-50%);
+              transform: translateY(-50%);
+      left: 2.5em;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-field, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field input.credit-card-field-field {
+      float: left;
+      display: inline;
+      border: none;
+      outline: 0;
+      background: none;
+      box-shadow: none;
+      line-height: 1em;
+      padding: .5em 0;
+      transition: -webkit-transform .333s ease-in-out;
+      transition: transform .333s ease-in-out;
+      transition: transform .333s ease-in-out, -webkit-transform .333s ease-in-out;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-field.is-invalid, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field input.credit-card-field-field.is-invalid {
+        color: #dc3545;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-security-fields {
+      position: absolute;
+      left: 100%;
+      width: 11em;
+      display: inline-block;
+      transition: -webkit-transform .333s ease-in-out;
+      transition: transform .333s ease-in-out;
+      transition: transform .333s ease-in-out, -webkit-transform .333s ease-in-out;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-placeholder-mask,
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-number-mask {
+      width: auto;
+      opacity: 0;
+      position: absolute;
+      z-index: -1;
+      color: #adb5bd;
+      top: 50%;
+      line-height: 1em;
+      font-size: 1em;
+      white-space: nowrap;
+      -webkit-transform: translateY(-50%);
+              transform: translateY(-50%);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-placeholder-mask {
+      padding: 2px 0;
+      transition: opacity ease 0.25s;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-number {
+      width: 100%;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-expiration {
+      width: 4.75em;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-cvc {
+      width: 2.75em;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-postal {
+      width: 3.5em;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2.5em;
+      height: 100%;
+      z-index: 2;
+      background: white;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2.5em;
+      height: 100%;
+      transition: -webkit-transform 0.4s ease-in-out;
+      transition: transform 0.4s ease-in-out;
+      transition: transform 0.4s ease-in-out, -webkit-transform 0.4s ease-in-out;
+      -webkit-transform-style: preserve-3d;
+              transform-style: preserve-3d;
+      /* hide back of pane during swap */
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon {
+        height: 100%;
+        width: 2.5em;
+        transition: .33s;
+        padding: 0 .5em;
+        position: absolute;
+        top: 0;
+        left: 0;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon-back,
+      .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon-front .credit-card-field-icon {
+        opacity: 0;
+        -webkit-transform: scale(0);
+                transform: scale(0);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon-front,
+      .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon-back {
+        -webkit-backface-visibility: hidden;
+                backface-visibility: hidden;
+        position: absolute;
+        height: 100%;
+        width: 2.5em;
+        top: 0;
+        left: 0;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon-front {
+        z-index: 3;
+        -webkit-transform: rotateY(0deg);
+                transform: rotateY(0deg);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon-back {
+        -webkit-transform: rotateY(180deg);
+                transform: rotateY(180deg);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused) .credit-card-field-security-fields,
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-number .credit-card-field-security-fields {
+      -webkit-transform: translateX(-4.5em);
+              transform: translateX(-4.5em);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.show-security-fields .credit-card-field-security-fields,
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-expiration .credit-card-field-security-fields,
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-cvc .credit-card-field-security-fields,
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-postal .credit-card-field-security-fields,
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.last-focused-expiration .credit-card-field-security-fields,
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.last-focused-cvc .credit-card-field-security-fields,
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.last-focused-postal .credit-card-field-security-fields {
+      -webkit-transform: translateX(-100%);
+              transform: translateX(-100%);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused {
+      outline: none;
+      border-color: #80bdff;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused:not(.is-focused-number) .credit-card-field-number.is-empty, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused).last-focused-expiration .credit-card-field-number.is-empty, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused).last-focused-cvc .credit-card-field-number.is-empty, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused).last-focused-postal .credit-card-field-number.is-empty {
+      opacity: 0;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused:not(.is-focused-number) .credit-card-field-number.is-empty ~ .credit-card-field-placeholder-mask, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused).last-focused-expiration .credit-card-field-number.is-empty ~ .credit-card-field-placeholder-mask, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused).last-focused-cvc .credit-card-field-number.is-empty ~ .credit-card-field-placeholder-mask, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused).last-focused-postal .credit-card-field-number.is-empty ~ .credit-card-field-placeholder-mask {
+      opacity: 1;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-cvc .credit-card-field-icon-card {
+      -webkit-perspective: 1000px;
+              perspective: 1000px;
+      -webkit-transform: rotateY(180deg);
+              transform: rotateY(180deg);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-cvc .credit-card-field-icon-back {
+      display: block;
+      opacity: 1;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-cvc .credit-card-field-icon-front {
+      display: none;
+      opacity: 0;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-jcb .credit-card-field-icon-card svg[data-brand="jcb"],
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-visa .credit-card-field-icon-card svg[data-brand=visa],
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-amex .credit-card-field-icon-card svg[data-brand="amex"],
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-unknown .credit-card-field-icon-card svg[data-brand="unknown"],
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-discover .credit-card-field-icon-card svg[data-brand="discover"],
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-mastercard .credit-card-field-icon-card svg[data-brand="mastercard"],
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-dinersclub .credit-card-field-icon-card svg[data-brand="dinersclub"] {
+      opacity: 1;
+      -webkit-transform: scale(1);
+              transform: scale(1);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-invalid, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:invalid {
+      outline: none;
+      border-color: #dc3545;
+      box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-invalid .credit-card-field-icon, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:invalid .credit-card-field-icon {
+        color: #dc3545;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-valid, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:valid {
+      outline: none;
+      border-color: #28a745;
+      box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-valid .credit-card-field-icon, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:valid .credit-card-field-icon {
+        color: #28a745;
 }

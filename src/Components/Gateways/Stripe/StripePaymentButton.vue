@@ -52,8 +52,8 @@
 </template>
 
 <script>
-import '@/Config/Icons';
-import Gateway from '@/Components/Gateways/Gateway';
+import '../../../Config/Icons';
+import Gateway from '../Gateway';
 import Alert from 'vue-interface/src/Components/Alert';
 import { FontAwesomeIcon as Icon } from '@fortawesome/vue-fontawesome';
 import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
@@ -121,6 +121,8 @@ export default {
     },
 
     created() {
+        /*
+        this.$dispatch.request('form').then(form => {
         this.$dispatch.request('form').then(form => {
             if(form.$card) {
                 this.card = form.$card;
@@ -134,9 +136,11 @@ export default {
         this.$submitCompleteEvent = this.$dispatch.on('form:submit:complete', () => {
             this.submitting = false;
         });
+        */
     },
 
     beforeDestroy() {
+        /*
         if(this.card) {
             this.$dispatch.request('form').then(form => {
                 form.$card = this.card;
@@ -146,12 +150,13 @@ export default {
         this.$dispatch.request('submit:show');
         this.$dispatch.off(this.$submitEvent);
         this.$dispatch.off(this.$submitCompleteEvent);
+        */
     },
 
     mounted() {
         const gateway = Gateway(this.gateway);
 
-        this.$dispatch.request('submit:hide');
+        // this.$dispatch.request('submit:hide');
 
         gateway.script((event) => {
             this.$paymentRequest = gateway.paymentRequest(1000, this.getPaymentLabel());
@@ -159,7 +164,7 @@ export default {
 
             this.$paymentRequestButton.on('click', (event) => {
                 if(this.form.token) {
-                    this.$dispatch.request('form:submit');
+                    // this.$dispatch.request('form:submit');
                 }
             });
 
@@ -179,7 +184,7 @@ export default {
                 this.form.token = event.token.id;
 
                 if(!this.changingCard) {
-                    this.$dispatch.request('form:submit');
+                    // this.$dispatch.request('form:submit');
                 }
                 else {
                     this.changingCard = false;

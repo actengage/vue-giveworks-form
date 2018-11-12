@@ -8,41 +8,7 @@
             <small class="text-muted">Minimum accepted amount is ${{ page.options.min_amount }}</small>
         </div>
 
-        <div class="row mb-2" :class="{'was-validated': errors.amount}">
-            <div class="col-sm-6">
-                <div class="custom-controls-stacked" v-for="value in amounts.slice(0, amounts.length / 2)">
-                    <label class="custom-control custom-radio">
-                        <input type="radio"class="custom-control-input" :value="value" :class="{'is-invalid': errors.amount}" v-model.number="form.amount">
-                        <span class="custom-control-indicator"/>
-                        <span class="custom-control-label">${{value}}</span>
-                    </label>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="custom-controls-stacked" v-for="value in amounts.slice(amounts.length / 2)">
-                    <label class="custom-control custom-radio">
-                        <input type="radio" class="custom-control-input" :value="value" :class="{'is-invalid': errors.amount}" v-model.number="form.amount">
-                        <span class="custom-control-indicator"/>
-                        <span class="custom-control-label">${{value}}</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-
-        <div class="row" :class="{'was-validated': errors.amount}">
-            <label for="amount" class="col-sm-6 col-form-label">
-                <span class="text-bold">Your Amount</span>
-            </label>
-            <div class="col-sm-6">
-                <div class="input-group">
-                    <label for="amount" class="input-group-prepend">
-                        <div class="input-group-text">$</div>
-                    </label>
-                    <input type="text" name="amount" class="form-control" id="amount" placeholder="10.00" :class="{'is-invalid': errors.amount}" v-model.number="form.amount">
-                    <div v-if="errors.amount" class="invalid-feedback" v-html="errors.amount.join('<br>')"/>
-                </div>
-            </div>
-        </div>
+        <payment-buttons v-model="form.amount" name="amount" :amounts="amounts" :errors="errors"/>
 
         <div class="form-group mt-3" v-if="page.site.recurring && !page.options.recurring_only">
             <label v-html="recurringMessage"/>
@@ -66,8 +32,9 @@
 </template>
 
 <script>
-import '@/Config/Icons';
-import FormComponent from '@/Mixins/FormComponent';
+import '../../Config/Icons';
+import PaymentButtons from '../Fields/PaymentButtons';
+import FormComponent from '../../Mixins/FormComponent';
 import Alert from 'vue-interface/src/Components/Alert';
 import { FontAwesomeIcon as Icon } from '@fortawesome/vue-fontawesome';
 import AlertHeading from 'vue-interface/src/Components/Alert/AlertHeading';
@@ -79,7 +46,8 @@ export default {
     components: {
         Icon,
         Alert,
-        AlertHeading
+        AlertHeading,
+        PaymentButtons
     },
 
     mixins: [

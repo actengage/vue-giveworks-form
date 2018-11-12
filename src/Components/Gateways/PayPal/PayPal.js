@@ -42,7 +42,7 @@ export default class PayPal extends Api {
 
             validate: (actions) => {
                 button.amount ? actions.enable() : actions.disable();
-
+                /*
                 $dispatch.reply('paypal:enable', (resolve, reject) => {
                     actions.enable();
                     resolve(actions);
@@ -54,6 +54,7 @@ export default class PayPal extends Api {
                 });
 
                 $dispatch.emit('paypal:validate', actions);
+                */
             },
 
             payment: function(data, actions) {
@@ -73,30 +74,32 @@ export default class PayPal extends Api {
                     }
                 });
 
-                $dispatch.emit('paypal:payment', payment);
+                // $dispatch.emit('paypal:payment', payment);
 
                 return payment;
-            },
+            }
 
+            /*
             onRender: function() {
-                $dispatch.emit('paypal:render', this);
+                // $dispatch.emit('paypal:render', this);
             },
 
             onClick: function(data) {
-                $dispatch.emit('paypal:click', this, data);
+                // $dispatch.emit('paypal:click', this, data);
             },
 
             onCancel: (data, actions) => {
-                $dispatch.emit('paypal:cancel', data, actions);
+                // $dispatch.emit('paypal:cancel', data, actions);
             },
 
             onError: (error) => {
-                $dispatch.emit('paypal:error', error);
+                // $dispatch.emit('paypal:error', error);
             },
 
             onAuthorize: (data, actions) => {
-                $dispatch.emit('paypal:authorize', data, actions);
+                // $dispatch.emit('paypal:authorize', data, actions);
             }
+            */
 
         }, el);
 

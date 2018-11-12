@@ -1,6 +1,6 @@
 import plugins from './build/plugins';
-import polyfill from './build/config/polyfill';
 import vendor from './build/config/vendor';
+import polyfill from './build/config/polyfill';
 
 import {
     BUILD_OPTIONS,
@@ -13,6 +13,7 @@ import {
     OUTPUT_GLOBALS,
     PACKAGE_FORMAT,
     SOURCEMAP,
+    SRC,
     WATCH_OPTIONS,
 } from './build/config';
 
@@ -23,7 +24,7 @@ export default [{
         name: NAMESPACE,
         format: PACKAGE_FORMAT,
         file: `${DIST}${FILENAME}${EXTENSION_PREFIX}.js`,
-        sourcemap: SOURCEMAP,
+        sourcemap: true,
         globals: OUTPUT_GLOBALS,
         exports: 'named',
     },
@@ -31,14 +32,13 @@ export default [{
     external: EXTERNAL,
     plugins: plugins(BUILD_OPTIONS[PACKAGE_FORMAT])
 },{
-    input: MAINJS,
+    input: `${SRC}install.js`,
     output: {
         name: NAMESPACE,
-        format: 'es',
-        file: `${DIST}${FILENAME}.es${EXTENSION_PREFIX}.js`,
-        sourcemap: SOURCEMAP,
-        globals: OUTPUT_GLOBALS,
-        exports: 'named',
+        format: 'iife',
+        file: `${DIST}${FILENAME}.install${EXTENSION_PREFIX}.js`,
+        sourcemap: true,
+        globals: OUTPUT_GLOBALS
     },
     watch: WATCH_OPTIONS,
     external: EXTERNAL,

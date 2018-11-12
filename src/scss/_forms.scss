@@ -53,11 +53,11 @@ $custom-control-transition: $input-transition, padding .15s ease-out;
 
 
 .custom-select-field,
-.custom-input-field {
+.custom-input-field,
+.custom-textarea-field {
     label {
         color: $input-placeholder-color;
     }
-
     &.is-invalid {
         &.custom-input-field .custom-control,
         &.custom-select-field .form-group-inner {
@@ -70,7 +70,7 @@ $custom-control-transition: $input-transition, padding .15s ease-out;
             box-shadow: 0 0 0 $input-focus-width rgba($danger, .25);
         }
 
-        &:not(.is-empty) > label {
+        label {
             color: $danger;
         }
 
@@ -102,7 +102,8 @@ $custom-control-transition: $input-transition, padding .15s ease-out;
 }
 
 .custom-select-field .form-group-inner,
-.custom-input-field .custom-control {
+.custom-input-field .custom-control,
+.custom-textarea-field .custom-control {
     display: block;
     width: 100%;
     transition: padding .15s ease-out;
@@ -141,6 +142,10 @@ $custom-control-transition: $input-transition, padding .15s ease-out;
         transition: opacity .15s ease-out;
         // Override Firefox's unusual default opacity; see https://github.com/twbs/bootstrap/pull/11526.
         opacity: 1;
+    }
+
+    &.is-invalid::placeholder {
+        color: $danger;
     }
 
     // Disabled and read-only inputs
@@ -329,14 +334,14 @@ $custom-control-transition: $input-transition, padding .15s ease-out;
 
 // Custom Input
 
-.custom-input-field {
+.custom-input-field,
+.custom-textarea-field {
     position: relative;
 
     & > label {
         margin: 0;
         opacity: 0;
         z-index: -1;
-        width: 100%;
         line-height: 1em;
         position: absolute;
         transition: all .15s ease-out;
@@ -359,6 +364,11 @@ $custom-control-transition: $input-transition, padding .15s ease-out;
                 padding-top: $custom-control-label-font-size * 2;
             }
         }
+    }
+
+    &.custom-textarea-field:not(.is-empty) textarea,
+    &.custom-textarea-field.is-empty.has-changed textarea {
+        padding-top: $custom-control-padding-y * 2;
     }
 
     &.custom-input-field-sm {
@@ -412,5 +422,59 @@ $custom-control-transition: $input-transition, padding .15s ease-out;
             line-height: $custom-control-line-height-lg;
             @include border-radius($custom-control-border-radius-lg);
         }
+    }
+}
+
+.input-group {
+    .input-group-append,
+    .input-group-prepend {
+        position: relative;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            z-index: 1;
+            padding: .75rem;
+            transform: translateY(-50%);
+        }
+    }
+
+    .input-group-prepend {
+        .input-group-text {
+            border-right: 0;
+        }
+
+        &::after {
+            right: 0;
+            border-right: $input-border-width solid $input-border-color;
+        }
+    }
+
+    .input-group-append {
+        .input-group-text {
+            border-left: 0;
+        }
+
+        &::after {
+            left: 0;
+            border-left: $input-border-width solid $input-border-color;
+        }
+    }
+
+    & > div:not(.input-group-prepend):not(.input-group-append):not(:last-child) .form-control,
+    & > div:not(.input-group-prepend):not(.input-group-append):not(:last-child) .custom-control,
+    & > div:not(.input-group-prepend):not(.input-group-append):not(:last-child) .custom-select {
+        border-right: 0;
+    }
+
+    & > div:not(.input-group-prepend):not(.input-group-append):not(:first-child) .form-control,
+    & > div:not(.input-group-prepend):not(.input-group-append):not(:first-child) .custom-control,
+    & > div:not(.input-group-prepend):not(.input-group-append):not(:first-child) .custom-select {
+        border-left: 0;
+    }
+
+    .input-group-text {
+        background: inherit;
     }
 }

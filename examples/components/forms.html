@@ -8,11 +8,16 @@
     <body>
         <div id="app" class="giveworks-form">
             <div class="container">
+
                 <h3>Custom Input</h3>
 
                 <input-field custom v-model="form.custom_text" label="Text Field" placeholder="Enter some text..."></input-field>
                 <input-field custom v-model="form.custom_email" label="Email Field" type="email" placeholder="you@example.com"></input-field>
                 <input-field custom label="Help Text" help-text="This is some help text." placeholder="Help Text"></input-field>
+                <input-field custom label="Text Field" placeholder="Enter some text..." invalid></input-field>
+                <input-field custom label="Text Field" placeholder="Enter some text..." error="This is an error message."></input-field>
+                <input-field custom label="Text Field" placeholder="Enter some text..." valid></input-field>
+                <input-field custom label="Text Field" placeholder="Enter some text..." feedback="This a success message."></input-field>
 
                 <h4>Sizes</h4>
 
@@ -22,9 +27,6 @@
 
                 <h3>Validation</h3>
 
-                <input-field custom label="Text Field" placeholder="Enter some text..." error="Test"></input-field>
-
-                <input-field custom label="Text Field" placeholder="Enter some text..." class="is-valid"></input-field>
 
                 <hr>
 
@@ -36,7 +38,25 @@
                     <option value="3">Option 3</option>
                 </select-field>
 
-                <select-field custom label="Help Text" help-text="This is some help text." invalid>
+                <select-field custom label="Invalid"invalid>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select-field>
+
+                <select-field custom label="Invalid" error="This is a sample error." invalid>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select-field>
+
+                <select-field custom label="Valid" valid>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select-field>
+
+                <select-field custom label="Valid" feedback="This a success message.">
                     <option value="1">Option 1</option>
                     <option value="2">Option 2</option>
                     <option value="3">Option 3</option>
@@ -62,19 +82,24 @@
                     <option value="3">Option 3</option>
                 </select-field>
 
-                <h3>Validation</h3>
+                <hr>
 
-                <select-field custom label="Invalid" error="This is a sample error." invalid>
-                    <option value="1">Option 1</option>
-                    <option value="2">Option 2</option>
-                    <option value="3">Option 3</option>
-                </select-field>
+                <h3>Custom Checkbox</h3>
 
-                <select-field custom label="Valid" class="is-valid">
-                    <option value="1">Option 1</option>
-                    <option value="2">Option 2</option>
-                    <option value="3">Option 3</option>
-                </select-field>
+                <checkbox-field v-model="form.checkbox" label="Option B" name="checkbox[]" value="b" custom></checkbox-field>
+                <checkbox-field v-model="form.checkbox" label="Option C" name="checkbox[]" value="c" custom></checkbox-field>
+                <checkbox-field v-model="form.checkbox" label="Option A" name="checkbox[]" value="a" custom valid></checkbox-field>
+                <checkbox-field v-model="form.checkbox" label="Option A" name="checkbox[]" value="a" custom invalid></checkbox-field>
+
+                <hr>
+
+                <h3>Custom Radio</h3>
+
+                <radio-field v-model="form.radio" label="Option A" name="radio" value="a" custom></radio-field>
+                <radio-field v-model="form.radio" label="Option B" name="radio" value="b" custom></radio-field>
+                <radio-field v-model="form.radio" label="Option C" name="radio" value="c" custom></radio-field>
+                <radio-field v-model="form.radio" label="Option D" name="radio" value="d" custom valid></radio-field>
+                <radio-field v-model="form.radio" label="Option E" name="radio" value="e" custom invalid></radio-field>
 
             </div>
         </div>
@@ -87,7 +112,7 @@
         <script src="https://cdn.jsdelivr.net/npm/axios@0.18.0/dist/axios.min.js"></script>
 
         <!-- VueGiveworksForm Library -->
-        <script type="text/javascript" src="../../dist/vue-giveworks-form.js"></script>
+        <script type="text/javascript" src="../../dist/vue-giveworks-form.install.js"></script>
 
         <!-- Instantiate a Vue instance -->
         <script type="text/javascript">
@@ -96,6 +121,8 @@
                 data() {
                     return {
                         form: {
+                            checkbox: ['b'],
+                            radio: 'b',
                             custom_sm: 'small',
                             custom_md: 'medium',
                             custom_lg: 'large',

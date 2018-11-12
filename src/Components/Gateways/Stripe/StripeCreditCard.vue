@@ -25,8 +25,8 @@
 </template>
 
 <script>
+import Gateway from '../Gateway';
 import wait from 'vue-interface/src/Helpers/Wait';
-import Gateway from '@/Components/Gateways/Gateway';
 import elapsed from 'vue-interface/src/Helpers/Elapsed';
 import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
 
@@ -62,19 +62,21 @@ export default {
     },
 
     created() {
+        /*
         this.$submitEvent = this.$dispatch.on('form:submit', (data) => {
             this.$card.blur();
         });
+        */
     },
 
     beforeDestroy() {
-        this.$dispatch.off(this.$submitEvent);
+        // this.$dispatch.off(this.$submitEvent);
     },
 
     mounted() {
         const gateway = Gateway(this.gateway);
 
-        this.$dispatch.request('submit:disable');
+        // this.$dispatch.request('submit:disable');
 
         gateway.script((event) => {
             try {
@@ -86,7 +88,7 @@ export default {
                 });
             }
             catch (e) {
-                this.$dispatch.emit('error', e);
+                // this.$dispatch.emit('error', e);
                 throw e;
             }
 
@@ -104,7 +106,7 @@ export default {
                                 }
                                 else {
                                     this.form.token = result.token.id;
-                                    this.$dispatch.request('submit:enable');
+                                    // this.$dispatch.request('submit:enable');
                                     resolve(result);
                                 }
                             }).then(resolve, reject);

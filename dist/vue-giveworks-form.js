@@ -8,6 +8,14 @@
 
     axios = axios && axios.hasOwnProperty('default') ? axios['default'] : axios;
 
+    function camelCase(string) {
+        string = string.toLowerCase().replace(/(?:(^.)|([-_\s]+.))/g, function(match) {
+            return match.charAt(match.length - 1).toUpperCase();
+        });
+
+        return string.charAt(0).toLowerCase() + string.substring(1);
+    }
+
     function chunk(arr, chunkSize, cache = []) {
         const tmp = [...arr];
         while(tmp.length) cache.push(tmp.splice(0, chunkSize));
@@ -940,23 +948,71 @@
       baseURL: `${domain}/api/public/v1/`
     };
 
-    var script = {
+    const EVENTS = ['submit', 'redirect', 'submit-enable', 'submit-disable', 'submit-show', 'submit-hide'];
+    var FormEvents = {
+      directives: {
+        bindEvents: {
+          bind(el, binding, vnode) {
+            const context = vnode.context;
+            const subject = vnode.child || vnode.context;
+
+            for (const i in EVENTS) {
+              subject.$on(EVENTS[i], (...args) => {
+                const method = camelCase('on-' + EVENTS[i]);
+
+                if (subject !== context) {
+                  context.$emit(EVENTS[i], ...args);
+                }
+
+                if (context[method]) {
+                  context[method](...args);
+                }
+              });
+            }
+          }
+
+        }
+      }
+    };
+
+    var PageType = {
       props: {
         page: {
           type: Object,
           required: true
         },
-        errors: {
-          type: [Boolean, Object],
-          required: true
-        }
+        redirect: [Boolean, String]
       },
+      mixins: [FormEvents],
       methods: {
+        hide() {
+          this.$el.querySelector('[type=submit]').style.display = 'none';
+        },
+
+        show() {
+          this.$el.querySelector('[type=submit]').style.display = 'block';
+        },
+
+        disable() {
+          this.$el.querySelector('[type=submit]').disabled = true;
+        },
+
+        enable() {
+          this.$el.querySelector('[type=submit]').disabled = false;
+        },
+
+        redirect(url) {
+          setTimeout(() => {
+            window.location = url || this.redirect || this.page.next_page.url;
+          });
+        },
+
         submit(e) {
           return new Promise((resolve, reject) => {
             if (!this.submitting) {
               this.errors = {};
               this.submitting = true;
+              this.$emit('submit');
               this.model.save(this.form, {
                 method: 'post'
               }).then(response => {
@@ -975,6 +1031,34 @@
               reject(new Error('The form is already submitting'));
             }
           });
+        },
+
+        onSubmit() {
+          if (this.$el.querySelector(':focus')) {
+            this.$el.querySelector(':focus').blur();
+          }
+        },
+
+        onSubmitEnable() {
+          this.enable();
+        },
+
+        onSubmitDisable() {
+          this.disable();
+        },
+
+        onSubmitShow() {
+          this.show();
+        },
+
+        onSubmitHide() {
+          this.hide();
+        },
+
+        onRedirect(url) {
+          setTimeout(() => {
+            window.location = url || this.redirect || this.page.next_page.url;
+          });
         }
 
       },
@@ -991,6 +1075,169 @@
           })
         };
       }
+
+    };
+
+    var States = {
+      'AL': 'Alabama',
+      'AK': 'Alaska',
+      // 'AS': 'American Samoa',
+      'AZ': 'Arizona',
+      'AR': 'Arkansas',
+      'CA': 'California',
+      'CO': 'Colorado',
+      'CT': 'Connecticut',
+      'DE': 'Delaware',
+      'DC': 'District Of Columbia',
+      // 'FM': 'Federated States Of Micronesia',
+      'FL': 'Florida',
+      'GA': 'Georgia',
+      // 'GU': 'Guam',
+      'HI': 'Hawaii',
+      'ID': 'Idaho',
+      'IL': 'Illinois',
+      'IN': 'Indiana',
+      'IA': 'Iowa',
+      'KS': 'Kansas',
+      'KY': 'Kentucky',
+      'LA': 'Louisiana',
+      'ME': 'Maine',
+      // 'MH': 'Marshall Islands',
+      'MD': 'Maryland',
+      'MA': 'Massachusetts',
+      'MI': 'Michigan',
+      'MN': 'Minnesota',
+      'MS': 'Mississippi',
+      'MO': 'Missouri',
+      'MT': 'Montana',
+      'NE': 'Nebraska',
+      'NV': 'Nevada',
+      'NH': 'New Hampshire',
+      'NJ': 'New Jersey',
+      'NM': 'New Mexico',
+      'NY': 'New York',
+      'NC': 'North Carolina',
+      'ND': 'North Dakota',
+      // 'MP': 'Northern Mariana Islands',
+      'OH': 'Ohio',
+      'OK': 'Oklahoma',
+      'OR': 'Oregon',
+      // 'PW': 'Palau',
+      'PA': 'Pennsylvania',
+      // 'PR': 'Puerto Rico',
+      'RI': 'Rhode Island',
+      'SC': 'South Carolina',
+      'SD': 'South Dakota',
+      'TN': 'Tennessee',
+      'TX': 'Texas',
+      'UT': 'Utah',
+      'VT': 'Vermont',
+      // 'VI': 'Virgin Islands',
+      'VA': 'Virginia',
+      'WA': 'Washington',
+      'WV': 'West Virginia',
+      'WI': 'Wisconsin',
+      'WY': 'Wyoming'
+    };
+
+    var FormComponent = {
+      props: {
+        page: {
+          type: Object,
+          required: true
+        },
+        form: {
+          type: Object
+        },
+        errors: {
+          type: [Boolean, Object],
+          required: true
+        }
+      },
+      mixins: [FormEvents],
+      computed: {
+        commentMessage() {
+          return this.page.options.comment_message || this.page.site.config.giveworks.comment_mess;
+        },
+
+        optinMessage() {
+          return this.page.options.optin_message || this.page.site.config.giveworks.optin_mess;
+        },
+
+        buttonLabel() {
+          return this.page.options.button;
+        }
+
+      }
+    };
+
+    var Colorable = {
+
+        computed: {
+
+            colorableClasses() {
+                const classes = {};
+
+                for(let i in this.$attrs) {
+                    if(i.match(/^bg|text|border|bg-gradient-/)) {
+                        classes[i] = true;
+                    }
+                }
+
+                return classes;
+            }
+
+        }
+
+    };
+
+    var Screenreaders = {
+
+        props: {
+
+            /**
+             * Should show only for screenreaders
+             *
+             * @property Boolean
+             */
+            srOnly: Boolean,
+
+            /**
+             * Should be focusable for screenreaders
+             *
+             * @property Boolean
+             */
+            srOnlyFocusable: Boolean
+
+        },
+
+        computed: {
+            screenreaderClasses() {
+                return {
+                    'sr-only': this.srOnly,
+                    'sr-only-focusable': this.srOnlyFocusable
+                };
+            }
+        }
+
+    };
+
+    //
+
+    var script = {
+
+        name: 'help-text',
+
+        mixins: [
+            Colorable,
+            Screenreaders
+        ],
+
+        computed: {
+            classes() {
+                return extend({}, this.screenreaderClasses, this.colorableClasses);
+            }
+        }
 
     };
 
@@ -1073,198 +1320,6 @@
                 const __vue_script__ = script;
                 
     /* template */
-
-      /* style */
-      const __vue_inject_styles__ = undefined;
-      /* scoped */
-      const __vue_scope_id__ = undefined;
-      /* module identifier */
-      const __vue_module_identifier__ = undefined;
-      /* functional template */
-      const __vue_is_functional_template__ = undefined;
-      /* style inject */
-      
-      /* style inject SSR */
-      
-
-      
-      var PageType = normalizeComponent(
-        {},
-        __vue_inject_styles__,
-        __vue_script__,
-        __vue_scope_id__,
-        __vue_is_functional_template__,
-        __vue_module_identifier__,
-        undefined,
-        undefined
-      );
-
-    var States = {
-      'AL': 'Alabama',
-      'AK': 'Alaska',
-      // 'AS': 'American Samoa',
-      'AZ': 'Arizona',
-      'AR': 'Arkansas',
-      'CA': 'California',
-      'CO': 'Colorado',
-      'CT': 'Connecticut',
-      'DE': 'Delaware',
-      'DC': 'District Of Columbia',
-      // 'FM': 'Federated States Of Micronesia',
-      'FL': 'Florida',
-      'GA': 'Georgia',
-      // 'GU': 'Guam',
-      'HI': 'Hawaii',
-      'ID': 'Idaho',
-      'IL': 'Illinois',
-      'IN': 'Indiana',
-      'IA': 'Iowa',
-      'KS': 'Kansas',
-      'KY': 'Kentucky',
-      'LA': 'Louisiana',
-      'ME': 'Maine',
-      // 'MH': 'Marshall Islands',
-      'MD': 'Maryland',
-      'MA': 'Massachusetts',
-      'MI': 'Michigan',
-      'MN': 'Minnesota',
-      'MS': 'Mississippi',
-      'MO': 'Missouri',
-      'MT': 'Montana',
-      'NE': 'Nebraska',
-      'NV': 'Nevada',
-      'NH': 'New Hampshire',
-      'NJ': 'New Jersey',
-      'NM': 'New Mexico',
-      'NY': 'New York',
-      'NC': 'North Carolina',
-      'ND': 'North Dakota',
-      // 'MP': 'Northern Mariana Islands',
-      'OH': 'Ohio',
-      'OK': 'Oklahoma',
-      'OR': 'Oregon',
-      // 'PW': 'Palau',
-      'PA': 'Pennsylvania',
-      // 'PR': 'Puerto Rico',
-      'RI': 'Rhode Island',
-      'SC': 'South Carolina',
-      'SD': 'South Dakota',
-      'TN': 'Tennessee',
-      'TX': 'Texas',
-      'UT': 'Utah',
-      'VT': 'Vermont',
-      // 'VI': 'Virgin Islands',
-      'VA': 'Virginia',
-      'WA': 'Washington',
-      'WV': 'West Virginia',
-      'WI': 'Wisconsin',
-      'WY': 'Wyoming'
-    };
-
-    var FormComponent = {
-      props: {
-        page: {
-          type: Object,
-          required: true
-        },
-        form: {
-          type: Object
-        },
-        errors: {
-          type: [Boolean, Object],
-          required: true
-        }
-      },
-      computed: {
-        commentMessage() {
-          return this.page.options.comment_message || this.page.site.config.giveworks.comment_mess;
-        },
-
-        optinMessage() {
-          return this.page.options.optin_message || this.page.site.config.giveworks.optin_mess;
-        },
-
-        buttonLabel() {
-          return this.page.options.button;
-        }
-
-      }
-    };
-
-    var Colorable = {
-
-        computed: {
-
-            colorableClasses() {
-                const classes = {};
-
-                for(let i in this.$attrs) {
-                    if(i.match(/^bg|text|border|bg-gradient-/)) {
-                        classes[i] = true;
-                    }
-                }
-
-                return classes;
-            }
-
-        }
-
-    };
-
-    var Screenreaders = {
-
-        props: {
-
-            /**
-             * Should show only for screenreaders
-             *
-             * @property Boolean
-             */
-            srOnly: Boolean,
-
-            /**
-             * Should be focusable for screenreaders
-             *
-             * @property Boolean
-             */
-            srOnlyFocusable: Boolean
-
-        },
-
-        computed: {
-            screenreaderClasses() {
-                return {
-                    'sr-only': this.srOnly,
-                    'sr-only-focusable': this.srOnlyFocusable
-                };
-            }
-        }
-
-    };
-
-    //
-
-    var script$1 = {
-
-        name: 'help-text',
-
-        mixins: [
-            Colorable,
-            Screenreaders
-        ],
-
-        computed: {
-            classes() {
-                return extend({}, this.screenreaderClasses, this.colorableClasses);
-            }
-        }
-
-    };
-
-    /* script */
-                const __vue_script__$1 = script$1;
-                
-    /* template */
     var __vue_render__ = function() {
       var _vm = this;
       var _h = _vm.$createElement;
@@ -1280,13 +1335,13 @@
     __vue_render__._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$1 = undefined;
+      const __vue_inject_styles__ = undefined;
       /* scoped */
-      const __vue_scope_id__$1 = undefined;
+      const __vue_scope_id__ = undefined;
       /* module identifier */
-      const __vue_module_identifier__$1 = undefined;
+      const __vue_module_identifier__ = undefined;
       /* functional template */
-      const __vue_is_functional_template__$1 = false;
+      const __vue_is_functional_template__ = false;
       /* style inject */
       
       /* style inject SSR */
@@ -1295,11 +1350,11 @@
       
       var HelpText = normalizeComponent(
         { render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ },
-        __vue_inject_styles__$1,
-        __vue_script__$1,
-        __vue_scope_id__$1,
-        __vue_is_functional_template__$1,
-        __vue_module_identifier__$1,
+        __vue_inject_styles__,
+        __vue_script__,
+        __vue_scope_id__,
+        __vue_is_functional_template__,
+        __vue_module_identifier__,
         undefined,
         undefined
       );
@@ -1313,7 +1368,7 @@
     //
     //
 
-    var script$2 = {
+    var script$1 = {
 
         name: 'form-group',
 
@@ -1329,7 +1384,7 @@
     };
 
     /* script */
-                const __vue_script__$2 = script$2;
+                const __vue_script__$1 = script$1;
     /* template */
     var __vue_render__$1 = function() {
       var _vm = this;
@@ -1346,13 +1401,13 @@
     __vue_render__$1._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$2 = undefined;
+      const __vue_inject_styles__$1 = undefined;
       /* scoped */
-      const __vue_scope_id__$2 = undefined;
+      const __vue_scope_id__$1 = undefined;
       /* module identifier */
-      const __vue_module_identifier__$2 = undefined;
+      const __vue_module_identifier__$1 = undefined;
       /* functional template */
-      const __vue_is_functional_template__$2 = false;
+      const __vue_is_functional_template__$1 = false;
       /* style inject */
       
       /* style inject SSR */
@@ -1361,18 +1416,18 @@
       
       var FormGroup = normalizeComponent(
         { render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 },
-        __vue_inject_styles__$2,
-        __vue_script__$2,
-        __vue_scope_id__$2,
-        __vue_is_functional_template__$2,
-        __vue_module_identifier__$2,
+        __vue_inject_styles__$1,
+        __vue_script__$1,
+        __vue_scope_id__$1,
+        __vue_is_functional_template__$1,
+        __vue_module_identifier__$1,
         undefined,
         undefined
       );
 
     //
 
-    var script$3 = {
+    var script$2 = {
 
         name: 'form-label',
 
@@ -1390,7 +1445,7 @@
     };
 
     /* script */
-                const __vue_script__$3 = script$3;
+                const __vue_script__$2 = script$2;
                 
     /* template */
     var __vue_render__$2 = function() {
@@ -1403,13 +1458,13 @@
     __vue_render__$2._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$3 = undefined;
+      const __vue_inject_styles__$2 = undefined;
       /* scoped */
-      const __vue_scope_id__$3 = undefined;
+      const __vue_scope_id__$2 = undefined;
       /* module identifier */
-      const __vue_module_identifier__$3 = undefined;
+      const __vue_module_identifier__$2 = undefined;
       /* functional template */
-      const __vue_is_functional_template__$3 = false;
+      const __vue_is_functional_template__$2 = false;
       /* style inject */
       
       /* style inject SSR */
@@ -1418,11 +1473,11 @@
       
       var FormLabel = normalizeComponent(
         { render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 },
-        __vue_inject_styles__$3,
-        __vue_script__$3,
-        __vue_scope_id__$3,
-        __vue_is_functional_template__$3,
-        __vue_module_identifier__$3,
+        __vue_inject_styles__$2,
+        __vue_script__$2,
+        __vue_scope_id__$2,
+        __vue_is_functional_template__$2,
+        __vue_module_identifier__$2,
         undefined,
         undefined
       );
@@ -1812,7 +1867,7 @@
 
     //
 
-    var script$4 = {
+    var script$3 = {
 
         name: 'form-control',
 
@@ -1833,7 +1888,7 @@
     };
 
     /* script */
-                const __vue_script__$4 = script$4;
+                const __vue_script__$3 = script$3;
                 
     /* template */
     var __vue_render__$3 = function() {
@@ -1874,13 +1929,13 @@
     __vue_render__$3._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$4 = undefined;
+      const __vue_inject_styles__$3 = undefined;
       /* scoped */
-      const __vue_scope_id__$4 = undefined;
+      const __vue_scope_id__$3 = undefined;
       /* module identifier */
-      const __vue_module_identifier__$4 = undefined;
+      const __vue_module_identifier__$3 = undefined;
       /* functional template */
-      const __vue_is_functional_template__$4 = false;
+      const __vue_is_functional_template__$3 = false;
       /* style inject */
       
       /* style inject SSR */
@@ -1889,18 +1944,18 @@
       
       var FormControl$1 = normalizeComponent(
         { render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 },
-        __vue_inject_styles__$4,
-        __vue_script__$4,
-        __vue_scope_id__$4,
-        __vue_is_functional_template__$4,
-        __vue_module_identifier__$4,
+        __vue_inject_styles__$3,
+        __vue_script__$3,
+        __vue_scope_id__$3,
+        __vue_is_functional_template__$3,
+        __vue_module_identifier__$3,
         undefined,
         undefined
       );
 
     //
 
-    var script$5 = {
+    var script$4 = {
 
         name: 'form-feedback',
 
@@ -1936,7 +1991,7 @@
     };
 
     /* script */
-                const __vue_script__$5 = script$5;
+                const __vue_script__$4 = script$4;
                 
     /* template */
     var __vue_render__$4 = function() {
@@ -1959,13 +2014,13 @@
     __vue_render__$4._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$5 = undefined;
+      const __vue_inject_styles__$4 = undefined;
       /* scoped */
-      const __vue_scope_id__$5 = undefined;
+      const __vue_scope_id__$4 = undefined;
       /* module identifier */
-      const __vue_module_identifier__$5 = undefined;
+      const __vue_module_identifier__$4 = undefined;
       /* functional template */
-      const __vue_is_functional_template__$5 = false;
+      const __vue_is_functional_template__$4 = false;
       /* style inject */
       
       /* style inject SSR */
@@ -1974,11 +2029,11 @@
       
       var FormFeedback = normalizeComponent(
         { render: __vue_render__$4, staticRenderFns: __vue_staticRenderFns__$4 },
-        __vue_inject_styles__$5,
-        __vue_script__$5,
-        __vue_scope_id__$5,
-        __vue_is_functional_template__$5,
-        __vue_module_identifier__$5,
+        __vue_inject_styles__$4,
+        __vue_script__$4,
+        __vue_scope_id__$4,
+        __vue_is_functional_template__$4,
+        __vue_module_identifier__$4,
         undefined,
         undefined
       );
@@ -1994,7 +2049,7 @@
     //
     //
 
-    var script$6 = {
+    var script$5 = {
 
         props: {
             nodes: {
@@ -2025,7 +2080,7 @@
     };
 
     /* script */
-                const __vue_script__$6 = script$6;
+                const __vue_script__$5 = script$5;
                 
     /* template */
     var __vue_render__$5 = function() {
@@ -2044,13 +2099,13 @@
     __vue_render__$5._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$6 = undefined;
+      const __vue_inject_styles__$5 = undefined;
       /* scoped */
-      const __vue_scope_id__$6 = undefined;
+      const __vue_scope_id__$5 = undefined;
       /* module identifier */
-      const __vue_module_identifier__$6 = undefined;
+      const __vue_module_identifier__$5 = undefined;
       /* functional template */
-      const __vue_is_functional_template__$6 = false;
+      const __vue_is_functional_template__$5 = false;
       /* style inject */
       
       /* style inject SSR */
@@ -2059,6 +2114,42 @@
       
       var BaseType = normalizeComponent(
         { render: __vue_render__$5, staticRenderFns: __vue_staticRenderFns__$5 },
+        __vue_inject_styles__$5,
+        __vue_script__$5,
+        __vue_scope_id__$5,
+        __vue_is_functional_template__$5,
+        __vue_module_identifier__$5,
+        undefined,
+        undefined
+      );
+
+    var script$6 = {
+
+        name: 'activity-indicator-dots',
+
+        extends: BaseType
+    };
+
+    /* script */
+                const __vue_script__$6 = script$6;
+    /* template */
+
+      /* style */
+      const __vue_inject_styles__$6 = undefined;
+      /* scoped */
+      const __vue_scope_id__$6 = undefined;
+      /* module identifier */
+      const __vue_module_identifier__$6 = undefined;
+      /* functional template */
+      const __vue_is_functional_template__$6 = undefined;
+      /* style inject */
+      
+      /* style inject SSR */
+      
+
+      
+      var ActivityIndicatorDots = normalizeComponent(
+        {},
         __vue_inject_styles__$6,
         __vue_script__$6,
         __vue_scope_id__$6,
@@ -2070,9 +2161,16 @@
 
     var script$7 = {
 
-        name: 'activity-indicator-dots',
+        name: 'activity-indicator-spinner',
 
-        extends: BaseType
+        extends: BaseType,
+
+        props: extend({}, BaseType.props, {
+            nodes: {
+                type: Number,
+                default: 12
+            }
+        })
     };
 
     /* script */
@@ -2093,7 +2191,7 @@
       
 
       
-      var ActivityIndicatorDots = normalizeComponent(
+      var ActivityIndicatorSpinner = normalizeComponent(
         {},
         __vue_inject_styles__$7,
         __vue_script__$7,
@@ -2104,52 +2202,9 @@
         undefined
       );
 
-    var script$8 = {
-
-        name: 'activity-indicator-spinner',
-
-        extends: BaseType,
-
-        props: extend({}, BaseType.props, {
-            nodes: {
-                type: Number,
-                default: 12
-            }
-        })
-    };
-
-    /* script */
-                const __vue_script__$8 = script$8;
-    /* template */
-
-      /* style */
-      const __vue_inject_styles__$8 = undefined;
-      /* scoped */
-      const __vue_scope_id__$8 = undefined;
-      /* module identifier */
-      const __vue_module_identifier__$8 = undefined;
-      /* functional template */
-      const __vue_is_functional_template__$8 = undefined;
-      /* style inject */
-      
-      /* style inject SSR */
-      
-
-      
-      var ActivityIndicatorSpinner = normalizeComponent(
-        {},
-        __vue_inject_styles__$8,
-        __vue_script__$8,
-        __vue_scope_id__$8,
-        __vue_is_functional_template__$8,
-        __vue_module_identifier__$8,
-        undefined,
-        undefined
-      );
-
     //
 
-    var script$9 = {
+    var script$8 = {
 
         name: 'activity-indicator',
 
@@ -2210,7 +2265,7 @@
     };
 
     /* script */
-                const __vue_script__$9 = script$9;
+                const __vue_script__$8 = script$8;
                 
     /* template */
     var __vue_render__$6 = function() {
@@ -2279,13 +2334,13 @@
     __vue_render__$6._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$9 = undefined;
+      const __vue_inject_styles__$8 = undefined;
       /* scoped */
-      const __vue_scope_id__$9 = undefined;
+      const __vue_scope_id__$8 = undefined;
       /* module identifier */
-      const __vue_module_identifier__$9 = undefined;
+      const __vue_module_identifier__$8 = undefined;
       /* functional template */
-      const __vue_is_functional_template__$9 = false;
+      const __vue_is_functional_template__$8 = false;
       /* style inject */
       
       /* style inject SSR */
@@ -2294,18 +2349,18 @@
       
       var ActivityIndicator = normalizeComponent(
         { render: __vue_render__$6, staticRenderFns: __vue_staticRenderFns__$6 },
-        __vue_inject_styles__$9,
-        __vue_script__$9,
-        __vue_scope_id__$9,
-        __vue_is_functional_template__$9,
-        __vue_module_identifier__$9,
+        __vue_inject_styles__$8,
+        __vue_script__$8,
+        __vue_scope_id__$8,
+        __vue_is_functional_template__$8,
+        __vue_module_identifier__$8,
         undefined,
         undefined
       );
 
     //
 
-    var script$a = {
+    var script$9 = {
 
         name: 'input-field',
 
@@ -2326,7 +2381,7 @@
     };
 
     /* script */
-                const __vue_script__$a = script$a;
+                const __vue_script__$9 = script$9;
     /* template */
     var __vue_render__$7 = function() {
       var _vm = this;
@@ -2424,13 +2479,13 @@
     __vue_render__$7._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$a = undefined;
+      const __vue_inject_styles__$9 = undefined;
       /* scoped */
-      const __vue_scope_id__$a = undefined;
+      const __vue_scope_id__$9 = undefined;
       /* module identifier */
-      const __vue_module_identifier__$a = undefined;
+      const __vue_module_identifier__$9 = undefined;
       /* functional template */
-      const __vue_is_functional_template__$a = false;
+      const __vue_is_functional_template__$9 = false;
       /* style inject */
       
       /* style inject SSR */
@@ -2439,11 +2494,11 @@
       
       var InputField = normalizeComponent(
         { render: __vue_render__$7, staticRenderFns: __vue_staticRenderFns__$7 },
-        __vue_inject_styles__$a,
-        __vue_script__$a,
-        __vue_scope_id__$a,
-        __vue_is_functional_template__$a,
-        __vue_module_identifier__$a,
+        __vue_inject_styles__$9,
+        __vue_script__$9,
+        __vue_scope_id__$9,
+        __vue_is_functional_template__$9,
+        __vue_module_identifier__$9,
         undefined,
         undefined
       );
@@ -2452,7 +2507,7 @@
 
     const CUSTOM_SELECT_PREFIX = 'custom-select-';
 
-    var script$b = {
+    var script$a = {
 
         name: 'select-field',
 
@@ -2490,7 +2545,7 @@
     };
 
     /* script */
-                const __vue_script__$b = script$b;
+                const __vue_script__$a = script$a;
     /* template */
     var __vue_render__$8 = function() {
       var _vm = this;
@@ -2586,13 +2641,13 @@
     __vue_render__$8._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$b = undefined;
+      const __vue_inject_styles__$a = undefined;
       /* scoped */
-      const __vue_scope_id__$b = undefined;
+      const __vue_scope_id__$a = undefined;
       /* module identifier */
-      const __vue_module_identifier__$b = undefined;
+      const __vue_module_identifier__$a = undefined;
       /* functional template */
-      const __vue_is_functional_template__$b = false;
+      const __vue_is_functional_template__$a = false;
       /* style inject */
       
       /* style inject SSR */
@@ -2601,11 +2656,11 @@
       
       var SelectField = normalizeComponent(
         { render: __vue_render__$8, staticRenderFns: __vue_staticRenderFns__$8 },
-        __vue_inject_styles__$b,
-        __vue_script__$b,
-        __vue_scope_id__$b,
-        __vue_is_functional_template__$b,
-        __vue_module_identifier__$b,
+        __vue_inject_styles__$a,
+        __vue_script__$a,
+        __vue_scope_id__$a,
+        __vue_is_functional_template__$a,
+        __vue_module_identifier__$a,
         undefined,
         undefined
       );
@@ -2719,7 +2774,7 @@
         return script;
     }
 
-    function script$c(url) {
+    function script$b(url) {
         if(LOADED_SCRIPTS[url] instanceof Promise) {
             return LOADED_SCRIPTS[url];
         }
@@ -2753,7 +2808,7 @@
     //
     //
 
-    var script$d = {
+    var script$c = {
 
         name: 'place-autocomplete-list-item',
 
@@ -2782,7 +2837,7 @@
     };
 
     /* script */
-                const __vue_script__$c = script$d;
+                const __vue_script__$b = script$c;
     /* template */
     var __vue_render__$9 = function() {
       var _vm = this;
@@ -2826,13 +2881,13 @@
     __vue_render__$9._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$c = undefined;
+      const __vue_inject_styles__$b = undefined;
       /* scoped */
-      const __vue_scope_id__$c = undefined;
+      const __vue_scope_id__$b = undefined;
       /* module identifier */
-      const __vue_module_identifier__$c = undefined;
+      const __vue_module_identifier__$b = undefined;
       /* functional template */
-      const __vue_is_functional_template__$c = false;
+      const __vue_is_functional_template__$b = false;
       /* style inject */
       
       /* style inject SSR */
@@ -2841,18 +2896,18 @@
       
       var PlaceAutocompleteListItem = normalizeComponent(
         { render: __vue_render__$9, staticRenderFns: __vue_staticRenderFns__$9 },
-        __vue_inject_styles__$c,
-        __vue_script__$c,
-        __vue_scope_id__$c,
-        __vue_is_functional_template__$c,
-        __vue_module_identifier__$c,
+        __vue_inject_styles__$b,
+        __vue_script__$b,
+        __vue_scope_id__$b,
+        __vue_is_functional_template__$b,
+        __vue_module_identifier__$b,
         undefined,
         undefined
       );
 
     //
 
-    var script$e = {
+    var script$d = {
 
         name: 'place-autocomplete-list',
 
@@ -2895,7 +2950,7 @@
     };
 
     /* script */
-                const __vue_script__$d = script$e;
+                const __vue_script__$c = script$d;
                 
     /* template */
     var __vue_render__$a = function() {
@@ -2924,13 +2979,13 @@
     __vue_render__$a._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$d = undefined;
+      const __vue_inject_styles__$c = undefined;
       /* scoped */
-      const __vue_scope_id__$d = undefined;
+      const __vue_scope_id__$c = undefined;
       /* module identifier */
-      const __vue_module_identifier__$d = undefined;
+      const __vue_module_identifier__$c = undefined;
       /* functional template */
-      const __vue_is_functional_template__$d = false;
+      const __vue_is_functional_template__$c = false;
       /* style inject */
       
       /* style inject SSR */
@@ -2939,11 +2994,11 @@
       
       var PlaceAutocompleteList = normalizeComponent(
         { render: __vue_render__$a, staticRenderFns: __vue_staticRenderFns__$a },
-        __vue_inject_styles__$d,
-        __vue_script__$d,
-        __vue_scope_id__$d,
-        __vue_is_functional_template__$d,
-        __vue_module_identifier__$d,
+        __vue_inject_styles__$c,
+        __vue_script__$c,
+        __vue_scope_id__$c,
+        __vue_is_functional_template__$c,
+        __vue_module_identifier__$c,
         undefined,
         undefined
       );
@@ -2970,7 +3025,7 @@
         'types'
     ];
 
-    var script$f = {
+    var script$e = {
 
         name: 'place-autocomplete-field',
 
@@ -3190,7 +3245,7 @@
         },
 
         mounted() {
-            script$c(`${this.baseUri}?key=${this.apiKey}&libraries=${this.libraries.join(',')}`).then(() => {
+            script$b(`${this.baseUri}?key=${this.apiKey}&libraries=${this.libraries.join(',')}`).then(() => {
                 this.$geocoder = new window.google.maps.Geocoder();
                 this.$service = new window.google.maps.places.AutocompleteService();
                 this.loaded = true;
@@ -3239,7 +3294,7 @@
     };
 
     /* script */
-                const __vue_script__$e = script$f;
+                const __vue_script__$d = script$e;
     /* template */
     var __vue_render__$b = function() {
       var _vm = this;
@@ -3307,13 +3362,13 @@
     __vue_render__$b._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$e = undefined;
+      const __vue_inject_styles__$d = undefined;
       /* scoped */
-      const __vue_scope_id__$e = undefined;
+      const __vue_scope_id__$d = undefined;
       /* module identifier */
-      const __vue_module_identifier__$e = undefined;
+      const __vue_module_identifier__$d = undefined;
       /* functional template */
-      const __vue_is_functional_template__$e = false;
+      const __vue_is_functional_template__$d = false;
       /* style inject */
       
       /* style inject SSR */
@@ -3322,17 +3377,17 @@
       
       var PlaceAutocompleteField = normalizeComponent(
         { render: __vue_render__$b, staticRenderFns: __vue_staticRenderFns__$b },
-        __vue_inject_styles__$e,
-        __vue_script__$e,
-        __vue_scope_id__$e,
-        __vue_is_functional_template__$e,
-        __vue_module_identifier__$e,
+        __vue_inject_styles__$d,
+        __vue_script__$d,
+        __vue_scope_id__$d,
+        __vue_is_functional_template__$d,
+        __vue_module_identifier__$d,
         undefined,
         undefined
       );
 
     //
-    var script$g = {
+    var script$f = {
       name: 'contact-info-fieldset',
       mixins: [FormComponent],
       components: {
@@ -3372,7 +3427,7 @@
     };
 
     /* script */
-                const __vue_script__$f = script$g;
+                const __vue_script__$e = script$f;
                 
     /* template */
     var __vue_render__$c = function() {
@@ -3629,13 +3684,13 @@
     __vue_render__$c._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$f = undefined;
+      const __vue_inject_styles__$e = undefined;
       /* scoped */
-      const __vue_scope_id__$f = undefined;
+      const __vue_scope_id__$e = undefined;
       /* module identifier */
-      const __vue_module_identifier__$f = undefined;
+      const __vue_module_identifier__$e = undefined;
       /* functional template */
-      const __vue_is_functional_template__$f = false;
+      const __vue_is_functional_template__$e = false;
       /* style inject */
       
       /* style inject SSR */
@@ -3644,11 +3699,11 @@
       
       var ContactInfoFieldset = normalizeComponent(
         { render: __vue_render__$c, staticRenderFns: __vue_staticRenderFns__$c },
-        __vue_inject_styles__$f,
-        __vue_script__$f,
-        __vue_scope_id__$f,
-        __vue_is_functional_template__$f,
-        __vue_module_identifier__$f,
+        __vue_inject_styles__$e,
+        __vue_script__$e,
+        __vue_scope_id__$e,
+        __vue_is_functional_template__$e,
+        __vue_module_identifier__$e,
         undefined,
         undefined
       );
@@ -3752,7 +3807,7 @@
       }
 
       script(success, error) {
-        script$c('https://js.stripe.com/v3/').then(success, error);
+        script$b('https://js.stripe.com/v3/').then(success, error);
       }
 
     }
@@ -3847,7 +3902,7 @@
       }
 
       script(success, error) {
-        script$c('https://www.paypalobjects.com/api/checkout.js').then(success, error);
+        script$b('https://www.paypalobjects.com/api/checkout.js').then(success, error);
       }
 
     }
@@ -3886,7 +3941,7 @@
       script(success, error) {
         const url = 'https://jstest.authorize.net/v1/Accept.js'; // Production;
 
-        script$c(url).then(success, error);
+        script$b(url).then(success, error);
       }
 
     }
@@ -3915,122 +3970,6 @@
 
       return instances[key];
     }
-
-    //
-    //
-    //
-    //
-    //
-    //
-
-    var script$h = {
-
-        name: 'alert-close',
-
-        methods: {
-
-            onClick(event) {
-                this.$emit('click', event);
-            }
-
-        }
-
-    };
-
-    /* script */
-                const __vue_script__$g = script$h;
-                
-    /* template */
-    var __vue_render__$d = function() {
-      var _vm = this;
-      var _h = _vm.$createElement;
-      var _c = _vm._self._c || _h;
-      return _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: { type: "button", "data-dismiss": "alert", "aria-label": "Close" },
-          on: { click: _vm.onClick }
-        },
-        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-      )
-    };
-    var __vue_staticRenderFns__$d = [];
-    __vue_render__$d._withStripped = true;
-
-      /* style */
-      const __vue_inject_styles__$g = undefined;
-      /* scoped */
-      const __vue_scope_id__$g = undefined;
-      /* module identifier */
-      const __vue_module_identifier__$g = undefined;
-      /* functional template */
-      const __vue_is_functional_template__$g = false;
-      /* style inject */
-      
-      /* style inject SSR */
-      
-
-      
-      var AlertClose = normalizeComponent(
-        { render: __vue_render__$d, staticRenderFns: __vue_staticRenderFns__$d },
-        __vue_inject_styles__$g,
-        __vue_script__$g,
-        __vue_scope_id__$g,
-        __vue_is_functional_template__$g,
-        __vue_module_identifier__$g,
-        undefined,
-        undefined
-      );
-
-    //
-    //
-    //
-    //
-
-    var script$i = {
-
-        name: 'alert-heading'
-
-    };
-
-    /* script */
-                const __vue_script__$h = script$i;
-                
-    /* template */
-    var __vue_render__$e = function() {
-      var _vm = this;
-      var _h = _vm.$createElement;
-      var _c = _vm._self._c || _h;
-      return _c("h4", { staticClass: "alert-heading" }, [_vm._t("default")], 2)
-    };
-    var __vue_staticRenderFns__$e = [];
-    __vue_render__$e._withStripped = true;
-
-      /* style */
-      const __vue_inject_styles__$h = undefined;
-      /* scoped */
-      const __vue_scope_id__$h = undefined;
-      /* module identifier */
-      const __vue_module_identifier__$h = undefined;
-      /* functional template */
-      const __vue_is_functional_template__$h = false;
-      /* style inject */
-      
-      /* style inject SSR */
-      
-
-      
-      var AlertHeading = normalizeComponent(
-        { render: __vue_render__$e, staticRenderFns: __vue_staticRenderFns__$e },
-        __vue_inject_styles__$h,
-        __vue_script__$h,
-        __vue_scope_id__$h,
-        __vue_is_functional_template__$h,
-        __vue_module_identifier__$h,
-        undefined,
-        undefined
-      );
 
     var Variant = {
 
@@ -4061,6 +4000,335 @@
         }
 
     };
+
+    var Sizeable = {
+
+        props: {
+
+            /**
+             * The size of the form control
+             *
+             * @property String
+             */
+            size: {
+                type: String,
+                default: 'md',
+                validate: value => ['sm', 'md', 'lg'].indexOf(value) !== -1
+            }
+
+        },
+
+        computed: {
+
+            sizeableClassPrefix() {
+                return this.$options.name;
+            },
+
+            sizeableClass() {
+                return prefix(this.size, this.sizeableClassPrefix);
+            }
+
+        }
+
+    };
+
+    //
+
+    var script$g = {
+
+        name: 'btn',
+
+        mixins: [
+            Variant,
+            Sizeable,
+            Colorable,
+            MergeClasses
+        ],
+
+        props: {
+
+            /**
+             * Display button with active state
+             *
+             * @property String
+             */
+            active: Boolean,
+
+            /**
+             * Display button with blocked state
+             *
+             * @property String
+             */
+            block: Boolean,
+
+            /**
+             * Display button with disabled state
+             *
+             * @property String
+             */
+            disabled: Boolean,
+
+            /**
+             * If an href is passed, button is an router-link element
+             *
+             * @property Boolean
+             */
+            href: String,
+
+            /**
+             * Should use <label> as the element for the button. Used for inputs
+             * wrappers (toggles).
+             *
+             * @property Boolean
+             */
+            label: Boolean,
+
+            /**
+             * Display as an outline button
+             *
+             * @property String
+             */
+            outline: Boolean,
+
+            /**
+             * If an to is passed, button is an router-link element
+             *
+             * @property Boolean
+             */
+            to: [Object, String],
+
+            /**
+             * The type attribute for the button. Not applied if an anchor
+             *
+             * @property String
+             */
+            type: String
+
+        },
+
+        methods: {
+
+            onClick(event) {
+                this.$emit('click', event);
+            }
+
+        },
+
+        computed: {
+
+            variantClassPrefix() {
+                return this.$options.name + (this.outline ? '-outline' : '');
+            },
+
+            classes() {
+                return this.mergeClasses(
+                    'btn',
+                    this.variantClass,
+                    this.sizeableClass,
+                    this.colorableClasses,
+                    this.block ? 'btn-block' : '',
+                    this.active ? 'active' : ''
+                );
+            }
+
+        }
+
+    };
+
+    /* script */
+                const __vue_script__$f = script$g;
+    /* template */
+    var __vue_render__$d = function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _vm.to
+        ? _c(
+            "router-link",
+            {
+              class: _vm.classes,
+              attrs: { to: _vm.to, disabled: _vm.disabled, role: "button" },
+              on: { click: _vm.onClick }
+            },
+            [_vm._t("default")],
+            2
+          )
+        : _vm.href
+          ? _c(
+              "a",
+              {
+                class: _vm.classes,
+                attrs: { href: _vm.href, disabled: _vm.disabled, role: "button" },
+                on: { click: _vm.onClick }
+              },
+              [_vm._t("default")],
+              2
+            )
+          : _vm.label
+            ? _c(
+                "label",
+                {
+                  class: _vm.classes,
+                  attrs: { disabled: _vm.disabled, role: "button" },
+                  on: { click: _vm.onClick }
+                },
+                [_vm._t("default")],
+                2
+              )
+            : _c(
+                "button",
+                {
+                  class: _vm.classes,
+                  attrs: { type: _vm.type, disabled: _vm.disabled },
+                  on: { click: _vm.onClick }
+                },
+                [_vm._t("default")],
+                2
+              )
+    };
+    var __vue_staticRenderFns__$d = [];
+    __vue_render__$d._withStripped = true;
+
+      /* style */
+      const __vue_inject_styles__$f = undefined;
+      /* scoped */
+      const __vue_scope_id__$f = undefined;
+      /* module identifier */
+      const __vue_module_identifier__$f = undefined;
+      /* functional template */
+      const __vue_is_functional_template__$f = false;
+      /* style inject */
+      
+      /* style inject SSR */
+      
+
+      
+      var Btn = normalizeComponent(
+        { render: __vue_render__$d, staticRenderFns: __vue_staticRenderFns__$d },
+        __vue_inject_styles__$f,
+        __vue_script__$f,
+        __vue_scope_id__$f,
+        __vue_is_functional_template__$f,
+        __vue_module_identifier__$f,
+        undefined,
+        undefined
+      );
+
+    //
+    //
+    //
+    //
+    //
+    //
+
+    var script$h = {
+
+        name: 'alert-close',
+
+        methods: {
+
+            onClick(event) {
+                this.$emit('click', event);
+            }
+
+        }
+
+    };
+
+    /* script */
+                const __vue_script__$g = script$h;
+                
+    /* template */
+    var __vue_render__$e = function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: { type: "button", "data-dismiss": "alert", "aria-label": "Close" },
+          on: { click: _vm.onClick }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    };
+    var __vue_staticRenderFns__$e = [];
+    __vue_render__$e._withStripped = true;
+
+      /* style */
+      const __vue_inject_styles__$g = undefined;
+      /* scoped */
+      const __vue_scope_id__$g = undefined;
+      /* module identifier */
+      const __vue_module_identifier__$g = undefined;
+      /* functional template */
+      const __vue_is_functional_template__$g = false;
+      /* style inject */
+      
+      /* style inject SSR */
+      
+
+      
+      var AlertClose = normalizeComponent(
+        { render: __vue_render__$e, staticRenderFns: __vue_staticRenderFns__$e },
+        __vue_inject_styles__$g,
+        __vue_script__$g,
+        __vue_scope_id__$g,
+        __vue_is_functional_template__$g,
+        __vue_module_identifier__$g,
+        undefined,
+        undefined
+      );
+
+    //
+    //
+    //
+    //
+
+    var script$i = {
+
+        name: 'alert-heading'
+
+    };
+
+    /* script */
+                const __vue_script__$h = script$i;
+                
+    /* template */
+    var __vue_render__$f = function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("h4", { staticClass: "alert-heading" }, [_vm._t("default")], 2)
+    };
+    var __vue_staticRenderFns__$f = [];
+    __vue_render__$f._withStripped = true;
+
+      /* style */
+      const __vue_inject_styles__$h = undefined;
+      /* scoped */
+      const __vue_scope_id__$h = undefined;
+      /* module identifier */
+      const __vue_module_identifier__$h = undefined;
+      /* functional template */
+      const __vue_is_functional_template__$h = false;
+      /* style inject */
+      
+      /* style inject SSR */
+      
+
+      
+      var AlertHeading = normalizeComponent(
+        { render: __vue_render__$f, staticRenderFns: __vue_staticRenderFns__$f },
+        __vue_inject_styles__$h,
+        __vue_script__$h,
+        __vue_scope_id__$h,
+        __vue_is_functional_template__$h,
+        __vue_module_identifier__$h,
+        undefined,
+        undefined
+      );
 
     //
 
@@ -4179,7 +4447,7 @@
                 const __vue_script__$i = script$j;
                 
     /* template */
-    var __vue_render__$f = function() {
+    var __vue_render__$g = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -4216,8 +4484,8 @@
         ]
       )
     };
-    var __vue_staticRenderFns__$f = [];
-    __vue_render__$f._withStripped = true;
+    var __vue_staticRenderFns__$g = [];
+    __vue_render__$g._withStripped = true;
 
       /* style */
       const __vue_inject_styles__$i = undefined;
@@ -4234,7 +4502,7 @@
 
       
       var ProgressBar = normalizeComponent(
-        { render: __vue_render__$f, staticRenderFns: __vue_staticRenderFns__$f },
+        { render: __vue_render__$g, staticRenderFns: __vue_staticRenderFns__$g },
         __vue_inject_styles__$i,
         __vue_script__$i,
         __vue_scope_id__$i,
@@ -4377,7 +4645,7 @@
                 const __vue_script__$j = script$k;
                 
     /* template */
-    var __vue_render__$g = function() {
+    var __vue_render__$h = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -4423,8 +4691,8 @@
         2
       )
     };
-    var __vue_staticRenderFns__$g = [];
-    __vue_render__$g._withStripped = true;
+    var __vue_staticRenderFns__$h = [];
+    __vue_render__$h._withStripped = true;
 
       /* style */
       const __vue_inject_styles__$j = undefined;
@@ -4441,7 +4709,7 @@
 
       
       var Alert = normalizeComponent(
-        { render: __vue_render__$g, staticRenderFns: __vue_staticRenderFns__$g },
+        { render: __vue_render__$h, staticRenderFns: __vue_staticRenderFns__$h },
         __vue_inject_styles__$j,
         __vue_script__$j,
         __vue_scope_id__$j,
@@ -4466,14 +4734,14 @@
                 const __vue_script__$k = script$l;
                 
     /* template */
-    var __vue_render__$h = function() {
+    var __vue_render__$i = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
       return _c("a", { staticClass: "alert-link" }, [_vm._t("default")], 2)
     };
-    var __vue_staticRenderFns__$h = [];
-    __vue_render__$h._withStripped = true;
+    var __vue_staticRenderFns__$i = [];
+    __vue_render__$i._withStripped = true;
 
       /* style */
       const __vue_inject_styles__$k = undefined;
@@ -4490,7 +4758,7 @@
 
       
       normalizeComponent(
-        { render: __vue_render__$h, staticRenderFns: __vue_staticRenderFns__$h },
+        { render: __vue_render__$i, staticRenderFns: __vue_staticRenderFns__$i },
         __vue_inject_styles__$k,
         __vue_script__$k,
         __vue_scope_id__$k,
@@ -5997,19 +6265,9 @@
         }
       },
 
-      created() {
-        /*
-        this.$submitEvent = this.$dispatch.on('form:submit', (data) => {
-            this.$card.blur();
-        });
-        */
-      },
-
-      beforeDestroy() {// this.$dispatch.off(this.$submitEvent);
-      },
-
       mounted() {
-        const gateway = Gateway$1(this.gateway); // this.$dispatch.request('submit:disable');
+        const gateway = Gateway$1(this.gateway); // this.$emit('submit-disable');
+        // this.$dispatch.request('submit:disable');
 
         gateway.script(event => {
           try {
@@ -6020,7 +6278,8 @@
               }
             });
           } catch (e) {
-            // this.$dispatch.emit('error', e);
+            this.$emit('error', e); // this.$dispatch.emit('error', e);
+
             throw e;
           }
 
@@ -6036,7 +6295,8 @@
                     if (result.error) {
                       reject(this.errors.token = [event.error.message]);
                     } else {
-                      this.form.token = result.token.id; // this.$dispatch.request('submit:enable');
+                      this.form.token = result.token.id;
+                      this.$emit('submit-enable'); // this.$dispatch.request('submit:enable');
 
                       resolve(result);
                     }
@@ -6052,7 +6312,7 @@
             }
           });
           this.loaded = true;
-          this.$nextTick(() => this.$card.mount(this.$el.querySelector('.stripe-field-input')));
+          this.$nextTick(() => this.$card.mount(this.$refs.input));
         });
       },
 
@@ -6068,7 +6328,7 @@
     /* script */
                 const __vue_script__$l = script$m;
     /* template */
-    var __vue_render__$i = function() {
+    var __vue_render__$j = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -6110,7 +6370,12 @@
                         staticClass: "form-control p-2",
                         class: { "is-invalid": !!_vm.errors.token }
                       },
-                      [_c("div", { staticClass: "stripe-field-input" })]
+                      [
+                        _c("div", {
+                          ref: "input",
+                          staticClass: "stripe-field-input"
+                        })
+                      ]
                     ),
                     _vm._v(" "),
                     _c(
@@ -6136,8 +6401,8 @@
         ]
       )
     };
-    var __vue_staticRenderFns__$i = [];
-    __vue_render__$i._withStripped = true;
+    var __vue_staticRenderFns__$j = [];
+    __vue_render__$j._withStripped = true;
 
       /* style */
       const __vue_inject_styles__$l = undefined;
@@ -6154,7 +6419,7 @@
 
       
       var StripeCreditCard = normalizeComponent(
-        { render: __vue_render__$i, staticRenderFns: __vue_staticRenderFns__$i },
+        { render: __vue_render__$j, staticRenderFns: __vue_staticRenderFns__$j },
         __vue_inject_styles__$l,
         __vue_script__$l,
         __vue_scope_id__$l,
@@ -7889,7 +8154,7 @@
     /* script */
                 const __vue_script__$m = script$n;
     /* template */
-    var __vue_render__$j = function() {
+    var __vue_render__$k = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -7907,44 +8172,38 @@
               "div",
               [
                 _vm.error
-                  ? _c("alert", { attrs: { variant: "danger" } }, [
-                      _c("div", { staticClass: "row" }, [
-                        _c(
-                          "div",
-                          { staticClass: "col-sm-2" },
-                          [
-                            _c("icon", {
-                              staticClass: "float-left mt-2",
-                              attrs: { icon: "exclamation-triangle", scale: "2.5" }
-                            })
-                          ],
-                          1
-                        ),
+                  ? _c(
+                      "alert",
+                      {
+                        staticClass: "d-flex align-items-center",
+                        attrs: { variant: "danger" }
+                      },
+                      [
+                        _c("icon", {
+                          staticClass: "mr-2",
+                          attrs: { icon: "exclamation-triangle", size: "2x" }
+                        }),
                         _vm._v(" "),
-                        _c("div", {
-                          staticClass: "col-sm-10",
-                          domProps: { innerHTML: _vm._s(_vm.error) }
-                        })
-                      ])
-                    ])
+                        _c("div", { domProps: { innerHTML: _vm._s(_vm.error) } })
+                      ],
+                      1
+                    )
                   : _vm.form.payerId && _vm.form.paymentId
-                    ? _c("alert", { attrs: { variant: "success" } }, [
-                        _c("div", { staticClass: "row" }, [
-                          _c(
-                            "div",
-                            { staticClass: "col-sm-2" },
-                            [
-                              _c("icon", {
-                                staticClass: "float-left mt-2",
-                                attrs: { icon: "check-circle", scale: "2.5" }
-                              })
-                            ],
-                            1
-                          ),
+                    ? _c(
+                        "alert",
+                        {
+                          staticClass: "d-flex align-items-center",
+                          attrs: { variant: "success" }
+                        },
+                        [
+                          _c("icon", {
+                            staticClass: "mr-2",
+                            attrs: { icon: "check-circle", size: "2x" }
+                          }),
                           _vm._v(" "),
-                          _c("div", { staticClass: "col-sm-10" }, [
+                          _c("div", [
                             _vm._v(
-                              "\n                    Your PayPal payment information has been collected and is ready to be processed. "
+                              "Your PayPal payment information has been collected and is ready to be processed. "
                             ),
                             _c(
                               "a",
@@ -7959,8 +8218,9 @@
                               [_vm._v("Cancel Payment")]
                             )
                           ])
-                        ])
-                      ])
+                        ],
+                        1
+                      )
                     : _vm._e()
               ],
               1
@@ -7972,8 +8232,8 @@
         })
       ])
     };
-    var __vue_staticRenderFns__$j = [];
-    __vue_render__$j._withStripped = true;
+    var __vue_staticRenderFns__$k = [];
+    __vue_render__$k._withStripped = true;
 
       /* style */
       const __vue_inject_styles__$m = undefined;
@@ -7990,7 +8250,7 @@
 
       
       var PaypalPaymentButton = normalizeComponent(
-        { render: __vue_render__$j, staticRenderFns: __vue_staticRenderFns__$j },
+        { render: __vue_render__$k, staticRenderFns: __vue_staticRenderFns__$k },
         __vue_inject_styles__$m,
         __vue_script__$m,
         __vue_scope_id__$m,
@@ -8004,6 +8264,7 @@
     var script$o = {
       name: 'stripe-payment-button',
       components: {
+        Btn,
         Icon: FontAwesomeIcon,
         Alert,
         ActivityIndicator
@@ -8127,7 +8388,7 @@
                 const __vue_script__$n = script$o;
                 
     /* template */
-    var __vue_render__$k = function() {
+    var __vue_render__$l = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -8198,39 +8459,48 @@
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "col-xs-10" }, [
-                          _c("div", { staticClass: "pl-2" }, [
-                            _c(
-                              "button",
-                              {
-                                staticClass: "btn btn-xs btn-warning float-right",
-                                attrs: { type: "button", disabled: _vm.submitting },
-                                on: {
-                                  click: function($event) {
-                                    _vm.changeCard($event);
+                          _c(
+                            "div",
+                            { staticClass: "pl-2" },
+                            [
+                              _c(
+                                "btn",
+                                {
+                                  staticClass: "float-right",
+                                  attrs: {
+                                    type: "button",
+                                    variant: "warning",
+                                    disabled: _vm.submitting
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.changeCard($event);
+                                    }
                                   }
-                                }
-                              },
-                              [_vm._v("Change Card")]
-                            ),
-                            _vm._v(" "),
-                            _vm.card.name
-                              ? _c("span", [
-                                  _vm._v(_vm._s(_vm.card.name)),
-                                  _c("br")
+                                },
+                                [_vm._v("Change Card")]
+                              ),
+                              _vm._v(" "),
+                              _vm.card.name
+                                ? _c("span", [
+                                    _vm._v(_vm._s(_vm.card.name)),
+                                    _c("br")
+                                  ])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _c("small", [
+                                _vm._v("****" + _vm._s(_vm.card.last4) + " "),
+                                _c("span", { staticClass: "pl-2" }, [
+                                  _vm._v(
+                                    _vm._s(_vm.card.exp_month) +
+                                      "/" +
+                                      _vm._s(_vm.card.exp_year)
+                                  )
                                 ])
-                              : _vm._e(),
-                            _vm._v(" "),
-                            _c("small", [
-                              _vm._v("****" + _vm._s(_vm.card.last4) + " "),
-                              _c("span", { staticClass: "pl-2" }, [
-                                _vm._v(
-                                  _vm._s(_vm.card.exp_month) +
-                                    "/" +
-                                    _vm._s(_vm.card.exp_year)
-                                )
                               ])
-                            ])
-                          ])
+                            ],
+                            1
+                          )
                         ])
                       ])
                     ])
@@ -8253,35 +8523,28 @@
                       _c("div", { staticClass: "stripe-payment-button mt-2 mb-4" })
                     ])
               ])
-            : _c("alert", { attrs: { variant: "danger" } }, [
-                _c("div", { staticClass: "row" }, [
-                  _c(
-                    "div",
-                    { staticClass: "col-xs-3 text-center" },
-                    [
-                      _c("icon", {
-                        staticClass: "mt-2",
-                        attrs: { icon: "exclamation-triangle", scale: "2" }
-                      })
-                    ],
-                    1
-                  ),
+            : _c(
+                "alert",
+                {
+                  staticClass: "d-flex align-items-center",
+                  attrs: { variant: "danger" }
+                },
+                [
+                  _c("icon", {
+                    staticClass: "mr-3",
+                    attrs: { icon: "exclamation-triangle", size: "2x" }
+                  }),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col-xs-9" }, [
-                    _vm._v(
-                      "\n                " +
-                        _vm._s(_vm.error.message) +
-                        "\n            "
-                    )
-                  ])
-                ])
-              ])
+                  _c("div", { domProps: { innerHTML: _vm._s(_vm.error.message) } })
+                ],
+                1
+              )
         ],
         1
       )
     };
-    var __vue_staticRenderFns__$k = [];
-    __vue_render__$k._withStripped = true;
+    var __vue_staticRenderFns__$l = [];
+    __vue_render__$l._withStripped = true;
 
       /* style */
       const __vue_inject_styles__$n = undefined;
@@ -8298,7 +8561,7 @@
 
       
       var StripePaymentButton = normalizeComponent(
-        { render: __vue_render__$k, staticRenderFns: __vue_staticRenderFns__$k },
+        { render: __vue_render__$l, staticRenderFns: __vue_staticRenderFns__$l },
         __vue_inject_styles__$n,
         __vue_script__$n,
         __vue_scope_id__$n,
@@ -9966,7 +10229,7 @@
     /* script */
                 const __vue_script__$o = script$p;
     /* template */
-    var __vue_render__$l = function() {
+    var __vue_render__$m = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -10294,8 +10557,8 @@
         2
       )
     };
-    var __vue_staticRenderFns__$l = [];
-    __vue_render__$l._withStripped = true;
+    var __vue_staticRenderFns__$m = [];
+    __vue_render__$m._withStripped = true;
 
       /* style */
       const __vue_inject_styles__$o = undefined;
@@ -10312,7 +10575,7 @@
 
       
       var CreditCardField = normalizeComponent(
-        { render: __vue_render__$l, staticRenderFns: __vue_staticRenderFns__$l },
+        { render: __vue_render__$m, staticRenderFns: __vue_staticRenderFns__$m },
         __vue_inject_styles__$o,
         __vue_script__$o,
         __vue_scope_id__$o,
@@ -10403,7 +10666,7 @@
                 const __vue_script__$p = script$q;
                 
     /* template */
-    var __vue_render__$m = function() {
+    var __vue_render__$n = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -10433,8 +10696,8 @@
             1
           )
     };
-    var __vue_staticRenderFns__$m = [];
-    __vue_render__$m._withStripped = true;
+    var __vue_staticRenderFns__$n = [];
+    __vue_render__$n._withStripped = true;
 
       /* style */
       const __vue_inject_styles__$p = undefined;
@@ -10451,7 +10714,7 @@
 
       
       var AuthorizeNetCreditCard = normalizeComponent(
-        { render: __vue_render__$m, staticRenderFns: __vue_staticRenderFns__$m },
+        { render: __vue_render__$n, staticRenderFns: __vue_staticRenderFns__$n },
         __vue_inject_styles__$p,
         __vue_script__$p,
         __vue_scope_id__$p,
@@ -10465,6 +10728,7 @@
     var script$r = {
       name: 'payment-gateways',
       components: {
+        Btn,
         Icon: FontAwesomeIcon,
         Alert,
         StripeCreditCard,
@@ -10505,6 +10769,10 @@
         onResize(event) {
           this.width = this.$el.offsetWidth;
           return this.onResize;
+        },
+
+        onSubmit() {
+          console.log('asd');
         }
 
       },
@@ -10542,8 +10810,9 @@
 
     /* script */
                 const __vue_script__$q = script$r;
+                
     /* template */
-    var __vue_render__$n = function() {
+    var __vue_render__$o = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -10552,70 +10821,68 @@
         [
           _c(
             "div",
-            { staticClass: "row" },
-            _vm._l(_vm.buttons, function(button) {
-              return _c("div", { class: _vm.classes }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-block payment-gateway-button",
-                    class: {
-                      "btn-success": button.active,
-                      "btn-secondary": !button.active
-                    },
-                    attrs: { type: "button" },
-                    on: {
-                      click: function($event) {
-                        _vm.activate(button);
-                      }
-                    }
+            { staticClass: "payment-gateway-buttons" },
+            _vm._l(_vm.buttons, function(button, i) {
+              return _c(
+                "btn",
+                {
+                  key: i,
+                  class: {
+                    "btn-success": button.active,
+                    "btn-secondary": !button.active
                   },
-                  [
-                    _c("icon", {
-                      class: { "mt-2 mb-1": !button.label },
-                      attrs: {
-                        icon:
-                          typeof button.icon === "string"
-                            ? ["far", button.icon]
-                            : button.icon,
-                        size: button.size || "lg"
-                      }
-                    }),
-                    _vm._v(" "),
-                    button.label
-                      ? _c("div", { staticClass: "pb-1 small" }, [
-                          _vm._v(_vm._s(button.label))
-                        ])
-                      : _vm._e()
-                  ],
-                  1
-                )
-              ])
+                  attrs: { type: "button" },
+                  on: {
+                    click: function($event) {
+                      _vm.activate(button);
+                    }
+                  }
+                },
+                [
+                  _c("icon", {
+                    class: { "mt-2 mb-1": !button.label },
+                    attrs: {
+                      icon:
+                        typeof button.icon === "string"
+                          ? ["far", button.icon]
+                          : button.icon,
+                      size: button.size || "lg"
+                    }
+                  }),
+                  _vm._v(" "),
+                  button.label
+                    ? _c("div", {
+                        staticClass: "pb-1 small",
+                        domProps: { innerHTML: _vm._s(button.label) }
+                      })
+                    : _vm._e()
+                ],
+                1
+              )
             })
           ),
           _vm._v(" "),
           !_vm.buttons || !_vm.buttons.length
-            ? _c("alert", { attrs: { variant: "danger" } }, [
-                _c("div", { staticClass: "row" }, [
-                  _c(
-                    "div",
-                    { staticClass: "col-xs-2 text-center" },
-                    [
-                      _c("icon", {
-                        staticClass: "mt-2",
-                        attrs: { icon: "exclamation-triangle", scale: "2.25" }
-                      })
-                    ],
-                    1
-                  ),
+            ? _c(
+                "alert",
+                {
+                  staticClass: "d-flex align-items-center",
+                  attrs: { variant: "danger" }
+                },
+                [
+                  _c("icon", {
+                    staticClass: "mr-2",
+                    attrs: { icon: "exclamation-triangle", size: "2x" }
+                  }),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col-xs-10" }, [
+                  _c("div", [
                     _vm._v(
-                      "\n                There are not payment gateways configured for this site!\n            "
+                      "There are not payment gateways configured for this site!"
                     )
                   ])
-                ])
-              ])
+                ],
+                1
+              )
             : _c(
                 "div",
                 [
@@ -10627,6 +10894,9 @@
                           "div",
                           [
                             _c(button.component, {
+                              directives: [
+                                { name: "bind-events", rawName: "v-bind-events" }
+                              ],
                               tag: "component",
                               attrs: {
                                 form: _vm.form,
@@ -10647,8 +10917,8 @@
         1
       )
     };
-    var __vue_staticRenderFns__$n = [];
-    __vue_render__$n._withStripped = true;
+    var __vue_staticRenderFns__$o = [];
+    __vue_render__$o._withStripped = true;
 
       /* style */
       const __vue_inject_styles__$q = undefined;
@@ -10665,7 +10935,7 @@
 
       
       var PaymentGateways = normalizeComponent(
-        { render: __vue_render__$n, staticRenderFns: __vue_staticRenderFns__$n },
+        { render: __vue_render__$o, staticRenderFns: __vue_staticRenderFns__$o },
         __vue_inject_styles__$q,
         __vue_script__$q,
         __vue_scope_id__$q,
@@ -10908,7 +11178,7 @@
     /* script */
                 const __vue_script__$r = script$s;
     /* template */
-    var __vue_render__$o = function() {
+    var __vue_render__$p = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -10930,8 +11200,8 @@
         2
       )
     };
-    var __vue_staticRenderFns__$o = [];
-    __vue_render__$o._withStripped = true;
+    var __vue_staticRenderFns__$p = [];
+    __vue_render__$p._withStripped = true;
 
       /* style */
       const __vue_inject_styles__$r = undefined;
@@ -10948,7 +11218,7 @@
 
       
       var BtnActivity = normalizeComponent(
-        { render: __vue_render__$o, staticRenderFns: __vue_staticRenderFns__$o },
+        { render: __vue_render__$p, staticRenderFns: __vue_staticRenderFns__$p },
         __vue_inject_styles__$r,
         __vue_script__$r,
         __vue_scope_id__$r,
@@ -11002,7 +11272,7 @@
                 const __vue_script__$s = script$t;
                 
     /* template */
-    var __vue_render__$p = function() {
+    var __vue_render__$q = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -11081,8 +11351,8 @@
         2
       )
     };
-    var __vue_staticRenderFns__$p = [];
-    __vue_render__$p._withStripped = true;
+    var __vue_staticRenderFns__$q = [];
+    __vue_render__$q._withStripped = true;
 
       /* style */
       const __vue_inject_styles__$s = undefined;
@@ -11099,7 +11369,7 @@
 
       
       var TextareaField = normalizeComponent(
-        { render: __vue_render__$p, staticRenderFns: __vue_staticRenderFns__$p },
+        { render: __vue_render__$q, staticRenderFns: __vue_staticRenderFns__$q },
         __vue_inject_styles__$s,
         __vue_script__$s,
         __vue_scope_id__$s,
@@ -11124,7 +11394,7 @@
                 const __vue_script__$t = script$u;
                 
     /* template */
-    var __vue_render__$q = function() {
+    var __vue_render__$r = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -11134,6 +11404,7 @@
           _c("legend", [_vm._v("Payment Information")]),
           _vm._v(" "),
           _c("payment-gateways", {
+            directives: [{ name: "bind-events", rawName: "v-bind-events" }],
             attrs: { form: _vm.form, errors: _vm.errors, page: _vm.page }
           }),
           _vm._v(" "),
@@ -11154,8 +11425,7 @@
           _c("btn-activity", {
             attrs: {
               type: "submit",
-              size: "md",
-              orientation: "right",
+              size: "lg",
               activity: _vm.submitting,
               block: true,
               label: _vm.buttonLabel || _vm.page.site.config.giveworks.button.donate
@@ -11229,8 +11499,8 @@
         1
       )
     };
-    var __vue_staticRenderFns__$q = [];
-    __vue_render__$q._withStripped = true;
+    var __vue_staticRenderFns__$r = [];
+    __vue_render__$r._withStripped = true;
 
       /* style */
       const __vue_inject_styles__$t = undefined;
@@ -11247,7 +11517,7 @@
 
       
       var PaymentInfoFieldset = normalizeComponent(
-        { render: __vue_render__$q, staticRenderFns: __vue_staticRenderFns__$q },
+        { render: __vue_render__$r, staticRenderFns: __vue_staticRenderFns__$r },
         __vue_inject_styles__$t,
         __vue_script__$t,
         __vue_scope_id__$t,
@@ -11257,46 +11527,17 @@
         undefined
       );
 
-    var Sizeable = {
-
-        props: {
-
-            /**
-             * The size of the form control
-             *
-             * @property String
-             */
-            size: {
-                type: String,
-                default: 'md',
-                validate: value => ['sm', 'md', 'lg'].indexOf(value) !== -1
-            }
-
-        },
-
-        computed: {
-
-            sizeableClassPrefix() {
-                return this.$options.name;
-            },
-
-            sizeableClass() {
-                return prefix(this.size, this.sizeableClassPrefix);
-            }
-
-        }
-
-    };
-
     //
 
     var script$v = {
 
-        name: 'btn',
+        name: 'btn-group',
+
+        components: {
+            Btn
+        },
 
         mixins: [
-            Variant,
-            Sizeable,
             Colorable,
             MergeClasses
         ],
@@ -11304,86 +11545,37 @@
         props: {
 
             /**
-             * Display button with active state
+             * An array of buttons
              *
-             * @property String
+             * @type {Array}
              */
-            active: Boolean,
+            buttons: Array,
 
             /**
-             * Display button with blocked state
+             * Denote the button group as toggle buttons
              *
-             * @property String
+             * @type {Boolean}
              */
-            block: Boolean,
+            toggle: Boolean,
 
             /**
-             * Display button with disabled state
+             * Display the buttons vertically
              *
-             * @property String
+             * @type {Boolean}
              */
-            disabled: Boolean,
-
-            /**
-             * If an href is passed, button is an router-link element
-             *
-             * @property Boolean
-             */
-            href: String,
-
-            /**
-             * Should use <label> as the element for the button. Used for inputs
-             * wrappers (toggles).
-             *
-             * @property Boolean
-             */
-            label: Boolean,
-
-            /**
-             * Display as an outline button
-             *
-             * @property String
-             */
-            outline: Boolean,
-
-            /**
-             * If an to is passed, button is an router-link element
-             *
-             * @property Boolean
-             */
-            to: [Object, String],
-
-            /**
-             * The type attribute for the button. Not applied if an anchor
-             *
-             * @property String
-             */
-            type: String
-
-        },
-
-        methods: {
-
-            onClick(event) {
-                this.$emit('click', event);
-            }
+            vertical: Boolean
 
         },
 
         computed: {
 
-            variantClassPrefix() {
-                return this.$options.name + (this.outline ? '-outline' : '');
-            },
-
             classes() {
                 return this.mergeClasses(
-                    'btn',
-                    this.variantClass,
-                    this.sizeableClass,
-                    this.colorableClasses,
-                    this.block ? 'btn-block' : '',
-                    this.active ? 'active' : ''
+                    this.colorableClasses, {
+                        'btn-group': !this.vertical,
+                        'btn-group-toggle': this.toggle,
+                        'btn-group-vertical': this.vertical
+                    }
                 );
             }
 
@@ -11393,57 +11585,32 @@
 
     /* script */
                 const __vue_script__$u = script$v;
+                
     /* template */
-    var __vue_render__$r = function() {
+    var __vue_render__$s = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
-      return _vm.to
-        ? _c(
-            "router-link",
-            {
-              class: _vm.classes,
-              attrs: { to: _vm.to, disabled: _vm.disabled, role: "button" },
-              on: { click: _vm.onClick }
-            },
-            [_vm._t("default")],
-            2
-          )
-        : _vm.href
-          ? _c(
-              "a",
-              {
-                class: _vm.classes,
-                attrs: { href: _vm.href, disabled: _vm.disabled, role: "button" },
-                on: { click: _vm.onClick }
-              },
-              [_vm._t("default")],
-              2
-            )
-          : _vm.label
-            ? _c(
-                "label",
-                {
-                  class: _vm.classes,
-                  attrs: { disabled: _vm.disabled, role: "button" },
-                  on: { click: _vm.onClick }
-                },
-                [_vm._t("default")],
-                2
-              )
-            : _c(
-                "button",
-                {
-                  class: _vm.classes,
-                  attrs: { type: _vm.type, disabled: _vm.disabled },
-                  on: { click: _vm.onClick }
-                },
-                [_vm._t("default")],
-                2
-              )
+      return _c(
+        "div",
+        {
+          class: _vm.classes,
+          attrs: { "data-toggle": _vm.toggle ? "buttons" : false, role: "group" }
+        },
+        [
+          _vm._l(_vm.buttons, function(button, i) {
+            return _vm.buttons
+              ? _c("btn", _vm._b({ key: i }, "btn", button, false))
+              : _vm._e()
+          }),
+          _vm._v(" "),
+          _vm._t("default")
+        ],
+        2
+      )
     };
-    var __vue_staticRenderFns__$r = [];
-    __vue_render__$r._withStripped = true;
+    var __vue_staticRenderFns__$s = [];
+    __vue_render__$s._withStripped = true;
 
       /* style */
       const __vue_inject_styles__$u = undefined;
@@ -11459,13 +11626,214 @@
       
 
       
-      var Btn = normalizeComponent(
-        { render: __vue_render__$r, staticRenderFns: __vue_staticRenderFns__$r },
+      var BtnGroup = normalizeComponent(
+        { render: __vue_render__$s, staticRenderFns: __vue_staticRenderFns__$s },
         __vue_inject_styles__$u,
         __vue_script__$u,
         __vue_scope_id__$u,
         __vue_is_functional_template__$u,
         __vue_module_identifier__$u,
+        undefined,
+        undefined
+      );
+
+    //
+    //
+    //
+    //
+    //
+    //
+
+    var script$w = {
+
+        name: 'btn-group-toggle'
+
+    };
+
+    /* script */
+                const __vue_script__$v = script$w;
+                
+    /* template */
+    var __vue_render__$t = function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c(
+        "div",
+        { staticClass: "btn-group-toggle", attrs: { "data-toggle": "buttons" } },
+        [_vm._t("default")],
+        2
+      )
+    };
+    var __vue_staticRenderFns__$t = [];
+    __vue_render__$t._withStripped = true;
+
+      /* style */
+      const __vue_inject_styles__$v = undefined;
+      /* scoped */
+      const __vue_scope_id__$v = undefined;
+      /* module identifier */
+      const __vue_module_identifier__$v = undefined;
+      /* functional template */
+      const __vue_is_functional_template__$v = false;
+      /* style inject */
+      
+      /* style inject SSR */
+      
+
+      
+      normalizeComponent(
+        { render: __vue_render__$t, staticRenderFns: __vue_staticRenderFns__$t },
+        __vue_inject_styles__$v,
+        __vue_script__$v,
+        __vue_scope_id__$v,
+        __vue_is_functional_template__$v,
+        __vue_module_identifier__$v,
+        undefined,
+        undefined
+      );
+
+    //
+    //
+    //
+    //
+    //
+    //
+
+    var script$x = {
+
+        name: 'btn-toolbar'
+
+    };
+
+    /* script */
+                const __vue_script__$w = script$x;
+                
+    /* template */
+    var __vue_render__$u = function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c(
+        "div",
+        { staticClass: "btn-toolbar", attrs: { role: "toolbar" } },
+        [_vm._t("default")],
+        2
+      )
+    };
+    var __vue_staticRenderFns__$u = [];
+    __vue_render__$u._withStripped = true;
+
+      /* style */
+      const __vue_inject_styles__$w = undefined;
+      /* scoped */
+      const __vue_scope_id__$w = undefined;
+      /* module identifier */
+      const __vue_module_identifier__$w = undefined;
+      /* functional template */
+      const __vue_is_functional_template__$w = false;
+      /* style inject */
+      
+      /* style inject SSR */
+      
+
+      
+      normalizeComponent(
+        { render: __vue_render__$u, staticRenderFns: __vue_staticRenderFns__$u },
+        __vue_inject_styles__$w,
+        __vue_script__$w,
+        __vue_scope_id__$w,
+        __vue_is_functional_template__$w,
+        __vue_module_identifier__$w,
+        undefined,
+        undefined
+      );
+
+    //
+    var script$y = {
+      name: 'toggle-button',
+      inheritAttrs: false,
+      mixins: [FormControl],
+      components: {
+        Btn,
+        BtnGroup
+      },
+      props: {
+        value: {
+          default: 0
+        },
+        buttons: {
+          type: Object,
+
+          default() {
+            return {
+              0: 'One-Time',
+              1: 'Monthly Gift'
+            };
+          }
+
+        }
+      }
+    };
+
+    /* script */
+                const __vue_script__$x = script$y;
+                
+    /* template */
+    var __vue_render__$v = function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c(
+        "btn-group",
+        { staticClass: "toggle-button", attrs: { size: _vm.size } },
+        [
+          _vm._l(_vm.buttons, function(label, i) {
+            return _c("btn", {
+              key: i,
+              attrs: {
+                outline: i !== _vm.value.toString(),
+                variant: i === _vm.value.toString() ? "success" : "secondary",
+                type: "button"
+              },
+              domProps: { innerHTML: _vm._s(label) },
+              on: {
+                click: function($event) {
+                  _vm.$emit("input", i);
+                }
+              }
+            })
+          }),
+          _vm._v(" "),
+          _vm._t("default")
+        ],
+        2
+      )
+    };
+    var __vue_staticRenderFns__$v = [];
+    __vue_render__$v._withStripped = true;
+
+      /* style */
+      const __vue_inject_styles__$x = undefined;
+      /* scoped */
+      const __vue_scope_id__$x = undefined;
+      /* module identifier */
+      const __vue_module_identifier__$x = undefined;
+      /* functional template */
+      const __vue_is_functional_template__$x = false;
+      /* style inject */
+      
+      /* style inject SSR */
+      
+
+      
+      var ToggleButton = normalizeComponent(
+        { render: __vue_render__$v, staticRenderFns: __vue_staticRenderFns__$v },
+        __vue_inject_styles__$x,
+        __vue_script__$x,
+        __vue_scope_id__$x,
+        __vue_is_functional_template__$x,
+        __vue_module_identifier__$x,
         undefined,
         undefined
       );
@@ -11511,33 +11879,33 @@
     //
     //
 
-    var script$w = {
+    var script$z = {
 
         name: 'input-group-text'
 
     };
 
     /* script */
-                const __vue_script__$v = script$w;
+                const __vue_script__$y = script$z;
                 
     /* template */
-    var __vue_render__$s = function() {
+    var __vue_render__$w = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
       return _c("span", { staticClass: "input-group-text" }, [_vm._t("default")], 2)
     };
-    var __vue_staticRenderFns__$s = [];
-    __vue_render__$s._withStripped = true;
+    var __vue_staticRenderFns__$w = [];
+    __vue_render__$w._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$v = undefined;
+      const __vue_inject_styles__$y = undefined;
       /* scoped */
-      const __vue_scope_id__$v = undefined;
+      const __vue_scope_id__$y = undefined;
       /* module identifier */
-      const __vue_module_identifier__$v = undefined;
+      const __vue_module_identifier__$y = undefined;
       /* functional template */
-      const __vue_is_functional_template__$v = false;
+      const __vue_is_functional_template__$y = false;
       /* style inject */
       
       /* style inject SSR */
@@ -11545,19 +11913,19 @@
 
       
       var InputGroupText = normalizeComponent(
-        { render: __vue_render__$s, staticRenderFns: __vue_staticRenderFns__$s },
-        __vue_inject_styles__$v,
-        __vue_script__$v,
-        __vue_scope_id__$v,
-        __vue_is_functional_template__$v,
-        __vue_module_identifier__$v,
+        { render: __vue_render__$w, staticRenderFns: __vue_staticRenderFns__$w },
+        __vue_inject_styles__$y,
+        __vue_script__$y,
+        __vue_scope_id__$y,
+        __vue_is_functional_template__$y,
+        __vue_module_identifier__$y,
         undefined,
         undefined
       );
 
     //
 
-    var script$x = {
+    var script$A = {
 
         name: 'input-group-append',
 
@@ -11579,10 +11947,10 @@
     };
 
     /* script */
-                const __vue_script__$w = script$x;
+                const __vue_script__$z = script$A;
                 
     /* template */
-    var __vue_render__$t = function() {
+    var __vue_render__$x = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -11597,17 +11965,17 @@
         2
       )
     };
-    var __vue_staticRenderFns__$t = [];
-    __vue_render__$t._withStripped = true;
+    var __vue_staticRenderFns__$x = [];
+    __vue_render__$x._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$w = undefined;
+      const __vue_inject_styles__$z = undefined;
       /* scoped */
-      const __vue_scope_id__$w = undefined;
+      const __vue_scope_id__$z = undefined;
       /* module identifier */
-      const __vue_module_identifier__$w = undefined;
+      const __vue_module_identifier__$z = undefined;
       /* functional template */
-      const __vue_is_functional_template__$w = false;
+      const __vue_is_functional_template__$z = false;
       /* style inject */
       
       /* style inject SSR */
@@ -11615,19 +11983,19 @@
 
       
       var InputGroupAppend = normalizeComponent(
-        { render: __vue_render__$t, staticRenderFns: __vue_staticRenderFns__$t },
-        __vue_inject_styles__$w,
-        __vue_script__$w,
-        __vue_scope_id__$w,
-        __vue_is_functional_template__$w,
-        __vue_module_identifier__$w,
+        { render: __vue_render__$x, staticRenderFns: __vue_staticRenderFns__$x },
+        __vue_inject_styles__$z,
+        __vue_script__$z,
+        __vue_scope_id__$z,
+        __vue_is_functional_template__$z,
+        __vue_module_identifier__$z,
         undefined,
         undefined
       );
 
     //
 
-    var script$y = {
+    var script$B = {
 
         name: 'input-group-prepend',
 
@@ -11649,10 +12017,10 @@
     };
 
     /* script */
-                const __vue_script__$x = script$y;
+                const __vue_script__$A = script$B;
                 
     /* template */
-    var __vue_render__$u = function() {
+    var __vue_render__$y = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -11667,17 +12035,17 @@
         2
       )
     };
-    var __vue_staticRenderFns__$u = [];
-    __vue_render__$u._withStripped = true;
+    var __vue_staticRenderFns__$y = [];
+    __vue_render__$y._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$x = undefined;
+      const __vue_inject_styles__$A = undefined;
       /* scoped */
-      const __vue_scope_id__$x = undefined;
+      const __vue_scope_id__$A = undefined;
       /* module identifier */
-      const __vue_module_identifier__$x = undefined;
+      const __vue_module_identifier__$A = undefined;
       /* functional template */
-      const __vue_is_functional_template__$x = false;
+      const __vue_is_functional_template__$A = false;
       /* style inject */
       
       /* style inject SSR */
@@ -11685,19 +12053,19 @@
 
       
       var InputGroupPrepend = normalizeComponent(
-        { render: __vue_render__$u, staticRenderFns: __vue_staticRenderFns__$u },
-        __vue_inject_styles__$x,
-        __vue_script__$x,
-        __vue_scope_id__$x,
-        __vue_is_functional_template__$x,
-        __vue_module_identifier__$x,
+        { render: __vue_render__$y, staticRenderFns: __vue_staticRenderFns__$y },
+        __vue_inject_styles__$A,
+        __vue_script__$A,
+        __vue_scope_id__$A,
+        __vue_is_functional_template__$A,
+        __vue_module_identifier__$A,
         undefined,
         undefined
       );
 
     //
 
-    var script$z = {
+    var script$C = {
 
         name: 'input-group',
 
@@ -11725,9 +12093,9 @@
     };
 
     /* script */
-                const __vue_script__$y = script$z;
+                const __vue_script__$B = script$C;
     /* template */
-    var __vue_render__$v = function() {
+    var __vue_render__$z = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -11787,17 +12155,17 @@
         2
       )
     };
-    var __vue_staticRenderFns__$v = [];
-    __vue_render__$v._withStripped = true;
+    var __vue_staticRenderFns__$z = [];
+    __vue_render__$z._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$y = undefined;
+      const __vue_inject_styles__$B = undefined;
       /* scoped */
-      const __vue_scope_id__$y = undefined;
+      const __vue_scope_id__$B = undefined;
       /* module identifier */
-      const __vue_module_identifier__$y = undefined;
+      const __vue_module_identifier__$B = undefined;
       /* functional template */
-      const __vue_is_functional_template__$y = false;
+      const __vue_is_functional_template__$B = false;
       /* style inject */
       
       /* style inject SSR */
@@ -11805,24 +12173,25 @@
 
       
       var InputGroup = normalizeComponent(
-        { render: __vue_render__$v, staticRenderFns: __vue_staticRenderFns__$v },
-        __vue_inject_styles__$y,
-        __vue_script__$y,
-        __vue_scope_id__$y,
-        __vue_is_functional_template__$y,
-        __vue_module_identifier__$y,
+        { render: __vue_render__$z, staticRenderFns: __vue_staticRenderFns__$z },
+        __vue_inject_styles__$B,
+        __vue_script__$B,
+        __vue_scope_id__$B,
+        __vue_is_functional_template__$B,
+        __vue_module_identifier__$B,
         undefined,
         undefined
       );
 
     //
-    var script$A = {
+    var script$D = {
       name: 'payment-buttons',
       mixins: [FormControl],
       components: {
         Btn,
         InputField,
-        InputGroup
+        InputGroup,
+        FormFeedback
       },
       props: {
         amounts: {
@@ -11839,16 +12208,19 @@
     };
 
     /* script */
-                const __vue_script__$z = script$A;
+                const __vue_script__$C = script$D;
                 
     /* template */
-    var __vue_render__$w = function() {
+    var __vue_render__$A = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
       return _c(
         "div",
-        { staticClass: "payment-buttons" },
+        {
+          staticClass: "payment-buttons",
+          class: { "was-validated": !!_vm.errors.amount }
+        },
         [
           _c(
             "div",
@@ -11857,6 +12229,7 @@
               return _c("btn", {
                 key: amount,
                 attrs: {
+                  type: "button",
                   outline: "",
                   variant: "success",
                   active: _vm.value
@@ -11875,15 +12248,18 @@
           _vm._v(" "),
           _c(
             "input-group",
-            { attrs: { prepend: "$" } },
+            {
+              class: { "is-invalid": !!_vm.errors.amount },
+              attrs: { prepend: "$" }
+            },
             [
               _c("input-field", {
                 attrs: {
-                  group: false,
-                  value: _vm.value,
+                  custom: "",
                   label: "Other Amount",
                   placeholder: "Other Amount",
-                  custom: ""
+                  group: false,
+                  value: _vm.value
                 },
                 on: {
                   input: function(value) {
@@ -11893,22 +12269,30 @@
               })
             ],
             1
-          )
+          ),
+          _vm._v(" "),
+          _vm.errors.amount
+            ? _c("form-feedback", {
+                staticClass: "d-block",
+                attrs: { invalid: "" },
+                domProps: { innerHTML: _vm._s(_vm.errors.amount.join("<br>")) }
+              })
+            : _vm._e()
         ],
         1
       )
     };
-    var __vue_staticRenderFns__$w = [];
-    __vue_render__$w._withStripped = true;
+    var __vue_staticRenderFns__$A = [];
+    __vue_render__$A._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$z = undefined;
+      const __vue_inject_styles__$C = undefined;
       /* scoped */
-      const __vue_scope_id__$z = undefined;
+      const __vue_scope_id__$C = undefined;
       /* module identifier */
-      const __vue_module_identifier__$z = undefined;
+      const __vue_module_identifier__$C = undefined;
       /* functional template */
-      const __vue_is_functional_template__$z = false;
+      const __vue_is_functional_template__$C = false;
       /* style inject */
       
       /* style inject SSR */
@@ -11916,32 +12300,27 @@
 
       
       var PaymentButtons = normalizeComponent(
-        { render: __vue_render__$w, staticRenderFns: __vue_staticRenderFns__$w },
-        __vue_inject_styles__$z,
-        __vue_script__$z,
-        __vue_scope_id__$z,
-        __vue_is_functional_template__$z,
-        __vue_module_identifier__$z,
+        { render: __vue_render__$A, staticRenderFns: __vue_staticRenderFns__$A },
+        __vue_inject_styles__$C,
+        __vue_script__$C,
+        __vue_scope_id__$C,
+        __vue_is_functional_template__$C,
+        __vue_module_identifier__$C,
         undefined,
         undefined
       );
 
     //
-    var script$B = {
+    var script$E = {
       name: 'select-donation-fieldset',
       components: {
         Icon: FontAwesomeIcon,
         Alert,
         AlertHeading,
+        ToggleButton,
         PaymentButtons
       },
       mixins: [FormComponent],
-      methods: {
-        setRecurring(value) {
-          this.$set(this.form, 'recurring', value);
-        }
-
-      },
       computed: {
         recurringMessage() {
           return this.page.options.recur_mess || this.page.site.config.giveworks.recur_mess;
@@ -11965,10 +12344,10 @@
     };
 
     /* script */
-                const __vue_script__$A = script$B;
+                const __vue_script__$D = script$E;
                 
     /* template */
-    var __vue_render__$x = function() {
+    var __vue_render__$B = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -12002,67 +12381,45 @@
           }),
           _vm._v(" "),
           _vm.page.site.recurring && !_vm.page.options.recurring_only
-            ? _c("div", { staticClass: "form-group mt-3" }, [
-                _c("label", {
-                  domProps: { innerHTML: _vm._s(_vm.recurringMessage) }
-                }),
-                _vm._v(" "),
-                _c("div", { staticClass: "btn-group" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn",
-                      class: {
-                        "btn-success": !_vm.form.recurring,
-                        "btn-secondary": !!_vm.form.recurring
-                      },
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          _vm.setRecurring(0);
-                        }
-                      }
-                    },
-                    [_vm._v("One-Time")]
-                  ),
+            ? _c(
+                "div",
+                { staticClass: "form-group mt-3" },
+                [
+                  _c("label", {
+                    domProps: { innerHTML: _vm._s(_vm.recurringMessage) }
+                  }),
                   _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn",
-                      class: {
-                        "btn-success": !!_vm.form.recurring,
-                        "btn-secondary": !_vm.form.recurring
+                  _c("toggle-button", {
+                    attrs: { size: "lg" },
+                    model: {
+                      value: _vm.form.recurring,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "recurring", $$v);
                       },
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          _vm.setRecurring(1);
-                        }
-                      }
-                    },
-                    [_vm._v("Monthly")]
-                  )
-                ]),
-                _vm._v(" "),
-                !_vm.recurring
-                  ? _c("small", { staticClass: "text-muted form-text" }, [
-                      _vm._v(
-                        "You are making a single donation of the amount entered above. Click the 'monthly' button to make your gift go further as an automatic monthly donation."
-                      )
-                    ])
-                  : _vm._e(),
-                _vm._v(" "),
-                !!_vm.recurring
-                  ? _c("small", { staticClass: "text-muted form-text" }, [
-                      _vm._v(
-                        "This amount will be charged automatically once each month, on or about the " +
-                          _vm._s(_vm.chargeDate) +
-                          ". You may cancel your donation at any time by contacting us."
-                      )
-                    ])
-                  : _vm._e()
-              ])
+                      expression: "form.recurring"
+                    }
+                  }),
+                  _vm._v(" "),
+                  !_vm.recurring
+                    ? _c("small", { staticClass: "text-muted form-text" }, [
+                        _vm._v(
+                          "You are making a single donation of the amount entered above. Click the 'monthly' button to make your gift go further as an automatic monthly donation."
+                        )
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  !!_vm.recurring
+                    ? _c("small", { staticClass: "text-muted form-text" }, [
+                        _vm._v(
+                          "This amount will be charged automatically once each month, on or about the " +
+                            _vm._s(_vm.chargeDate) +
+                            ". You may cancel your donation at any time by contacting us."
+                        )
+                      ])
+                    : _vm._e()
+                ],
+                1
+              )
             : _vm.page.site.recurring && _vm.page.options.recurring_only
               ? _c(
                   "alert",
@@ -12098,17 +12455,17 @@
         1
       )
     };
-    var __vue_staticRenderFns__$x = [];
-    __vue_render__$x._withStripped = true;
+    var __vue_staticRenderFns__$B = [];
+    __vue_render__$B._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$A = undefined;
+      const __vue_inject_styles__$D = undefined;
       /* scoped */
-      const __vue_scope_id__$A = undefined;
+      const __vue_scope_id__$D = undefined;
       /* module identifier */
-      const __vue_module_identifier__$A = undefined;
+      const __vue_module_identifier__$D = undefined;
       /* functional template */
-      const __vue_is_functional_template__$A = false;
+      const __vue_is_functional_template__$D = false;
       /* style inject */
       
       /* style inject SSR */
@@ -12116,18 +12473,18 @@
 
       
       var SelectDonationFieldset = normalizeComponent(
-        { render: __vue_render__$x, staticRenderFns: __vue_staticRenderFns__$x },
-        __vue_inject_styles__$A,
-        __vue_script__$A,
-        __vue_scope_id__$A,
-        __vue_is_functional_template__$A,
-        __vue_module_identifier__$A,
+        { render: __vue_render__$B, staticRenderFns: __vue_staticRenderFns__$B },
+        __vue_inject_styles__$D,
+        __vue_script__$D,
+        __vue_scope_id__$D,
+        __vue_is_functional_template__$D,
+        __vue_module_identifier__$D,
         undefined,
         undefined
       );
 
     //
-    var script$C = {
+    var script$F = {
       name: 'page-type-donation',
       extends: PageType,
       components: {
@@ -12138,15 +12495,16 @@
     };
 
     /* script */
-                const __vue_script__$B = script$C;
+                const __vue_script__$E = script$F;
                 
     /* template */
-    var __vue_render__$y = function() {
+    var __vue_render__$C = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
       return _c(
         "div",
+        { directives: [{ name: "bind-events", rawName: "v-bind-events" }] },
         [
           _c("select-donation-fieldset", {
             attrs: { form: _vm.form, errors: _vm.errors, page: _vm.page }
@@ -12162,28 +12520,24 @@
           }),
           _vm._v(" "),
           _c("payment-info-fieldset", {
-            attrs: {
-              form: _vm.form,
-              errors: _vm.errors,
-              page: _vm.page,
-              submitting: _vm.submitting
-            }
+            directives: [{ name: "bind-events", rawName: "v-bind-events" }],
+            attrs: { form: _vm.form, errors: _vm.errors, page: _vm.page }
           })
         ],
         1
       )
     };
-    var __vue_staticRenderFns__$y = [];
-    __vue_render__$y._withStripped = true;
+    var __vue_staticRenderFns__$C = [];
+    __vue_render__$C._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$B = undefined;
+      const __vue_inject_styles__$E = undefined;
       /* scoped */
-      const __vue_scope_id__$B = undefined;
+      const __vue_scope_id__$E = undefined;
       /* module identifier */
-      const __vue_module_identifier__$B = undefined;
+      const __vue_module_identifier__$E = undefined;
       /* functional template */
-      const __vue_is_functional_template__$B = false;
+      const __vue_is_functional_template__$E = false;
       /* style inject */
       
       /* style inject SSR */
@@ -12191,12 +12545,12 @@
 
       
       var Donation = normalizeComponent(
-        { render: __vue_render__$y, staticRenderFns: __vue_staticRenderFns__$y },
-        __vue_inject_styles__$B,
-        __vue_script__$B,
-        __vue_scope_id__$B,
-        __vue_is_functional_template__$B,
-        __vue_module_identifier__$B,
+        { render: __vue_render__$C, staticRenderFns: __vue_staticRenderFns__$C },
+        __vue_inject_styles__$E,
+        __vue_script__$E,
+        __vue_scope_id__$E,
+        __vue_is_functional_template__$E,
+        __vue_module_identifier__$E,
         undefined,
         undefined
       );
@@ -12212,7 +12566,7 @@
 
     //
 
-    var script$D = {
+    var script$G = {
 
         name: 'radio-field',
 
@@ -12320,10 +12674,10 @@
     };
 
     /* script */
-                const __vue_script__$C = script$D;
+                const __vue_script__$F = script$G;
                 
     /* template */
-    var __vue_render__$z = function() {
+    var __vue_render__$D = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -12392,17 +12746,17 @@
         2
       )
     };
-    var __vue_staticRenderFns__$z = [];
-    __vue_render__$z._withStripped = true;
+    var __vue_staticRenderFns__$D = [];
+    __vue_render__$D._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$C = undefined;
+      const __vue_inject_styles__$F = undefined;
       /* scoped */
-      const __vue_scope_id__$C = undefined;
+      const __vue_scope_id__$F = undefined;
       /* module identifier */
-      const __vue_module_identifier__$C = undefined;
+      const __vue_module_identifier__$F = undefined;
       /* functional template */
-      const __vue_is_functional_template__$C = false;
+      const __vue_is_functional_template__$F = false;
       /* style inject */
       
       /* style inject SSR */
@@ -12410,19 +12764,19 @@
 
       
       var RadioField = normalizeComponent(
-        { render: __vue_render__$z, staticRenderFns: __vue_staticRenderFns__$z },
-        __vue_inject_styles__$C,
-        __vue_script__$C,
-        __vue_scope_id__$C,
-        __vue_is_functional_template__$C,
-        __vue_module_identifier__$C,
+        { render: __vue_render__$D, staticRenderFns: __vue_staticRenderFns__$D },
+        __vue_inject_styles__$F,
+        __vue_script__$F,
+        __vue_scope_id__$F,
+        __vue_is_functional_template__$F,
+        __vue_module_identifier__$F,
         undefined,
         undefined
       );
 
     //
 
-    var script$E = {
+    var script$H = {
 
         name: 'checkbox-field',
 
@@ -12475,10 +12829,10 @@
     };
 
     /* script */
-                const __vue_script__$D = script$E;
+                const __vue_script__$G = script$H;
                 
     /* template */
-    var __vue_render__$A = function() {
+    var __vue_render__$E = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -12547,17 +12901,17 @@
         2
       )
     };
-    var __vue_staticRenderFns__$A = [];
-    __vue_render__$A._withStripped = true;
+    var __vue_staticRenderFns__$E = [];
+    __vue_render__$E._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$D = undefined;
+      const __vue_inject_styles__$G = undefined;
       /* scoped */
-      const __vue_scope_id__$D = undefined;
+      const __vue_scope_id__$G = undefined;
       /* module identifier */
-      const __vue_module_identifier__$D = undefined;
+      const __vue_module_identifier__$G = undefined;
       /* functional template */
-      const __vue_is_functional_template__$D = false;
+      const __vue_is_functional_template__$G = false;
       /* style inject */
       
       /* style inject SSR */
@@ -12565,18 +12919,18 @@
 
       
       var CheckboxField = normalizeComponent(
-        { render: __vue_render__$A, staticRenderFns: __vue_staticRenderFns__$A },
-        __vue_inject_styles__$D,
-        __vue_script__$D,
-        __vue_scope_id__$D,
-        __vue_is_functional_template__$D,
-        __vue_module_identifier__$D,
+        { render: __vue_render__$E, staticRenderFns: __vue_staticRenderFns__$E },
+        __vue_inject_styles__$G,
+        __vue_script__$G,
+        __vue_scope_id__$G,
+        __vue_is_functional_template__$G,
+        __vue_module_identifier__$G,
         undefined,
         undefined
       );
 
     //
-    var script$F = {
+    var script$I = {
       name: 'employment-info-fieldset',
       mixins: [FormComponent],
       components: {
@@ -12596,10 +12950,10 @@
     };
 
     /* script */
-                const __vue_script__$E = script$F;
+                const __vue_script__$H = script$I;
                 
     /* template */
-    var __vue_render__$B = function() {
+    var __vue_render__$F = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -12690,17 +13044,17 @@
         1
       )
     };
-    var __vue_staticRenderFns__$B = [];
-    __vue_render__$B._withStripped = true;
+    var __vue_staticRenderFns__$F = [];
+    __vue_render__$F._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$E = undefined;
+      const __vue_inject_styles__$H = undefined;
       /* scoped */
-      const __vue_scope_id__$E = undefined;
+      const __vue_scope_id__$H = undefined;
       /* module identifier */
-      const __vue_module_identifier__$E = undefined;
+      const __vue_module_identifier__$H = undefined;
       /* functional template */
-      const __vue_is_functional_template__$E = false;
+      const __vue_is_functional_template__$H = false;
       /* style inject */
       
       /* style inject SSR */
@@ -12708,18 +13062,18 @@
 
       
       var EmploymentInfoFieldset = normalizeComponent(
-        { render: __vue_render__$B, staticRenderFns: __vue_staticRenderFns__$B },
-        __vue_inject_styles__$E,
-        __vue_script__$E,
-        __vue_scope_id__$E,
-        __vue_is_functional_template__$E,
-        __vue_module_identifier__$E,
+        { render: __vue_render__$F, staticRenderFns: __vue_staticRenderFns__$F },
+        __vue_inject_styles__$H,
+        __vue_script__$H,
+        __vue_scope_id__$H,
+        __vue_is_functional_template__$H,
+        __vue_module_identifier__$H,
         undefined,
         undefined
       );
 
     //
-    var script$G = {
+    var script$J = {
       name: 'page-type-petition',
       extends: PageType,
       components: {
@@ -12738,10 +13092,10 @@
     };
 
     /* script */
-                const __vue_script__$F = script$G;
+                const __vue_script__$I = script$J;
                 
     /* template */
-    var __vue_render__$C = function() {
+    var __vue_render__$G = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -12803,17 +13157,17 @@
         1
       )
     };
-    var __vue_staticRenderFns__$C = [];
-    __vue_render__$C._withStripped = true;
+    var __vue_staticRenderFns__$G = [];
+    __vue_render__$G._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$F = undefined;
+      const __vue_inject_styles__$I = undefined;
       /* scoped */
-      const __vue_scope_id__$F = undefined;
+      const __vue_scope_id__$I = undefined;
       /* module identifier */
-      const __vue_module_identifier__$F = undefined;
+      const __vue_module_identifier__$I = undefined;
       /* functional template */
-      const __vue_is_functional_template__$F = false;
+      const __vue_is_functional_template__$I = false;
       /* style inject */
       
       /* style inject SSR */
@@ -12821,12 +13175,12 @@
 
       
       var Petition = normalizeComponent(
-        { render: __vue_render__$C, staticRenderFns: __vue_staticRenderFns__$C },
-        __vue_inject_styles__$F,
-        __vue_script__$F,
-        __vue_scope_id__$F,
-        __vue_is_functional_template__$F,
-        __vue_module_identifier__$F,
+        { render: __vue_render__$G, staticRenderFns: __vue_staticRenderFns__$G },
+        __vue_inject_styles__$I,
+        __vue_script__$I,
+        __vue_scope_id__$I,
+        __vue_is_functional_template__$I,
+        __vue_module_identifier__$I,
         undefined,
         undefined
       );
@@ -12952,7 +13306,7 @@
     };
 
     //
-    var script$H = {
+    var script$K = {
       name: 'go-to-webinar',
       mixins: [FormComponent],
       components: {
@@ -12977,10 +13331,10 @@
     };
 
     /* script */
-                const __vue_script__$G = script$H;
+                const __vue_script__$J = script$K;
                 
     /* template */
-    var __vue_render__$D = function() {
+    var __vue_render__$H = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -13356,7 +13710,7 @@
         1
       )
     };
-    var __vue_staticRenderFns__$D = [
+    var __vue_staticRenderFns__$H = [
       function() {
         var _vm = this;
         var _h = _vm.$createElement;
@@ -13364,16 +13718,16 @@
         return _c("p", [_c("em", [_vm._v("* Indicates required fields")])])
       }
     ];
-    __vue_render__$D._withStripped = true;
+    __vue_render__$H._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$G = undefined;
+      const __vue_inject_styles__$J = undefined;
       /* scoped */
-      const __vue_scope_id__$G = undefined;
+      const __vue_scope_id__$J = undefined;
       /* module identifier */
-      const __vue_module_identifier__$G = undefined;
+      const __vue_module_identifier__$J = undefined;
       /* functional template */
-      const __vue_is_functional_template__$G = false;
+      const __vue_is_functional_template__$J = false;
       /* style inject */
       
       /* style inject SSR */
@@ -13381,18 +13735,18 @@
 
       
       var GoToWebinar = normalizeComponent(
-        { render: __vue_render__$D, staticRenderFns: __vue_staticRenderFns__$D },
-        __vue_inject_styles__$G,
-        __vue_script__$G,
-        __vue_scope_id__$G,
-        __vue_is_functional_template__$G,
-        __vue_module_identifier__$G,
+        { render: __vue_render__$H, staticRenderFns: __vue_staticRenderFns__$H },
+        __vue_inject_styles__$J,
+        __vue_script__$J,
+        __vue_scope_id__$J,
+        __vue_is_functional_template__$J,
+        __vue_module_identifier__$J,
         undefined,
         undefined
       );
 
     //
-    var script$I = {
+    var script$L = {
       name: 'page-type-signup',
       extends: PageType,
       components: {
@@ -13401,10 +13755,10 @@
     };
 
     /* script */
-                const __vue_script__$H = script$I;
+                const __vue_script__$K = script$L;
                 
     /* template */
-    var __vue_render__$E = function() {
+    var __vue_render__$I = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -13424,17 +13778,17 @@
         1
       )
     };
-    var __vue_staticRenderFns__$E = [];
-    __vue_render__$E._withStripped = true;
+    var __vue_staticRenderFns__$I = [];
+    __vue_render__$I._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$H = undefined;
+      const __vue_inject_styles__$K = undefined;
       /* scoped */
-      const __vue_scope_id__$H = undefined;
+      const __vue_scope_id__$K = undefined;
       /* module identifier */
-      const __vue_module_identifier__$H = undefined;
+      const __vue_module_identifier__$K = undefined;
       /* functional template */
-      const __vue_is_functional_template__$H = false;
+      const __vue_is_functional_template__$K = false;
       /* style inject */
       
       /* style inject SSR */
@@ -13442,17 +13796,17 @@
 
       
       var Signup = normalizeComponent(
-        { render: __vue_render__$E, staticRenderFns: __vue_staticRenderFns__$E },
-        __vue_inject_styles__$H,
-        __vue_script__$H,
-        __vue_scope_id__$H,
-        __vue_is_functional_template__$H,
-        __vue_module_identifier__$H,
+        { render: __vue_render__$I, staticRenderFns: __vue_staticRenderFns__$I },
+        __vue_inject_styles__$K,
+        __vue_script__$K,
+        __vue_scope_id__$K,
+        __vue_is_functional_template__$K,
+        __vue_module_identifier__$K,
         undefined,
         undefined
       );
 
-    var script$J = {
+    var script$M = {
       mixins: [FormControl],
       props: {
         form: {
@@ -13491,18 +13845,18 @@
     };
 
     /* script */
-                const __vue_script__$I = script$J;
+                const __vue_script__$L = script$M;
                 
     /* template */
 
       /* style */
-      const __vue_inject_styles__$I = undefined;
+      const __vue_inject_styles__$L = undefined;
       /* scoped */
-      const __vue_scope_id__$I = undefined;
+      const __vue_scope_id__$L = undefined;
       /* module identifier */
-      const __vue_module_identifier__$I = undefined;
+      const __vue_module_identifier__$L = undefined;
       /* functional template */
-      const __vue_is_functional_template__$I = undefined;
+      const __vue_is_functional_template__$L = undefined;
       /* style inject */
       
       /* style inject SSR */
@@ -13511,33 +13865,33 @@
       
       var SurveyField = normalizeComponent(
         {},
-        __vue_inject_styles__$I,
-        __vue_script__$I,
-        __vue_scope_id__$I,
-        __vue_is_functional_template__$I,
-        __vue_module_identifier__$I,
+        __vue_inject_styles__$L,
+        __vue_script__$L,
+        __vue_scope_id__$L,
+        __vue_is_functional_template__$L,
+        __vue_module_identifier__$L,
         undefined,
         undefined
       );
 
-    var script$K = {
+    var script$N = {
       name: 'input-field',
       extends: InputField
     };
 
     /* script */
-                const __vue_script__$J = script$K;
+                const __vue_script__$M = script$N;
                 
     /* template */
 
       /* style */
-      const __vue_inject_styles__$J = undefined;
+      const __vue_inject_styles__$M = undefined;
       /* scoped */
-      const __vue_scope_id__$J = undefined;
+      const __vue_scope_id__$M = undefined;
       /* module identifier */
-      const __vue_module_identifier__$J = undefined;
+      const __vue_module_identifier__$M = undefined;
       /* functional template */
-      const __vue_is_functional_template__$J = undefined;
+      const __vue_is_functional_template__$M = undefined;
       /* style inject */
       
       /* style inject SSR */
@@ -13546,17 +13900,17 @@
       
       var InputField$1 = normalizeComponent(
         {},
-        __vue_inject_styles__$J,
-        __vue_script__$J,
-        __vue_scope_id__$J,
-        __vue_is_functional_template__$J,
-        __vue_module_identifier__$J,
+        __vue_inject_styles__$M,
+        __vue_script__$M,
+        __vue_scope_id__$M,
+        __vue_is_functional_template__$M,
+        __vue_module_identifier__$M,
         undefined,
         undefined
       );
 
     //
-    var script$L = {
+    var script$O = {
       name: 'survey-alt-email-field',
       extends: SurveyField,
       components: {
@@ -13565,10 +13919,10 @@
     };
 
     /* script */
-                const __vue_script__$K = script$L;
+                const __vue_script__$N = script$O;
                 
     /* template */
-    var __vue_render__$F = function() {
+    var __vue_render__$J = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -13594,17 +13948,17 @@
         }
       })
     };
-    var __vue_staticRenderFns__$F = [];
-    __vue_render__$F._withStripped = true;
+    var __vue_staticRenderFns__$J = [];
+    __vue_render__$J._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$K = undefined;
+      const __vue_inject_styles__$N = undefined;
       /* scoped */
-      const __vue_scope_id__$K = undefined;
+      const __vue_scope_id__$N = undefined;
       /* module identifier */
-      const __vue_module_identifier__$K = undefined;
+      const __vue_module_identifier__$N = undefined;
       /* functional template */
-      const __vue_is_functional_template__$K = false;
+      const __vue_is_functional_template__$N = false;
       /* style inject */
       
       /* style inject SSR */
@@ -13612,18 +13966,18 @@
 
       
       var AltEmailField = normalizeComponent(
-        { render: __vue_render__$F, staticRenderFns: __vue_staticRenderFns__$F },
-        __vue_inject_styles__$K,
-        __vue_script__$K,
-        __vue_scope_id__$K,
-        __vue_is_functional_template__$K,
-        __vue_module_identifier__$K,
+        { render: __vue_render__$J, staticRenderFns: __vue_staticRenderFns__$J },
+        __vue_inject_styles__$N,
+        __vue_script__$N,
+        __vue_scope_id__$N,
+        __vue_is_functional_template__$N,
+        __vue_module_identifier__$N,
         undefined,
         undefined
       );
 
     //
-    var script$M = {
+    var script$P = {
       name: 'survey-alt-phone-field',
       extends: SurveyField,
       components: {
@@ -13632,10 +13986,10 @@
     };
 
     /* script */
-                const __vue_script__$L = script$M;
+                const __vue_script__$O = script$P;
                 
     /* template */
-    var __vue_render__$G = function() {
+    var __vue_render__$K = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -13659,17 +14013,17 @@
         }
       })
     };
-    var __vue_staticRenderFns__$G = [];
-    __vue_render__$G._withStripped = true;
+    var __vue_staticRenderFns__$K = [];
+    __vue_render__$K._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$L = undefined;
+      const __vue_inject_styles__$O = undefined;
       /* scoped */
-      const __vue_scope_id__$L = undefined;
+      const __vue_scope_id__$O = undefined;
       /* module identifier */
-      const __vue_module_identifier__$L = undefined;
+      const __vue_module_identifier__$O = undefined;
       /* functional template */
-      const __vue_is_functional_template__$L = false;
+      const __vue_is_functional_template__$O = false;
       /* style inject */
       
       /* style inject SSR */
@@ -13677,34 +14031,34 @@
 
       
       var AltPhoneField = normalizeComponent(
-        { render: __vue_render__$G, staticRenderFns: __vue_staticRenderFns__$G },
-        __vue_inject_styles__$L,
-        __vue_script__$L,
-        __vue_scope_id__$L,
-        __vue_is_functional_template__$L,
-        __vue_module_identifier__$L,
+        { render: __vue_render__$K, staticRenderFns: __vue_staticRenderFns__$K },
+        __vue_inject_styles__$O,
+        __vue_script__$O,
+        __vue_scope_id__$O,
+        __vue_is_functional_template__$O,
+        __vue_module_identifier__$O,
         undefined,
         undefined
       );
 
-    var script$N = {
+    var script$Q = {
       name: 'checkbox-field',
       extends: CheckboxField
     };
 
     /* script */
-                const __vue_script__$M = script$N;
+                const __vue_script__$P = script$Q;
                 
     /* template */
 
       /* style */
-      const __vue_inject_styles__$M = undefined;
+      const __vue_inject_styles__$P = undefined;
       /* scoped */
-      const __vue_scope_id__$M = undefined;
+      const __vue_scope_id__$P = undefined;
       /* module identifier */
-      const __vue_module_identifier__$M = undefined;
+      const __vue_module_identifier__$P = undefined;
       /* functional template */
-      const __vue_is_functional_template__$M = undefined;
+      const __vue_is_functional_template__$P = undefined;
       /* style inject */
       
       /* style inject SSR */
@@ -13713,17 +14067,17 @@
       
       var CheckboxField$1 = normalizeComponent(
         {},
-        __vue_inject_styles__$M,
-        __vue_script__$M,
-        __vue_scope_id__$M,
-        __vue_is_functional_template__$M,
-        __vue_module_identifier__$M,
+        __vue_inject_styles__$P,
+        __vue_script__$P,
+        __vue_scope_id__$P,
+        __vue_is_functional_template__$P,
+        __vue_module_identifier__$P,
         undefined,
         undefined
       );
 
     //
-    var script$O = {
+    var script$R = {
       name: 'survey-checkbox-field',
       extends: SurveyField,
       components: {
@@ -13734,10 +14088,10 @@
     };
 
     /* script */
-                const __vue_script__$N = script$O;
+                const __vue_script__$Q = script$R;
                 
     /* template */
-    var __vue_render__$H = function() {
+    var __vue_render__$L = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -13839,17 +14193,17 @@
         2
       )
     };
-    var __vue_staticRenderFns__$H = [];
-    __vue_render__$H._withStripped = true;
+    var __vue_staticRenderFns__$L = [];
+    __vue_render__$L._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$N = undefined;
+      const __vue_inject_styles__$Q = undefined;
       /* scoped */
-      const __vue_scope_id__$N = undefined;
+      const __vue_scope_id__$Q = undefined;
       /* module identifier */
-      const __vue_module_identifier__$N = undefined;
+      const __vue_module_identifier__$Q = undefined;
       /* functional template */
-      const __vue_is_functional_template__$N = false;
+      const __vue_is_functional_template__$Q = false;
       /* style inject */
       
       /* style inject SSR */
@@ -13857,18 +14211,18 @@
 
       
       var CheckboxField$2 = normalizeComponent(
-        { render: __vue_render__$H, staticRenderFns: __vue_staticRenderFns__$H },
-        __vue_inject_styles__$N,
-        __vue_script__$N,
-        __vue_scope_id__$N,
-        __vue_is_functional_template__$N,
-        __vue_module_identifier__$N,
+        { render: __vue_render__$L, staticRenderFns: __vue_staticRenderFns__$L },
+        __vue_inject_styles__$Q,
+        __vue_script__$Q,
+        __vue_scope_id__$Q,
+        __vue_is_functional_template__$Q,
+        __vue_module_identifier__$Q,
         undefined,
         undefined
       );
 
     //
-    var script$P = {
+    var script$S = {
       name: 'survey-city-field',
       extends: SurveyField,
       components: {
@@ -13877,10 +14231,10 @@
     };
 
     /* script */
-                const __vue_script__$O = script$P;
+                const __vue_script__$R = script$S;
                 
     /* template */
-    var __vue_render__$I = function() {
+    var __vue_render__$M = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -13905,17 +14259,17 @@
         }
       })
     };
-    var __vue_staticRenderFns__$I = [];
-    __vue_render__$I._withStripped = true;
+    var __vue_staticRenderFns__$M = [];
+    __vue_render__$M._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$O = undefined;
+      const __vue_inject_styles__$R = undefined;
       /* scoped */
-      const __vue_scope_id__$O = undefined;
+      const __vue_scope_id__$R = undefined;
       /* module identifier */
-      const __vue_module_identifier__$O = undefined;
+      const __vue_module_identifier__$R = undefined;
       /* functional template */
-      const __vue_is_functional_template__$O = false;
+      const __vue_is_functional_template__$R = false;
       /* style inject */
       
       /* style inject SSR */
@@ -13923,34 +14277,34 @@
 
       
       var CityField = normalizeComponent(
-        { render: __vue_render__$I, staticRenderFns: __vue_staticRenderFns__$I },
-        __vue_inject_styles__$O,
-        __vue_script__$O,
-        __vue_scope_id__$O,
-        __vue_is_functional_template__$O,
-        __vue_module_identifier__$O,
+        { render: __vue_render__$M, staticRenderFns: __vue_staticRenderFns__$M },
+        __vue_inject_styles__$R,
+        __vue_script__$R,
+        __vue_scope_id__$R,
+        __vue_is_functional_template__$R,
+        __vue_module_identifier__$R,
         undefined,
         undefined
       );
 
-    var script$Q = {
+    var script$T = {
       name: 'radio-field',
       extends: RadioField
     };
 
     /* script */
-                const __vue_script__$P = script$Q;
+                const __vue_script__$S = script$T;
                 
     /* template */
 
       /* style */
-      const __vue_inject_styles__$P = undefined;
+      const __vue_inject_styles__$S = undefined;
       /* scoped */
-      const __vue_scope_id__$P = undefined;
+      const __vue_scope_id__$S = undefined;
       /* module identifier */
-      const __vue_module_identifier__$P = undefined;
+      const __vue_module_identifier__$S = undefined;
       /* functional template */
-      const __vue_is_functional_template__$P = undefined;
+      const __vue_is_functional_template__$S = undefined;
       /* style inject */
       
       /* style inject SSR */
@@ -13959,17 +14313,17 @@
       
       var RadioField$1 = normalizeComponent(
         {},
-        __vue_inject_styles__$P,
-        __vue_script__$P,
-        __vue_scope_id__$P,
-        __vue_is_functional_template__$P,
-        __vue_module_identifier__$P,
+        __vue_inject_styles__$S,
+        __vue_script__$S,
+        __vue_scope_id__$S,
+        __vue_is_functional_template__$S,
+        __vue_module_identifier__$S,
         undefined,
         undefined
       );
 
     //
-    var script$R = {
+    var script$U = {
       name: 'survey-dollar-amount-field',
       extends: SurveyField,
       components: {
@@ -13988,10 +14342,10 @@
     };
 
     /* script */
-                const __vue_script__$Q = script$R;
+                const __vue_script__$T = script$U;
                 
     /* template */
-    var __vue_render__$J = function() {
+    var __vue_render__$N = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -14063,17 +14417,17 @@
         )
       ])
     };
-    var __vue_staticRenderFns__$J = [];
-    __vue_render__$J._withStripped = true;
+    var __vue_staticRenderFns__$N = [];
+    __vue_render__$N._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$Q = undefined;
+      const __vue_inject_styles__$T = undefined;
       /* scoped */
-      const __vue_scope_id__$Q = undefined;
+      const __vue_scope_id__$T = undefined;
       /* module identifier */
-      const __vue_module_identifier__$Q = undefined;
+      const __vue_module_identifier__$T = undefined;
       /* functional template */
-      const __vue_is_functional_template__$Q = false;
+      const __vue_is_functional_template__$T = false;
       /* style inject */
       
       /* style inject SSR */
@@ -14081,18 +14435,18 @@
 
       
       var DollarAmountField = normalizeComponent(
-        { render: __vue_render__$J, staticRenderFns: __vue_staticRenderFns__$J },
-        __vue_inject_styles__$Q,
-        __vue_script__$Q,
-        __vue_scope_id__$Q,
-        __vue_is_functional_template__$Q,
-        __vue_module_identifier__$Q,
+        { render: __vue_render__$N, staticRenderFns: __vue_staticRenderFns__$N },
+        __vue_inject_styles__$T,
+        __vue_script__$T,
+        __vue_scope_id__$T,
+        __vue_is_functional_template__$T,
+        __vue_module_identifier__$T,
         undefined,
         undefined
       );
 
     //
-    var script$S = {
+    var script$V = {
       name: 'survey-first-field',
       extends: SurveyField,
       components: {
@@ -14101,10 +14455,10 @@
     };
 
     /* script */
-                const __vue_script__$R = script$S;
+                const __vue_script__$U = script$V;
                 
     /* template */
-    var __vue_render__$K = function() {
+    var __vue_render__$O = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -14129,17 +14483,17 @@
         }
       })
     };
-    var __vue_staticRenderFns__$K = [];
-    __vue_render__$K._withStripped = true;
+    var __vue_staticRenderFns__$O = [];
+    __vue_render__$O._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$R = undefined;
+      const __vue_inject_styles__$U = undefined;
       /* scoped */
-      const __vue_scope_id__$R = undefined;
+      const __vue_scope_id__$U = undefined;
       /* module identifier */
-      const __vue_module_identifier__$R = undefined;
+      const __vue_module_identifier__$U = undefined;
       /* functional template */
-      const __vue_is_functional_template__$R = false;
+      const __vue_is_functional_template__$U = false;
       /* style inject */
       
       /* style inject SSR */
@@ -14147,18 +14501,18 @@
 
       
       var FirstField = normalizeComponent(
-        { render: __vue_render__$K, staticRenderFns: __vue_staticRenderFns__$K },
-        __vue_inject_styles__$R,
-        __vue_script__$R,
-        __vue_scope_id__$R,
-        __vue_is_functional_template__$R,
-        __vue_module_identifier__$R,
+        { render: __vue_render__$O, staticRenderFns: __vue_staticRenderFns__$O },
+        __vue_inject_styles__$U,
+        __vue_script__$U,
+        __vue_scope_id__$U,
+        __vue_is_functional_template__$U,
+        __vue_module_identifier__$U,
         undefined,
         undefined
       );
 
     //
-    var script$T = {
+    var script$W = {
       name: 'survey-input-field',
       extends: SurveyField,
       components: {
@@ -14167,10 +14521,10 @@
     };
 
     /* script */
-                const __vue_script__$S = script$T;
+                const __vue_script__$V = script$W;
                 
     /* template */
-    var __vue_render__$L = function() {
+    var __vue_render__$P = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -14195,17 +14549,17 @@
         }
       })
     };
-    var __vue_staticRenderFns__$L = [];
-    __vue_render__$L._withStripped = true;
+    var __vue_staticRenderFns__$P = [];
+    __vue_render__$P._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$S = undefined;
+      const __vue_inject_styles__$V = undefined;
       /* scoped */
-      const __vue_scope_id__$S = undefined;
+      const __vue_scope_id__$V = undefined;
       /* module identifier */
-      const __vue_module_identifier__$S = undefined;
+      const __vue_module_identifier__$V = undefined;
       /* functional template */
-      const __vue_is_functional_template__$S = false;
+      const __vue_is_functional_template__$V = false;
       /* style inject */
       
       /* style inject SSR */
@@ -14213,18 +14567,18 @@
 
       
       var InputField$2 = normalizeComponent(
-        { render: __vue_render__$L, staticRenderFns: __vue_staticRenderFns__$L },
-        __vue_inject_styles__$S,
-        __vue_script__$S,
-        __vue_scope_id__$S,
-        __vue_is_functional_template__$S,
-        __vue_module_identifier__$S,
+        { render: __vue_render__$P, staticRenderFns: __vue_staticRenderFns__$P },
+        __vue_inject_styles__$V,
+        __vue_script__$V,
+        __vue_scope_id__$V,
+        __vue_is_functional_template__$V,
+        __vue_module_identifier__$V,
         undefined,
         undefined
       );
 
     //
-    var script$U = {
+    var script$X = {
       name: 'survey-last-field',
       extends: SurveyField,
       components: {
@@ -14233,10 +14587,10 @@
     };
 
     /* script */
-                const __vue_script__$T = script$U;
+                const __vue_script__$W = script$X;
                 
     /* template */
-    var __vue_render__$M = function() {
+    var __vue_render__$Q = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -14261,17 +14615,17 @@
         }
       })
     };
-    var __vue_staticRenderFns__$M = [];
-    __vue_render__$M._withStripped = true;
+    var __vue_staticRenderFns__$Q = [];
+    __vue_render__$Q._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$T = undefined;
+      const __vue_inject_styles__$W = undefined;
       /* scoped */
-      const __vue_scope_id__$T = undefined;
+      const __vue_scope_id__$W = undefined;
       /* module identifier */
-      const __vue_module_identifier__$T = undefined;
+      const __vue_module_identifier__$W = undefined;
       /* functional template */
-      const __vue_is_functional_template__$T = false;
+      const __vue_is_functional_template__$W = false;
       /* style inject */
       
       /* style inject SSR */
@@ -14279,18 +14633,18 @@
 
       
       var LastField = normalizeComponent(
-        { render: __vue_render__$M, staticRenderFns: __vue_staticRenderFns__$M },
-        __vue_inject_styles__$T,
-        __vue_script__$T,
-        __vue_scope_id__$T,
-        __vue_is_functional_template__$T,
-        __vue_module_identifier__$T,
+        { render: __vue_render__$Q, staticRenderFns: __vue_staticRenderFns__$Q },
+        __vue_inject_styles__$W,
+        __vue_script__$W,
+        __vue_scope_id__$W,
+        __vue_is_functional_template__$W,
+        __vue_module_identifier__$W,
         undefined,
         undefined
       );
 
     //
-    var script$V = {
+    var script$Y = {
       name: 'survey-primary-email-field',
       extends: SurveyField,
       components: {
@@ -14299,10 +14653,10 @@
     };
 
     /* script */
-                const __vue_script__$U = script$V;
+                const __vue_script__$X = script$Y;
                 
     /* template */
-    var __vue_render__$N = function() {
+    var __vue_render__$R = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -14328,17 +14682,17 @@
         }
       })
     };
-    var __vue_staticRenderFns__$N = [];
-    __vue_render__$N._withStripped = true;
+    var __vue_staticRenderFns__$R = [];
+    __vue_render__$R._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$U = undefined;
+      const __vue_inject_styles__$X = undefined;
       /* scoped */
-      const __vue_scope_id__$U = undefined;
+      const __vue_scope_id__$X = undefined;
       /* module identifier */
-      const __vue_module_identifier__$U = undefined;
+      const __vue_module_identifier__$X = undefined;
       /* functional template */
-      const __vue_is_functional_template__$U = false;
+      const __vue_is_functional_template__$X = false;
       /* style inject */
       
       /* style inject SSR */
@@ -14346,18 +14700,18 @@
 
       
       var PrimaryEmailField = normalizeComponent(
-        { render: __vue_render__$N, staticRenderFns: __vue_staticRenderFns__$N },
-        __vue_inject_styles__$U,
-        __vue_script__$U,
-        __vue_scope_id__$U,
-        __vue_is_functional_template__$U,
-        __vue_module_identifier__$U,
+        { render: __vue_render__$R, staticRenderFns: __vue_staticRenderFns__$R },
+        __vue_inject_styles__$X,
+        __vue_script__$X,
+        __vue_scope_id__$X,
+        __vue_is_functional_template__$X,
+        __vue_module_identifier__$X,
         undefined,
         undefined
       );
 
     //
-    var script$W = {
+    var script$Z = {
       name: 'survey-primary-phone-field',
       extends: SurveyField,
       components: {
@@ -14366,10 +14720,10 @@
     };
 
     /* script */
-                const __vue_script__$V = script$W;
+                const __vue_script__$Y = script$Z;
                 
     /* template */
-    var __vue_render__$O = function() {
+    var __vue_render__$S = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -14395,17 +14749,17 @@
         }
       })
     };
-    var __vue_staticRenderFns__$O = [];
-    __vue_render__$O._withStripped = true;
+    var __vue_staticRenderFns__$S = [];
+    __vue_render__$S._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$V = undefined;
+      const __vue_inject_styles__$Y = undefined;
       /* scoped */
-      const __vue_scope_id__$V = undefined;
+      const __vue_scope_id__$Y = undefined;
       /* module identifier */
-      const __vue_module_identifier__$V = undefined;
+      const __vue_module_identifier__$Y = undefined;
       /* functional template */
-      const __vue_is_functional_template__$V = false;
+      const __vue_is_functional_template__$Y = false;
       /* style inject */
       
       /* style inject SSR */
@@ -14413,18 +14767,18 @@
 
       
       var PrimaryPhoneField = normalizeComponent(
-        { render: __vue_render__$O, staticRenderFns: __vue_staticRenderFns__$O },
-        __vue_inject_styles__$V,
-        __vue_script__$V,
-        __vue_scope_id__$V,
-        __vue_is_functional_template__$V,
-        __vue_module_identifier__$V,
+        { render: __vue_render__$S, staticRenderFns: __vue_staticRenderFns__$S },
+        __vue_inject_styles__$Y,
+        __vue_script__$Y,
+        __vue_scope_id__$Y,
+        __vue_is_functional_template__$Y,
+        __vue_module_identifier__$Y,
         undefined,
         undefined
       );
 
     //
-    var script$X = {
+    var script$_ = {
       name: 'survey-radio-field',
       extends: SurveyField,
       components: {
@@ -14434,10 +14788,10 @@
     };
 
     /* script */
-                const __vue_script__$W = script$X;
+                const __vue_script__$Z = script$_;
                 
     /* template */
-    var __vue_render__$P = function() {
+    var __vue_render__$T = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -14546,17 +14900,17 @@
         2
       )
     };
-    var __vue_staticRenderFns__$P = [];
-    __vue_render__$P._withStripped = true;
+    var __vue_staticRenderFns__$T = [];
+    __vue_render__$T._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$W = undefined;
+      const __vue_inject_styles__$Z = undefined;
       /* scoped */
-      const __vue_scope_id__$W = undefined;
+      const __vue_scope_id__$Z = undefined;
       /* module identifier */
-      const __vue_module_identifier__$W = undefined;
+      const __vue_module_identifier__$Z = undefined;
       /* functional template */
-      const __vue_is_functional_template__$W = false;
+      const __vue_is_functional_template__$Z = false;
       /* style inject */
       
       /* style inject SSR */
@@ -14564,34 +14918,34 @@
 
       
       var RadioField$2 = normalizeComponent(
-        { render: __vue_render__$P, staticRenderFns: __vue_staticRenderFns__$P },
-        __vue_inject_styles__$W,
-        __vue_script__$W,
-        __vue_scope_id__$W,
-        __vue_is_functional_template__$W,
-        __vue_module_identifier__$W,
+        { render: __vue_render__$T, staticRenderFns: __vue_staticRenderFns__$T },
+        __vue_inject_styles__$Z,
+        __vue_script__$Z,
+        __vue_scope_id__$Z,
+        __vue_is_functional_template__$Z,
+        __vue_module_identifier__$Z,
         undefined,
         undefined
       );
 
-    var script$Y = {
+    var script$10 = {
       name: 'select-field',
       extends: SelectField
     };
 
     /* script */
-                const __vue_script__$X = script$Y;
+                const __vue_script__$_ = script$10;
                 
     /* template */
 
       /* style */
-      const __vue_inject_styles__$X = undefined;
+      const __vue_inject_styles__$_ = undefined;
       /* scoped */
-      const __vue_scope_id__$X = undefined;
+      const __vue_scope_id__$_ = undefined;
       /* module identifier */
-      const __vue_module_identifier__$X = undefined;
+      const __vue_module_identifier__$_ = undefined;
       /* functional template */
-      const __vue_is_functional_template__$X = undefined;
+      const __vue_is_functional_template__$_ = undefined;
       /* style inject */
       
       /* style inject SSR */
@@ -14600,17 +14954,17 @@
       
       var SelectField$1 = normalizeComponent(
         {},
-        __vue_inject_styles__$X,
-        __vue_script__$X,
-        __vue_scope_id__$X,
-        __vue_is_functional_template__$X,
-        __vue_module_identifier__$X,
+        __vue_inject_styles__$_,
+        __vue_script__$_,
+        __vue_scope_id__$_,
+        __vue_is_functional_template__$_,
+        __vue_module_identifier__$_,
         undefined,
         undefined
       );
 
     //
-    var script$Z = {
+    var script$11 = {
       name: 'survey-select-field',
       extends: SurveyField,
       components: {
@@ -14619,10 +14973,10 @@
     };
 
     /* script */
-                const __vue_script__$Y = script$Z;
+                const __vue_script__$10 = script$11;
                 
     /* template */
-    var __vue_render__$Q = function() {
+    var __vue_render__$U = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -14653,17 +15007,17 @@
         })
       )
     };
-    var __vue_staticRenderFns__$Q = [];
-    __vue_render__$Q._withStripped = true;
+    var __vue_staticRenderFns__$U = [];
+    __vue_render__$U._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$Y = undefined;
+      const __vue_inject_styles__$10 = undefined;
       /* scoped */
-      const __vue_scope_id__$Y = undefined;
+      const __vue_scope_id__$10 = undefined;
       /* module identifier */
-      const __vue_module_identifier__$Y = undefined;
+      const __vue_module_identifier__$10 = undefined;
       /* functional template */
-      const __vue_is_functional_template__$Y = false;
+      const __vue_is_functional_template__$10 = false;
       /* style inject */
       
       /* style inject SSR */
@@ -14671,18 +15025,18 @@
 
       
       var SelectField$2 = normalizeComponent(
-        { render: __vue_render__$Q, staticRenderFns: __vue_staticRenderFns__$Q },
-        __vue_inject_styles__$Y,
-        __vue_script__$Y,
-        __vue_scope_id__$Y,
-        __vue_is_functional_template__$Y,
-        __vue_module_identifier__$Y,
+        { render: __vue_render__$U, staticRenderFns: __vue_staticRenderFns__$U },
+        __vue_inject_styles__$10,
+        __vue_script__$10,
+        __vue_scope_id__$10,
+        __vue_is_functional_template__$10,
+        __vue_module_identifier__$10,
         undefined,
         undefined
       );
 
     //
-    var script$_ = {
+    var script$12 = {
       name: 'survey-state-field',
       extends: SurveyField,
       components: {
@@ -14691,10 +15045,10 @@
     };
 
     /* script */
-                const __vue_script__$Z = script$_;
+                const __vue_script__$11 = script$12;
                 
     /* template */
-    var __vue_render__$R = function() {
+    var __vue_render__$V = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -14725,17 +15079,17 @@
         })
       )
     };
-    var __vue_staticRenderFns__$R = [];
-    __vue_render__$R._withStripped = true;
+    var __vue_staticRenderFns__$V = [];
+    __vue_render__$V._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$Z = undefined;
+      const __vue_inject_styles__$11 = undefined;
       /* scoped */
-      const __vue_scope_id__$Z = undefined;
+      const __vue_scope_id__$11 = undefined;
       /* module identifier */
-      const __vue_module_identifier__$Z = undefined;
+      const __vue_module_identifier__$11 = undefined;
       /* functional template */
-      const __vue_is_functional_template__$Z = false;
+      const __vue_is_functional_template__$11 = false;
       /* style inject */
       
       /* style inject SSR */
@@ -14743,18 +15097,18 @@
 
       
       var StateField = normalizeComponent(
-        { render: __vue_render__$R, staticRenderFns: __vue_staticRenderFns__$R },
-        __vue_inject_styles__$Z,
-        __vue_script__$Z,
-        __vue_scope_id__$Z,
-        __vue_is_functional_template__$Z,
-        __vue_module_identifier__$Z,
+        { render: __vue_render__$V, staticRenderFns: __vue_staticRenderFns__$V },
+        __vue_inject_styles__$11,
+        __vue_script__$11,
+        __vue_scope_id__$11,
+        __vue_is_functional_template__$11,
+        __vue_module_identifier__$11,
         undefined,
         undefined
       );
 
     //
-    var script$10 = {
+    var script$13 = {
       name: 'survey-street-field',
       extends: SurveyField,
       components: {
@@ -14766,10 +15120,10 @@
     };
 
     /* script */
-                const __vue_script__$_ = script$10;
+                const __vue_script__$12 = script$13;
                 
     /* template */
-    var __vue_render__$S = function() {
+    var __vue_render__$W = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -14825,17 +15179,17 @@
         }
       })
     };
-    var __vue_staticRenderFns__$S = [];
-    __vue_render__$S._withStripped = true;
+    var __vue_staticRenderFns__$W = [];
+    __vue_render__$W._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$_ = undefined;
+      const __vue_inject_styles__$12 = undefined;
       /* scoped */
-      const __vue_scope_id__$_ = undefined;
+      const __vue_scope_id__$12 = undefined;
       /* module identifier */
-      const __vue_module_identifier__$_ = undefined;
+      const __vue_module_identifier__$12 = undefined;
       /* functional template */
-      const __vue_is_functional_template__$_ = false;
+      const __vue_is_functional_template__$12 = false;
       /* style inject */
       
       /* style inject SSR */
@@ -14843,34 +15197,34 @@
 
       
       var StreetField = normalizeComponent(
-        { render: __vue_render__$S, staticRenderFns: __vue_staticRenderFns__$S },
-        __vue_inject_styles__$_,
-        __vue_script__$_,
-        __vue_scope_id__$_,
-        __vue_is_functional_template__$_,
-        __vue_module_identifier__$_,
+        { render: __vue_render__$W, staticRenderFns: __vue_staticRenderFns__$W },
+        __vue_inject_styles__$12,
+        __vue_script__$12,
+        __vue_scope_id__$12,
+        __vue_is_functional_template__$12,
+        __vue_module_identifier__$12,
         undefined,
         undefined
       );
 
-    var script$11 = {
+    var script$14 = {
       name: 'textarea-field',
       extends: TextareaField
     };
 
     /* script */
-                const __vue_script__$10 = script$11;
+                const __vue_script__$13 = script$14;
                 
     /* template */
 
       /* style */
-      const __vue_inject_styles__$10 = undefined;
+      const __vue_inject_styles__$13 = undefined;
       /* scoped */
-      const __vue_scope_id__$10 = undefined;
+      const __vue_scope_id__$13 = undefined;
       /* module identifier */
-      const __vue_module_identifier__$10 = undefined;
+      const __vue_module_identifier__$13 = undefined;
       /* functional template */
-      const __vue_is_functional_template__$10 = undefined;
+      const __vue_is_functional_template__$13 = undefined;
       /* style inject */
       
       /* style inject SSR */
@@ -14879,17 +15233,17 @@
       
       var TextareaField$1 = normalizeComponent(
         {},
-        __vue_inject_styles__$10,
-        __vue_script__$10,
-        __vue_scope_id__$10,
-        __vue_is_functional_template__$10,
-        __vue_module_identifier__$10,
+        __vue_inject_styles__$13,
+        __vue_script__$13,
+        __vue_scope_id__$13,
+        __vue_is_functional_template__$13,
+        __vue_module_identifier__$13,
         undefined,
         undefined
       );
 
     //
-    var script$12 = {
+    var script$15 = {
       name: 'survey-textarea-field',
       extends: SurveyField,
       components: {
@@ -14900,10 +15254,10 @@
     };
 
     /* script */
-                const __vue_script__$11 = script$12;
+                const __vue_script__$14 = script$15;
                 
     /* template */
-    var __vue_render__$T = function() {
+    var __vue_render__$X = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -14928,17 +15282,17 @@
         }
       })
     };
-    var __vue_staticRenderFns__$T = [];
-    __vue_render__$T._withStripped = true;
+    var __vue_staticRenderFns__$X = [];
+    __vue_render__$X._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$11 = undefined;
+      const __vue_inject_styles__$14 = undefined;
       /* scoped */
-      const __vue_scope_id__$11 = undefined;
+      const __vue_scope_id__$14 = undefined;
       /* module identifier */
-      const __vue_module_identifier__$11 = undefined;
+      const __vue_module_identifier__$14 = undefined;
       /* functional template */
-      const __vue_is_functional_template__$11 = false;
+      const __vue_is_functional_template__$14 = false;
       /* style inject */
       
       /* style inject SSR */
@@ -14946,18 +15300,18 @@
 
       
       var TextareaField$2 = normalizeComponent(
-        { render: __vue_render__$T, staticRenderFns: __vue_staticRenderFns__$T },
-        __vue_inject_styles__$11,
-        __vue_script__$11,
-        __vue_scope_id__$11,
-        __vue_is_functional_template__$11,
-        __vue_module_identifier__$11,
+        { render: __vue_render__$X, staticRenderFns: __vue_staticRenderFns__$X },
+        __vue_inject_styles__$14,
+        __vue_script__$14,
+        __vue_scope_id__$14,
+        __vue_is_functional_template__$14,
+        __vue_module_identifier__$14,
         undefined,
         undefined
       );
 
     //
-    var script$13 = {
+    var script$16 = {
       name: 'survey-zip-field',
       extends: SurveyField,
       components: {
@@ -14966,10 +15320,10 @@
     };
 
     /* script */
-                const __vue_script__$12 = script$13;
+                const __vue_script__$15 = script$16;
                 
     /* template */
-    var __vue_render__$U = function() {
+    var __vue_render__$Y = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -14996,17 +15350,17 @@
         }
       })
     };
-    var __vue_staticRenderFns__$U = [];
-    __vue_render__$U._withStripped = true;
+    var __vue_staticRenderFns__$Y = [];
+    __vue_render__$Y._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$12 = undefined;
+      const __vue_inject_styles__$15 = undefined;
       /* scoped */
-      const __vue_scope_id__$12 = undefined;
+      const __vue_scope_id__$15 = undefined;
       /* module identifier */
-      const __vue_module_identifier__$12 = undefined;
+      const __vue_module_identifier__$15 = undefined;
       /* functional template */
-      const __vue_is_functional_template__$12 = false;
+      const __vue_is_functional_template__$15 = false;
       /* style inject */
       
       /* style inject SSR */
@@ -15014,12 +15368,12 @@
 
       
       var ZipField = normalizeComponent(
-        { render: __vue_render__$U, staticRenderFns: __vue_staticRenderFns__$U },
-        __vue_inject_styles__$12,
-        __vue_script__$12,
-        __vue_scope_id__$12,
-        __vue_is_functional_template__$12,
-        __vue_module_identifier__$12,
+        { render: __vue_render__$Y, staticRenderFns: __vue_staticRenderFns__$Y },
+        __vue_inject_styles__$15,
+        __vue_script__$15,
+        __vue_scope_id__$15,
+        __vue_is_functional_template__$15,
+        __vue_module_identifier__$15,
         undefined,
         undefined
       );
@@ -15043,7 +15397,7 @@
       'state': 'StateField',
       'zip': 'ZipField'
     };
-    var script$14 = {
+    var script$17 = {
       name: 'page-type-survey',
       extends: PageType,
       components: {
@@ -15074,10 +15428,10 @@
     };
 
     /* script */
-                const __vue_script__$13 = script$14;
+                const __vue_script__$16 = script$17;
                 
     /* template */
-    var __vue_render__$V = function() {
+    var __vue_render__$Z = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -15118,17 +15472,17 @@
         2
       )
     };
-    var __vue_staticRenderFns__$V = [];
-    __vue_render__$V._withStripped = true;
+    var __vue_staticRenderFns__$Z = [];
+    __vue_render__$Z._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$13 = undefined;
+      const __vue_inject_styles__$16 = undefined;
       /* scoped */
-      const __vue_scope_id__$13 = undefined;
+      const __vue_scope_id__$16 = undefined;
       /* module identifier */
-      const __vue_module_identifier__$13 = undefined;
+      const __vue_module_identifier__$16 = undefined;
       /* functional template */
-      const __vue_is_functional_template__$13 = false;
+      const __vue_is_functional_template__$16 = false;
       /* style inject */
       
       /* style inject SSR */
@@ -15136,18 +15490,18 @@
 
       
       var Survey = normalizeComponent(
-        { render: __vue_render__$V, staticRenderFns: __vue_staticRenderFns__$V },
-        __vue_inject_styles__$13,
-        __vue_script__$13,
-        __vue_scope_id__$13,
-        __vue_is_functional_template__$13,
-        __vue_module_identifier__$13,
+        { render: __vue_render__$Z, staticRenderFns: __vue_staticRenderFns__$Z },
+        __vue_inject_styles__$16,
+        __vue_script__$16,
+        __vue_scope_id__$16,
+        __vue_is_functional_template__$16,
+        __vue_module_identifier__$16,
         undefined,
         undefined
       );
 
     //
-    var script$15 = {
+    var script$18 = {
       name: 'http-error-response',
       components: {
         Alert
@@ -15190,10 +15544,10 @@
     };
 
     /* script */
-                const __vue_script__$14 = script$15;
+                const __vue_script__$17 = script$18;
                 
     /* template */
-    var __vue_render__$W = function() {
+    var __vue_render__$_ = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -15210,17 +15564,17 @@
         [_vm._v("\n    " + _vm._s(_vm.formattedMessage) + "\n")]
       )
     };
-    var __vue_staticRenderFns__$W = [];
-    __vue_render__$W._withStripped = true;
+    var __vue_staticRenderFns__$_ = [];
+    __vue_render__$_._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$14 = undefined;
+      const __vue_inject_styles__$17 = undefined;
       /* scoped */
-      const __vue_scope_id__$14 = undefined;
+      const __vue_scope_id__$17 = undefined;
       /* module identifier */
-      const __vue_module_identifier__$14 = undefined;
+      const __vue_module_identifier__$17 = undefined;
       /* functional template */
-      const __vue_is_functional_template__$14 = false;
+      const __vue_is_functional_template__$17 = false;
       /* style inject */
       
       /* style inject SSR */
@@ -15228,18 +15582,18 @@
 
       
       var HttpErrorResponse = normalizeComponent(
-        { render: __vue_render__$W, staticRenderFns: __vue_staticRenderFns__$W },
-        __vue_inject_styles__$14,
-        __vue_script__$14,
-        __vue_scope_id__$14,
-        __vue_is_functional_template__$14,
-        __vue_module_identifier__$14,
+        { render: __vue_render__$_, staticRenderFns: __vue_staticRenderFns__$_ },
+        __vue_inject_styles__$17,
+        __vue_script__$17,
+        __vue_scope_id__$17,
+        __vue_is_functional_template__$17,
+        __vue_module_identifier__$17,
         undefined,
         undefined
       );
 
     //
-    var script$16 = {
+    var script$19 = {
       name: 'giveworks-form',
       components: {
         ActivityIndicator,
@@ -15278,38 +15632,6 @@
 
       },
       methods: {
-        hide() {
-          this.$el.querySelector('[type=submit]').style.display = 'none';
-        },
-
-        show() {
-          this.$el.querySelector('[type=submit]').style.display = 'block';
-        },
-
-        disable() {
-          this.$el.querySelector('[type=submit]').disabled = true;
-        },
-
-        enable() {
-          this.$el.querySelector('[type=submit]').disabled = false;
-        },
-
-        showActivity() {
-          const el = this.$el.querySelector('[type=submit]');
-
-          if (el) {
-            el.dispatchEvent(new Event('activity:show'));
-          }
-        },
-
-        hideActivity() {
-          const el = this.$el.querySelector('[type=submit]');
-
-          if (el) {
-            el.dispatchEvent(new Event('activity:hide'));
-          }
-        },
-
         submit(e) {
           this.$refs.type.submit(e);
         },
@@ -15317,6 +15639,10 @@
         onResize() {
           this.width = this.$el.offsetWidth;
           return this.onResize;
+        },
+
+        onError(error) {
+          this.error = error;
         }
 
       },
@@ -15344,89 +15670,6 @@
         window.removeEventListener('resize', this.onResize);
       },
 
-      beforeCreate() {
-        /*
-        const replies = {
-            'submit:show': 'show',
-            'submit:hide': 'hide',
-            'submit:enable': 'enable',
-            'submit:disable': 'disable'
-        };
-         each(replies, (method, name) => {
-            this.$dispatch.reply(name, (resolve, reject) => {
-                try {
-                    resolve(this[method]());
-                }
-                catch (error) {
-                    reject(error);
-                }
-            });
-        });
-         this.$dispatch.reply('form', (resolve, reject) => {
-            resolve(this);
-        });
-         this.$dispatch.reply('form:redirect', (resolve, reject, url) => {
-            try {
-                const location = url || (this.redirect || this.page.next_page.url);
-                 setTimeout(() => {
-                    window.location = location;
-                });
-                 resolve(location);
-            }
-            catch (e) {
-                reject(e);
-            }
-        });
-         this.$dispatch.reply('form:submit', (resolve, reject) => {
-            if(!this.submitting) {
-                this.showActivity();
-                this.errors = {};
-                this.submitting = true;
-                this.$dispatch.emit('form:submit', this.form, this);
-                 return this.model.save(this.form, { method: 'post' })
-                    .then(response => {
-                        this.submitting = false;
-                        this.$dispatch.emit('form:submit:complete', true, response, this);
-                        this.$dispatch.emit('form:submit:success', response, this);
-                        this.$dispatch.request('form:redirect');
-                        resolve(response);
-                    }, response => {
-                        this.hideActivity();
-                        this.submitting = false;
-                        this.errors = response.data.errors;
-                        this.$dispatch.emit('form:submit:complete', false, this.errors, this);
-                        this.$dispatch.emit('form:submit:error', this.errors, this);
-                        reject(response);
-                    });
-            }
-            else {
-                reject(new Error('The form is already submitting'));
-            }
-        });
-         this.$dispatch.on('error', error => {
-            this.error = error;
-        });
-         this.$dispatch.on('form:submit', data => {
-            if(this.$el.querySelector(':focus')) {
-                this.$el.querySelector(':focus').blur();
-            }
-        });
-        */
-      },
-
-      beforeDestroy() {
-        /*
-        this.$dispatch.off('error');
-        this.$dispatch.off('form:submit');
-        this.$dispatch.stopReply('form:submit');
-        this.$dispatch.stopReply('form:redirect');
-        this.$dispatch.stopReply('submit:enable');
-        this.$dispatch.stopReply('submit:disable');
-        this.$dispatch.stopReply('submit:show');
-        this.$dispatch.stopReply('submit:hide');
-        */
-      },
-
       data() {
         return {
           error: null,
@@ -15437,10 +15680,10 @@
     };
 
     /* script */
-                const __vue_script__$15 = script$16;
+                const __vue_script__$18 = script$19;
                 
     /* template */
-    var __vue_render__$X = function() {
+    var __vue_render__$10 = function() {
       var _vm = this;
       var _h = _vm.$createElement;
       var _c = _vm._self._c || _h;
@@ -15473,29 +15716,34 @@
                   _c(_vm.pageTypeComponent, {
                     ref: "type",
                     tag: "component",
-                    attrs: { orientation: _vm.orientation, page: _vm.page }
+                    attrs: {
+                      orientation: _vm.orientation,
+                      page: _vm.page,
+                      redirect: _vm.redirect
+                    },
+                    on: { error: _vm.onError }
                   })
                 ],
                 1
               )
             : _c(
                 "div",
-                [_c("activity-indicator", { attrs: { center: true, size: "lg" } })],
+                [_c("activity-indicator", { attrs: { size: "lg", center: "" } })],
                 1
               )
       ])
     };
-    var __vue_staticRenderFns__$X = [];
-    __vue_render__$X._withStripped = true;
+    var __vue_staticRenderFns__$10 = [];
+    __vue_render__$10._withStripped = true;
 
       /* style */
-      const __vue_inject_styles__$15 = undefined;
+      const __vue_inject_styles__$18 = undefined;
       /* scoped */
-      const __vue_scope_id__$15 = undefined;
+      const __vue_scope_id__$18 = undefined;
       /* module identifier */
-      const __vue_module_identifier__$15 = undefined;
+      const __vue_module_identifier__$18 = undefined;
       /* functional template */
-      const __vue_is_functional_template__$15 = false;
+      const __vue_is_functional_template__$18 = false;
       /* style inject */
       
       /* style inject SSR */
@@ -15503,12 +15751,12 @@
 
       
       var GiveworksForm = normalizeComponent(
-        { render: __vue_render__$X, staticRenderFns: __vue_staticRenderFns__$X },
-        __vue_inject_styles__$15,
-        __vue_script__$15,
-        __vue_scope_id__$15,
-        __vue_is_functional_template__$15,
-        __vue_module_identifier__$15,
+        { render: __vue_render__$10, staticRenderFns: __vue_staticRenderFns__$10 },
+        __vue_inject_styles__$18,
+        __vue_script__$18,
+        __vue_scope_id__$18,
+        __vue_is_functional_template__$18,
+        __vue_module_identifier__$18,
         undefined,
         undefined
       );

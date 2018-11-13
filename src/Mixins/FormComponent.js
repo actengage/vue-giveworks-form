@@ -1,3 +1,5 @@
+import FormEvents from './FormEvents';
+
 export default {
 
     props: {
@@ -13,6 +15,10 @@ export default {
             required: true
         }
     },
+
+    mixins: [
+        FormEvents
+    ],
 
     computed: {
 

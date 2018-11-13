@@ -1,17 +1,43 @@
 @import '_variables.scss';
 
-.payment-buttons {
-    .payment-buttons-grid {
-        display: grid;
-        grid-gap: .25rem;
-        grid-template-columns: repeat(3, 1fr);
+.payment-buttons-grid,
+.payment-gateway-buttons {
+    display: grid;
+    grid-gap: .25rem;
+    grid-template-columns: repeat(3, 1fr);
 
-        .btn {
-            padding: 1rem;
-        }
+    .btn {
+        padding: 1rem;
     }
+}
 
+.payment-buttons {
     .input-group div:not(.input-group-prepend):not(.input-group-append) {
         flex: 1;
+    }
+}
+
+.payment-gateway-buttons {
+    .btn-secondary {
+        color: $gray-600;
+        background: $gray-200;
+        border-color: $gray-500;
+    }
+}
+
+.btn-group.toggle-button {
+    display: flex;
+
+    .btn {
+        flex: 1;
+    }
+
+    .btn.success {
+        @include button-variant($green, $green);
+    }
+
+    .btn:not(.btn-success) {
+        @include button-outline-variant($input-border-color);
+        color: $input-color;
     }
 }

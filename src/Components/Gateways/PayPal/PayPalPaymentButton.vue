@@ -6,23 +6,13 @@
             </div>
         </div>
         <div v-else>
-            <alert v-if="error" variant="danger">
-                <div class="row">
-                    <div class="col-sm-2">
-                        <icon icon="exclamation-triangle" scale="2.5" class="float-left mt-2"/>
-                    </div>
-                    <div class="col-sm-10" v-html="error"/>
-                </div>
+            <alert v-if="error" variant="danger" class="d-flex align-items-center">
+                <icon icon="exclamation-triangle" size="2x" class="mr-2"/>
+                <div v-html="error"/>
             </alert>
-            <alert v-else-if="form.payerId && form.paymentId" variant="success">
-                <div class="row">
-                    <div class="col-sm-2">
-                        <icon icon="check-circle" scale="2.5" class="float-left mt-2"/>
-                    </div>
-                    <div class="col-sm-10">
-                        Your PayPal payment information has been collected and is ready to be processed. <a href="#" @click="removePaymentInfo($event)">Cancel Payment</a>
-                    </div>
-                </div>
+            <alert v-else-if="form.payerId && form.paymentId" variant="success" class="d-flex align-items-center">
+                <icon icon="check-circle" size="2x" class="mr-2"/>
+                <div>Your PayPal payment information has been collected and is ready to be processed. <a href="#" @click="removePaymentInfo($event)">Cancel Payment</a></div>
             </alert>
         </div>
 

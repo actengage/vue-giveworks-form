@@ -426,6 +426,37 @@ $custom-control-transition: $input-transition, padding .15s ease-out;
 }
 
 .input-group {
+    &.is-invalid .input-group-prepend::after,
+    &.is-invalid .input-group-prepend span,
+    &.is-invalid .input-group-append::after,
+    &.is-invalid .input-group-append span,
+    &.is-invalid .form-control,
+    &.is-invalid .custom-select,
+    &.is-invalid .custom-control {
+        color: $form-feedback-invalid-color;
+        border-color: $form-feedback-invalid-color;
+    }
+
+    &.is-invalid .form-control,
+    &.is-invalid .custom-select,
+    &.is-invalid .custom-control {
+        &::placeholder {
+            color: $form-feedback-invalid-color;
+        }
+    }
+
+    & > div:not(.input-group-prepend):not(.input-group-append):not(:last-child) .form-control,
+    & > div:not(.input-group-prepend):not(.input-group-append):not(:last-child) .custom-control,
+    & > div:not(.input-group-prepend):not(.input-group-append):not(:last-child) .custom-select {
+        border-right: 0;
+    }
+
+    & > div:not(.input-group-prepend):not(.input-group-append):not(:first-child) .form-control,
+    & > div:not(.input-group-prepend):not(.input-group-append):not(:first-child) .custom-control,
+    & > div:not(.input-group-prepend):not(.input-group-append):not(:first-child) .custom-select {
+        border-left: 0;
+    }
+
     .input-group-append,
     .input-group-prepend {
         position: relative;
@@ -460,18 +491,6 @@ $custom-control-transition: $input-transition, padding .15s ease-out;
             left: 0;
             border-left: $input-border-width solid $input-border-color;
         }
-    }
-
-    & > div:not(.input-group-prepend):not(.input-group-append):not(:last-child) .form-control,
-    & > div:not(.input-group-prepend):not(.input-group-append):not(:last-child) .custom-control,
-    & > div:not(.input-group-prepend):not(.input-group-append):not(:last-child) .custom-select {
-        border-right: 0;
-    }
-
-    & > div:not(.input-group-prepend):not(.input-group-append):not(:first-child) .form-control,
-    & > div:not(.input-group-prepend):not(.input-group-append):not(:first-child) .custom-control,
-    & > div:not(.input-group-prepend):not(.input-group-append):not(:first-child) .custom-select {
-        border-left: 0;
     }
 
     .input-group-text {

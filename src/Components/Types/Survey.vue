@@ -33,7 +33,7 @@ import DollarAmountField from '../Survey/DollarAmountField';
 import FirstField from '../Survey/FirstField';
 import InputField from '../Survey/InputField';
 import LastField from '../Survey/LastField';
-import PageType from './PageType';
+import PageType from '../../Mixins/PageType';
 import PrimaryEmailField from '../Survey/PrimaryEmailField';
 import PrimaryPhoneField from '../Survey/PrimaryPhoneField';
 import RadioField from '../Survey/RadioField';

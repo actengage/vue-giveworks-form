@@ -4,6 +4,7 @@ import PaymentButtons from './PaymentButtons';
 import RadioField from './RadioField';
 import SelectField from './SelectField';
 import TextareaField from './TextareaField';
+import ToggleButton from './ToggleButton';
 
 export {
     CheckboxField,
@@ -11,5 +12,5 @@ export {
     PaymentButtons,
     RadioField,
     SelectField,
-    TextareaField
+    ToggleButton
 };

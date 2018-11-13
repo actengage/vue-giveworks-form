@@ -1,12 +1,74 @@
-.giveworks-form .payment-buttons .payment-buttons-grid {
+.giveworks-form {
+  font-family: "Helvetica Nueue", Helvetica, Arial, sans-serif; }
+
+.giveworks-form {
+  font-family: "Helvetica Nueue", Helvetica, Arial, sans-serif; }
+
+.giveworks-form .payment-buttons-grid,
+.giveworks-form .payment-gateway-buttons {
   display: grid;
   grid-gap: .25rem;
   grid-template-columns: repeat(3, 1fr); }
-  .giveworks-form .payment-buttons .payment-buttons-grid .btn {
+  .giveworks-form .payment-buttons-grid .btn,
+  .giveworks-form .payment-gateway-buttons .btn {
     padding: 1rem; }
 
 .giveworks-form .payment-buttons .input-group div:not(.input-group-prepend):not(.input-group-append) {
   flex: 1; }
+
+.giveworks-form .payment-gateway-buttons .btn-secondary {
+  color: #6c757d;
+  background: #e9ecef;
+  border-color: #adb5bd; }
+
+.giveworks-form .btn-group.toggle-button {
+  display: flex; }
+  .giveworks-form .btn-group.toggle-button .btn {
+    flex: 1; }
+  .giveworks-form .btn-group.toggle-button .btn.success {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745; }
+    .giveworks-form .btn-group.toggle-button .btn.success:hover {
+      color: #fff;
+      background-color: #218838;
+      border-color: #1e7e34; }
+    .giveworks-form .btn-group.toggle-button .btn.success:focus, .giveworks-form .btn-group.toggle-button .btn.success.focus {
+      box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5); }
+    .giveworks-form .btn-group.toggle-button .btn.success.disabled, .giveworks-form .btn-group.toggle-button .btn.success:disabled {
+      color: #fff;
+      background-color: #28a745;
+      border-color: #28a745; }
+    .giveworks-form .btn-group.toggle-button .btn.success:not(:disabled):not(.disabled):active, .giveworks-form .btn-group.toggle-button .btn.success:not(:disabled):not(.disabled).active, .giveworks-form .show > .btn-group.toggle-button .btn.success.dropdown-toggle {
+      color: #fff;
+      background-color: #1e7e34;
+      border-color: #1c7430; }
+      .giveworks-form .btn-group.toggle-button .btn.success:not(:disabled):not(.disabled):active:focus, .giveworks-form .btn-group.toggle-button .btn.success:not(:disabled):not(.disabled).active:focus, .giveworks-form .show > .btn-group.toggle-button .btn.success.dropdown-toggle:focus {
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5); }
+  .giveworks-form .btn-group.toggle-button .btn:not(.btn-success) {
+    color: #ced4da;
+    background-color: transparent;
+    background-image: none;
+    border-color: #ced4da;
+    color: #495057; }
+    .giveworks-form .btn-group.toggle-button .btn:not(.btn-success):hover {
+      color: #212529;
+      background-color: #ced4da;
+      border-color: #ced4da; }
+    .giveworks-form .btn-group.toggle-button .btn:not(.btn-success):focus, .giveworks-form .btn-group.toggle-button .btn:not(.btn-success).focus {
+      box-shadow: 0 0 0 0.2rem rgba(206, 212, 218, 0.5); }
+    .giveworks-form .btn-group.toggle-button .btn:not(.btn-success).disabled, .giveworks-form .btn-group.toggle-button .btn:not(.btn-success):disabled {
+      color: #ced4da;
+      background-color: transparent; }
+    .giveworks-form .btn-group.toggle-button .btn:not(.btn-success):not(:disabled):not(.disabled):active, .giveworks-form .btn-group.toggle-button .btn:not(.btn-success):not(:disabled):not(.disabled).active, .giveworks-form .show > .btn-group.toggle-button .btn:not(.btn-success).dropdown-toggle {
+      color: #212529;
+      background-color: #ced4da;
+      border-color: #ced4da; }
+      .giveworks-form .btn-group.toggle-button .btn:not(.btn-success):not(:disabled):not(.disabled):active:focus, .giveworks-form .btn-group.toggle-button .btn:not(.btn-success):not(:disabled):not(.disabled).active:focus, .giveworks-form .show > .btn-group.toggle-button .btn:not(.btn-success).dropdown-toggle:focus {
+        box-shadow: 0 0 0 0.2rem rgba(206, 212, 218, 0.5); }
+
+.giveworks-form {
+  font-family: "Helvetica Nueue", Helvetica, Arial, sans-serif; }
 
 .giveworks-form .custom-select-field label,
 .giveworks-form .custom-input-field label,
@@ -330,6 +392,46 @@
     line-height: 1.5;
     border-radius: 0.3rem; }
 
+.giveworks-form .input-group.is-invalid .input-group-prepend::after,
+.giveworks-form .input-group.is-invalid .input-group-prepend span,
+.giveworks-form .input-group.is-invalid .input-group-append::after,
+.giveworks-form .input-group.is-invalid .input-group-append span,
+.giveworks-form .input-group.is-invalid .form-control,
+.giveworks-form .input-group.is-invalid .custom-select,
+.giveworks-form .input-group.is-invalid .custom-control {
+  color: #dc3545;
+  border-color: #dc3545; }
+
+.giveworks-form .input-group.is-invalid .form-control::-webkit-input-placeholder,
+.giveworks-form .input-group.is-invalid .custom-select::-webkit-input-placeholder,
+.giveworks-form .input-group.is-invalid .custom-control::-webkit-input-placeholder {
+  color: #dc3545; }
+
+.giveworks-form .input-group.is-invalid .form-control:-ms-input-placeholder,
+.giveworks-form .input-group.is-invalid .custom-select:-ms-input-placeholder,
+.giveworks-form .input-group.is-invalid .custom-control:-ms-input-placeholder {
+  color: #dc3545; }
+
+.giveworks-form .input-group.is-invalid .form-control::-ms-input-placeholder,
+.giveworks-form .input-group.is-invalid .custom-select::-ms-input-placeholder,
+.giveworks-form .input-group.is-invalid .custom-control::-ms-input-placeholder {
+  color: #dc3545; }
+
+.giveworks-form .input-group.is-invalid .form-control::placeholder,
+.giveworks-form .input-group.is-invalid .custom-select::placeholder,
+.giveworks-form .input-group.is-invalid .custom-control::placeholder {
+  color: #dc3545; }
+
+.giveworks-form .input-group > div:not(.input-group-prepend):not(.input-group-append):not(:last-child) .form-control,
+.giveworks-form .input-group > div:not(.input-group-prepend):not(.input-group-append):not(:last-child) .custom-control,
+.giveworks-form .input-group > div:not(.input-group-prepend):not(.input-group-append):not(:last-child) .custom-select {
+  border-right: 0; }
+
+.giveworks-form .input-group > div:not(.input-group-prepend):not(.input-group-append):not(:first-child) .form-control,
+.giveworks-form .input-group > div:not(.input-group-prepend):not(.input-group-append):not(:first-child) .custom-control,
+.giveworks-form .input-group > div:not(.input-group-prepend):not(.input-group-append):not(:first-child) .custom-select {
+  border-left: 0; }
+
 .giveworks-form .input-group .input-group-append,
 .giveworks-form .input-group .input-group-prepend {
   position: relative; }
@@ -357,19 +459,8 @@
   left: 0;
   border-left: 1px solid #ced4da; }
 
-.giveworks-form .input-group > div:not(.input-group-prepend):not(.input-group-append):not(:last-child) .form-control,
-.giveworks-form .input-group > div:not(.input-group-prepend):not(.input-group-append):not(:last-child) .custom-control,
-.giveworks-form .input-group > div:not(.input-group-prepend):not(.input-group-append):not(:last-child) .custom-select {
-  border-right: 0; }
-
-.giveworks-form .input-group > div:not(.input-group-prepend):not(.input-group-append):not(:first-child) .form-control,
-.giveworks-form .input-group > div:not(.input-group-prepend):not(.input-group-append):not(:first-child) .custom-control,
-.giveworks-form .input-group > div:not(.input-group-prepend):not(.input-group-append):not(:first-child) .custom-select {
-  border-left: 0; }
-
 .giveworks-form .input-group .input-group-text {
   background: inherit; }
-
 
 /*!
  * Bootstrap v4.1.3 (https://getbootstrap.com/)
@@ -7106,13 +7197,6 @@
     width: 7.5%;
 }
 
-.giveworks-form .payment-gateway-button {
-  height: 85px;
-}
-.giveworks-form .payment-gateway-button .small {
-    line-height: 1rem;
-}
-
 .giveworks-form .activity-indicator-dots > div {
   border-radius: 100%;
   display: inline-block;
@@ -8085,13 +8169,6 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
 }
 
-.giveworks-form .input-field .slide-fade-enter,
-.giveworks-form .input-field .slide-fade-leave-to {
-  opacity: 1;
-  -webkit-transform: translate(25%, -50%);
-          transform: translate(25%, -50%);
-}
-
 .giveworks-form .has-activity {
   /* For IE10 */
 }
@@ -8102,6 +8179,13 @@
 }
 .giveworks-form .has-activity select::-ms-expand {
     display: none;
+}
+
+.giveworks-form .input-field .slide-fade-enter,
+.giveworks-form .input-field .slide-fade-leave-to {
+  opacity: 1;
+  -webkit-transform: translate(25%, -50%);
+          transform: translate(25%, -50%);
 }
 
 .giveworks-form .input-group > div:not(:first-child) .form-control,
@@ -8116,12 +8200,6 @@
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
-
-.giveworks-form .paypal-payment-button.disabled,
-.giveworks-form .paypal-payment-button:disabled {
-    opacity: .5;
-}
-
 
 .giveworks-form .stripe-field {
   position: relative;
@@ -8146,6 +8224,12 @@
 .giveworks-form .stripe-field.has-activity .stripe-field-activity {
     opacity: 1;
 }
+
+.giveworks-form .paypal-payment-button.disabled,
+.giveworks-form .paypal-payment-button:disabled {
+    opacity: .5;
+}
+
 
 .giveworks-form .form-group, .giveworks-form .form-group .form-group-inner {
   position: relative;

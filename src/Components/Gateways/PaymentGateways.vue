@@ -2,34 +2,27 @@
 
     <div>
 
-        <div class="row">
-            <div :class="classes" v-for="button in buttons">
-                <button
-                    type="button"
-                    class="btn btn-block payment-gateway-button"
-                    :class="{'btn-success': button.active, 'btn-secondary': !button.active}"
-                    @click="activate(button)">
-                    <icon :icon="typeof button.icon === 'string' ? ['far', button.icon]: button.icon" :size="button.size || 'lg'" :class="{'mt-2 mb-1': !button.label}"/>
-                    <div v-if="button.label" class="pb-1 small">{{ button.label }}</div>
-                </button>
-            </div>
+        <div class="payment-gateway-buttons">
+            <btn
+                v-for="(button, i) in buttons"
+                :key="i"
+                :class="{'btn-success': button.active, 'btn-secondary': !button.active}"
+                type="button"
+                @click="activate(button)">
+                <icon :icon="typeof button.icon === 'string' ? ['far', button.icon]: button.icon" :size="button.size || 'lg'" :class="{'mt-2 mb-1': !button.label}"/>
+                <div v-if="button.label" class="pb-1 small" v-html="button.label"/>
+            </btn>
         </div>
 
-        <alert v-if="!buttons || !buttons.length" variant="danger">
-            <div class="row">
-                <div class="col-xs-2 text-center">
-                    <icon icon="exclamation-triangle" scale="2.25" class="mt-2"/>
-                </div>
-                <div class="col-xs-10">
-                    There are not payment gateways configured for this site!
-                </div>
-            </div>
+        <alert v-if="!buttons || !buttons.length" variant="danger" class="d-flex align-items-center">
+            <icon icon="exclamation-triangle" size="2x" class="mr-2"/>
+            <div>There are not payment gateways configured for this site!</div>
         </alert>
 
         <div v-else>
             <hr>
             <div v-if="button.active" v-for="button in buttons">
-                <component :is="button.component" :form="form" :page="page" :errors="errors" :gateway="button.gateway"/>
+                <component v-bind-events :is="button.component" :form="form" :page="page" :errors="errors" :gateway="button.gateway"/>
             </div>
         </div>
 
@@ -39,6 +32,7 @@
 
 <script>
 import Gateway from '../Gateways/Gateway';
+import Btn from 'vue-interface/src/Components/Btn';
 import Alert from 'vue-interface/src/Components/Alert';
 import FormComponent from '../../Mixins/FormComponent';
 import { FontAwesomeIcon as Icon } from '@fortawesome/vue-fontawesome';
@@ -52,6 +46,7 @@ export default {
     name: 'payment-gateways',
 
     components: {
+        Btn,
         Icon,
         Alert,
         StripeCreditCard,
@@ -99,6 +94,10 @@ export default {
         onResize(event) {
             this.width = this.$el.offsetWidth;
             return this.onResize;
+        },
+
+        onSubmit() {
+            console.log('asd');
         }
 
     },
@@ -139,13 +138,3 @@ export default {
 
 };
 </script>
-
-<style lang="scss">
-.payment-gateway-button {
-    height: 85px;
-
-    .small {
-        line-height: 1rem;
-    }
-}
-</style>

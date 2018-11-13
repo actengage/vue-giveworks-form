@@ -12,7 +12,7 @@
             <div class="text-bold mb-2">Credit Card</div>
             <div class="stripe-field" :class="{'has-activity': activity}">
                 <div class="form-control p-2" :class="{'is-invalid': !!errors.token}">
-                    <div class="stripe-field-input"/>
+                    <div ref="input" class="stripe-field-input"/>
                 </div>
                 <div class="stripe-field-activity">
                     <activity-indicator size="xs" center/>
@@ -61,21 +61,11 @@ export default {
         }
     },
 
-    created() {
-        /*
-        this.$submitEvent = this.$dispatch.on('form:submit', (data) => {
-            this.$card.blur();
-        });
-        */
-    },
-
-    beforeDestroy() {
-        // this.$dispatch.off(this.$submitEvent);
-    },
 
     mounted() {
         const gateway = Gateway(this.gateway);
 
+        // this.$emit('submit-disable');
         // this.$dispatch.request('submit:disable');
 
         gateway.script((event) => {
@@ -88,6 +78,7 @@ export default {
                 });
             }
             catch (e) {
+                this.$emit('error', e);
                 // this.$dispatch.emit('error', e);
                 throw e;
             }
@@ -106,6 +97,7 @@ export default {
                                 }
                                 else {
                                     this.form.token = result.token.id;
+                                    this.$emit('submit-enable');
                                     // this.$dispatch.request('submit:enable');
                                     resolve(result);
                                 }
@@ -122,7 +114,7 @@ export default {
             });
 
             this.loaded = true;
-            this.$nextTick(() => this.$card.mount(this.$el.querySelector('.stripe-field-input')));
+            this.$nextTick(() => this.$card.mount(this.$refs.input));
         });
     },
 

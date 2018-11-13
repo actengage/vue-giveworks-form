@@ -17,7 +17,7 @@
                     </div>
                     <div class="col-xs-10">
                         <div class="pl-2">
-                            <button type="button" class="btn btn-xs btn-warning float-right" :disabled="submitting" @click="changeCard($event)">Change Card</button>
+                            <btn type="button" variant="warning" class="float-right" :disabled="submitting" @click="changeCard($event)">Change Card</btn>
                             <span v-if="card.name">{{card.name}}<br></span>
                             <small>****{{card.last4}} <span class="pl-2">{{card.exp_month}}/{{card.exp_year}}</span></small>
                         </div>
@@ -36,15 +36,9 @@
             </div>
         </div>
 
-        <alert v-else variant="danger">
-            <div class="row">
-                <div class="col-xs-3 text-center">
-                    <icon icon="exclamation-triangle" scale="2" class="mt-2"/>
-                </div>
-                <div class="col-xs-9">
-                    {{ error.message }}
-                </div>
-            </div>
+        <alert v-else variant="danger" class="d-flex align-items-center">
+            <icon icon="exclamation-triangle" size="2x" class="mr-3"/>
+            <div v-html="error.message"/>
         </alert>
 
     </div>
@@ -54,6 +48,7 @@
 <script>
 import '../../../Config/Icons';
 import Gateway from '../Gateway';
+import Btn from 'vue-interface/src/Components/Btn';
 import Alert from 'vue-interface/src/Components/Alert';
 import { FontAwesomeIcon as Icon } from '@fortawesome/vue-fontawesome';
 import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
@@ -63,6 +58,7 @@ export default {
     name: 'stripe-payment-button',
 
     components: {
+        Btn,
         Icon,
         Alert,
         ActivityIndicator

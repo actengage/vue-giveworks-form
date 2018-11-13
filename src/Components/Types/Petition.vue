@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import PageType from './PageType';
+import PageType from '../../Mixins/PageType';
 import BtnActivity from 'vue-interface/src/Components/BtnActivity';
 import ContactInfoFieldset from '../Fieldsets/ContactInfoFieldset';
 import CheckboxField from 'vue-interface/src/Components/CheckboxField';

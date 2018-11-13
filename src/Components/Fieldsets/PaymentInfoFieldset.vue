@@ -4,11 +4,11 @@
 
         <legend>Payment Information</legend>
 
-        <payment-gateways :form="form" :errors="errors" :page="page"/>
+        <payment-gateways v-bind-events :form="form" :errors="errors" :page="page"/>
 
         <textarea-field v-if="page.options.add_comment" v-autogrow v-model="form.comment" id="comment" :label="commentMessage"/>
 
-        <btn-activity type="submit" size="md" orientation="right" :activity="submitting" :block="true" :label="buttonLabel || page.site.config.giveworks.button.donate"/>
+        <btn-activity type="submit" size="lg" :activity="submitting" :block="true" :label="buttonLabel || page.site.config.giveworks.button.donate"/>
 
         <div v-if="page.options.add_optin">
             <label class="custom-control custom-checkbox">
@@ -18,7 +18,9 @@
             </label>
         </div>
 
-        <div v-if="page.site.disclaimer" class="mt-3"><small class="text-muted" v-html="page.site.disclaimer"/></div>
+        <div v-if="page.site.disclaimer" class="mt-3">
+            <small class="text-muted" v-html="page.site.disclaimer"/>
+        </div>
 
     </fieldset>
 
@@ -31,6 +33,7 @@ import BtnActivity from 'vue-interface/src/Components/BtnActivity';
 import TextareaField from 'vue-interface/src/Components/TextareaField';
 
 export default {
+
 
     name: 'payment-info-fieldset',
 

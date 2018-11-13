@@ -1,7 +1,9 @@
 <template>
-    <div class="payment-buttons">
+    <div class="payment-buttons" :class="{'was-validated': !!errors.amount}">
+
         <div class="payment-buttons-grid mb-2">
-            <btn outline
+            <btn type="button"
+                outline
                 variant="success"
                 v-for="amount in amounts"
                 v-html="`$${amount}`"
@@ -10,9 +12,17 @@
                 @click="onClickButton(amount)"/>
         </div>
 
-        <input-group prepend="$">
-            <input-field :group="false" :value="value" @input="value => $emit('input', value)" label="Other Amount" placeholder="Other Amount" custom/>
+        <input-group prepend="$" :class="{'is-invalid': !!errors.amount}">
+            <input-field
+                custom
+                label="Other Amount"
+                placeholder="Other Amount"
+                :group="false"
+                :value="value"
+                @input="value => $emit('input', value)"/>
         </input-group>
+
+        <form-feedback v-if="errors.amount" v-html="errors.amount.join('<br>')" class="d-block" invalid/>
     </div>
 </template>
 
@@ -21,6 +31,7 @@ import Btn from 'vue-interface/src/Components/Btn';
 import FormControl from 'vue-interface/src/Mixins/FormControl';
 import InputField from 'vue-interface/src/Components/InputField';
 import InputGroup from 'vue-interface/src/Components/InputGroup';
+import FormFeedback from 'vue-interface/src/Components/FormFeedback';
 
 export default {
 
@@ -33,7 +44,8 @@ export default {
     components: {
         Btn,
         InputField,
-        InputGroup
+        InputGroup,
+        FormFeedback
     },
 
     props: {

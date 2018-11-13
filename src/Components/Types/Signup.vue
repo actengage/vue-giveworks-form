@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import PageType from './PageType';
+import PageType from '../../Mixins/PageType';
 import GoToWebinar from '../Signups/GoToWebinar';
 
 export default {

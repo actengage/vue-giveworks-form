@@ -12,10 +12,9 @@
 
         <div class="form-group mt-3" v-if="page.site.recurring && !page.options.recurring_only">
             <label v-html="recurringMessage"/>
-            <div class="btn-group">
-                <button type="button" class="btn" :class="{'btn-success': !form.recurring, 'btn-secondary': !!form.recurring}" @click="setRecurring(0)">One-Time</button>
-                <button type="button" class="btn" :class="{'btn-success': !!form.recurring, 'btn-secondary': !form.recurring}" @click="setRecurring(1)">Monthly</button>
-            </div>
+
+            <toggle-button size="lg" v-model="form.recurring"/>
+
             <small v-if="!recurring" class="text-muted form-text">You are making a single donation of the amount entered above. Click the 'monthly' button to make your gift go further as an automatic monthly donation.</small>
             <small v-if="!!recurring" class="text-muted form-text">This amount will be charged automatically once each month, on or about the {{ chargeDate }}. You may cancel your donation at any time by contacting us.</small>
         </div>
@@ -33,6 +32,7 @@
 
 <script>
 import '../../Config/Icons';
+import ToggleButton from '../Fields/ToggleButton';
 import PaymentButtons from '../Fields/PaymentButtons';
 import FormComponent from '../../Mixins/FormComponent';
 import Alert from 'vue-interface/src/Components/Alert';
@@ -47,18 +47,13 @@ export default {
         Icon,
         Alert,
         AlertHeading,
+        ToggleButton,
         PaymentButtons
     },
 
     mixins: [
         FormComponent
     ],
-
-    methods: {
-        setRecurring(value) {
-            this.$set(this.form, 'recurring', value);
-        }
-    },
 
     computed: {
 

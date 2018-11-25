@@ -100,7 +100,7 @@ export default {
             this.enable = actions.enable;
             this.disable = actions.disable;
 
-            if(!!this.form.amount) {
+            if(this.form.amount) {
                 actions.enable();
             }
             else {

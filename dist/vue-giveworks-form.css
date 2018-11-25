@@ -1,4 +1,3 @@
-
 .giveworks-form .payment-buttons .input-group div:not(.input-group-prepend):not(.input-group-append) {
   flex: 1; }
 
@@ -63,6 +62,7 @@
       border-color: #ced4da; }
       .giveworks-form .btn-group.toggle-button .btn:not(.btn-success):not(:disabled):not(.disabled):active:focus, .giveworks-form .btn-group.toggle-button .btn:not(.btn-success):not(:disabled):not(.disabled).active:focus, .giveworks-form .show > .btn-group.toggle-button .btn:not(.btn-success).dropdown-toggle:focus {
         box-shadow: 0 0 0 0.2rem rgba(206, 212, 218, 0.5); }
+
 
 .giveworks-form .custom-select-field label,
 .giveworks-form .custom-input-field label,
@@ -1884,6 +1884,377 @@
   margin: 0;
   padding: 0;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+}
+
+.giveworks-form .form-group, .giveworks-form .form-group .form-group-inner {
+  position: relative;
+}
+.giveworks-form .form-group .activity-indicator {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  -webkit-transform: translate(-1rem, -50%);
+          transform: translate(-1rem, -50%);
+  transition: all .25s ease-in;
+}
+
+@media (max-width: 575.98px) {
+.giveworks-form .btn-xs-block {
+    width: 100%;
+    display: block;
+}
+.giveworks-form .btn-xs-block + .btn-xs-block {
+      margin-top: 0.5rem;
+}
+}
+@media (max-width: 767.98px) {
+.giveworks-form .btn-sm-block {
+    width: 100%;
+    display: block;
+}
+.giveworks-form .btn-sm-block + .btn-xs-block,
+    .giveworks-form .btn-sm-block + .btn-sm-block {
+      margin-top: 0.5rem;
+}
+}
+@media (max-width: 991.98px) {
+.giveworks-form .btn-md-block {
+    width: 100%;
+    display: block;
+}
+.giveworks-form .btn-md-block + .btn-xs-block,
+    .giveworks-form .btn-md-block + .btn-sm-block,
+    .giveworks-form .btn-md-block + .btn-md-block {
+      margin-top: 0.5rem;
+}
+}
+@media (max-width: 1199.98px) {
+.giveworks-form .btn-lg-block {
+    width: 100%;
+    display: block;
+}
+.giveworks-form .btn-lg-block + .btn-xs-block,
+    .giveworks-form .btn-lg-block + .btn-sm-block,
+    .giveworks-form .btn-lg-block + .btn-md-block,
+    .giveworks-form .btn-lg-block + .btn-lg-block {
+      margin-top: 0.5rem;
+}
+}
+.giveworks-form .btn-xl-block {
+  width: 100%;
+  display: block;
+}
+.giveworks-form .btn-xl-block + .btn-xs-block,
+  .giveworks-form .btn-xl-block + .btn-sm-block,
+  .giveworks-form .btn-xl-block + .btn-md-block,
+  .giveworks-form .btn-xl-block + .btn-lg-block,
+  .giveworks-form .btn-xl-block + .btn-xl-block {
+    margin-top: 0.5rem;
+}
+
+.giveworks-form .input-field .slide-fade-enter,
+.giveworks-form .input-field .slide-fade-leave-to {
+  opacity: 1;
+  -webkit-transform: translate(25%, -50%);
+          transform: translate(25%, -50%);
+}
+
+.giveworks-form .has-activity {
+  /* For IE10 */
+}
+.giveworks-form .has-activity select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+.giveworks-form .has-activity select::-ms-expand {
+    display: none;
+}
+
+.giveworks-form .input-group > div:not(:first-child) .form-control,
+.giveworks-form .input-group > div:not(:first-child) .custom-control,
+.giveworks-form .input-group > div:not(:first-child) .custom-select {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.giveworks-form .input-group > div:not(:last-child) .form-control,
+.giveworks-form .input-group > div:not(:last-child) .custom-control,
+.giveworks-form .input-group > div:not(:last-child) .custom-select {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.giveworks-form .credit-card-field-wrapper {
+  position: relative;
+}
+.giveworks-form .credit-card-field-wrapper .credit-card-field-activity {
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 3em;
+    height: 100%;
+    transition: opacity .15s ease-in-out;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field {
+    box-sizing: border-box;
+    overflow: hidden;
+    position: relative;
+    background: white;
+    transition: width .333s ease-in-out;
+    /*
+        &.text-sm .credit-card-field-field,
+        &.text-sm .credit-card-field-number-mask,
+        &.text-sm .credit-card-field-placeholder-mask {
+            font-size: .85em;
+            line-height: .85em;
+        }
+
+        &.text-sm .credit-card-field-security-fields {
+            width: calc(11em * .85);
+        }
+
+        &.text-sm:not(.is-focused) .credit-card-field-security-fields,
+        &.text-sm.is-focused-number .credit-card-field-security-fields {
+            transform: translateX(calc(-4.5em * .85));
+        }
+        */
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.has-activity {
+      width: calc(100% - 3em);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.has-activity + .credit-card-field-activity {
+        opacity: 1;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.form-control-sm {
+      min-height: calc((0.25rem * 2) + (0.875rem * 1.5) + (1px * 2));
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.form-control-md {
+      min-height: calc((0.375rem * 2) + (1rem * 1.5) + (1px * 2));
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.form-control-lg {
+      min-height: calc((0.5rem * 2) + (1.25rem * 1.5) + (1px * 2));
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field ::-webkit-input-placeholder {
+      color: #adb5bd;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field ::-moz-placeholder {
+      color: #adb5bd;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field :-ms-input-placeholder {
+      color: #adb5bd;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field :-moz-placeholder {
+      color: #ced4da;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field + .invalid-feedback {
+      display: block;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-sm {
+      font-size: .95em;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-sm .credit-card-field-icon-wrapper {
+        width: .5em;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-sm .credit-card-field-number,
+      .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-sm .credit-card-field-fields {
+        width: calc(100% - .5em);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-sm .credit-card-field-icon-card {
+        display: none;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-sm .credit-card-field-fields {
+        left: .5em;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-lg.is-focused-number:not(.show-security-fields) .credit-card-field-security-fields {
+      -webkit-transform: translateX(-7.5em);
+              transform: translateX(-7.5em);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-fields {
+      position: absolute;
+      top: 50%;
+      width: calc(100% - 2.5em);
+      -webkit-transform: translateY(-50%);
+              transform: translateY(-50%);
+      left: 2.5em;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-field, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field input.credit-card-field-field {
+      float: left;
+      display: inline;
+      border: none;
+      outline: 0;
+      background: none;
+      box-shadow: none;
+      line-height: 1em;
+      padding: .5em 0;
+      transition: -webkit-transform .333s ease-in-out;
+      transition: transform .333s ease-in-out;
+      transition: transform .333s ease-in-out, -webkit-transform .333s ease-in-out;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-field.is-invalid, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field input.credit-card-field-field.is-invalid {
+        color: #dc3545;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-security-fields {
+      position: absolute;
+      left: 100%;
+      width: 11em;
+      display: inline-block;
+      transition: -webkit-transform .333s ease-in-out;
+      transition: transform .333s ease-in-out;
+      transition: transform .333s ease-in-out, -webkit-transform .333s ease-in-out;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-placeholder-mask,
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-number-mask {
+      width: auto;
+      opacity: 0;
+      position: absolute;
+      z-index: -1;
+      color: #adb5bd;
+      top: 50%;
+      line-height: 1em;
+      font-size: 1em;
+      white-space: nowrap;
+      -webkit-transform: translateY(-50%);
+              transform: translateY(-50%);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-placeholder-mask {
+      padding: 2px 0;
+      transition: opacity ease 0.25s;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-number {
+      width: 100%;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-expiration {
+      width: 4.75em;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-cvc {
+      width: 2.75em;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-postal {
+      width: 3.5em;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2.5em;
+      height: 100%;
+      z-index: 2;
+      background: white;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2.5em;
+      height: 100%;
+      transition: -webkit-transform 0.4s ease-in-out;
+      transition: transform 0.4s ease-in-out;
+      transition: transform 0.4s ease-in-out, -webkit-transform 0.4s ease-in-out;
+      -webkit-transform-style: preserve-3d;
+              transform-style: preserve-3d;
+      /* hide back of pane during swap */
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon {
+        height: 100%;
+        width: 2.5em;
+        transition: .33s;
+        padding: 0 .5em;
+        position: absolute;
+        top: 0;
+        left: 0;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon-back,
+      .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon-front .credit-card-field-icon {
+        opacity: 0;
+        -webkit-transform: scale(0);
+                transform: scale(0);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon-front,
+      .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon-back {
+        -webkit-backface-visibility: hidden;
+                backface-visibility: hidden;
+        position: absolute;
+        height: 100%;
+        width: 2.5em;
+        top: 0;
+        left: 0;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon-front {
+        z-index: 3;
+        -webkit-transform: rotateY(0deg);
+                transform: rotateY(0deg);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon-back {
+        -webkit-transform: rotateY(180deg);
+                transform: rotateY(180deg);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused) .credit-card-field-security-fields,
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-number .credit-card-field-security-fields {
+      -webkit-transform: translateX(-4.5em);
+              transform: translateX(-4.5em);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.show-security-fields .credit-card-field-security-fields,
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-expiration .credit-card-field-security-fields,
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-cvc .credit-card-field-security-fields,
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-postal .credit-card-field-security-fields,
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.last-focused-expiration .credit-card-field-security-fields,
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.last-focused-cvc .credit-card-field-security-fields,
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.last-focused-postal .credit-card-field-security-fields {
+      -webkit-transform: translateX(-100%);
+              transform: translateX(-100%);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused {
+      outline: none;
+      border-color: #80bdff;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused:not(.is-focused-number) .credit-card-field-number.is-empty, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused).last-focused-expiration .credit-card-field-number.is-empty, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused).last-focused-cvc .credit-card-field-number.is-empty, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused).last-focused-postal .credit-card-field-number.is-empty {
+      opacity: 0;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused:not(.is-focused-number) .credit-card-field-number.is-empty ~ .credit-card-field-placeholder-mask, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused).last-focused-expiration .credit-card-field-number.is-empty ~ .credit-card-field-placeholder-mask, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused).last-focused-cvc .credit-card-field-number.is-empty ~ .credit-card-field-placeholder-mask, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused).last-focused-postal .credit-card-field-number.is-empty ~ .credit-card-field-placeholder-mask {
+      opacity: 1;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-cvc .credit-card-field-icon-card {
+      -webkit-perspective: 1000px;
+              perspective: 1000px;
+      -webkit-transform: rotateY(180deg);
+              transform: rotateY(180deg);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-cvc .credit-card-field-icon-back {
+      display: block;
+      opacity: 1;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-cvc .credit-card-field-icon-front {
+      display: none;
+      opacity: 0;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-jcb .credit-card-field-icon-card svg[data-brand="jcb"],
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-visa .credit-card-field-icon-card svg[data-brand=visa],
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-amex .credit-card-field-icon-card svg[data-brand="amex"],
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-unknown .credit-card-field-icon-card svg[data-brand="unknown"],
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-discover .credit-card-field-icon-card svg[data-brand="discover"],
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-mastercard .credit-card-field-icon-card svg[data-brand="mastercard"],
+    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-dinersclub .credit-card-field-icon-card svg[data-brand="dinersclub"] {
+      opacity: 1;
+      -webkit-transform: scale(1);
+              transform: scale(1);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-invalid, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:invalid {
+      outline: none;
+      border-color: #dc3545;
+      box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-invalid .credit-card-field-icon, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:invalid .credit-card-field-icon {
+        color: #dc3545;
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-valid, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:valid {
+      outline: none;
+      border-color: #28a745;
+      box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-valid .credit-card-field-icon, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:valid .credit-card-field-icon {
+        color: #28a745;
 }
 /*!
  * Bootstrap v4.1.3 (https://getbootstrap.com/)
@@ -8650,377 +9021,6 @@
 .giveworks-form .input-group .input-group-text {
   background: inherit; }
 
-
-.giveworks-form .form-group, .giveworks-form .form-group .form-group-inner {
-  position: relative;
-}
-.giveworks-form .form-group .activity-indicator {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  -webkit-transform: translate(-1rem, -50%);
-          transform: translate(-1rem, -50%);
-  transition: all .25s ease-in;
-}
-
-@media (max-width: 575.98px) {
-.giveworks-form .btn-xs-block {
-    width: 100%;
-    display: block;
-}
-.giveworks-form .btn-xs-block + .btn-xs-block {
-      margin-top: 0.5rem;
-}
-}
-@media (max-width: 767.98px) {
-.giveworks-form .btn-sm-block {
-    width: 100%;
-    display: block;
-}
-.giveworks-form .btn-sm-block + .btn-xs-block,
-    .giveworks-form .btn-sm-block + .btn-sm-block {
-      margin-top: 0.5rem;
-}
-}
-@media (max-width: 991.98px) {
-.giveworks-form .btn-md-block {
-    width: 100%;
-    display: block;
-}
-.giveworks-form .btn-md-block + .btn-xs-block,
-    .giveworks-form .btn-md-block + .btn-sm-block,
-    .giveworks-form .btn-md-block + .btn-md-block {
-      margin-top: 0.5rem;
-}
-}
-@media (max-width: 1199.98px) {
-.giveworks-form .btn-lg-block {
-    width: 100%;
-    display: block;
-}
-.giveworks-form .btn-lg-block + .btn-xs-block,
-    .giveworks-form .btn-lg-block + .btn-sm-block,
-    .giveworks-form .btn-lg-block + .btn-md-block,
-    .giveworks-form .btn-lg-block + .btn-lg-block {
-      margin-top: 0.5rem;
-}
-}
-.giveworks-form .btn-xl-block {
-  width: 100%;
-  display: block;
-}
-.giveworks-form .btn-xl-block + .btn-xs-block,
-  .giveworks-form .btn-xl-block + .btn-sm-block,
-  .giveworks-form .btn-xl-block + .btn-md-block,
-  .giveworks-form .btn-xl-block + .btn-lg-block,
-  .giveworks-form .btn-xl-block + .btn-xl-block {
-    margin-top: 0.5rem;
-}
-
-.giveworks-form .has-activity {
-  /* For IE10 */
-}
-.giveworks-form .has-activity select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-.giveworks-form .has-activity select::-ms-expand {
-    display: none;
-}
-
-.giveworks-form .input-field .slide-fade-enter,
-.giveworks-form .input-field .slide-fade-leave-to {
-  opacity: 1;
-  -webkit-transform: translate(25%, -50%);
-          transform: translate(25%, -50%);
-}
-
-.giveworks-form .input-group > div:not(:first-child) .form-control,
-.giveworks-form .input-group > div:not(:first-child) .custom-control,
-.giveworks-form .input-group > div:not(:first-child) .custom-select {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.giveworks-form .input-group > div:not(:last-child) .form-control,
-.giveworks-form .input-group > div:not(:last-child) .custom-control,
-.giveworks-form .input-group > div:not(:last-child) .custom-select {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.giveworks-form .credit-card-field-wrapper {
-  position: relative;
-}
-.giveworks-form .credit-card-field-wrapper .credit-card-field-activity {
-    opacity: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 3em;
-    height: 100%;
-    transition: opacity .15s ease-in-out;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field {
-    box-sizing: border-box;
-    overflow: hidden;
-    position: relative;
-    background: white;
-    transition: width .333s ease-in-out;
-    /*
-        &.text-sm .credit-card-field-field,
-        &.text-sm .credit-card-field-number-mask,
-        &.text-sm .credit-card-field-placeholder-mask {
-            font-size: .85em;
-            line-height: .85em;
-        }
-
-        &.text-sm .credit-card-field-security-fields {
-            width: calc(11em * .85);
-        }
-
-        &.text-sm:not(.is-focused) .credit-card-field-security-fields,
-        &.text-sm.is-focused-number .credit-card-field-security-fields {
-            transform: translateX(calc(-4.5em * .85));
-        }
-        */
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.has-activity {
-      width: calc(100% - 3em);
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.has-activity + .credit-card-field-activity {
-        opacity: 1;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.form-control-sm {
-      min-height: calc((0.25rem * 2) + (0.875rem * 1.5) + (1px * 2));
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.form-control-md {
-      min-height: calc((0.375rem * 2) + (1rem * 1.5) + (1px * 2));
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.form-control-lg {
-      min-height: calc((0.5rem * 2) + (1.25rem * 1.5) + (1px * 2));
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field ::-webkit-input-placeholder {
-      color: #adb5bd;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field ::-moz-placeholder {
-      color: #adb5bd;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field :-ms-input-placeholder {
-      color: #adb5bd;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field :-moz-placeholder {
-      color: #ced4da;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field + .invalid-feedback {
-      display: block;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-sm {
-      font-size: .95em;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-sm .credit-card-field-icon-wrapper {
-        width: .5em;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-sm .credit-card-field-number,
-      .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-sm .credit-card-field-fields {
-        width: calc(100% - .5em);
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-sm .credit-card-field-icon-card {
-        display: none;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-sm .credit-card-field-fields {
-        left: .5em;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.credit-card-field-lg.is-focused-number:not(.show-security-fields) .credit-card-field-security-fields {
-      -webkit-transform: translateX(-7.5em);
-              transform: translateX(-7.5em);
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-fields {
-      position: absolute;
-      top: 50%;
-      width: calc(100% - 2.5em);
-      -webkit-transform: translateY(-50%);
-              transform: translateY(-50%);
-      left: 2.5em;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-field, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field input.credit-card-field-field {
-      float: left;
-      display: inline;
-      border: none;
-      outline: 0;
-      background: none;
-      box-shadow: none;
-      line-height: 1em;
-      padding: .5em 0;
-      transition: -webkit-transform .333s ease-in-out;
-      transition: transform .333s ease-in-out;
-      transition: transform .333s ease-in-out, -webkit-transform .333s ease-in-out;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-field.is-invalid, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field input.credit-card-field-field.is-invalid {
-        color: #dc3545;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-security-fields {
-      position: absolute;
-      left: 100%;
-      width: 11em;
-      display: inline-block;
-      transition: -webkit-transform .333s ease-in-out;
-      transition: transform .333s ease-in-out;
-      transition: transform .333s ease-in-out, -webkit-transform .333s ease-in-out;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-placeholder-mask,
-    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-number-mask {
-      width: auto;
-      opacity: 0;
-      position: absolute;
-      z-index: -1;
-      color: #adb5bd;
-      top: 50%;
-      line-height: 1em;
-      font-size: 1em;
-      white-space: nowrap;
-      -webkit-transform: translateY(-50%);
-              transform: translateY(-50%);
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-placeholder-mask {
-      padding: 2px 0;
-      transition: opacity ease 0.25s;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-number {
-      width: 100%;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-expiration {
-      width: 4.75em;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-cvc {
-      width: 2.75em;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-postal {
-      width: 3.5em;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-wrapper {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 2.5em;
-      height: 100%;
-      z-index: 2;
-      background: white;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 2.5em;
-      height: 100%;
-      transition: -webkit-transform 0.4s ease-in-out;
-      transition: transform 0.4s ease-in-out;
-      transition: transform 0.4s ease-in-out, -webkit-transform 0.4s ease-in-out;
-      -webkit-transform-style: preserve-3d;
-              transform-style: preserve-3d;
-      /* hide back of pane during swap */
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon {
-        height: 100%;
-        width: 2.5em;
-        transition: .33s;
-        padding: 0 .5em;
-        position: absolute;
-        top: 0;
-        left: 0;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon-back,
-      .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon-front .credit-card-field-icon {
-        opacity: 0;
-        -webkit-transform: scale(0);
-                transform: scale(0);
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon-front,
-      .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon-back {
-        -webkit-backface-visibility: hidden;
-                backface-visibility: hidden;
-        position: absolute;
-        height: 100%;
-        width: 2.5em;
-        top: 0;
-        left: 0;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon-front {
-        z-index: 3;
-        -webkit-transform: rotateY(0deg);
-                transform: rotateY(0deg);
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field .credit-card-field-icon-card .credit-card-field-icon-back {
-        -webkit-transform: rotateY(180deg);
-                transform: rotateY(180deg);
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused) .credit-card-field-security-fields,
-    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-number .credit-card-field-security-fields {
-      -webkit-transform: translateX(-4.5em);
-              transform: translateX(-4.5em);
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.show-security-fields .credit-card-field-security-fields,
-    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-expiration .credit-card-field-security-fields,
-    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-cvc .credit-card-field-security-fields,
-    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-postal .credit-card-field-security-fields,
-    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.last-focused-expiration .credit-card-field-security-fields,
-    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.last-focused-cvc .credit-card-field-security-fields,
-    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.last-focused-postal .credit-card-field-security-fields {
-      -webkit-transform: translateX(-100%);
-              transform: translateX(-100%);
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused {
-      outline: none;
-      border-color: #80bdff;
-      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused:not(.is-focused-number) .credit-card-field-number.is-empty, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused).last-focused-expiration .credit-card-field-number.is-empty, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused).last-focused-cvc .credit-card-field-number.is-empty, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused).last-focused-postal .credit-card-field-number.is-empty {
-      opacity: 0;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused:not(.is-focused-number) .credit-card-field-number.is-empty ~ .credit-card-field-placeholder-mask, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused).last-focused-expiration .credit-card-field-number.is-empty ~ .credit-card-field-placeholder-mask, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused).last-focused-cvc .credit-card-field-number.is-empty ~ .credit-card-field-placeholder-mask, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:not(.is-focused).last-focused-postal .credit-card-field-number.is-empty ~ .credit-card-field-placeholder-mask {
-      opacity: 1;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-cvc .credit-card-field-icon-card {
-      -webkit-perspective: 1000px;
-              perspective: 1000px;
-      -webkit-transform: rotateY(180deg);
-              transform: rotateY(180deg);
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-cvc .credit-card-field-icon-back {
-      display: block;
-      opacity: 1;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-focused-cvc .credit-card-field-icon-front {
-      display: none;
-      opacity: 0;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-jcb .credit-card-field-icon-card svg[data-brand="jcb"],
-    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-visa .credit-card-field-icon-card svg[data-brand=visa],
-    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-amex .credit-card-field-icon-card svg[data-brand="amex"],
-    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-unknown .credit-card-field-icon-card svg[data-brand="unknown"],
-    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-discover .credit-card-field-icon-card svg[data-brand="discover"],
-    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-mastercard .credit-card-field-icon-card svg[data-brand="mastercard"],
-    .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.brand-dinersclub .credit-card-field-icon-card svg[data-brand="dinersclub"] {
-      opacity: 1;
-      -webkit-transform: scale(1);
-              transform: scale(1);
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-invalid, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:invalid {
-      outline: none;
-      border-color: #dc3545;
-      box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-invalid .credit-card-field-icon, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:invalid .credit-card-field-icon {
-        color: #dc3545;
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-valid, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:valid {
-      outline: none;
-      border-color: #28a745;
-      box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
-}
-.giveworks-form .credit-card-field-wrapper .form-control.credit-card-field.is-valid .credit-card-field-icon, .giveworks-form .credit-card-field-wrapper .form-control.credit-card-field:valid .credit-card-field-icon {
-        color: #28a745;
-}
 
 .giveworks-form .autocomplete-list-item {
   margin: 0;

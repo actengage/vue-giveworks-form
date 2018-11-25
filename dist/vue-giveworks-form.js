@@ -1,5 +1,3 @@
-
-(function(l, i, v, e) { v = l.createElement(i); v.async = 1; v.src = '//' + (location.host || 'localhost').split(':')[0] + ':35731/livereload.js?snipver=1'; e = l.getElementsByTagName(i)[0]; e.parentNode.insertBefore(v, e)})(document, 'script');
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(require('axios')) :
     typeof define === 'function' && define.amd ? define(['axios'], factory) :
@@ -3602,7 +3600,7 @@
     var PRODUCTION$1 = false;
 
     try {
-      PRODUCTION$1 = "development" === 'production';
+      PRODUCTION$1 = "production" === 'production';
     } catch (e) {}
 
     function log () {
@@ -5949,7 +5947,7 @@
           this.enable = actions.enable;
           this.disable = actions.disable;
 
-          if (!!this.form.amount) {
+          if (this.form.amount) {
             actions.enable();
           } else {
             actions.disable();
@@ -8220,7 +8218,7 @@
     var PRODUCTION$3 = false;
 
     try {
-      PRODUCTION$3 = "development" === 'production';
+      PRODUCTION$3 = "production" === 'production';
     } catch (e) {}
 
     function log$1 () {

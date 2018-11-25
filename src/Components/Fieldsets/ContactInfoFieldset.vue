@@ -88,18 +88,6 @@ export default {
         states() {
             return States;
         }
-    },
-
-    created() {
-        /*
-        this.$dispatch.on('place:changed', place => {
-            this.$el.querySelector('[name="street"]').value = 'test';
-        });
-        */
-    },
-
-    beforeDestroy() {
-        // this.$dispatch.off('place:changed');
     }
 
 };

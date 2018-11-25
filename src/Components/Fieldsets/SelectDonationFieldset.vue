@@ -13,7 +13,7 @@
         <div class="form-group mt-3" v-if="page.site.recurring && !page.options.recurring_only">
             <label v-html="recurringMessage"/>
 
-            <toggle-button size="lg" v-model="form.recurring"/>
+            <toggle-button size="lg" v-model.number="form.recurring"/>
 
             <small v-if="!recurring" class="text-muted form-text">You are making a single donation of the amount entered above. Click the 'monthly' button to make your gift go further as an automatic monthly donation.</small>
             <small v-if="!!recurring" class="text-muted form-text">This amount will be charged automatically once each month, on or about the {{ chargeDate }}. You may cancel your donation at any time by contacting us.</small>

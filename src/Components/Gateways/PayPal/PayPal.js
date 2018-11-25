@@ -22,10 +22,9 @@ export default class PayPal extends Api {
         return this._paypal;
     }
 
-    button(el, $dispatch) {
-        const button = this.paypal().Button.render({
-            // 'production' or 'sandbox'
-            env: 'sandbox',
+    button(el, context) {
+        return this.paypal().Button.render({
+            env: process.ENV === 'production' ? 'production' : 'sandbox',
 
             locale: 'en_US',
 
@@ -40,29 +39,12 @@ export default class PayPal extends Api {
 
             commit: false,
 
-            validate: (actions) => {
-                button.amount ? actions.enable() : actions.disable();
-                /*
-                $dispatch.reply('paypal:enable', (resolve, reject) => {
-                    actions.enable();
-                    resolve(actions);
-                });
-
-                $dispatch.reply('paypal:disable', (resolve, reject) => {
-                    actions.disable();
-                    resolve(actions);
-                });
-
-                $dispatch.emit('paypal:validate', actions);
-                */
-            },
-
             payment: function(data, actions) {
-                const payment = actions.payment.create({
+                return actions.payment.create({
                     payment: {
                         transactions: [{
                             amount: {
-                                total: button.amount,
+                                total: context.form.amount,
                                 currency: 'USD'
                             }
                         }]
@@ -73,37 +55,20 @@ export default class PayPal extends Api {
                         }
                     }
                 });
-
-                // $dispatch.emit('paypal:payment', payment);
-
-                return payment;
-            }
-
-            /*
-            onRender: function() {
-                // $dispatch.emit('paypal:render', this);
             },
 
-            onClick: function(data) {
-                // $dispatch.emit('paypal:click', this, data);
-            },
+            validate: context.onPaypalValidate,
 
-            onCancel: (data, actions) => {
-                // $dispatch.emit('paypal:cancel', data, actions);
-            },
+            onRender: context.onPaypalRender,
 
-            onError: (error) => {
-                // $dispatch.emit('paypal:error', error);
-            },
+            onClick: context.onPaypalClick,
 
-            onAuthorize: (data, actions) => {
-                // $dispatch.emit('paypal:authorize', data, actions);
-            }
-            */
+            onCancel: context.onPaypalCancel,
 
+            onError: context.onPaypalError,
+
+            onAuthorize: context.onPaypalAuthorize
         }, el);
-
-        return button;
     }
 
     script(success, error) {

@@ -42,17 +42,6 @@ export default {
         ContactInfoFieldset,
         EmploymentInfoFieldset,
         SelectDonationFieldset
-    },
-
-    computed: {
-
-        shouldShowEmployment() {
-            return (
-                this.page.site.type === 'PAC' ||
-                this.page.site.type === 'Campaign'
-            );
-        }
-
     }
 
 };

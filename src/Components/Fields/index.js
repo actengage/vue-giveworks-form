@@ -12,5 +12,6 @@ export {
     PaymentButtons,
     RadioField,
     SelectField,
+    TextareaField,
     ToggleButton
 };

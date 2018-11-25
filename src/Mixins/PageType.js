@@ -1,5 +1,6 @@
 import Page from '../Models/Page';
 import FormEvents from './FormEvents';
+import { isFunction } from 'vue-interface/src/Helpers/Functions';
 
 export default {
 
@@ -15,31 +16,47 @@ export default {
         FormEvents
     ],
 
+    computed: {
+
+        shouldShowEmployment() {
+            return this.page.site.type === 'PAC' || this.page.site.type === 'Campaign';
+        }
+
+    },
+
     methods: {
 
-        hide() {
-            this.$el.querySelector('[type=submit]').style.display = 'none';
+        submitButton() {
+            return this.$refs.submit || this.$el.querySelector('[type=submit]');
         },
 
-        show() {
-            this.$el.querySelector('[type=submit]').style.display = 'block';
+        hideSubmitButton() {
+            this.submitButton().style.display = 'none';
         },
 
-        disable() {
-            this.$el.querySelector('[type=submit]').disabled = true;
+        showSubmitButton() {
+            this.submitButton().style.display = 'block';
         },
 
-        enable() {
-            this.$el.querySelector('[type=submit]').disabled = false;
+        disableSubmitButton() {
+            this.submitButton().disabled = true;
+        },
+
+        enableSubmitButton() {
+            this.submitButton().disabled = false;
         },
 
         redirect(url) {
             setTimeout(() => {
-                window.location = url || (this.redirect || this.page.next_page.url);
+                window.location = url || this.page.next_page.url;
             });
         },
 
-        submit(e) {
+        submit(success, failed) {
+            if(this.$el.querySelector(':focus')) {
+                this.$el.querySelector(':focus').blur();
+            }
+
             return new Promise((resolve, reject) => {
                 if(!this.submitting) {
                     this.errors = {};
@@ -50,12 +67,22 @@ export default {
                             this.submitting = false;
                             this.$emit('submit-complete', true, response);
                             this.$emit('submit-success', response);
+
+                            if(isFunction(success)) {
+                                success(response);
+                            }
+
                             resolve(response);
                         }, response => {
                             this.submitting = false;
                             this.errors = response.data.errors;
                             this.$emit('submit-complete', true, response);
                             this.$emit('submit-success', response);
+
+                            if(isFunction(failed)) {
+                                failed(response);
+                            }
+
                             reject(response);
                         });
                 }
@@ -65,41 +92,16 @@ export default {
             });
         },
 
-        onSubmit() {
-            if(this.$el.querySelector(':focus')) {
-                this.$el.querySelector(':focus').blur();
-            }
-        },
-
-        onSubmitEnable() {
-            this.enable();
-        },
-
-        onSubmitDisable() {
-            this.disable();
-        },
-
-        onSubmitShow() {
-            this.show();
-        },
-
-        onSubmitHide() {
-            this.hide();
-        },
-
-        onRedirect(url) {
-            setTimeout(() => {
-                window.location = url || this.redirect || this.page.next_page.url;
-            });
+        onSubmitSuccess() {
+            console.log('onSubmitSuccess');
+            this.redirect();
         }
 
     },
 
     data() {
         return {
-            form: this.$attrs.form || {
-                recurring: 0
-            },
+            form: {},
             errors: {},
             submitting: false,
             model: new Page({

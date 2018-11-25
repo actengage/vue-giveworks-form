@@ -13,7 +13,8 @@ export default class Stripe extends Api {
             label: 'Credit Card',
             size: '2x',
             component: 'stripe-credit-card'
-        }, {
+        }/*
+        , {
             icon: ['fab', 'apple-pay'],
             size: '3x',
             component: 'stripe-payment-button'
@@ -22,7 +23,8 @@ export default class Stripe extends Api {
             label: 'Wallet',
             size: '2x',
             component: 'stripe-payment-button'
-        }];
+        }
+        */];
     }
 
     paymentRequest(amount, label) {

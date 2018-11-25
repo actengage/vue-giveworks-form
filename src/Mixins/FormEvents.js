@@ -19,7 +19,7 @@ export default {
 
                 for(const i in EVENTS) {
                     subject.$on(EVENTS[i], (...args) => {
-                        const method = camelCase('on-'+EVENTS[i]);
+                        const method = camelCase('on-' + EVENTS[i]);
 
                         if(subject !== context) {
                             context.$emit(EVENTS[i], ...args);

@@ -1,7 +1,8 @@
 import './scss/_variables.scss';
+import './scss/main.scss';
 import './scss/_buttons.scss';
 import './scss/_forms.scss';
-import './scss/main.scss';
+
 import GiveworksForm from './Components/GiveworksForm';
 
 if(!window || !window.Vue) {

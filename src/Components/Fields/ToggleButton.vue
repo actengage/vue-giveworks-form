@@ -1,6 +1,7 @@
 <template>
     <btn-group class="toggle-button" :size="size">
         <btn
+            ref="buttons"
             v-for="(label, i) in buttons"
             v-html="label"
             :key="i"
@@ -49,7 +50,15 @@ export default {
             }
         }
 
+    },
+
+    mounted() {
+        this.$refs.buttons.map((vnode, i) => {
+            if(vnode.$el.classList.contains('btn-success')) {
+                this.$emit('input', Object.keys(this.buttons).find(key => this.buttons[key] === vnode.$el.innerHTML));
+            }
+        });
     }
 
-}
+};
 </script>

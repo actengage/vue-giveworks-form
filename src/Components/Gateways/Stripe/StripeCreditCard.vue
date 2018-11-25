@@ -28,44 +28,20 @@
 import Gateway from '../Gateway';
 import wait from 'vue-interface/src/Helpers/Wait';
 import elapsed from 'vue-interface/src/Helpers/Elapsed';
-import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
+import PaymentGateway from '../../../Mixins/PaymentGateway';
 
 export default {
 
     name: 'stripe-credit-card',
 
-    components: {
-        ActivityIndicator
-    },
-
-    props: {
-        page: {
-            type: Object,
-            required: true
-        },
-        form: {
-            type: Object,
-            required: true
-        },
-        errors: {
-            type: Object,
-            required: true
-        },
-        gateway: {
-            type: Object,
-            required: true
-        },
-        hidePostalCode: {
-            type: Boolean,
-            default: false
-        }
-    },
-
+    mixins: [
+        PaymentGateway
+    ],
 
     mounted() {
         const gateway = Gateway(this.gateway);
 
-        // this.$emit('submit-disable');
+        this.pageType.disableSubmitButton();
         // this.$dispatch.request('submit:disable');
 
         gateway.script((event) => {
@@ -78,9 +54,7 @@ export default {
                 });
             }
             catch (e) {
-                this.$emit('error', e);
-                // this.$dispatch.emit('error', e);
-                throw e;
+                this.pageType.$emit('error', e);
             }
 
             this.$card.addEventListener('change', (event) => {
@@ -97,7 +71,7 @@ export default {
                                 }
                                 else {
                                     this.form.token = result.token.id;
-                                    this.$emit('submit-enable');
+                                    this.pageType.enableSubmitButton();
                                     // this.$dispatch.request('submit:enable');
                                     resolve(result);
                                 }

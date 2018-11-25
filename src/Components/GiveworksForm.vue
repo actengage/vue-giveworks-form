@@ -7,7 +7,7 @@
                 </div>
             </div>
         </div>
-        <form v-else-if="page.id" @submit.prevent="submit" novalidate="novalidate" :class="classes">
+        <form v-else-if="page.id" novalidate="novalidate" :class="classes" @submit.prevent="submit">
             <component
                 ref="type"
                 :is="pageTypeComponent"
@@ -86,7 +86,10 @@ export default {
     methods: {
 
         submit(e) {
-            this.$refs.type.submit(e);
+            this.$refs.type.submit(e).then(
+                this.pageType.onSubmitSuccess,
+                this.pageType.onSubmitError
+            );
         },
 
         onResize() {

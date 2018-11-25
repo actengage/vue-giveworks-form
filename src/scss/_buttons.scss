@@ -1,5 +1,11 @@
 @import '_variables.scss';
 
+.payment-buttons {
+    .input-group div:not(.input-group-prepend):not(.input-group-append) {
+        flex: 1;
+    }
+}
+
 .payment-buttons-grid,
 .payment-gateway-buttons {
     display: grid;
@@ -11,13 +17,9 @@
     }
 }
 
-.payment-buttons {
-    .input-group div:not(.input-group-prepend):not(.input-group-append) {
-        flex: 1;
-    }
-}
-
 .payment-gateway-buttons {
+    margin-bottom: $form-group-margin-bottom;
+
     .btn-secondary {
         color: $gray-600;
         background: $gray-200;

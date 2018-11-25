@@ -1,16 +1,9 @@
-
 // Bootstrap Theme Overrides
-
 // Example:
 // $font-size-base: 1.2rem !default;
 $font-family-base: 'Helvetica Nueue', Helvetica, Arial, sans-serif;
-// $green: lighten(#28a745, 5%);
 
 // Import mixins and functions
 @import "node_modules/bootstrap/scss/functions";
 @import "node_modules/bootstrap/scss/mixins";
 @import "node_modules/bootstrap/scss/variables";
-
-.giveworks-form {
-    font-family: $font-family-base;
-}

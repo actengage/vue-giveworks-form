@@ -18,39 +18,24 @@ import Gateway from '../Gateway';
 import wait from 'vue-interface/src/Helpers/Wait';
 import elapsed from 'vue-interface/src/Helpers/Elapsed';
 import CreditCardField from 'vue-credit-card-field/src/CreditCardField';
-import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
+import PaymentGateway from '../../../Mixins/PaymentGateway';
 
 export default {
 
     name: 'authorize-net-credit-card',
 
     components: {
-        CreditCardField,
-        ActivityIndicator
+        CreditCardField
     },
 
-    props: {
-        page: {
-            type: Object,
-            required: true
-        },
-        form: {
-            type: Object,
-            required: true
-        },
-        errors: {
-            type: Object,
-            required: true
-        },
-        gateway: {
-            type: Object,
-            required: true
-        }
-    },
+    mixins: [
+        PaymentGateway
+    ],
 
     methods: {
         onChange: function(event) {
             if(!event || !event.complete) {
+                this.pageType.disableSubmitButton();
                 // this.$dispatch.request('submit:disable');
             }
         },
@@ -66,11 +51,13 @@ export default {
                         if(event.messages.resultCode === 'Ok') {
                             this.$set(this.form, 'token', event.opaqueData.dataValue);
                             this.$set(this.form, 'tokenDescriptor', event.opaqueData.dataDescriptor);
+                            this.pageType.enableSubmitButton();
                             // this.$dispatch.request('submit:enable');
                             resolve(event);
                         }
                         else if(event.messages.resultCode === 'Error') {
                             this.error = event.messages.message[0].text;
+                            this.pageType.disableSubmitButton();
                             // this.$dispatch.request('submit:disable');
                             reject(this.error);
                         }
@@ -87,6 +74,7 @@ export default {
     },
 
     mounted() {
+        this.pageType.disableSubmitButton();
         // this.$dispatch.request('submit:disable');
 
         Gateway(this.gateway).script((event) => {

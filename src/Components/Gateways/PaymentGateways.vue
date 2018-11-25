@@ -20,9 +20,8 @@
         </alert>
 
         <div v-else>
-            <hr>
             <div v-if="button.active" v-for="button in buttons">
-                <component v-bind-events :is="button.component" :form="form" :page="page" :errors="errors" :gateway="button.gateway"/>
+                <component :is="button.component" :page-type="pageType" :form="form" :page="page" :errors="errors" :gateway="button.gateway"/>
             </div>
         </div>
 
@@ -58,6 +57,15 @@ export default {
     mixins: [
         FormComponent
     ],
+
+    props: {
+
+        pageType: {
+            type: Object,
+            required: true
+        }
+
+    },
 
     methods: {
 

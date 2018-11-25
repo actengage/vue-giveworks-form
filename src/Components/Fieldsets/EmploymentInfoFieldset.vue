@@ -5,19 +5,12 @@
 		<legend v-if="legends">Employment Information</legend>
 
 		<p v-if="!recurring">
-            <small class="text-muted" v-html="employmentOccurMessage"/>
+			<small class="text-muted" v-html="employmentOccurMessage"/>
 		</p>
 
-		<div class="row" v-if="!isRetired">
-			<div class="col-md-6">
-                <input-field v-model="form.employer" id="employer" name="employer" label="Employer" placeholder="Employer" :errors="errors" custom/>
-			</div>
-			<div class="col-md-6">
-                <input-field v-model="form.occupation" id="occupation" name="occupation" label="Occupation" placeholder="Occupation" :errors="errors" custom/>
-			</div>
-		</div>
-
-        <checkbox-field v-model="form.retired" name="retired" label="I'm retired" value="1" custom/>
+		<input-field v-if="!isRetired" ref="employer" v-model="form.employer" id="employer" name="employer" label="Employer" placeholder="Employer" :disabled="isRetired" :errors="errors" custom/>
+		<input-field v-if="!isRetired" ref="occupation" v-model="form.occupation" id="occupation" name="occupation" label="Occupation" placeholder="Occupation" :disabled="isRetired" :errors="errors" custom/>
+		<checkbox-field v-model="form.retired" label="I'm retired" value="1" custom/>
 
 	</fieldset>
 
@@ -41,10 +34,23 @@ export default {
         CheckboxField
     },
 
+    watch: {
+
+        'form.retired': function(value) {
+            if(value && value.length) {
+                this.form.employer = this.form.occupation = 'Retired';
+            }
+            else {
+                this.form.employer = this.form.occupation = '';
+            }
+        }
+
+    },
+
     computed: {
 
         isRetired() {
-            return this.employer === 'Retired' && this.occupation === 'Retired';
+            return !!(this.form.retired && this.form.retired.length);
         },
 
         employmentOccurMessage() {

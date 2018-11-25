@@ -46,61 +46,36 @@
 </template>
 
 <script>
-import '../../../Config/Icons';
 import Gateway from '../Gateway';
-import Btn from 'vue-interface/src/Components/Btn';
-import Alert from 'vue-interface/src/Components/Alert';
-import { FontAwesomeIcon as Icon } from '@fortawesome/vue-fontawesome';
-import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
+import PaymentGateway from '../../../Mixins/PaymentGateway';
 
 export default {
 
     name: 'stripe-payment-button',
 
-    components: {
-        Btn,
-        Icon,
-        Alert,
-        ActivityIndicator
-    },
-
-    props: {
-        page: {
-            type: Object,
-            required: true
-        },
-        form: {
-            type: Object,
-            required: true
-        },
-        errors: {
-            type: Object,
-            required: true
-        },
-        gateway: {
-            type: Object,
-            required: true
-        }
-    },
-
-    data() {
-        return {
-            card: false,
-            error: false,
-            loaded: false,
-            submitting: false,
-            changingCard: false
-        };
-    },
+    mixins: [
+        PaymentGateway
+    ],
 
     methods: {
+
         changeCard: function(event) {
             this.changingCard = true;
             this.$paymentRequest.show();
         },
+
         getPaymentLabel: function() {
-            return 'Donation to ' + this.page.site.name;
+            return `Donation to ${this.page.site.name}`;
+        },
+
+        onSubmit() {
+            this.submitting = true;
+        },
+
+        onSubmitComplete() {
+            this.submitting = false;
         }
+
     },
 
     updated() {
@@ -116,9 +91,11 @@ export default {
         }
     },
 
-    created() {
+    beforeCreate() {
+        this.pageType.$on('submit', this.onSubmit);
+        this.pageType.$on('submit-complete', this.onSubmitComplete);
+
         /*
-        this.$dispatch.request('form').then(form => {
         this.$dispatch.request('form').then(form => {
             if(form.$card) {
                 this.card = form.$card;
@@ -136,31 +113,26 @@ export default {
     },
 
     beforeDestroy() {
-        /*
-        if(this.card) {
-            this.$dispatch.request('form').then(form => {
-                form.$card = this.card;
-            });
-        }
-
-        this.$dispatch.request('submit:show');
-        this.$dispatch.off(this.$submitEvent);
-        this.$dispatch.off(this.$submitCompleteEvent);
-        */
+        this.pageType.$off('submit', this.onSubmit);
+        this.pageType.$off('submit-complete', this.onSubmitComplete);
     },
 
     mounted() {
         const gateway = Gateway(this.gateway);
 
+        this.pageType.hideSubmitButton();
         // this.$dispatch.request('submit:hide');
 
         gateway.script((event) => {
-            this.$paymentRequest = gateway.paymentRequest(1000, this.getPaymentLabel());
+            this.$paymentRequest = gateway.paymentRequest(this.form.amount, this.getPaymentLabel());
             this.$paymentRequestButton = gateway.paymentRequestButton(this.$paymentRequest);
 
             this.$paymentRequestButton.on('click', (event) => {
                 if(this.form.token) {
-                    // this.$dispatch.request('form:submit');
+                    this.pageType.submit(
+                        this.pageType.onSubmitSuccess,
+                        this.pageType.onSubmitError
+                    );
                 }
             });
 
@@ -180,6 +152,10 @@ export default {
                 this.form.token = event.token.id;
 
                 if(!this.changingCard) {
+                    this.pageType.submit(
+                        this.pageType.onSubmitSuccess,
+                        this.pageType.onSubmitError
+                    );
                     // this.$dispatch.request('form:submit');
                 }
                 else {
@@ -191,6 +167,16 @@ export default {
                 this.loaded = true;
             });
         });
+    },
+
+    data() {
+        return {
+            card: false,
+            error: false,
+            loaded: false,
+            submitting: false,
+            changingCard: false
+        };
     }
 
 };

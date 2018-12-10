@@ -19,6 +19,7 @@
                 placeholder="Other Amount"
                 :group="false"
                 :value="value"
+                :class="{'mb-3': !page.site.recurring}"
                 @input="value => $emit('input', value)"/>
         </input-group>
 

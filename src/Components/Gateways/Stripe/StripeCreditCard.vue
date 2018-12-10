@@ -11,7 +11,7 @@
         <label v-else class="d-block mt-3">
             <div class="text-bold mb-2">Credit Card</div>
             <div class="stripe-field" :class="{'has-activity': activity}">
-                <div class="form-control p-2" :class="{'is-invalid': !!errors.token}">
+                <div class="form-control" :class="{'is-invalid': !!errors.token}">
                     <div ref="input" class="stripe-field-input"/>
                 </div>
                 <div class="stripe-field-activity">
@@ -108,7 +108,9 @@ export default {
 
     .form-control {
         width: 100%;
+        padding: 1em;
         transition: all .15s ease-in-out;
+        height: calc((1em * 2.5) + (0.75em * 2));
     }
 
     .stripe-field-activity {

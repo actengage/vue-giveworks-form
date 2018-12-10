@@ -5816,7 +5816,7 @@
                     _c(
                       "div",
                       {
-                        staticClass: "form-control p-2",
+                        staticClass: "form-control",
                         class: { "is-invalid": !!_vm.errors.token }
                       },
                       [
@@ -12615,6 +12615,7 @@
             },
             [
               _c("input-field", {
+                class: { "mb-3": !_vm.page.site.recurring },
                 attrs: {
                   custom: "",
                   label: "Other Amount",

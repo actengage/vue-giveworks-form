@@ -1,5 +1,4 @@
-import './scss/_variables.scss';
-import './scss/main.scss';
+import './scss/_global.scss';
 import './scss/_buttons.scss';
 import './scss/_forms.scss';
 

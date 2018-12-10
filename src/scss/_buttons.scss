@@ -1,4 +1,6 @@
-@import '_variables.scss';
+@import 'node_modules/bootstrap/scss/functions';
+@import 'node_modules/bootstrap/scss/mixins';
+@import 'node_modules/bootstrap/scss/variables';
 
 .payment-buttons {
     .input-group div:not(.input-group-prepend):not(.input-group-append) {
@@ -13,7 +15,7 @@
     grid-template-columns: repeat(3, 1fr);
 
     .btn {
-        padding: 1rem;
+        padding: 1em;
     }
 }
 

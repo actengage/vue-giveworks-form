@@ -51,6 +51,11 @@ export default {
 
     props: {
 
+        page: {
+            type: Object,
+            required: true
+        },
+
         amounts: {
             type: Array,
             required: true

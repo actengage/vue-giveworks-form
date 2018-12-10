@@ -12555,6 +12555,10 @@
         FormFeedback
       },
       props: {
+        page: {
+          type: Object,
+          required: true
+        },
         amounts: {
           type: Array,
           required: true
@@ -12732,7 +12736,12 @@
             : _vm._e(),
           _vm._v(" "),
           _c("payment-buttons", {
-            attrs: { name: "amount", amounts: _vm.amounts, errors: _vm.errors },
+            attrs: {
+              name: "amount",
+              amounts: _vm.amounts,
+              errors: _vm.errors,
+              page: _vm.page
+            },
             model: {
               value: _vm.form.amount,
               callback: function($$v) {

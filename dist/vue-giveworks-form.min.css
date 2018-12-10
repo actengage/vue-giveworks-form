@@ -14,7 +14,7 @@
 @-webkit-keyframes activity-indicator-dots{0%,80%,to{-webkit-transform:scale(0);transform:scale(0)}40%{-webkit-transform:scale(1);transform:scale(1)}}@keyframes activity-indicator-dots{0%,80%,to{-webkit-transform:scale(0);transform:scale(0)}40%{-webkit-transform:scale(1);transform:scale(1)}}
 .giveworks-form .form-group{position:relative}.giveworks-form .form-group .activity-indicator{position:absolute;right:0;top:50%;-webkit-transform:translate(-1rem,-50%);transform:translate(-1rem,-50%);transition:all .25s ease-in}
 
-
 .giveworks-form .has-activity select{-webkit-appearance:none;-moz-appearance:none;appearance:none}.giveworks-form .has-activity select::-ms-expand{display:none}
 .giveworks-form .input-group>div:not(:first-child) .custom-control,.giveworks-form .input-group>div:not(:first-child) .form-control{border-top-left-radius:0;border-bottom-left-radius:0}.giveworks-form .input-group>div:not(:last-child) .custom-control,.giveworks-form .input-group>div:not(:last-child) .form-control{border-top-right-radius:0;border-bottom-right-radius:0}
+
 

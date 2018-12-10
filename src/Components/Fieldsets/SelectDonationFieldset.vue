@@ -8,7 +8,7 @@
             <small class="text-muted">Minimum accepted amount is ${{ page.options.min_amount }}</small>
         </div>
 
-        <payment-buttons v-model="form.amount" name="amount" :amounts="amounts" :errors="errors"/>
+        <payment-buttons v-model="form.amount" name="amount" :amounts="amounts" :errors="errors" :page="page"/>
 
         <div class="form-group mt-3" v-if="page.site.recurring && !page.options.recurring_only">
             <label v-html="recurringMessage"/>

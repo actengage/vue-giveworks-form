@@ -2,7 +2,7 @@
 
 	<fieldset>
 
-		<legend v-if="legends">Employment Information</legend>
+		<h3 v-if="legends">Employment Information</h3>
 
 		<p v-if="!recurring">
 			<small class="text-muted" v-html="employmentOccurMessage"/>
@@ -28,6 +28,13 @@ export default {
     mixins: [
         FormComponent
     ],
+
+    props: {
+        legends: {
+            type: Boolean,
+            default: true
+        }
+    },
 
     components: {
         InputField,

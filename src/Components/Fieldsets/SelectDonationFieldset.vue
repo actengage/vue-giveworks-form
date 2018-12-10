@@ -2,7 +2,7 @@
 
     <fieldset>
 
-        <legend :class="{'mb-0': hasMinimumAmount}">Select your donation amount</legend>
+        <h3 :class="{'mb-0': hasMinimumAmount}" v-if="legends">Select your donation amount</h3>
 
         <div v-if="hasMinimumAmount" class="mb-2">
             <small class="text-muted">Minimum accepted amount is ${{ page.options.min_amount }}</small>
@@ -54,6 +54,13 @@ export default {
     mixins: [
         FormComponent
     ],
+
+    props: {
+        legends: {
+            type: Boolean,
+            default: true
+        }
+    },
 
     computed: {
 

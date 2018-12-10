@@ -26,6 +26,13 @@ export default {
         PaymentGateways
     },
 
+    props: {
+        legends: {
+            type: Boolean,
+            default: true
+        }
+    },
+
     mixins: [
         FormComponent
     ]

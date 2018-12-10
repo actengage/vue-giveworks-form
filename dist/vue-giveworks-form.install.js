@@ -10916,7 +10916,10 @@
       },
       props: {
         address: Boolean,
-        legends: Boolean
+        legends: {
+          type: Boolean,
+          default: true
+        }
       },
       computed: {
         titles() {
@@ -10941,7 +10944,7 @@
       return _c(
         "fieldset",
         [
-          _vm.legends ? _c("legend", [_vm._v("Your information")]) : _vm._e(),
+          _vm.legends ? _c("h3", [_vm._v("Your information")]) : _vm._e(),
           _vm._v(" "),
           _vm.page.options.add_title
             ? _c(
@@ -11741,6 +11744,12 @@
     var script$w = {
       name: 'employment-info-fieldset',
       mixins: [FormComponent],
+      props: {
+        legends: {
+          type: Boolean,
+          default: true
+        }
+      },
       components: {
         InputField,
         CheckboxField
@@ -11777,7 +11786,7 @@
       return _c(
         "fieldset",
         [
-          _vm.legends ? _c("legend", [_vm._v("Employment Information")]) : _vm._e(),
+          _vm.legends ? _c("h3", [_vm._v("Employment Information")]) : _vm._e(),
           _vm._v(" "),
           !_vm.recurring
             ? _c("p", [
@@ -12686,6 +12695,12 @@
         PaymentButtons
       },
       mixins: [FormComponent],
+      props: {
+        legends: {
+          type: Boolean,
+          default: true
+        }
+      },
       computed: {
         recurringMessage() {
           return this.page.options.recur_mess || this.page.site.config.giveworks.recur_mess;
@@ -12719,9 +12734,11 @@
       return _c(
         "fieldset",
         [
-          _c("legend", { class: { "mb-0": _vm.hasMinimumAmount } }, [
-            _vm._v("Select your donation amount")
-          ]),
+          _vm.legends
+            ? _c("h3", { class: { "mb-0": _vm.hasMinimumAmount } }, [
+                _vm._v("Select your donation amount")
+              ])
+            : _vm._e(),
           _vm._v(" "),
           _vm.hasMinimumAmount
             ? _c("div", { staticClass: "mb-2" }, [
@@ -13092,7 +13109,7 @@
           _vm._v(" "),
           _c("btn-activity", {
             attrs: {
-              size: "md",
+              size: "lg",
               type: "submit",
               orientation: "right",
               block: true,
@@ -13652,7 +13669,7 @@
           _vm._v(" "),
           _c("btn-activity", {
             attrs: {
-              size: "md",
+              size: "lg",
               type: "submit",
               orientation: "right",
               activity: _vm.submitting,
@@ -15414,7 +15431,7 @@
           _vm._v(" "),
           _c("btn-activity", {
             attrs: {
-              size: "md",
+              size: "lg",
               type: "submit",
               block: true,
               orientation: "right",
@@ -15721,6 +15738,12 @@
       components: {
         TextareaField,
         PaymentGateways
+      },
+      props: {
+        legends: {
+          type: Boolean,
+          default: true
+        }
       },
       mixins: [FormComponent]
     };

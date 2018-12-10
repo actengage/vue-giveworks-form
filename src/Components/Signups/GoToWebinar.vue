@@ -41,7 +41,7 @@
         <input-field v-if="page.options.show_role" v-model="form.purchasing_role" id="purchasing_role" label="Purchasing Role" placeholder="Purchasing Role" :errors="errors" custom/>
 
         <btn-activity
-            size="md"
+            size="lg"
             type="submit"
             orientation="right"
             :activity="submitting"

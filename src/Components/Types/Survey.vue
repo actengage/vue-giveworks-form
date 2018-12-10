@@ -13,7 +13,7 @@
         </div>
 
         <btn-activity
-            size="md"
+            size="lg"
             type="submit"
             :block="true"
             orientation="right"

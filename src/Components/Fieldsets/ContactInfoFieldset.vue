@@ -2,7 +2,7 @@
 
     <fieldset>
 
-        <legend v-if="legends">Your information</legend>
+        <h3 v-if="legends">Your information</h3>
 
         <select-field v-if="page.options.add_title" v-model="form.title" name="title" label="Title" placeholder="Title" :errors="errors" custom>
             <option v-for="value in titles" :value="value" v-html="value"/>
@@ -76,7 +76,10 @@ export default {
 
     props: {
         address: Boolean,
-        legends: Boolean
+        legends: {
+            type: Boolean,
+            default: true
+        }
     },
 
     computed: {

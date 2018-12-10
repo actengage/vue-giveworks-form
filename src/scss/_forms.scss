@@ -431,6 +431,13 @@ $custom-control-transition: $input-transition, padding .15s ease-out;
 }
 
 .input-group {
+
+    .form-control,
+    .custom-select,
+    .custom-control {
+        border: 0;
+    }
+
     &.is-invalid .input-group-prepend::after,
     &.is-invalid .input-group-prepend span,
     &.is-invalid .input-group-append::after,

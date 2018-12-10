@@ -392,6 +392,11 @@
     line-height: 1.5;
     border-radius: 0.3rem; }
 
+.giveworks-form .input-group .form-control,
+.giveworks-form .input-group .custom-select,
+.giveworks-form .input-group .custom-control {
+  border: 0; }
+
 .giveworks-form .input-group.is-invalid .input-group-prepend::after,
 .giveworks-form .input-group.is-invalid .input-group-prepend span,
 .giveworks-form .input-group.is-invalid .input-group-append::after,
@@ -8282,18 +8287,6 @@
           transform: translate(25%, -50%);
 }
 
-.giveworks-form .has-activity {
-  /* For IE10 */
-}
-.giveworks-form .has-activity select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-.giveworks-form .has-activity select::-ms-expand {
-    display: none;
-}
-
 .giveworks-form .input-group > div:not(:first-child) .form-control,
 .giveworks-form .input-group > div:not(:first-child) .custom-control,
 .giveworks-form .input-group > div:not(:first-child) .custom-select {
@@ -8305,6 +8298,18 @@
 .giveworks-form .input-group > div:not(:last-child) .custom-select {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
+}
+
+.giveworks-form .has-activity {
+  /* For IE10 */
+}
+.giveworks-form .has-activity select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+.giveworks-form .has-activity select::-ms-expand {
+    display: none;
 }
 
 .giveworks-form .credit-card-field-wrapper {

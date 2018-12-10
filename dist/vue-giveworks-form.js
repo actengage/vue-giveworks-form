@@ -12614,12 +12614,14 @@
           _c(
             "input-group",
             {
-              class: { "is-invalid": !!_vm.errors.amount },
+              class: {
+                "is-invalid": !!_vm.errors.amount,
+                "mb-3": !_vm.page.site.recurring
+              },
               attrs: { prepend: "$" }
             },
             [
               _c("input-field", {
-                class: { "mb-3": !_vm.page.site.recurring },
                 attrs: {
                   custom: "",
                   label: "Other Amount",

@@ -12,14 +12,13 @@
                 @click="onClickButton(amount)"/>
         </div>
 
-        <input-group prepend="$" :class="{'is-invalid': !!errors.amount}">
+        <input-group prepend="$" :class="{'is-invalid': !!errors.amount, 'mb-3': !page.site.recurring}">
             <input-field
                 custom
                 label="Other Amount"
                 placeholder="Other Amount"
                 :group="false"
                 :value="value"
-                :class="{'mb-3': !page.site.recurring}"
                 @input="value => $emit('input', value)"/>
         </input-group>
 

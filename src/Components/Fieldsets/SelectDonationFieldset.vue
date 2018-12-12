@@ -12,18 +12,21 @@
 
         <div class="form-group mt-3" v-if="page.site.recurring && !page.options.recurring_only">
             <label v-html="recurringMessage"/>
-
             <toggle-button size="lg" v-model.number="form.recurring"/>
-
             <small v-if="!recurring" class="text-muted form-text">You are making a single donation of the amount entered above. Click the 'monthly' button to make your gift go further as an automatic monthly donation.</small>
-            <small v-if="!!recurring" class="text-muted form-text">This amount will be charged automatically once each month, on or about the {{ chargeDate }}. You may cancel your donation at any time by contacting us.</small>
+            <small v-else class="text-muted form-text">This amount will be charged automatically once each month, on or about the {{ chargeDate }}. You may cancel your donation at any time by contacting us.</small>
         </div>
-        <alert variant="warning" class="mt-3" v-else-if="page.site.recurring && page.options.recurring_only">
-            <alert-heading><icon icon="exclamation-triangle"/> Monthly Donation</alert-heading>
-            <div v-if="page.options.recur_message" v-html="page.options.recur_message"/>
-            <div v-else>
-                Please note that this will be a monthly recurring donation. The amount you select will be charged automatically once each month on or about the {{ chargeDate }}.  You may cancel your donation at any time by contacting us.
-            </div>
+        <alert v-else-if="page.site.recurring && page.options.recurring_only" variant="warning" class="mt-3">
+            <alert-heading class="h3 d-flex align-items-center">
+                <icon icon="exclamation-triangle" size="1.5x" class="mr-3"/> Monthly Donation
+            </alert-heading>
+            <p v-if="page.options.recur_message" class="font-weight-light" v-html="page.options.recur_message"/>
+            <p v-else>
+                Please note that this will be a monthly recurring donation. The
+                amount you select will be charged automatically once each month
+                on or about <em>{{ chargeDate }}</em>.  You may cancel your donation
+                at any time by contacting us.
+            </p>
         </alert>
 
     </fieldset>
@@ -69,7 +72,13 @@ export default {
         },
 
         chargeDate() {
-            // return moment().format('do');
+            const now = new Date();
+
+            return [
+                now.getMonth() + 1,
+                now.getDate(),
+                now.getFullYear()
+            ].join('/');
         },
 
         hasMinimumAmount() {

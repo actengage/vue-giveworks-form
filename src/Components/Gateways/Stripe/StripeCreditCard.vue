@@ -9,7 +9,6 @@
         </div>
 
         <label v-else class="d-block mt-3">
-            <div class="text-bold mb-2">Credit Card</div>
             <div class="stripe-field" :class="{'has-activity': activity}">
                 <div class="form-control" :class="{'is-invalid': !!errors.token}">
                     <div ref="input" class="stripe-field-input"/>

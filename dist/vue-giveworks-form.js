@@ -5802,10 +5802,6 @@
                 )
               ])
             : _c("label", { staticClass: "d-block mt-3" }, [
-                _c("div", { staticClass: "text-bold mb-2" }, [
-                  _vm._v("Credit Card")
-                ]),
-                _vm._v(" "),
                 _c(
                   "div",
                   {
@@ -9171,8 +9167,6 @@
             "div",
             { staticClass: "form-group" },
             [
-              _c("div", { staticClass: "text-bold mb-2" }, [_vm._v("Credit Card")]),
-              _vm._v(" "),
               _c("credit-card-field", {
                 attrs: {
                   activity: _vm.activity,
@@ -10947,8 +10941,6 @@
       return _c(
         "fieldset",
         [
-          _vm.legends ? _c("h3", [_vm._v("Your information")]) : _vm._e(),
-          _vm._v(" "),
           _vm.page.options.add_title
             ? _c(
                 "select-field",
@@ -12709,7 +12701,9 @@
           return this.page.options.recur_mess || this.page.site.config.giveworks.recur_mess;
         },
 
-        chargeDate() {// return moment().format('do');
+        chargeDate() {
+          const now = new Date();
+          return [now.getMonth() + 1, now.getDate(), now.getFullYear()].join('/');
         },
 
         hasMinimumAmount() {
@@ -12796,17 +12790,13 @@
                           "You are making a single donation of the amount entered above. Click the 'monthly' button to make your gift go further as an automatic monthly donation."
                         )
                       ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  !!_vm.recurring
-                    ? _c("small", { staticClass: "text-muted form-text" }, [
+                    : _c("small", { staticClass: "text-muted form-text" }, [
                         _vm._v(
                           "This amount will be charged automatically once each month, on or about the " +
                             _vm._s(_vm.chargeDate) +
                             ". You may cancel your donation at any time by contacting us."
                         )
                       ])
-                    : _vm._e()
                 ],
                 1
               )
@@ -12817,24 +12807,31 @@
                   [
                     _c(
                       "alert-heading",
+                      { staticClass: "h3 d-flex align-items-center" },
                       [
-                        _c("icon", { attrs: { icon: "exclamation-triangle" } }),
-                        _vm._v(" Monthly Donation")
+                        _c("icon", {
+                          staticClass: "mr-3",
+                          attrs: { icon: "exclamation-triangle", size: "1.5x" }
+                        }),
+                        _vm._v(" Monthly Donation\n        ")
                       ],
                       1
                     ),
                     _vm._v(" "),
                     _vm.page.options.recur_message
-                      ? _c("div", {
+                      ? _c("p", {
+                          staticClass: "font-weight-light",
                           domProps: {
                             innerHTML: _vm._s(_vm.page.options.recur_message)
                           }
                         })
-                      : _c("div", [
+                      : _c("p", [
                           _vm._v(
-                            "\n            Please note that this will be a monthly recurring donation. The amount you select will be charged automatically once each month on or about the " +
-                              _vm._s(_vm.chargeDate) +
-                              ".  You may cancel your donation at any time by contacting us.\n        "
+                            "\n            Please note that this will be a monthly recurring donation. The\n            amount you select will be charged automatically once each month\n            on or about "
+                          ),
+                          _c("em", [_vm._v(_vm._s(_vm.chargeDate))]),
+                          _vm._v(
+                            ".  You may cancel your donation\n            at any time by contacting us.\n        "
                           )
                         ])
                   ],

@@ -7,7 +7,6 @@
     </div>
 
     <div v-else class="form-group">
-        <div class="text-bold mb-2">Credit Card</div>
         <credit-card-field :activity="activity" :error="error || errors.token" @change="onChange" @complete="onComplete"/>
     </div>
 

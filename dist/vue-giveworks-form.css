@@ -64,6 +64,7 @@
 .giveworks-form .custom-textarea-field.is-valid .invalid-feedback {
   display: block; }
 
+.giveworks-form .credit-card-field-wrapper .form-control,
 .giveworks-form .custom-select-field .form-group-inner,
 .giveworks-form .custom-input-field .custom-control,
 .giveworks-form .custom-textarea-field .custom-control {
@@ -81,15 +82,18 @@
   border-radius: 0.25rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, padding 0.15s ease-out; }
   @media screen and (prefers-reduced-motion: reduce) {
+    .giveworks-form .credit-card-field-wrapper .form-control,
     .giveworks-form .custom-select-field .form-group-inner,
     .giveworks-form .custom-input-field .custom-control,
     .giveworks-form .custom-textarea-field .custom-control {
       transition: none; } }
+  .giveworks-form .credit-card-field-wrapper .form-control::-ms-expand,
   .giveworks-form .custom-select-field .form-group-inner::-ms-expand,
   .giveworks-form .custom-input-field .custom-control::-ms-expand,
   .giveworks-form .custom-textarea-field .custom-control::-ms-expand {
     background-color: transparent;
     border: 0; }
+  .giveworks-form .credit-card-field-wrapper .form-control:focus,
   .giveworks-form .custom-select-field .form-group-inner:focus,
   .giveworks-form .custom-input-field .custom-control:focus,
   .giveworks-form .custom-textarea-field .custom-control:focus {
@@ -98,43 +102,51 @@
     border-color: #80bdff;
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
+  .giveworks-form .credit-card-field-wrapper .form-control::-webkit-input-placeholder,
   .giveworks-form .custom-select-field .form-group-inner::-webkit-input-placeholder,
   .giveworks-form .custom-input-field .custom-control::-webkit-input-placeholder,
   .giveworks-form .custom-textarea-field .custom-control::-webkit-input-placeholder {
     transition: opacity .15s ease-out;
     opacity: 1; }
+  .giveworks-form .credit-card-field-wrapper .form-control:-ms-input-placeholder,
   .giveworks-form .custom-select-field .form-group-inner:-ms-input-placeholder,
   .giveworks-form .custom-input-field .custom-control:-ms-input-placeholder,
   .giveworks-form .custom-textarea-field .custom-control:-ms-input-placeholder {
     transition: opacity .15s ease-out;
     opacity: 1; }
+  .giveworks-form .credit-card-field-wrapper .form-control::-ms-input-placeholder,
   .giveworks-form .custom-select-field .form-group-inner::-ms-input-placeholder,
   .giveworks-form .custom-input-field .custom-control::-ms-input-placeholder,
   .giveworks-form .custom-textarea-field .custom-control::-ms-input-placeholder {
     transition: opacity .15s ease-out;
     opacity: 1; }
+  .giveworks-form .credit-card-field-wrapper .form-control::placeholder,
   .giveworks-form .custom-select-field .form-group-inner::placeholder,
   .giveworks-form .custom-input-field .custom-control::placeholder,
   .giveworks-form .custom-textarea-field .custom-control::placeholder {
     transition: opacity .15s ease-out;
     opacity: 1; }
+  .giveworks-form .credit-card-field-wrapper .form-control.is-invalid::-webkit-input-placeholder,
   .giveworks-form .custom-select-field .form-group-inner.is-invalid::-webkit-input-placeholder,
   .giveworks-form .custom-input-field .custom-control.is-invalid::-webkit-input-placeholder,
   .giveworks-form .custom-textarea-field .custom-control.is-invalid::-webkit-input-placeholder {
     color: #dc3545; }
+  .giveworks-form .credit-card-field-wrapper .form-control.is-invalid:-ms-input-placeholder,
   .giveworks-form .custom-select-field .form-group-inner.is-invalid:-ms-input-placeholder,
   .giveworks-form .custom-input-field .custom-control.is-invalid:-ms-input-placeholder,
   .giveworks-form .custom-textarea-field .custom-control.is-invalid:-ms-input-placeholder {
     color: #dc3545; }
+  .giveworks-form .credit-card-field-wrapper .form-control.is-invalid::-ms-input-placeholder,
   .giveworks-form .custom-select-field .form-group-inner.is-invalid::-ms-input-placeholder,
   .giveworks-form .custom-input-field .custom-control.is-invalid::-ms-input-placeholder,
   .giveworks-form .custom-textarea-field .custom-control.is-invalid::-ms-input-placeholder {
     color: #dc3545; }
+  .giveworks-form .credit-card-field-wrapper .form-control.is-invalid::placeholder,
   .giveworks-form .custom-select-field .form-group-inner.is-invalid::placeholder,
   .giveworks-form .custom-input-field .custom-control.is-invalid::placeholder,
   .giveworks-form .custom-textarea-field .custom-control.is-invalid::placeholder {
     color: #dc3545; }
-  .giveworks-form .custom-select-field .form-group-inner:disabled, .giveworks-form .custom-select-field .form-group-inner[readonly], .giveworks-form .custom-input-field .custom-control:disabled, .giveworks-form .custom-input-field .custom-control[readonly], .giveworks-form .custom-textarea-field .custom-control:disabled, .giveworks-form .custom-textarea-field .custom-control[readonly] {
+  .giveworks-form .credit-card-field-wrapper .form-control:disabled, .giveworks-form .credit-card-field-wrapper .form-control[readonly], .giveworks-form .custom-select-field .form-group-inner:disabled, .giveworks-form .custom-select-field .form-group-inner[readonly], .giveworks-form .custom-input-field .custom-control:disabled, .giveworks-form .custom-input-field .custom-control[readonly], .giveworks-form .custom-textarea-field .custom-control:disabled, .giveworks-form .custom-textarea-field .custom-control[readonly] {
     background-color: #e9ecef;
     opacity: 1; }
 
@@ -6776,6 +6788,8 @@
   font-family: "Helvetica Nueue", Helvetica, Arial, sans-serif; }
   .giveworks-form .btn {
     font-size: 1em; }
+  .giveworks-form .show.fade {
+    opacity: 1; }
 
 
 @-webkit-keyframes btn-activity-in {
@@ -7205,6 +7219,12 @@
     width: 7.5%;
 }
 
+.giveworks-form .paypal-payment-button.disabled,
+.giveworks-form .paypal-payment-button:disabled {
+    opacity: .5;
+}
+
+
 .giveworks-form .stripe-field {
   position: relative;
 }
@@ -7229,120 +7249,6 @@
 }
 .giveworks-form .stripe-field.has-activity .stripe-field-activity {
     opacity: 1;
-}
-
-.giveworks-form .paypal-payment-button.disabled,
-.giveworks-form .paypal-payment-button:disabled {
-    opacity: .5;
-}
-
-
-.giveworks-form .activity-indicator-dots > div {
-  border-radius: 100%;
-  display: inline-block;
-  background-color: #212529;
-  width: 0.6rem;
-  height: 0.6rem;
-  -webkit-animation: activity-indicator-dots 1.4s infinite ease-in-out both;
-          animation: activity-indicator-dots 1.4s infinite ease-in-out both;
-}
-.giveworks-form .activity-indicator-dots > div:not(:last-child) {
-  margin-right: 0.198rem;
-}
-.giveworks-form .activity-indicator-dots.activity-indicator-xs > div {
-  width: 0.3rem;
-  height: 0.3rem;
-}
-.giveworks-form .activity-indicator-dots.activity-indicator-sm > div {
-  width: 0.45rem;
-  height: 0.45rem;
-}
-.giveworks-form .activity-indicator-dots.activity-indicator-md > div {
-  width: 0.6rem;
-  height: 0.6rem;
-}
-.giveworks-form .activity-indicator-dots.activity-indicator-lg > div {
-  width: 0.9rem;
-  height: 0.9rem;
-}
-.giveworks-form .activity-indicator-dots.activity-indicator-xl > div {
-  width: 1.2rem;
-  height: 1.2rem;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(1) {
-  -webkit-animation-delay: 0s;
-          animation-delay: 0s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(2) {
-  -webkit-animation-delay: 0.16s;
-          animation-delay: 0.16s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(3) {
-  -webkit-animation-delay: 0.32s;
-          animation-delay: 0.32s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(4) {
-  -webkit-animation-delay: 0.48s;
-          animation-delay: 0.48s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(5) {
-  -webkit-animation-delay: 0.64s;
-          animation-delay: 0.64s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(6) {
-  -webkit-animation-delay: 0.8s;
-          animation-delay: 0.8s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(7) {
-  -webkit-animation-delay: 0.96s;
-          animation-delay: 0.96s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(8) {
-  -webkit-animation-delay: 1.12s;
-          animation-delay: 1.12s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(9) {
-  -webkit-animation-delay: 1.28s;
-          animation-delay: 1.28s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(10) {
-  -webkit-animation-delay: 1.44s;
-          animation-delay: 1.44s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(11) {
-  -webkit-animation-delay: 1.6s;
-          animation-delay: 1.6s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(12) {
-  -webkit-animation-delay: 1.76s;
-          animation-delay: 1.76s;
-}
-.giveworks-form .activity-indicator-dots > div:nth-child(13) {
-  -webkit-animation-delay: 1.92s;
-          animation-delay: 1.92s;
-}
-@-webkit-keyframes activity-indicator-dots {
-0%, 80%, 100% {
-    -webkit-transform: scale(0);
-            transform: scale(0);
-}
-40% {
-    -webkit-transform: scale(1);
-            transform: scale(1);
-}
-}
-@keyframes activity-indicator-dots {
-0%, 80%, 100% {
-    -webkit-transform: scale(0);
-            transform: scale(0);
-}
-40% {
-    -webkit-transform: scale(1);
-            transform: scale(1);
-}
-}
-.giveworks-form .btn-activity-indicator-dots:not(.btn-warning) .activity-indicator-dots > div {
-  background: white;
 }
 
 .giveworks-form .activity-indicator-spinner {
@@ -8186,6 +8092,114 @@
 }
 .giveworks-form .btn-activity-indicator-spinner:not(.btn-warning) .activity-indicator-spinner > div:before {
   background-color: white;
+}
+
+.giveworks-form .activity-indicator-dots > div {
+  border-radius: 100%;
+  display: inline-block;
+  background-color: #212529;
+  width: 0.6rem;
+  height: 0.6rem;
+  -webkit-animation: activity-indicator-dots 1.4s infinite ease-in-out both;
+          animation: activity-indicator-dots 1.4s infinite ease-in-out both;
+}
+.giveworks-form .activity-indicator-dots > div:not(:last-child) {
+  margin-right: 0.198rem;
+}
+.giveworks-form .activity-indicator-dots.activity-indicator-xs > div {
+  width: 0.3rem;
+  height: 0.3rem;
+}
+.giveworks-form .activity-indicator-dots.activity-indicator-sm > div {
+  width: 0.45rem;
+  height: 0.45rem;
+}
+.giveworks-form .activity-indicator-dots.activity-indicator-md > div {
+  width: 0.6rem;
+  height: 0.6rem;
+}
+.giveworks-form .activity-indicator-dots.activity-indicator-lg > div {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+.giveworks-form .activity-indicator-dots.activity-indicator-xl > div {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(1) {
+  -webkit-animation-delay: 0s;
+          animation-delay: 0s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(2) {
+  -webkit-animation-delay: 0.16s;
+          animation-delay: 0.16s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(3) {
+  -webkit-animation-delay: 0.32s;
+          animation-delay: 0.32s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(4) {
+  -webkit-animation-delay: 0.48s;
+          animation-delay: 0.48s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(5) {
+  -webkit-animation-delay: 0.64s;
+          animation-delay: 0.64s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(6) {
+  -webkit-animation-delay: 0.8s;
+          animation-delay: 0.8s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(7) {
+  -webkit-animation-delay: 0.96s;
+          animation-delay: 0.96s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(8) {
+  -webkit-animation-delay: 1.12s;
+          animation-delay: 1.12s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(9) {
+  -webkit-animation-delay: 1.28s;
+          animation-delay: 1.28s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(10) {
+  -webkit-animation-delay: 1.44s;
+          animation-delay: 1.44s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(11) {
+  -webkit-animation-delay: 1.6s;
+          animation-delay: 1.6s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(12) {
+  -webkit-animation-delay: 1.76s;
+          animation-delay: 1.76s;
+}
+.giveworks-form .activity-indicator-dots > div:nth-child(13) {
+  -webkit-animation-delay: 1.92s;
+          animation-delay: 1.92s;
+}
+@-webkit-keyframes activity-indicator-dots {
+0%, 80%, 100% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+}
+40% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+}
+}
+@keyframes activity-indicator-dots {
+0%, 80%, 100% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+}
+40% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+}
+}
+.giveworks-form .btn-activity-indicator-dots:not(.btn-warning) .activity-indicator-dots > div {
+  background: white;
 }
 
 .giveworks-form .autocomplete-field {

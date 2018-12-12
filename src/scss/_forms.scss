@@ -52,7 +52,6 @@ $custom-control-placeholder-color: $input-placeholder-color;
 
 $custom-control-transition: $input-transition, padding .15s ease-out;
 
-
 .custom-select-field,
 .custom-input-field,
 .custom-textarea-field {
@@ -106,6 +105,8 @@ $custom-control-transition: $input-transition, padding .15s ease-out;
     }
 }
 
+
+.credit-card-field-wrapper .form-control,
 .custom-select-field .form-group-inner,
 .custom-input-field .custom-control,
 .custom-textarea-field .custom-control {

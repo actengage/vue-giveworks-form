@@ -2,7 +2,7 @@
 
     <fieldset>
 
-        <h3 v-if="legends">Your information</h3>
+        <!-- <h3 v-if="legends">Your information</h3> -->
 
         <select-field v-if="page.options.add_title" v-model="form.title" name="title" label="Title" placeholder="Title" :errors="errors" custom>
             <option v-for="value in titles" :value="value" v-html="value"/>

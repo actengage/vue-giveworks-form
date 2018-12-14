@@ -19,6 +19,7 @@
                 placeholder="Other Amount"
                 :group="false"
                 :value="value"
+                @keydown="onKeyDown"
                 @input="value => $emit('input', value)"/>
         </input-group>
 
@@ -68,6 +69,12 @@ export default {
             this.$emit('input',
                 parseFloat(this.value) !== (value = parseFloat(value)) ? value : null
             );
+        },
+
+        onKeyDown(e) {
+            if((e.keyCode < 48 || e.keyCode > 57 && e.keyCode !== 190) && !e.metaKey && e.key.length === 1) {
+                e.preventDefault();
+            }
         }
 
     }

@@ -100,36 +100,3 @@ export default {
 
 };
 </script>
-
-<style lang="scss">
-.stripe-field {
-    position: relative;
-
-    .form-control {
-        width: 100%;
-        padding: 1em;
-        transition: all .15s ease-in-out;
-        height: calc((1em * 2.5) + (0.75em * 2));
-    }
-
-    .stripe-field-activity {
-        opacity: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
-        z-index: 1;
-        height: 100%;
-        width: 35px;
-        transition: all .15s ease-in-out;
-    }
-
-    &.has-activity {
-        .form-control {
-            width: calc(100% - 35px);
-        }
-        .stripe-field-activity {
-            opacity: 1;
-        }
-    }
-}
-</style>

@@ -408,7 +408,7 @@
             return this.make('put', url, attributes).send();
         }
 
-        static patch(url, data, attributes) {
+        static patch(url, attributes) {
             return this.make('path', url, attributes).send();
         }
 
@@ -772,7 +772,7 @@
                 this.$request = this.constructor.request(method, uri, config);
                 this.$request.send({
                     data: data
-                }).then(response => resolve(this.fill(response)), reject);
+                }).then(response => resolve(this.fill(response.data)), reject);
             });
         }
 
@@ -2150,11 +2150,11 @@
         methods: {
 
             dismiss() {
+                this.isVisible = false;
+
                 transition(this.$el).then(delay => {
                     this.$emit('dismissed');
                 });
-
-                this.$emit('update:visible', this.isVisible = false);
             }
 
         },
@@ -2343,15 +2343,108 @@
       }
     };
 
-    /*!
-     * Font Awesome Free 5.5.0 by @fontawesome - https://fontawesome.com
-     * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
-     */
+    function _classCallCheck(instance, Constructor) {
+      if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+      }
+    }
+
+    function _defineProperties(target, props) {
+      for (var i = 0; i < props.length; i++) {
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if ("value" in descriptor) descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+      }
+    }
+
+    function _createClass(Constructor, protoProps, staticProps) {
+      if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+      if (staticProps) _defineProperties(Constructor, staticProps);
+      return Constructor;
+    }
+
+    function _defineProperty(obj, key, value) {
+      if (key in obj) {
+        Object.defineProperty(obj, key, {
+          value: value,
+          enumerable: true,
+          configurable: true,
+          writable: true
+        });
+      } else {
+        obj[key] = value;
+      }
+
+      return obj;
+    }
+
+    function _objectSpread(target) {
+      for (var i = 1; i < arguments.length; i++) {
+        var source = arguments[i] != null ? arguments[i] : {};
+        var ownKeys = Object.keys(source);
+
+        if (typeof Object.getOwnPropertySymbols === 'function') {
+          ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+
+        ownKeys.forEach(function (key) {
+          _defineProperty(target, key, source[key]);
+        });
+      }
+
+      return target;
+    }
+
+    function _slicedToArray(arr, i) {
+      return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+    }
+
+    function _arrayWithHoles(arr) {
+      if (Array.isArray(arr)) return arr;
+    }
+
+    function _iterableToArrayLimit(arr, i) {
+      var _arr = [];
+      var _n = true;
+      var _d = false;
+      var _e = undefined;
+
+      try {
+        for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+          _arr.push(_s.value);
+
+          if (i && _arr.length === i) break;
+        }
+      } catch (err) {
+        _d = true;
+        _e = err;
+      } finally {
+        try {
+          if (!_n && _i["return"] != null) _i["return"]();
+        } finally {
+          if (_d) throw _e;
+        }
+      }
+
+      return _arr;
+    }
+
+    function _nonIterableRest() {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    }
+
     var noop$2 = function noop() {};
 
     var _WINDOW = {};
     var _DOCUMENT = {};
-    var _PERFORMANCE = { mark: noop$2, measure: noop$2 };
+    var _PERFORMANCE = {
+      mark: noop$2,
+      measure: noop$2
+    };
 
     try {
       if (typeof window !== 'undefined') _WINDOW = window;
@@ -2359,14 +2452,14 @@
       if (typeof performance !== 'undefined') _PERFORMANCE = performance;
     } catch (e) {}
 
-    var _ref = _WINDOW.navigator || {};
-    var _ref$userAgent = _ref.userAgent;
-    var userAgent = _ref$userAgent === undefined ? '' : _ref$userAgent;
+    var _ref = _WINDOW.navigator || {},
+        _ref$userAgent = _ref.userAgent,
+        userAgent = _ref$userAgent === void 0 ? '' : _ref$userAgent;
 
     var WINDOW = _WINDOW;
     var DOCUMENT = _DOCUMENT;
     var PERFORMANCE = _PERFORMANCE;
-
+    var IS_BROWSER = !!WINDOW.document;
     var IS_DOM = !!DOCUMENT.documentElement && !!DOCUMENT.head && typeof DOCUMENT.addEventListener === 'function' && typeof DOCUMENT.createElement === 'function';
     var IS_IE = ~userAgent.indexOf('MSIE') || ~userAgent.indexOf('Trident/');
 
@@ -2374,86 +2467,6 @@
     var DEFAULT_FAMILY_PREFIX = 'fa';
     var DEFAULT_REPLACEMENT_CLASS = 'svg-inline--fa';
     var DATA_FA_I2SVG = 'data-fa-i2svg';
-
-    var classCallCheck = function (instance, Constructor) {
-      if (!(instance instanceof Constructor)) {
-        throw new TypeError("Cannot call a class as a function");
-      }
-    };
-
-    var createClass = function () {
-      function defineProperties(target, props) {
-        for (var i = 0; i < props.length; i++) {
-          var descriptor = props[i];
-          descriptor.enumerable = descriptor.enumerable || false;
-          descriptor.configurable = true;
-          if ("value" in descriptor) descriptor.writable = true;
-          Object.defineProperty(target, descriptor.key, descriptor);
-        }
-      }
-
-      return function (Constructor, protoProps, staticProps) {
-        if (protoProps) defineProperties(Constructor.prototype, protoProps);
-        if (staticProps) defineProperties(Constructor, staticProps);
-        return Constructor;
-      };
-    }();
-
-
-
-    var _extends = Object.assign || function (target) {
-      for (var i = 1; i < arguments.length; i++) {
-        var source = arguments[i];
-
-        for (var key in source) {
-          if (Object.prototype.hasOwnProperty.call(source, key)) {
-            target[key] = source[key];
-          }
-        }
-      }
-
-      return target;
-    };
-
-
-
-    var slicedToArray = function () {
-      function sliceIterator(arr, i) {
-        var _arr = [];
-        var _n = true;
-        var _d = false;
-        var _e = undefined;
-
-        try {
-          for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-            _arr.push(_s.value);
-
-            if (i && _arr.length === i) break;
-          }
-        } catch (err) {
-          _d = true;
-          _e = err;
-        } finally {
-          try {
-            if (!_n && _i["return"]) _i["return"]();
-          } finally {
-            if (_d) throw _e;
-          }
-        }
-
-        return _arr;
-      }
-
-      return function (arr, i) {
-        if (Array.isArray(arr)) {
-          return arr;
-        } else if (Symbol.iterator in Object(arr)) {
-          return sliceIterator(arr, i);
-        } else {
-          throw new TypeError("Invalid attempt to destructure non-iterable instance");
-        }
-      };
-    }();
 
     var initial = WINDOW.FontAwesomeConfig || {};
 
@@ -2477,9 +2490,8 @@
 
     if (DOCUMENT && typeof DOCUMENT.querySelector === 'function') {
       var attrs = [['data-family-prefix', 'familyPrefix'], ['data-replacement-class', 'replacementClass'], ['data-auto-replace-svg', 'autoReplaceSvg'], ['data-auto-add-css', 'autoAddCss'], ['data-auto-a11y', 'autoA11y'], ['data-search-pseudo-elements', 'searchPseudoElements'], ['data-observe-mutations', 'observeMutations'], ['data-keep-original-source', 'keepOriginalSource'], ['data-measure-performance', 'measurePerformance'], ['data-show-missing-icons', 'showMissingIcons']];
-
       attrs.forEach(function (_ref) {
-        var _ref2 = slicedToArray(_ref, 2),
+        var _ref2 = _slicedToArray(_ref, 2),
             attr = _ref2[0],
             key = _ref2[1];
 
@@ -2491,7 +2503,7 @@
       });
     }
 
-    var _default = _extends({
+    var _default = _objectSpread({
       familyPrefix: DEFAULT_FAMILY_PREFIX,
       replacementClass: DEFAULT_REPLACEMENT_CLASS,
       autoReplaceSvg: true,
@@ -2506,20 +2518,19 @@
 
     if (!_default.autoReplaceSvg) _default.observeMutations = false;
 
-    var config$1 = _extends({}, _default);
+    var config$1 = _objectSpread({}, _default);
 
     WINDOW.FontAwesomeConfig = config$1;
 
     var w = WINDOW || {};
-
     if (!w[NAMESPACE_IDENTIFIER]) w[NAMESPACE_IDENTIFIER] = {};
     if (!w[NAMESPACE_IDENTIFIER].styles) w[NAMESPACE_IDENTIFIER].styles = {};
     if (!w[NAMESPACE_IDENTIFIER].hooks) w[NAMESPACE_IDENTIFIER].hooks = {};
     if (!w[NAMESPACE_IDENTIFIER].shims) w[NAMESPACE_IDENTIFIER].shims = [];
-
     var namespace = w[NAMESPACE_IDENTIFIER];
 
     var functions = [];
+
     var listener = function listener() {
       DOCUMENT.removeEventListener('DOMContentLoaded', listener);
       loaded = 1;
@@ -2532,10 +2543,8 @@
 
     if (IS_DOM) {
       loaded = (DOCUMENT.documentElement.doScroll ? /^loaded|^c/ : /^loaded|^i|^c/).test(DOCUMENT.readyState);
-
       if (!loaded) DOCUMENT.addEventListener('DOMContentLoaded', listener);
     }
-
     var meaninglessTransform = {
       size: 16,
       x: 0,
@@ -2544,9 +2553,6 @@
       flipX: false,
       flipY: false
     };
-
-
-
     function insertCss(css) {
       if (!css || !IS_DOM) {
         return;
@@ -2555,70 +2561,63 @@
       var style = DOCUMENT.createElement('style');
       style.setAttribute('type', 'text/css');
       style.innerHTML = css;
-
       var headChildren = DOCUMENT.head.childNodes;
       var beforeChild = null;
 
       for (var i = headChildren.length - 1; i > -1; i--) {
         var child = headChildren[i];
         var tagName = (child.tagName || '').toUpperCase();
+
         if (['STYLE', 'LINK'].indexOf(tagName) > -1) {
           beforeChild = child;
         }
       }
 
       DOCUMENT.head.insertBefore(style, beforeChild);
-
       return css;
     }
-
     var idPool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
     function nextUniqueId() {
       var size = 12;
       var id = '';
+
       while (size-- > 0) {
         id += idPool[Math.random() * 62 | 0];
       }
+
       return id;
     }
-
     function htmlEscape(str) {
-      return ('' + str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return "".concat(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
-
     function joinAttributes(attributes) {
       return Object.keys(attributes || {}).reduce(function (acc, attributeName) {
-        return acc + (attributeName + '="' + htmlEscape(attributes[attributeName]) + '" ');
+        return acc + "".concat(attributeName, "=\"").concat(htmlEscape(attributes[attributeName]), "\" ");
       }, '').trim();
     }
-
     function joinStyles(styles) {
       return Object.keys(styles || {}).reduce(function (acc, styleName) {
-        return acc + (styleName + ': ' + styles[styleName] + ';');
+        return acc + "".concat(styleName, ": ").concat(styles[styleName], ";");
       }, '');
     }
-
     function transformIsMeaningful(transform) {
       return transform.size !== meaninglessTransform.size || transform.x !== meaninglessTransform.x || transform.y !== meaninglessTransform.y || transform.rotate !== meaninglessTransform.rotate || transform.flipX || transform.flipY;
     }
-
     function transformForSvg(_ref) {
       var transform = _ref.transform,
           containerWidth = _ref.containerWidth,
           iconWidth = _ref.iconWidth;
-
       var outer = {
-        transform: 'translate(' + containerWidth / 2 + ' 256)'
+        transform: "translate(".concat(containerWidth / 2, " 256)")
       };
-      var innerTranslate = 'translate(' + transform.x * 32 + ', ' + transform.y * 32 + ') ';
-      var innerScale = 'scale(' + transform.size / 16 * (transform.flipX ? -1 : 1) + ', ' + transform.size / 16 * (transform.flipY ? -1 : 1) + ') ';
-      var innerRotate = 'rotate(' + transform.rotate + ' 0 0)';
+      var innerTranslate = "translate(".concat(transform.x * 32, ", ").concat(transform.y * 32, ") ");
+      var innerScale = "scale(".concat(transform.size / 16 * (transform.flipX ? -1 : 1), ", ").concat(transform.size / 16 * (transform.flipY ? -1 : 1), ") ");
+      var innerRotate = "rotate(".concat(transform.rotate, " 0 0)");
       var inner = {
-        transform: innerTranslate + ' ' + innerScale + ' ' + innerRotate
+        transform: "".concat(innerTranslate, " ").concat(innerScale, " ").concat(innerRotate)
       };
       var path = {
-        transform: 'translate(' + iconWidth / 2 * -1 + ' -256)'
+        transform: "translate(".concat(iconWidth / 2 * -1, " -256)")
       };
       return {
         outer: outer,
@@ -2633,8 +2632,7 @@
       width: '100%',
       height: '100%'
     };
-
-    var makeIconMasking = function (_ref) {
+    function makeIconMasking (_ref) {
       var children = _ref.children,
           attributes = _ref.attributes,
           main = _ref.main,
@@ -2644,31 +2642,37 @@
           mainPath = main.icon;
       var maskWidth = mask.width,
           maskPath = mask.icon;
-
-
-      var trans = transformForSvg({ transform: transform, containerWidth: maskWidth, iconWidth: mainWidth });
-
+      var trans = transformForSvg({
+        transform: transform,
+        containerWidth: maskWidth,
+        iconWidth: mainWidth
+      });
       var maskRect = {
         tag: 'rect',
-        attributes: _extends({}, ALL_SPACE, {
+        attributes: _objectSpread({}, ALL_SPACE, {
           fill: 'white'
         })
       };
       var maskInnerGroup = {
         tag: 'g',
-        attributes: _extends({}, trans.inner),
-        children: [{ tag: 'path', attributes: _extends({}, mainPath.attributes, trans.path, { fill: 'black' }) }]
+        attributes: _objectSpread({}, trans.inner),
+        children: [{
+          tag: 'path',
+          attributes: _objectSpread({}, mainPath.attributes, trans.path, {
+            fill: 'black'
+          })
+        }]
       };
       var maskOuterGroup = {
         tag: 'g',
-        attributes: _extends({}, trans.outer),
+        attributes: _objectSpread({}, trans.outer),
         children: [maskInnerGroup]
       };
-      var maskId = 'mask-' + nextUniqueId();
-      var clipId = 'clip-' + nextUniqueId();
+      var maskId = "mask-".concat(nextUniqueId());
+      var clipId = "clip-".concat(nextUniqueId());
       var maskTag = {
         tag: 'mask',
-        attributes: _extends({}, ALL_SPACE, {
+        attributes: _objectSpread({}, ALL_SPACE, {
           id: maskId,
           maskUnits: 'userSpaceOnUse',
           maskContentUnits: 'userSpaceOnUse'
@@ -2677,24 +2681,34 @@
       };
       var defs = {
         tag: 'defs',
-        children: [{ tag: 'clipPath', attributes: { id: clipId }, children: [maskPath] }, maskTag]
+        children: [{
+          tag: 'clipPath',
+          attributes: {
+            id: clipId
+          },
+          children: [maskPath]
+        }, maskTag]
       };
-
-      children.push(defs, { tag: 'rect', attributes: _extends({ fill: 'currentColor', 'clip-path': 'url(#' + clipId + ')', mask: 'url(#' + maskId + ')' }, ALL_SPACE) });
-
+      children.push(defs, {
+        tag: 'rect',
+        attributes: _objectSpread({
+          fill: 'currentColor',
+          'clip-path': "url(#".concat(clipId, ")"),
+          mask: "url(#".concat(maskId, ")")
+        }, ALL_SPACE)
+      });
       return {
         children: children,
         attributes: attributes
       };
-    };
+    }
 
-    var makeIconStandard = function (_ref) {
+    function makeIconStandard (_ref) {
       var children = _ref.children,
           attributes = _ref.attributes,
           main = _ref.main,
           transform = _ref.transform,
           styles = _ref.styles;
-
       var styleString = joinStyles(styles);
 
       if (styleString.length > 0) {
@@ -2702,17 +2716,21 @@
       }
 
       if (transformIsMeaningful(transform)) {
-        var trans = transformForSvg({ transform: transform, containerWidth: main.width, iconWidth: main.width });
+        var trans = transformForSvg({
+          transform: transform,
+          containerWidth: main.width,
+          iconWidth: main.width
+        });
         children.push({
           tag: 'g',
-          attributes: _extends({}, trans.outer),
+          attributes: _objectSpread({}, trans.outer),
           children: [{
             tag: 'g',
-            attributes: _extends({}, trans.inner),
+            attributes: _objectSpread({}, trans.inner),
             children: [{
               tag: main.icon.tag,
               children: main.icon.children,
-              attributes: _extends({}, main.icon.attributes, trans.path)
+              attributes: _objectSpread({}, main.icon.attributes, trans.path)
             }]
           }]
         });
@@ -2724,9 +2742,9 @@
         children: children,
         attributes: attributes
       };
-    };
+    }
 
-    var asIcon = function (_ref) {
+    function asIcon (_ref) {
       var children = _ref.children,
           main = _ref.main,
           mask = _ref.mask,
@@ -2737,13 +2755,12 @@
       if (transformIsMeaningful(transform) && main.found && !mask.found) {
         var width = main.width,
             height = main.height;
-
         var offset = {
           x: width / height / 2,
           y: 0.5
         };
-        attributes['style'] = joinStyles(_extends({}, styles, {
-          'transform-origin': offset.x + transform.x / 16 + 'em ' + (offset.y + transform.y / 16) + 'em'
+        attributes['style'] = joinStyles(_objectSpread({}, styles, {
+          'transform-origin': "".concat(offset.x + transform.x / 16, "em ").concat(offset.y + transform.y / 16, "em")
         }));
       }
 
@@ -2752,17 +2769,15 @@
         attributes: attributes,
         children: children
       }];
-    };
+    }
 
-    var asSymbol = function (_ref) {
+    function asSymbol (_ref) {
       var prefix = _ref.prefix,
           iconName = _ref.iconName,
           children = _ref.children,
           attributes = _ref.attributes,
           symbol = _ref.symbol;
-
-      var id = symbol === true ? prefix + '-' + config$1.familyPrefix + '-' + iconName : symbol;
-
+      var id = symbol === true ? "".concat(prefix, "-").concat(config$1.familyPrefix, "-").concat(iconName) : symbol;
       return [{
         tag: 'svg',
         attributes: {
@@ -2770,11 +2785,13 @@
         },
         children: [{
           tag: 'symbol',
-          attributes: _extends({}, attributes, { id: id }),
+          attributes: _objectSpread({}, attributes, {
+            id: id
+          }),
           children: children
         }]
       }];
-    };
+    }
 
     function makeInlineSvgAbstract(params) {
       var _params$icons = params.icons,
@@ -2787,26 +2804,25 @@
           title = params.title,
           extra = params.extra,
           _params$watchable = params.watchable,
-          watchable = _params$watchable === undefined ? false : _params$watchable;
+          watchable = _params$watchable === void 0 ? false : _params$watchable;
 
       var _ref = mask.found ? mask : main,
           width = _ref.width,
           height = _ref.height;
 
-      var widthClass = 'fa-w-' + Math.ceil(width / height * 16);
-      var attrClass = [config$1.replacementClass, iconName ? config$1.familyPrefix + '-' + iconName : '', widthClass].filter(function (c) {
+      var widthClass = "fa-w-".concat(Math.ceil(width / height * 16));
+      var attrClass = [config$1.replacementClass, iconName ? "".concat(config$1.familyPrefix, "-").concat(iconName) : '', widthClass].filter(function (c) {
         return extra.classes.indexOf(c) === -1;
       }).concat(extra.classes).join(' ');
-
       var content = {
         children: [],
-        attributes: _extends({}, extra.attributes, {
+        attributes: _objectSpread({}, extra.attributes, {
           'data-prefix': prefix,
           'data-icon': iconName,
           'class': attrClass,
           'role': 'img',
           'xmlns': 'http://www.w3.org/2000/svg',
-          'viewBox': '0 0 ' + width + ' ' + height
+          'viewBox': "0 0 ".concat(width, " ").concat(height)
         })
       };
 
@@ -2814,9 +2830,15 @@
         content.attributes[DATA_FA_I2SVG] = '';
       }
 
-      if (title) content.children.push({ tag: 'title', attributes: { id: content.attributes['aria-labelledby'] || 'title-' + nextUniqueId() }, children: [title] });
+      if (title) content.children.push({
+        tag: 'title',
+        attributes: {
+          id: content.attributes['aria-labelledby'] || "title-".concat(nextUniqueId())
+        },
+        children: [title]
+      });
 
-      var args = _extends({}, content, {
+      var args = _objectSpread({}, content, {
         prefix: prefix,
         iconName: iconName,
         main: main,
@@ -2840,20 +2862,23 @@
       }
     }
 
-    var noop$2$1 = function noop() {};
-    var p = config$1.measurePerformance && PERFORMANCE && PERFORMANCE.mark && PERFORMANCE.measure ? PERFORMANCE : { mark: noop$2$1, measure: noop$2$1 };
+    var noop$1$1 = function noop() {};
+
+    var p = config$1.measurePerformance && PERFORMANCE && PERFORMANCE.mark && PERFORMANCE.measure ? PERFORMANCE : {
+      mark: noop$1$1,
+      measure: noop$1$1
+    };
 
     /**
      * Internal helper to bind a function known to have 4 arguments
      * to a given context.
      */
-    var bindInternal4 = function bindInternal4 (func, thisContext) {
+
+    var bindInternal4 = function bindInternal4(func, thisContext) {
       return function (a, b, c, d) {
         return func.call(thisContext, a, b, c, d);
       };
     };
-
-
 
     /**
      * # Reduce
@@ -2866,17 +2891,20 @@
      * @param  {Object}   thisContext  The context for the reducer.
      * @return {mixed}                 The final result.
      */
-    var reduce = function fastReduceObject (subject, fn, initialValue, thisContext) {
+
+
+    var reduce = function fastReduceObject(subject, fn, initialValue, thisContext) {
       var keys = Object.keys(subject),
           length = keys.length,
           iterator = thisContext !== undefined ? bindInternal4(fn, thisContext) : fn,
-          i, key, result;
+          i,
+          key,
+          result;
 
       if (initialValue === undefined) {
         i = 1;
         result = subject[keys[0]];
-      }
-      else {
+      } else {
         i = 0;
         result = initialValue;
       }
@@ -2889,17 +2917,14 @@
       return result;
     };
 
-    var styles$2 = namespace.styles;
-    var shims = namespace.shims;
-
-
+    var styles = namespace.styles,
+        shims = namespace.shims;
     var _byUnicode = {};
     var _byLigature = {};
     var _byOldName = {};
-
     var build = function build() {
       var lookup = function lookup(reducer) {
-        return reduce(styles$2, function (o, style, prefix) {
+        return reduce(styles, function (o, style, prefix) {
           o[prefix] = reduce(style, reducer, {});
           return o;
         }, {});
@@ -2907,24 +2932,17 @@
 
       _byUnicode = lookup(function (acc, icon, iconName) {
         acc[icon[3]] = iconName;
-
         return acc;
       });
-
       _byLigature = lookup(function (acc, icon, iconName) {
         var ligatures = icon[2];
-
         acc[iconName] = iconName;
-
         ligatures.forEach(function (ligature) {
           acc[ligature] = iconName;
         });
-
         return acc;
       });
-
-      var hasRegular = 'far' in styles$2;
-
+      var hasRegular = 'far' in styles;
       _byOldName = reduce(shims, function (acc, shim) {
         var oldName = shim[0];
         var prefix = shim[1];
@@ -2934,16 +2952,16 @@
           prefix = 'fas';
         }
 
-        acc[oldName] = { prefix: prefix, iconName: iconName };
-
+        acc[oldName] = {
+          prefix: prefix,
+          iconName: iconName
+        };
         return acc;
       }, {});
     };
-
     build();
 
     var styles$1 = namespace.styles;
-
     function iconFromMapping(mapping, prefix, iconName) {
       if (mapping && mapping[prefix] && mapping[prefix][iconName]) {
         return {
@@ -2957,15 +2975,14 @@
     function toHtml(abstractNodes) {
       var tag = abstractNodes.tag,
           _abstractNodes$attrib = abstractNodes.attributes,
-          attributes = _abstractNodes$attrib === undefined ? {} : _abstractNodes$attrib,
+          attributes = _abstractNodes$attrib === void 0 ? {} : _abstractNodes$attrib,
           _abstractNodes$childr = abstractNodes.children,
-          children = _abstractNodes$childr === undefined ? [] : _abstractNodes$childr;
-
+          children = _abstractNodes$childr === void 0 ? [] : _abstractNodes$childr;
 
       if (typeof abstractNodes === 'string') {
         return htmlEscape(abstractNodes);
       } else {
-        return '<' + tag + ' ' + joinAttributes(attributes) + '>' + children.map(toHtml).join('') + '</' + tag + '>';
+        return "<".concat(tag, " ").concat(joinAttributes(attributes), ">").concat(children.map(toHtml).join(''), "</").concat(tag, ">");
       }
     }
 
@@ -3007,21 +3024,27 @@
             case 'grow':
               acc.size = acc.size + rest;
               break;
+
             case 'shrink':
               acc.size = acc.size - rest;
               break;
+
             case 'left':
               acc.x = acc.x - rest;
               break;
+
             case 'right':
               acc.x = acc.x + rest;
               break;
+
             case 'up':
               acc.y = acc.y - rest;
               break;
+
             case 'down':
               acc.y = acc.y + rest;
               break;
+
             case 'rotate':
               acc.rotate = acc.rotate + rest;
               break;
@@ -3037,11 +3060,12 @@
       this.message = error || 'Icon unavailable';
       this.stack = new Error().stack;
     }
-
     MissingIcon.prototype = Object.create(Error.prototype);
     MissingIcon.prototype.constructor = MissingIcon;
 
-    var FILL = { fill: 'currentColor' };
+    var FILL = {
+      fill: 'currentColor'
+    };
     var ANIMATION_BASE = {
       attributeType: 'XML',
       repeatCount: 'indefinite',
@@ -3049,44 +3073,67 @@
     };
     var RING = {
       tag: 'path',
-      attributes: _extends({}, FILL, {
+      attributes: _objectSpread({}, FILL, {
         d: 'M156.5,447.7l-12.6,29.5c-18.7-9.5-35.9-21.2-51.5-34.9l22.7-22.7C127.6,430.5,141.5,440,156.5,447.7z M40.6,272H8.5 c1.4,21.2,5.4,41.7,11.7,61.1L50,321.2C45.1,305.5,41.8,289,40.6,272z M40.6,240c1.4-18.8,5.2-37,11.1-54.1l-29.5-12.6 C14.7,194.3,10,216.7,8.5,240H40.6z M64.3,156.5c7.8-14.9,17.2-28.8,28.1-41.5L69.7,92.3c-13.7,15.6-25.5,32.8-34.9,51.5 L64.3,156.5z M397,419.6c-13.9,12-29.4,22.3-46.1,30.4l11.9,29.8c20.7-9.9,39.8-22.6,56.9-37.6L397,419.6z M115,92.4 c13.9-12,29.4-22.3,46.1-30.4l-11.9-29.8c-20.7,9.9-39.8,22.6-56.8,37.6L115,92.4z M447.7,355.5c-7.8,14.9-17.2,28.8-28.1,41.5 l22.7,22.7c13.7-15.6,25.5-32.9,34.9-51.5L447.7,355.5z M471.4,272c-1.4,18.8-5.2,37-11.1,54.1l29.5,12.6 c7.5-21.1,12.2-43.5,13.6-66.8H471.4z M321.2,462c-15.7,5-32.2,8.2-49.2,9.4v32.1c21.2-1.4,41.7-5.4,61.1-11.7L321.2,462z M240,471.4c-18.8-1.4-37-5.2-54.1-11.1l-12.6,29.5c21.1,7.5,43.5,12.2,66.8,13.6V471.4z M462,190.8c5,15.7,8.2,32.2,9.4,49.2h32.1 c-1.4-21.2-5.4-41.7-11.7-61.1L462,190.8z M92.4,397c-12-13.9-22.3-29.4-30.4-46.1l-29.8,11.9c9.9,20.7,22.6,39.8,37.6,56.9 L92.4,397z M272,40.6c18.8,1.4,36.9,5.2,54.1,11.1l12.6-29.5C317.7,14.7,295.3,10,272,8.5V40.6z M190.8,50 c15.7-5,32.2-8.2,49.2-9.4V8.5c-21.2,1.4-41.7,5.4-61.1,11.7L190.8,50z M442.3,92.3L419.6,115c12,13.9,22.3,29.4,30.5,46.1 l29.8-11.9C470,128.5,457.3,109.4,442.3,92.3z M397,92.4l22.7-22.7c-15.6-13.7-32.8-25.5-51.5-34.9l-12.6,29.5 C370.4,72.1,384.4,81.5,397,92.4z'
       })
     };
-    var OPACITY_ANIMATE = _extends({}, ANIMATION_BASE, {
+
+    var OPACITY_ANIMATE = _objectSpread({}, ANIMATION_BASE, {
       attributeName: 'opacity'
     });
+
     var DOT = {
       tag: 'circle',
-      attributes: _extends({}, FILL, {
+      attributes: _objectSpread({}, FILL, {
         cx: '256',
         cy: '364',
         r: '28'
       }),
-      children: [{ tag: 'animate', attributes: _extends({}, ANIMATION_BASE, { attributeName: 'r', values: '28;14;28;28;14;28;' }) }, { tag: 'animate', attributes: _extends({}, OPACITY_ANIMATE, { values: '1;0;1;1;0;1;' }) }]
+      children: [{
+        tag: 'animate',
+        attributes: _objectSpread({}, ANIMATION_BASE, {
+          attributeName: 'r',
+          values: '28;14;28;28;14;28;'
+        })
+      }, {
+        tag: 'animate',
+        attributes: _objectSpread({}, OPACITY_ANIMATE, {
+          values: '1;0;1;1;0;1;'
+        })
+      }]
     };
     var QUESTION = {
       tag: 'path',
-      attributes: _extends({}, FILL, {
+      attributes: _objectSpread({}, FILL, {
         opacity: '1',
         d: 'M263.7,312h-16c-6.6,0-12-5.4-12-12c0-71,77.4-63.9,77.4-107.8c0-20-17.8-40.2-57.4-40.2c-29.1,0-44.3,9.6-59.2,28.7 c-3.9,5-11.1,6-16.2,2.4l-13.1-9.2c-5.6-3.9-6.9-11.8-2.6-17.2c21.2-27.2,46.4-44.7,91.2-44.7c52.3,0,97.4,29.8,97.4,80.2 c0,67.6-77.4,63.5-77.4,107.8C275.7,306.6,270.3,312,263.7,312z'
       }),
-      children: [{ tag: 'animate', attributes: _extends({}, OPACITY_ANIMATE, { values: '1;0;0;0;0;1;' }) }]
+      children: [{
+        tag: 'animate',
+        attributes: _objectSpread({}, OPACITY_ANIMATE, {
+          values: '1;0;0;0;0;1;'
+        })
+      }]
     };
     var EXCLAMATION = {
       tag: 'path',
-      attributes: _extends({}, FILL, {
+      attributes: _objectSpread({}, FILL, {
         opacity: '0',
         d: 'M232.5,134.5l7,168c0.3,6.4,5.6,11.5,12,11.5h9c6.4,0,11.7-5.1,12-11.5l7-168c0.3-6.8-5.2-12.5-12-12.5h-23 C237.7,122,232.2,127.7,232.5,134.5z'
       }),
-      children: [{ tag: 'animate', attributes: _extends({}, OPACITY_ANIMATE, { values: '0;0;1;1;0;0;' }) }]
+      children: [{
+        tag: 'animate',
+        attributes: _objectSpread({}, OPACITY_ANIMATE, {
+          values: '0;0;1;1;0;0;'
+        })
+      }]
     };
 
-    var styles = namespace.styles;
+    var styles$2 = namespace.styles;
 
-    var baseStyles = "svg:not(:root).svg-inline--fa {\n  overflow: visible; }\n\n.svg-inline--fa {\n  display: inline-block;\n  font-size: inherit;\n  height: 1em;\n  overflow: visible;\n  vertical-align: -.125em; }\n  .svg-inline--fa.fa-lg {\n    vertical-align: -.225em; }\n  .svg-inline--fa.fa-w-1 {\n    width: 0.0625em; }\n  .svg-inline--fa.fa-w-2 {\n    width: 0.125em; }\n  .svg-inline--fa.fa-w-3 {\n    width: 0.1875em; }\n  .svg-inline--fa.fa-w-4 {\n    width: 0.25em; }\n  .svg-inline--fa.fa-w-5 {\n    width: 0.3125em; }\n  .svg-inline--fa.fa-w-6 {\n    width: 0.375em; }\n  .svg-inline--fa.fa-w-7 {\n    width: 0.4375em; }\n  .svg-inline--fa.fa-w-8 {\n    width: 0.5em; }\n  .svg-inline--fa.fa-w-9 {\n    width: 0.5625em; }\n  .svg-inline--fa.fa-w-10 {\n    width: 0.625em; }\n  .svg-inline--fa.fa-w-11 {\n    width: 0.6875em; }\n  .svg-inline--fa.fa-w-12 {\n    width: 0.75em; }\n  .svg-inline--fa.fa-w-13 {\n    width: 0.8125em; }\n  .svg-inline--fa.fa-w-14 {\n    width: 0.875em; }\n  .svg-inline--fa.fa-w-15 {\n    width: 0.9375em; }\n  .svg-inline--fa.fa-w-16 {\n    width: 1em; }\n  .svg-inline--fa.fa-w-17 {\n    width: 1.0625em; }\n  .svg-inline--fa.fa-w-18 {\n    width: 1.125em; }\n  .svg-inline--fa.fa-w-19 {\n    width: 1.1875em; }\n  .svg-inline--fa.fa-w-20 {\n    width: 1.25em; }\n  .svg-inline--fa.fa-pull-left {\n    margin-right: .3em;\n    width: auto; }\n  .svg-inline--fa.fa-pull-right {\n    margin-left: .3em;\n    width: auto; }\n  .svg-inline--fa.fa-border {\n    height: 1.5em; }\n  .svg-inline--fa.fa-li {\n    width: 2em; }\n  .svg-inline--fa.fa-fw {\n    width: 1.25em; }\n\n.fa-layers svg.svg-inline--fa {\n  bottom: 0;\n  left: 0;\n  margin: auto;\n  position: absolute;\n  right: 0;\n  top: 0; }\n\n.fa-layers {\n  display: inline-block;\n  height: 1em;\n  position: relative;\n  text-align: center;\n  vertical-align: -.125em;\n  width: 1em; }\n  .fa-layers svg.svg-inline--fa {\n    -webkit-transform-origin: center center;\n            transform-origin: center center; }\n\n.fa-layers-text, .fa-layers-counter {\n  display: inline-block;\n  position: absolute;\n  text-align: center; }\n\n.fa-layers-text {\n  left: 50%;\n  top: 50%;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%);\n  -webkit-transform-origin: center center;\n          transform-origin: center center; }\n\n.fa-layers-counter {\n  background-color: #ff253a;\n  border-radius: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  color: #fff;\n  height: 1.5em;\n  line-height: 1;\n  max-width: 5em;\n  min-width: 1.5em;\n  overflow: hidden;\n  padding: .25em;\n  right: 0;\n  text-overflow: ellipsis;\n  top: 0;\n  -webkit-transform: scale(0.25);\n          transform: scale(0.25);\n  -webkit-transform-origin: top right;\n          transform-origin: top right; }\n\n.fa-layers-bottom-right {\n  bottom: 0;\n  right: 0;\n  top: auto;\n  -webkit-transform: scale(0.25);\n          transform: scale(0.25);\n  -webkit-transform-origin: bottom right;\n          transform-origin: bottom right; }\n\n.fa-layers-bottom-left {\n  bottom: 0;\n  left: 0;\n  right: auto;\n  top: auto;\n  -webkit-transform: scale(0.25);\n          transform: scale(0.25);\n  -webkit-transform-origin: bottom left;\n          transform-origin: bottom left; }\n\n.fa-layers-top-right {\n  right: 0;\n  top: 0;\n  -webkit-transform: scale(0.25);\n          transform: scale(0.25);\n  -webkit-transform-origin: top right;\n          transform-origin: top right; }\n\n.fa-layers-top-left {\n  left: 0;\n  right: auto;\n  top: 0;\n  -webkit-transform: scale(0.25);\n          transform: scale(0.25);\n  -webkit-transform-origin: top left;\n          transform-origin: top left; }\n\n.fa-lg {\n  font-size: 1.33333em;\n  line-height: 0.75em;\n  vertical-align: -.0667em; }\n\n.fa-xs {\n  font-size: .75em; }\n\n.fa-sm {\n  font-size: .875em; }\n\n.fa-1x {\n  font-size: 1em; }\n\n.fa-2x {\n  font-size: 2em; }\n\n.fa-3x {\n  font-size: 3em; }\n\n.fa-4x {\n  font-size: 4em; }\n\n.fa-5x {\n  font-size: 5em; }\n\n.fa-6x {\n  font-size: 6em; }\n\n.fa-7x {\n  font-size: 7em; }\n\n.fa-8x {\n  font-size: 8em; }\n\n.fa-9x {\n  font-size: 9em; }\n\n.fa-10x {\n  font-size: 10em; }\n\n.fa-fw {\n  text-align: center;\n  width: 1.25em; }\n\n.fa-ul {\n  list-style-type: none;\n  margin-left: 2.5em;\n  padding-left: 0; }\n  .fa-ul > li {\n    position: relative; }\n\n.fa-li {\n  left: -2em;\n  position: absolute;\n  text-align: center;\n  width: 2em;\n  line-height: inherit; }\n\n.fa-border {\n  border: solid 0.08em #eee;\n  border-radius: .1em;\n  padding: .2em .25em .15em; }\n\n.fa-pull-left {\n  float: left; }\n\n.fa-pull-right {\n  float: right; }\n\n.fa.fa-pull-left,\n.fas.fa-pull-left,\n.far.fa-pull-left,\n.fal.fa-pull-left,\n.fab.fa-pull-left {\n  margin-right: .3em; }\n\n.fa.fa-pull-right,\n.fas.fa-pull-right,\n.far.fa-pull-right,\n.fal.fa-pull-right,\n.fab.fa-pull-right {\n  margin-left: .3em; }\n\n.fa-spin {\n  -webkit-animation: fa-spin 2s infinite linear;\n          animation: fa-spin 2s infinite linear; }\n\n.fa-pulse {\n  -webkit-animation: fa-spin 1s infinite steps(8);\n          animation: fa-spin 1s infinite steps(8); }\n\n@-webkit-keyframes fa-spin {\n  0% {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg); }\n  100% {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg); } }\n\n@keyframes fa-spin {\n  0% {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg); }\n  100% {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg); } }\n\n.fa-rotate-90 {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=1)\";\n  -webkit-transform: rotate(90deg);\n          transform: rotate(90deg); }\n\n.fa-rotate-180 {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=2)\";\n  -webkit-transform: rotate(180deg);\n          transform: rotate(180deg); }\n\n.fa-rotate-270 {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=3)\";\n  -webkit-transform: rotate(270deg);\n          transform: rotate(270deg); }\n\n.fa-flip-horizontal {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1)\";\n  -webkit-transform: scale(-1, 1);\n          transform: scale(-1, 1); }\n\n.fa-flip-vertical {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)\";\n  -webkit-transform: scale(1, -1);\n          transform: scale(1, -1); }\n\n.fa-flip-horizontal.fa-flip-vertical {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)\";\n  -webkit-transform: scale(-1, -1);\n          transform: scale(-1, -1); }\n\n:root .fa-rotate-90,\n:root .fa-rotate-180,\n:root .fa-rotate-270,\n:root .fa-flip-horizontal,\n:root .fa-flip-vertical {\n  -webkit-filter: none;\n          filter: none; }\n\n.fa-stack {\n  display: inline-block;\n  height: 2em;\n  position: relative;\n  width: 2.5em; }\n\n.fa-stack-1x,\n.fa-stack-2x {\n  bottom: 0;\n  left: 0;\n  margin: auto;\n  position: absolute;\n  right: 0;\n  top: 0; }\n\n.svg-inline--fa.fa-stack-1x {\n  height: 1em;\n  width: 1.25em; }\n\n.svg-inline--fa.fa-stack-2x {\n  height: 2em;\n  width: 2.5em; }\n\n.fa-inverse {\n  color: #fff; }\n\n.sr-only {\n  border: 0;\n  clip: rect(0, 0, 0, 0);\n  height: 1px;\n  margin: -1px;\n  overflow: hidden;\n  padding: 0;\n  position: absolute;\n  width: 1px; }\n\n.sr-only-focusable:active, .sr-only-focusable:focus {\n  clip: auto;\n  height: auto;\n  margin: 0;\n  overflow: visible;\n  position: static;\n  width: auto; }\n";
+    var baseStyles = "svg:not(:root).svg-inline--fa {\n  overflow: visible;\n}\n\n.svg-inline--fa {\n  display: inline-block;\n  font-size: inherit;\n  height: 1em;\n  overflow: visible;\n  vertical-align: -0.125em;\n}\n.svg-inline--fa.fa-lg {\n  vertical-align: -0.225em;\n}\n.svg-inline--fa.fa-w-1 {\n  width: 0.0625em;\n}\n.svg-inline--fa.fa-w-2 {\n  width: 0.125em;\n}\n.svg-inline--fa.fa-w-3 {\n  width: 0.1875em;\n}\n.svg-inline--fa.fa-w-4 {\n  width: 0.25em;\n}\n.svg-inline--fa.fa-w-5 {\n  width: 0.3125em;\n}\n.svg-inline--fa.fa-w-6 {\n  width: 0.375em;\n}\n.svg-inline--fa.fa-w-7 {\n  width: 0.4375em;\n}\n.svg-inline--fa.fa-w-8 {\n  width: 0.5em;\n}\n.svg-inline--fa.fa-w-9 {\n  width: 0.5625em;\n}\n.svg-inline--fa.fa-w-10 {\n  width: 0.625em;\n}\n.svg-inline--fa.fa-w-11 {\n  width: 0.6875em;\n}\n.svg-inline--fa.fa-w-12 {\n  width: 0.75em;\n}\n.svg-inline--fa.fa-w-13 {\n  width: 0.8125em;\n}\n.svg-inline--fa.fa-w-14 {\n  width: 0.875em;\n}\n.svg-inline--fa.fa-w-15 {\n  width: 0.9375em;\n}\n.svg-inline--fa.fa-w-16 {\n  width: 1em;\n}\n.svg-inline--fa.fa-w-17 {\n  width: 1.0625em;\n}\n.svg-inline--fa.fa-w-18 {\n  width: 1.125em;\n}\n.svg-inline--fa.fa-w-19 {\n  width: 1.1875em;\n}\n.svg-inline--fa.fa-w-20 {\n  width: 1.25em;\n}\n.svg-inline--fa.fa-pull-left {\n  margin-right: 0.3em;\n  width: auto;\n}\n.svg-inline--fa.fa-pull-right {\n  margin-left: 0.3em;\n  width: auto;\n}\n.svg-inline--fa.fa-border {\n  height: 1.5em;\n}\n.svg-inline--fa.fa-li {\n  width: 2em;\n}\n.svg-inline--fa.fa-fw {\n  width: 1.25em;\n}\n\n.fa-layers svg.svg-inline--fa {\n  bottom: 0;\n  left: 0;\n  margin: auto;\n  position: absolute;\n  right: 0;\n  top: 0;\n}\n\n.fa-layers {\n  display: inline-block;\n  height: 1em;\n  position: relative;\n  text-align: center;\n  vertical-align: -0.125em;\n  width: 1em;\n}\n.fa-layers svg.svg-inline--fa {\n  -webkit-transform-origin: center center;\n          transform-origin: center center;\n}\n\n.fa-layers-counter, .fa-layers-text {\n  display: inline-block;\n  position: absolute;\n  text-align: center;\n}\n\n.fa-layers-text {\n  left: 50%;\n  top: 50%;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%);\n  -webkit-transform-origin: center center;\n          transform-origin: center center;\n}\n\n.fa-layers-counter {\n  background-color: #ff253a;\n  border-radius: 1em;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n  color: #fff;\n  height: 1.5em;\n  line-height: 1;\n  max-width: 5em;\n  min-width: 1.5em;\n  overflow: hidden;\n  padding: 0.25em;\n  right: 0;\n  text-overflow: ellipsis;\n  top: 0;\n  -webkit-transform: scale(0.25);\n          transform: scale(0.25);\n  -webkit-transform-origin: top right;\n          transform-origin: top right;\n}\n\n.fa-layers-bottom-right {\n  bottom: 0;\n  right: 0;\n  top: auto;\n  -webkit-transform: scale(0.25);\n          transform: scale(0.25);\n  -webkit-transform-origin: bottom right;\n          transform-origin: bottom right;\n}\n\n.fa-layers-bottom-left {\n  bottom: 0;\n  left: 0;\n  right: auto;\n  top: auto;\n  -webkit-transform: scale(0.25);\n          transform: scale(0.25);\n  -webkit-transform-origin: bottom left;\n          transform-origin: bottom left;\n}\n\n.fa-layers-top-right {\n  right: 0;\n  top: 0;\n  -webkit-transform: scale(0.25);\n          transform: scale(0.25);\n  -webkit-transform-origin: top right;\n          transform-origin: top right;\n}\n\n.fa-layers-top-left {\n  left: 0;\n  right: auto;\n  top: 0;\n  -webkit-transform: scale(0.25);\n          transform: scale(0.25);\n  -webkit-transform-origin: top left;\n          transform-origin: top left;\n}\n\n.fa-lg {\n  font-size: 1.3333333333em;\n  line-height: 0.75em;\n  vertical-align: -0.0667em;\n}\n\n.fa-xs {\n  font-size: 0.75em;\n}\n\n.fa-sm {\n  font-size: 0.875em;\n}\n\n.fa-1x {\n  font-size: 1em;\n}\n\n.fa-2x {\n  font-size: 2em;\n}\n\n.fa-3x {\n  font-size: 3em;\n}\n\n.fa-4x {\n  font-size: 4em;\n}\n\n.fa-5x {\n  font-size: 5em;\n}\n\n.fa-6x {\n  font-size: 6em;\n}\n\n.fa-7x {\n  font-size: 7em;\n}\n\n.fa-8x {\n  font-size: 8em;\n}\n\n.fa-9x {\n  font-size: 9em;\n}\n\n.fa-10x {\n  font-size: 10em;\n}\n\n.fa-fw {\n  text-align: center;\n  width: 1.25em;\n}\n\n.fa-ul {\n  list-style-type: none;\n  margin-left: 2.5em;\n  padding-left: 0;\n}\n.fa-ul > li {\n  position: relative;\n}\n\n.fa-li {\n  left: -2em;\n  position: absolute;\n  text-align: center;\n  width: 2em;\n  line-height: inherit;\n}\n\n.fa-border {\n  border: solid 0.08em #eee;\n  border-radius: 0.1em;\n  padding: 0.2em 0.25em 0.15em;\n}\n\n.fa-pull-left {\n  float: left;\n}\n\n.fa-pull-right {\n  float: right;\n}\n\n.fa.fa-pull-left,\n.fas.fa-pull-left,\n.far.fa-pull-left,\n.fal.fa-pull-left,\n.fab.fa-pull-left {\n  margin-right: 0.3em;\n}\n.fa.fa-pull-right,\n.fas.fa-pull-right,\n.far.fa-pull-right,\n.fal.fa-pull-right,\n.fab.fa-pull-right {\n  margin-left: 0.3em;\n}\n\n.fa-spin {\n  -webkit-animation: fa-spin 2s infinite linear;\n          animation: fa-spin 2s infinite linear;\n}\n\n.fa-pulse {\n  -webkit-animation: fa-spin 1s infinite steps(8);\n          animation: fa-spin 1s infinite steps(8);\n}\n\n@-webkit-keyframes fa-spin {\n  0% {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n  }\n}\n\n@keyframes fa-spin {\n  0% {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n  }\n  100% {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n  }\n}\n.fa-rotate-90 {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=1)\";\n  -webkit-transform: rotate(90deg);\n          transform: rotate(90deg);\n}\n\n.fa-rotate-180 {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=2)\";\n  -webkit-transform: rotate(180deg);\n          transform: rotate(180deg);\n}\n\n.fa-rotate-270 {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=3)\";\n  -webkit-transform: rotate(270deg);\n          transform: rotate(270deg);\n}\n\n.fa-flip-horizontal {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1)\";\n  -webkit-transform: scale(-1, 1);\n          transform: scale(-1, 1);\n}\n\n.fa-flip-vertical {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)\";\n  -webkit-transform: scale(1, -1);\n          transform: scale(1, -1);\n}\n\n.fa-flip-horizontal.fa-flip-vertical {\n  -ms-filter: \"progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)\";\n  -webkit-transform: scale(-1, -1);\n          transform: scale(-1, -1);\n}\n\n:root .fa-rotate-90,\n:root .fa-rotate-180,\n:root .fa-rotate-270,\n:root .fa-flip-horizontal,\n:root .fa-flip-vertical {\n  -webkit-filter: none;\n          filter: none;\n}\n\n.fa-stack {\n  display: inline-block;\n  height: 2em;\n  position: relative;\n  width: 2.5em;\n}\n\n.fa-stack-1x,\n.fa-stack-2x {\n  bottom: 0;\n  left: 0;\n  margin: auto;\n  position: absolute;\n  right: 0;\n  top: 0;\n}\n\n.svg-inline--fa.fa-stack-1x {\n  height: 1em;\n  width: 1.25em;\n}\n.svg-inline--fa.fa-stack-2x {\n  height: 2em;\n  width: 2.5em;\n}\n\n.fa-inverse {\n  color: #fff;\n}\n\n.sr-only {\n  border: 0;\n  clip: rect(0, 0, 0, 0);\n  height: 1px;\n  margin: -1px;\n  overflow: hidden;\n  padding: 0;\n  position: absolute;\n  width: 1px;\n}\n\n.sr-only-focusable:active, .sr-only-focusable:focus {\n  clip: auto;\n  height: auto;\n  margin: 0;\n  overflow: visible;\n  position: static;\n  width: auto;\n}";
 
-    var css$1 = function () {
+    function css$1 () {
       var dfp = DEFAULT_FAMILY_PREFIX;
       var drc = DEFAULT_REPLACEMENT_CLASS;
       var fp = config$1.familyPrefix;
@@ -3094,14 +3141,13 @@
       var s = baseStyles;
 
       if (fp !== dfp || rc !== drc) {
-        var dPatt = new RegExp('\\.' + dfp + '\\-', 'g');
-        var rPatt = new RegExp('\\.' + drc, 'g');
-
-        s = s.replace(dPatt, '.' + fp + '-').replace(rPatt, '.' + rc);
+        var dPatt = new RegExp("\\.".concat(dfp, "\\-"), 'g');
+        var rPatt = new RegExp("\\.".concat(drc), 'g');
+        s = s.replace(dPatt, ".".concat(fp, "-")).replace(rPatt, ".".concat(rc));
       }
 
       return s;
-    };
+    }
 
     function define(prefix, icons) {
       var normalized = Object.keys(icons).reduce(function (acc, iconName) {
@@ -3113,75 +3159,76 @@
         } else {
           acc[iconName] = icon;
         }
+
         return acc;
       }, {});
 
       if (typeof namespace.hooks.addPack === 'function') {
         namespace.hooks.addPack(prefix, normalized);
       } else {
-        namespace.styles[prefix] = _extends({}, namespace.styles[prefix] || {}, normalized);
+        namespace.styles[prefix] = _objectSpread({}, namespace.styles[prefix] || {}, normalized);
       }
-
       /**
        * Font Awesome 4 used the prefix of `fa` for all icons. With the introduction
        * of new styles we needed to differentiate between them. Prefix `fa` is now an alias
        * for `fas` so we'll easy the upgrade process for our users by automatically defining
        * this as well.
        */
+
+
       if (prefix === 'fas') {
         define('fa', icons);
       }
     }
 
-    var Library = function () {
+    var Library =
+    /*#__PURE__*/
+    function () {
       function Library() {
-        classCallCheck(this, Library);
+        _classCallCheck(this, Library);
 
         this.definitions = {};
       }
 
-      createClass(Library, [{
-        key: 'add',
+      _createClass(Library, [{
+        key: "add",
         value: function add() {
           var _this = this;
 
-          for (var _len = arguments.length, definitions = Array(_len), _key = 0; _key < _len; _key++) {
+          for (var _len = arguments.length, definitions = new Array(_len), _key = 0; _key < _len; _key++) {
             definitions[_key] = arguments[_key];
           }
 
           var additions = definitions.reduce(this._pullDefinitions, {});
-
           Object.keys(additions).forEach(function (key) {
-            _this.definitions[key] = _extends({}, _this.definitions[key] || {}, additions[key]);
+            _this.definitions[key] = _objectSpread({}, _this.definitions[key] || {}, additions[key]);
             define(key, additions[key]);
             build();
           });
         }
       }, {
-        key: 'reset',
+        key: "reset",
         value: function reset() {
           this.definitions = {};
         }
       }, {
-        key: '_pullDefinitions',
+        key: "_pullDefinitions",
         value: function _pullDefinitions(additions, definition) {
-          var normalized = definition.prefix && definition.iconName && definition.icon ? { 0: definition } : definition;
-
+          var normalized = definition.prefix && definition.iconName && definition.icon ? {
+            0: definition
+          } : definition;
           Object.keys(normalized).map(function (key) {
             var _normalized$key = normalized[key],
                 prefix = _normalized$key.prefix,
                 iconName = _normalized$key.iconName,
                 icon = _normalized$key.icon;
-
-
             if (!additions[prefix]) additions[prefix] = {};
-
             additions[prefix][iconName] = icon;
           });
-
           return additions;
         }
       }]);
+
       return Library;
     }();
 
@@ -3189,18 +3236,24 @@
       var width = icon[0];
       var height = icon[1];
       var vectorData = icon.slice(4);
-
       return {
         found: true,
         width: width,
         height: height,
-        icon: { tag: 'path', attributes: { fill: 'currentColor', d: vectorData[0] } }
+        icon: {
+          tag: 'path',
+          attributes: {
+            fill: 'currentColor',
+            d: vectorData[0]
+          }
+        }
       };
     }
 
     function ensureCss() {
       if (config$1.autoAddCss && !_cssInserted) {
         insertCss(css$1());
+
         _cssInserted = true;
       }
     }
@@ -3209,7 +3262,6 @@
       Object.defineProperty(val, 'abstract', {
         get: abstractCreator
       });
-
       Object.defineProperty(val, 'html', {
         get: function get() {
           return val.abstract.map(function (a) {
@@ -3217,89 +3269,76 @@
           });
         }
       });
-
       Object.defineProperty(val, 'node', {
         get: function get() {
           if (!IS_DOM) return;
-
           var container = DOCUMENT.createElement('div');
           container.innerHTML = val.html;
           return container.children;
         }
       });
-
       return val;
     }
 
     function findIconDefinition(params) {
       var _params$prefix = params.prefix,
-          prefix = _params$prefix === undefined ? 'fa' : _params$prefix,
+          prefix = _params$prefix === void 0 ? 'fa' : _params$prefix,
           iconName = params.iconName;
-
-
       if (!iconName) return;
-
       return iconFromMapping(library.definitions, prefix, iconName) || iconFromMapping(namespace.styles, prefix, iconName);
     }
 
     function resolveIcons(next) {
       return function (maybeIconDefinition) {
         var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
         var iconDefinition = (maybeIconDefinition || {}).icon ? maybeIconDefinition : findIconDefinition(maybeIconDefinition || {});
-
         var mask = params.mask;
-
 
         if (mask) {
           mask = (mask || {}).icon ? mask : findIconDefinition(mask || {});
         }
 
-        return next(iconDefinition, _extends({}, params, { mask: mask }));
+        return next(iconDefinition, _objectSpread({}, params, {
+          mask: mask
+        }));
       };
     }
 
     var library = new Library();
-
     var _cssInserted = false;
-
     var parse = {
       transform: function transform(transformString) {
         return parseTransformString(transformString);
       }
     };
-
     var icon = resolveIcons(function (iconDefinition) {
       var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var _params$transform = params.transform,
-          transform = _params$transform === undefined ? meaninglessTransform : _params$transform,
+          transform = _params$transform === void 0 ? meaninglessTransform : _params$transform,
           _params$symbol = params.symbol,
-          symbol = _params$symbol === undefined ? false : _params$symbol,
+          symbol = _params$symbol === void 0 ? false : _params$symbol,
           _params$mask = params.mask,
-          mask = _params$mask === undefined ? null : _params$mask,
+          mask = _params$mask === void 0 ? null : _params$mask,
           _params$title = params.title,
-          title = _params$title === undefined ? null : _params$title,
+          title = _params$title === void 0 ? null : _params$title,
           _params$classes = params.classes,
-          classes = _params$classes === undefined ? [] : _params$classes,
+          classes = _params$classes === void 0 ? [] : _params$classes,
           _params$attributes = params.attributes,
-          attributes = _params$attributes === undefined ? {} : _params$attributes,
+          attributes = _params$attributes === void 0 ? {} : _params$attributes,
           _params$styles = params.styles,
-          styles = _params$styles === undefined ? {} : _params$styles;
-
-
+          styles = _params$styles === void 0 ? {} : _params$styles;
       if (!iconDefinition) return;
-
       var prefix = iconDefinition.prefix,
           iconName = iconDefinition.iconName,
           icon = iconDefinition.icon;
-
-
-      return apiObject(_extends({ type: 'icon' }, iconDefinition), function () {
+      return apiObject(_objectSpread({
+        type: 'icon'
+      }, iconDefinition), function () {
         ensureCss();
 
         if (config$1.autoA11y) {
           if (title) {
-            attributes['aria-labelledby'] = config$1.replacementClass + '-title-' + nextUniqueId();
+            attributes['aria-labelledby'] = "".concat(config$1.replacementClass, "-title-").concat(nextUniqueId());
           } else {
             attributes['aria-hidden'] = 'true';
           }
@@ -3308,11 +3347,16 @@
         return makeInlineSvgAbstract({
           icons: {
             main: prepIcon(icon),
-            mask: mask ? prepIcon(mask.icon) : { found: false, width: null, height: null, icon: {} }
+            mask: mask ? prepIcon(mask.icon) : {
+              found: false,
+              width: null,
+              height: null,
+              icon: {}
+            }
           },
           prefix: prefix,
           iconName: iconName,
-          transform: _extends({}, meaninglessTransform, transform),
+          transform: _objectSpread({}, meaninglessTransform, transform),
           symbol: symbol,
           title: title,
           extra: {
@@ -3483,7 +3527,7 @@
       return obj;
     };
 
-    var _extends$1 = Object.assign || function (target) {
+    var _extends = Object.assign || function (target) {
       for (var i = 1; i < arguments.length; i++) {
         var source = arguments[i];
 
@@ -3584,10 +3628,10 @@
       if (typeof element === 'string') {
         return element;
       } else {
-        return h(element.tag, _extends$1({
+        return h(element.tag, _extends({
           class: combineClassObjects(mixins.class, dClass),
-          style: _extends$1({}, mixins.style, dStyle),
-          attrs: _extends$1({}, mixins.attrs, dAttrs)
+          style: _extends({}, mixins.style, dStyle),
+          attrs: _extends({}, mixins.attrs, dAttrs)
         }, remainingData, {
           props: props
         }), children);
@@ -3733,7 +3777,7 @@
         var transform = objectWithKey('transform', typeof props.transform === 'string' ? parse.transform(props.transform) : props.transform);
         var mask = objectWithKey('mask', normalizeIconArgs(maskArgs));
 
-        var renderedIcon = icon(icon$$1, _extends$1({}, classes, transform, mask, { symbol: symbol }));
+        var renderedIcon = icon(icon$$1, _extends({}, classes, transform, mask, { symbol: symbol }));
 
         if (!renderedIcon) {
           return log('Could not find one or more icon(s)', icon$$1, mask);
@@ -4227,13 +4271,13 @@
     var DEFAULT_REPLACEMENT_CLASS$1 = 'svg-inline--fa';
     var DATA_FA_I2SVG$1 = 'data-fa-i2svg';
 
-    var classCallCheck$1 = function (instance, Constructor) {
+    var classCallCheck = function (instance, Constructor) {
       if (!(instance instanceof Constructor)) {
         throw new TypeError("Cannot call a class as a function");
       }
     };
 
-    var createClass$1 = function () {
+    var createClass = function () {
       function defineProperties(target, props) {
         for (var i = 0; i < props.length; i++) {
           var descriptor = props[i];
@@ -4253,7 +4297,7 @@
 
 
 
-    var _extends$2 = Object.assign || function (target) {
+    var _extends$1 = Object.assign || function (target) {
       for (var i = 1; i < arguments.length; i++) {
         var source = arguments[i];
 
@@ -4269,7 +4313,7 @@
 
 
 
-    var slicedToArray$1 = function () {
+    var slicedToArray = function () {
       function sliceIterator(arr, i) {
         var _arr = [];
         var _n = true;
@@ -4331,7 +4375,7 @@
       var attrs$1 = [['data-family-prefix', 'familyPrefix'], ['data-replacement-class', 'replacementClass'], ['data-auto-replace-svg', 'autoReplaceSvg'], ['data-auto-add-css', 'autoAddCss'], ['data-auto-a11y', 'autoA11y'], ['data-search-pseudo-elements', 'searchPseudoElements'], ['data-observe-mutations', 'observeMutations'], ['data-keep-original-source', 'keepOriginalSource'], ['data-measure-performance', 'measurePerformance'], ['data-show-missing-icons', 'showMissingIcons']];
 
       attrs$1.forEach(function (_ref) {
-        var _ref2 = slicedToArray$1(_ref, 2),
+        var _ref2 = slicedToArray(_ref, 2),
             attr = _ref2[0],
             key = _ref2[1];
 
@@ -4343,7 +4387,7 @@
       });
     }
 
-    var _default$1 = _extends$2({
+    var _default$1 = _extends$1({
       familyPrefix: DEFAULT_FAMILY_PREFIX$1,
       replacementClass: DEFAULT_REPLACEMENT_CLASS$1,
       autoReplaceSvg: true,
@@ -4358,7 +4402,7 @@
 
     if (!_default$1.autoReplaceSvg) _default$1.observeMutations = false;
 
-    var config$2 = _extends$2({}, _default$1);
+    var config$2 = _extends$1({}, _default$1);
 
     WINDOW$1.FontAwesomeConfig = config$2;
 
@@ -4502,25 +4546,25 @@
 
       var maskRect = {
         tag: 'rect',
-        attributes: _extends$2({}, ALL_SPACE$1, {
+        attributes: _extends$1({}, ALL_SPACE$1, {
           fill: 'white'
         })
       };
       var maskInnerGroup = {
         tag: 'g',
-        attributes: _extends$2({}, trans.inner),
-        children: [{ tag: 'path', attributes: _extends$2({}, mainPath.attributes, trans.path, { fill: 'black' }) }]
+        attributes: _extends$1({}, trans.inner),
+        children: [{ tag: 'path', attributes: _extends$1({}, mainPath.attributes, trans.path, { fill: 'black' }) }]
       };
       var maskOuterGroup = {
         tag: 'g',
-        attributes: _extends$2({}, trans.outer),
+        attributes: _extends$1({}, trans.outer),
         children: [maskInnerGroup]
       };
       var maskId = 'mask-' + nextUniqueId$1();
       var clipId = 'clip-' + nextUniqueId$1();
       var maskTag = {
         tag: 'mask',
-        attributes: _extends$2({}, ALL_SPACE$1, {
+        attributes: _extends$1({}, ALL_SPACE$1, {
           id: maskId,
           maskUnits: 'userSpaceOnUse',
           maskContentUnits: 'userSpaceOnUse'
@@ -4532,7 +4576,7 @@
         children: [{ tag: 'clipPath', attributes: { id: clipId }, children: [maskPath] }, maskTag]
       };
 
-      children.push(defs, { tag: 'rect', attributes: _extends$2({ fill: 'currentColor', 'clip-path': 'url(#' + clipId + ')', mask: 'url(#' + maskId + ')' }, ALL_SPACE$1) });
+      children.push(defs, { tag: 'rect', attributes: _extends$1({ fill: 'currentColor', 'clip-path': 'url(#' + clipId + ')', mask: 'url(#' + maskId + ')' }, ALL_SPACE$1) });
 
       return {
         children: children,
@@ -4557,14 +4601,14 @@
         var trans = transformForSvg$1({ transform: transform, containerWidth: main.width, iconWidth: main.width });
         children.push({
           tag: 'g',
-          attributes: _extends$2({}, trans.outer),
+          attributes: _extends$1({}, trans.outer),
           children: [{
             tag: 'g',
-            attributes: _extends$2({}, trans.inner),
+            attributes: _extends$1({}, trans.inner),
             children: [{
               tag: main.icon.tag,
               children: main.icon.children,
-              attributes: _extends$2({}, main.icon.attributes, trans.path)
+              attributes: _extends$1({}, main.icon.attributes, trans.path)
             }]
           }]
         });
@@ -4594,7 +4638,7 @@
           x: width / height / 2,
           y: 0.5
         };
-        attributes['style'] = joinStyles$1(_extends$2({}, styles, {
+        attributes['style'] = joinStyles$1(_extends$1({}, styles, {
           'transform-origin': offset.x + transform.x / 16 + 'em ' + (offset.y + transform.y / 16) + 'em'
         }));
       }
@@ -4622,7 +4666,7 @@
         },
         children: [{
           tag: 'symbol',
-          attributes: _extends$2({}, attributes, { id: id }),
+          attributes: _extends$1({}, attributes, { id: id }),
           children: children
         }]
       }];
@@ -4652,7 +4696,7 @@
 
       var content = {
         children: [],
-        attributes: _extends$2({}, extra.attributes, {
+        attributes: _extends$1({}, extra.attributes, {
           'data-prefix': prefix,
           'data-icon': iconName,
           'class': attrClass,
@@ -4668,7 +4712,7 @@
 
       if (title) content.children.push({ tag: 'title', attributes: { id: content.attributes['aria-labelledby'] || 'title-' + nextUniqueId$1() }, children: [title] });
 
-      var args = _extends$2({}, content, {
+      var args = _extends$1({}, content, {
         prefix: prefix,
         iconName: iconName,
         main: main,
@@ -4901,37 +4945,37 @@
     };
     var RING$1 = {
       tag: 'path',
-      attributes: _extends$2({}, FILL$1, {
+      attributes: _extends$1({}, FILL$1, {
         d: 'M156.5,447.7l-12.6,29.5c-18.7-9.5-35.9-21.2-51.5-34.9l22.7-22.7C127.6,430.5,141.5,440,156.5,447.7z M40.6,272H8.5 c1.4,21.2,5.4,41.7,11.7,61.1L50,321.2C45.1,305.5,41.8,289,40.6,272z M40.6,240c1.4-18.8,5.2-37,11.1-54.1l-29.5-12.6 C14.7,194.3,10,216.7,8.5,240H40.6z M64.3,156.5c7.8-14.9,17.2-28.8,28.1-41.5L69.7,92.3c-13.7,15.6-25.5,32.8-34.9,51.5 L64.3,156.5z M397,419.6c-13.9,12-29.4,22.3-46.1,30.4l11.9,29.8c20.7-9.9,39.8-22.6,56.9-37.6L397,419.6z M115,92.4 c13.9-12,29.4-22.3,46.1-30.4l-11.9-29.8c-20.7,9.9-39.8,22.6-56.8,37.6L115,92.4z M447.7,355.5c-7.8,14.9-17.2,28.8-28.1,41.5 l22.7,22.7c13.7-15.6,25.5-32.9,34.9-51.5L447.7,355.5z M471.4,272c-1.4,18.8-5.2,37-11.1,54.1l29.5,12.6 c7.5-21.1,12.2-43.5,13.6-66.8H471.4z M321.2,462c-15.7,5-32.2,8.2-49.2,9.4v32.1c21.2-1.4,41.7-5.4,61.1-11.7L321.2,462z M240,471.4c-18.8-1.4-37-5.2-54.1-11.1l-12.6,29.5c21.1,7.5,43.5,12.2,66.8,13.6V471.4z M462,190.8c5,15.7,8.2,32.2,9.4,49.2h32.1 c-1.4-21.2-5.4-41.7-11.7-61.1L462,190.8z M92.4,397c-12-13.9-22.3-29.4-30.4-46.1l-29.8,11.9c9.9,20.7,22.6,39.8,37.6,56.9 L92.4,397z M272,40.6c18.8,1.4,36.9,5.2,54.1,11.1l12.6-29.5C317.7,14.7,295.3,10,272,8.5V40.6z M190.8,50 c15.7-5,32.2-8.2,49.2-9.4V8.5c-21.2,1.4-41.7,5.4-61.1,11.7L190.8,50z M442.3,92.3L419.6,115c12,13.9,22.3,29.4,30.5,46.1 l29.8-11.9C470,128.5,457.3,109.4,442.3,92.3z M397,92.4l22.7-22.7c-15.6-13.7-32.8-25.5-51.5-34.9l-12.6,29.5 C370.4,72.1,384.4,81.5,397,92.4z'
       })
     };
-    var OPACITY_ANIMATE$1 = _extends$2({}, ANIMATION_BASE$1, {
+    var OPACITY_ANIMATE$1 = _extends$1({}, ANIMATION_BASE$1, {
       attributeName: 'opacity'
     });
     var DOT$1 = {
       tag: 'circle',
-      attributes: _extends$2({}, FILL$1, {
+      attributes: _extends$1({}, FILL$1, {
         cx: '256',
         cy: '364',
         r: '28'
       }),
-      children: [{ tag: 'animate', attributes: _extends$2({}, ANIMATION_BASE$1, { attributeName: 'r', values: '28;14;28;28;14;28;' }) }, { tag: 'animate', attributes: _extends$2({}, OPACITY_ANIMATE$1, { values: '1;0;1;1;0;1;' }) }]
+      children: [{ tag: 'animate', attributes: _extends$1({}, ANIMATION_BASE$1, { attributeName: 'r', values: '28;14;28;28;14;28;' }) }, { tag: 'animate', attributes: _extends$1({}, OPACITY_ANIMATE$1, { values: '1;0;1;1;0;1;' }) }]
     };
     var QUESTION$1 = {
       tag: 'path',
-      attributes: _extends$2({}, FILL$1, {
+      attributes: _extends$1({}, FILL$1, {
         opacity: '1',
         d: 'M263.7,312h-16c-6.6,0-12-5.4-12-12c0-71,77.4-63.9,77.4-107.8c0-20-17.8-40.2-57.4-40.2c-29.1,0-44.3,9.6-59.2,28.7 c-3.9,5-11.1,6-16.2,2.4l-13.1-9.2c-5.6-3.9-6.9-11.8-2.6-17.2c21.2-27.2,46.4-44.7,91.2-44.7c52.3,0,97.4,29.8,97.4,80.2 c0,67.6-77.4,63.5-77.4,107.8C275.7,306.6,270.3,312,263.7,312z'
       }),
-      children: [{ tag: 'animate', attributes: _extends$2({}, OPACITY_ANIMATE$1, { values: '1;0;0;0;0;1;' }) }]
+      children: [{ tag: 'animate', attributes: _extends$1({}, OPACITY_ANIMATE$1, { values: '1;0;0;0;0;1;' }) }]
     };
     var EXCLAMATION$1 = {
       tag: 'path',
-      attributes: _extends$2({}, FILL$1, {
+      attributes: _extends$1({}, FILL$1, {
         opacity: '0',
         d: 'M232.5,134.5l7,168c0.3,6.4,5.6,11.5,12,11.5h9c6.4,0,11.7-5.1,12-11.5l7-168c0.3-6.8-5.2-12.5-12-12.5h-23 C237.7,122,232.2,127.7,232.5,134.5z'
       }),
-      children: [{ tag: 'animate', attributes: _extends$2({}, OPACITY_ANIMATE$1, { values: '0;0;1;1;0;0;' }) }]
+      children: [{ tag: 'animate', attributes: _extends$1({}, OPACITY_ANIMATE$1, { values: '0;0;1;1;0;0;' }) }]
     };
 
     var styles$3 = namespace$1.styles;
@@ -4971,7 +5015,7 @@
       if (typeof namespace$1.hooks.addPack === 'function') {
         namespace$1.hooks.addPack(prefix, normalized);
       } else {
-        namespace$1.styles[prefix] = _extends$2({}, namespace$1.styles[prefix] || {}, normalized);
+        namespace$1.styles[prefix] = _extends$1({}, namespace$1.styles[prefix] || {}, normalized);
       }
 
       /**
@@ -4987,12 +5031,12 @@
 
     var Library$1 = function () {
       function Library() {
-        classCallCheck$1(this, Library);
+        classCallCheck(this, Library);
 
         this.definitions = {};
       }
 
-      createClass$1(Library, [{
+      createClass(Library, [{
         key: 'add',
         value: function add() {
           var _this = this;
@@ -5004,7 +5048,7 @@
           var additions = definitions.reduce(this._pullDefinitions, {});
 
           Object.keys(additions).forEach(function (key) {
-            _this.definitions[key] = _extends$2({}, _this.definitions[key] || {}, additions[key]);
+            _this.definitions[key] = _extends$1({}, _this.definitions[key] || {}, additions[key]);
             define$1(key, additions[key]);
             build$1();
           });
@@ -5107,7 +5151,7 @@
           mask = (mask || {}).icon ? mask : findIconDefinition$1(mask || {});
         }
 
-        return next(iconDefinition, _extends$2({}, params, { mask: mask }));
+        return next(iconDefinition, _extends$1({}, params, { mask: mask }));
       };
     }
 
@@ -5146,7 +5190,7 @@
           icon = iconDefinition.icon;
 
 
-      return apiObject$1(_extends$2({ type: 'icon' }, iconDefinition), function () {
+      return apiObject$1(_extends$1({ type: 'icon' }, iconDefinition), function () {
         ensureCss$1();
 
         if (config$2.autoA11y) {
@@ -5164,7 +5208,7 @@
           },
           prefix: prefix,
           iconName: iconName,
-          transform: _extends$2({}, meaninglessTransform$1, transform),
+          transform: _extends$1({}, meaninglessTransform$1, transform),
           symbol: symbol,
           title: title,
           extra: {
@@ -5411,7 +5455,8 @@
         { staticClass: "activity-indicator", class: _vm.classes },
         _vm._l(_vm.nodes, function(i) {
           return _c("div")
-        })
+        }),
+        0
       )
     };
     var __vue_staticRenderFns__$6 = [];
@@ -5585,7 +5630,6 @@
 
     /* script */
                 const __vue_script__$9 = script$a;
-                
     /* template */
     var __vue_render__$7 = function() {
       var _vm = this;
@@ -5773,6 +5817,7 @@
 
     /* script */
                 const __vue_script__$a = script$b;
+                
     /* template */
     var __vue_render__$8 = function() {
       var _vm = this;
@@ -7643,6 +7688,21 @@
         directives: {
             bindEvents: {
                 bind(el, binding, vnode) {
+                    vnode.context.$watch('value', (value) => {
+                        addClass(el, vnode, changedClass);
+
+                        if(!isEmpty(value) || (el.selectedInd && el.selectedIndex > -1)) {
+                            removeClass(el, vnode, emptyClass);
+                        }
+                        else if(!el.classList.contains(changedClass)) {
+                            addClass(el, vnode, emptyClass);
+                        }
+
+                        if(el.tagName === 'SELECT' && el.querySelector('[value=""]')) {
+                            el.querySelector('[value=""]').selected = !value;
+                        }
+                    });
+
                     // Add/remove the has-focus class from the form control
                     el.addEventListener('focus', event => {
                         addClass(el, vnode, focusClass);
@@ -7655,18 +7715,6 @@
 
                         removeClass(el, vnode, focusClass);
                     });
-
-                    el.addEventListener('input', e => {
-                        addClass(el, vnode, changedClass);
-
-                        if(!isEmpty(el.value) || (el.tagName === 'SELECT' && el.selectedIndex > -1)) {
-                            removeClass(el, vnode, emptyClass);
-                        }
-                        else {
-                            addClass(el, vnode, emptyClass);
-                        }
-                    });
-
                     // Bubble the native events up to the vue component.
                     each(vnode.context.bindEvents, name => {
                         el.addEventListener(name, event => {
@@ -7676,6 +7724,10 @@
                 },
                 inserted(el, binding, vnode) {
                     addEmptyClass(el, vnode);
+
+                    if(el.selectedIndex > -1) {
+                        addClass(el, vnode, changedClass);
+                    }
                 },
                 update(el, binding, vnode) {
                     addEmptyClass(el, vnode);
@@ -8097,7 +8149,7 @@
       return obj;
     };
 
-    var _extends$3 = Object.assign || function (target) {
+    var _extends$2 = Object.assign || function (target) {
       for (var i = 1; i < arguments.length; i++) {
         var source = arguments[i];
 
@@ -8198,10 +8250,10 @@
       if (typeof element === 'string') {
         return element;
       } else {
-        return h(element.tag, _extends$3({
+        return h(element.tag, _extends$2({
           class: combineClassObjects$1(mixins.class, dClass),
-          style: _extends$3({}, mixins.style, dStyle),
-          attrs: _extends$3({}, mixins.attrs, dAttrs)
+          style: _extends$2({}, mixins.style, dStyle),
+          attrs: _extends$2({}, mixins.attrs, dAttrs)
         }, remainingData, {
           props: props
         }), children);
@@ -8347,7 +8399,7 @@
         var transform = objectWithKey$1('transform', typeof props.transform === 'string' ? parse$1.transform(props.transform) : props.transform);
         var mask = objectWithKey$1('mask', normalizeIconArgs$1(maskArgs));
 
-        var renderedIcon = icon$1(icon$$1, _extends$3({}, classes, transform, mask, { symbol: symbol }));
+        var renderedIcon = icon$1(icon$$1, _extends$2({}, classes, transform, mask, { symbol: symbol }));
 
         if (!renderedIcon) {
           return log$1('Could not find one or more icon(s)', icon$$1, mask);
@@ -9344,7 +9396,8 @@
                 ],
                 1
               )
-            })
+            }),
+            1
           ),
           _vm._v(" "),
           !_vm.buttons || !_vm.buttons.length
@@ -9389,7 +9442,8 @@
                         1
                       )
                     : _vm._e()
-                })
+                }),
+                0
               )
         ],
         1
@@ -9868,13 +9922,6 @@
               input: function($event) {
                 _vm.$emit("input", $event.target.value);
               }
-            },
-            model: {
-              value: _vm.testValue,
-              callback: function($$v) {
-                _vm.testValue = $$v;
-              },
-              expression: "testValue"
             }
           },
           "component",
@@ -10481,7 +10528,8 @@
               },
               [_vm._v("\n            " + _vm._s(item[_vm.display]) + "\n        ")]
             )
-          })
+          }),
+          1
         )
       ])
     };
@@ -10961,7 +11009,8 @@
                   return _c("option", {
                     domProps: { value: value, innerHTML: _vm._s(value) }
                   })
-                })
+                }),
+                0
               )
             : _vm._e(),
           _vm._v(" "),
@@ -11172,7 +11221,8 @@
                   return _c("option", {
                     domProps: { value: value, innerHTML: _vm._s(label) }
                   })
-                })
+                }),
+                0
               )
             : _vm._e()
         ],
@@ -11207,6 +11257,128 @@
         undefined
       );
 
+    const STYLE_ATTRIBUTES = [
+        'font',
+        'fontFamily',
+        'fontKerning',
+        'fontSize',
+        'fontStretch',
+        'fontStyle',
+        'fontVariant',
+        'fontVariantLigatures',
+        'fontVariantCaps',
+        'fontVariantNumeric',
+        'fontVariantEastAsian',
+        'fontWeight',
+        'lineHeight',
+        'letterSpacing',
+        'padding',
+        'margin',
+        'textAlign',
+        'textAlignLast',
+        'textDecoration',
+        'textDecorationLine',
+        'textDecorationStyle',
+        'textDecorationColor',
+        'textDecorationSkipInk',
+        'textDecorationPosition',
+        'textIndent',
+        'textRendering',
+        'textShadow',
+        'textSizeAdjust',
+        'textOverflow',
+        'textTransform',
+        'width',
+        'wordBreak',
+        'wordSpacing',
+        'wordWrap'
+    ];
+
+    function int(str) {
+        if(typeof str === 'number') {
+            return str;
+        }
+        else if(!str || !str.replace) {
+            return 0;
+        }
+
+        return parseInt(str.replace(/[^\d.]+/g, ''));
+    }
+
+    function input(div, el) {
+        div.innerHTML = el.value.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    }
+
+    function height(el) {
+        return int(el.getBoundingClientRect().height);
+    }
+
+    function style(el, attr) {
+        return window.getComputedStyle(el)[attr];
+    }
+
+    function resize(target, div, minHeight, maxHeight) {
+        const dynamicHeight = Math.max(height(div) + int(style(div, 'lineHeight')), minHeight);
+        target.style.height = ((!maxHeight || dynamicHeight < maxHeight) ? dynamicHeight : maxHeight) + 'px';
+    }
+
+    /*
+    function setMinHeight(div, el) {
+        div.style.minHeight = height(el) + 'px';
+    }
+    */
+
+    function mimic(el) {
+        const div = document.createElement('div');
+        const styles = window.getComputedStyle(el);
+
+        for(let i in STYLE_ATTRIBUTES) {
+            const key = STYLE_ATTRIBUTES[i];
+
+            div.style[key] = styles[key];
+        }
+
+        div.style.position = 'absolute';
+        div.style.bottom = '100%';
+        div.style.zIndex = -1;
+        div.style.visibility = 'hidden';
+
+        return div;
+    }
+
+    function init(el, maxHeight) {
+        const div = mimic(el);
+        const minHeight = height(el);
+
+        el.addEventListener('input', event => {
+            input(div, event.target);
+            resize(el, div, minHeight, maxHeight);
+        });
+
+        document.body.appendChild(div);
+
+        input(div, el);
+        resize(el, div, minHeight, maxHeight);
+    }
+
+    var Autogrow = {
+
+        inserted(el, binding, vnode) {
+            if(el.tagName !== 'TEXTAREA') {
+                el = el.querySelector('textarea');
+            }
+
+            if(!el) {
+                throw new Error('A textarea is required for the v-autogrow directive.');
+            }
+
+            if(binding.value !== false) {
+                init(el, binding.value);
+            }
+        }
+
+    };
+
     //
 
     var script$t = {
@@ -11220,6 +11392,10 @@
             FormFeedback
         },
 
+        directives: {
+            autogrow: Autogrow
+        },
+
         mixins: [
             Colorable,
             FormControl,
@@ -11227,6 +11403,13 @@
         ],
 
         props: {
+            /**
+             * The autogrow attribute
+             *
+             * @property Boolean
+             */
+            autogrow: [Number, String, Boolean],
+
             /**
              * The type attribute
              *
@@ -11280,13 +11463,13 @@
                   _vm._b(
                     {
                       directives: [
-                        { name: "bind-events", rawName: "v-bind-events" },
                         {
                           name: "autogrow",
                           rawName: "v-autogrow",
                           value: _vm.autogrow,
                           expression: "autogrow"
-                        }
+                        },
+                        { name: "bind-events", rawName: "v-bind-events" }
                       ],
                       domProps: { value: _vm.value },
                       on: {
@@ -11778,8 +11961,6 @@
       return _c(
         "fieldset",
         [
-          _vm.legends ? _c("h3", [_vm._v("Employment Information")]) : _vm._e(),
-          _vm._v(" "),
           !_vm.recurring
             ? _c("p", [
                 _c("small", {
@@ -11886,6 +12067,7 @@
         },
 
         mixins: [
+            Sizeable,
             Colorable,
             MergeClasses
         ],
@@ -12475,7 +12657,8 @@
                         key: value,
                         domProps: { innerHTML: _vm._s(value) }
                       })
-                    })
+                    }),
+                    1
                   )
                 ]
               : _vm.prepend
@@ -12499,7 +12682,8 @@
                         key: value,
                         domProps: { innerHTML: _vm._s(value) }
                       })
-                    })
+                    }),
+                    1
                   )
                 ]
               : _vm.append
@@ -12565,6 +12749,12 @@
       methods: {
         onClickButton(value) {
           this.$emit('input', parseFloat(this.value) !== (value = parseFloat(value)) ? value : null);
+        },
+
+        onKeyDown(e) {
+          if ((e.keyCode < 48 || e.keyCode > 57 && e.keyCode !== 190) && !e.metaKey && e.key.length === 1) {
+            e.preventDefault();
+          }
         }
 
       }
@@ -12606,7 +12796,8 @@
                   }
                 }
               })
-            })
+            }),
+            1
           ),
           _vm._v(" "),
           _c(
@@ -12628,6 +12819,7 @@
                   value: _vm.value
                 },
                 on: {
+                  keydown: _vm.onKeyDown,
                   input: function(value) {
                     return _vm.$emit("input", value)
                   }
@@ -12728,12 +12920,6 @@
       return _c(
         "fieldset",
         [
-          _vm.legends
-            ? _c("h3", { class: { "mb-0": _vm.hasMinimumAmount } }, [
-                _vm._v("Select your donation amount")
-              ])
-            : _vm._e(),
-          _vm._v(" "),
           _vm.hasMinimumAmount
             ? _c("div", { staticClass: "mb-2" }, [
                 _c("small", { staticClass: "text-muted" }, [
@@ -13152,126 +13338,6 @@
         undefined,
         undefined
       );
-
-    const STYLE_ATTRIBUTES = [
-        'font',
-        'fontFamily',
-        'fontKerning',
-        'fontSize',
-        'fontStretch',
-        'fontStyle',
-        'fontVariant',
-        'fontVariantLigatures',
-        'fontVariantCaps',
-        'fontVariantNumeric',
-        'fontVariantEastAsian',
-        'fontWeight',
-        'lineHeight',
-        'letterSpacing',
-        'padding',
-        'margin',
-        'textAlign',
-        'textAlignLast',
-        'textDecoration',
-        'textDecorationLine',
-        'textDecorationStyle',
-        'textDecorationColor',
-        'textDecorationSkipInk',
-        'textDecorationPosition',
-        'textIndent',
-        'textRendering',
-        'textShadow',
-        'textSizeAdjust',
-        'textOverflow',
-        'textTransform',
-        'width',
-        'wordBreak',
-        'wordSpacing',
-        'wordWrap'
-    ];
-
-    function int(str) {
-        if(typeof str === 'number') {
-            return str;
-        }
-        else if(!str || !str.replace) {
-            return 0;
-        }
-
-        return parseInt(str.replace(/[^\d.]+/g, ''));
-    }
-
-    function input(div, el) {
-        div.innerHTML = el.value.replace(/(?:\r\n|\r|\n)/g, '<br />');
-    }
-
-    function height(el) {
-        return int(el.getBoundingClientRect().height);
-    }
-
-    function style(el, attr) {
-        return window.getComputedStyle(el)[attr];
-    }
-
-    function resize(target, div, minHeight, maxHeight) {
-        const dynamicHeight = Math.max(height(div) + int(style(div, 'lineHeight')), minHeight);
-        target.style.height = ((!maxHeight || dynamicHeight < maxHeight) ? dynamicHeight : maxHeight) + 'px';
-    }
-
-    /*
-    function setMinHeight(div, el) {
-        div.style.minHeight = height(el) + 'px';
-    }
-    */
-
-    function mimic(el) {
-        const div = document.createElement('div');
-        const styles = window.getComputedStyle(el);
-
-        for(let i in STYLE_ATTRIBUTES) {
-            const key = STYLE_ATTRIBUTES[i];
-
-            div.style[key] = styles[key];
-        }
-
-        div.style.position = 'absolute';
-        div.style.bottom = '100%';
-        div.style.zIndex = -1;
-        div.style.visibility = 'hidden';
-
-        return div;
-    }
-
-    function init(el, maxHeight) {
-        const div = mimic(el);
-        const minHeight = height(el);
-
-        el.addEventListener('input', event => {
-            input(div, event.target);
-            resize(el, div, minHeight, maxHeight);
-        });
-
-        document.body.appendChild(div);
-
-        input(div, el);
-        resize(el, div, minHeight, maxHeight);
-    }
-
-    var Autogrow = {
-
-        inserted(el, binding, vnode) {
-            if(el.tagName !== 'TEXTAREA') {
-                el = el.querySelector('textarea');
-            }
-
-            if(!el) {
-                throw new Error('A textarea is required for the v-autogrow directive.');
-            }
-
-            init(el, binding.value);
-        }
-
-    };
 
     //
     var script$J = {
@@ -14350,7 +14416,8 @@
                     ],
                     1
                   )
-                })
+                }),
+                0
               )
             }),
             _vm._v(" "),
@@ -14972,7 +15039,8 @@
           return _c("option", {
             domProps: { value: value, innerHTML: _vm._s(value) }
           })
-        })
+        }),
+        0
       )
     };
     var __vue_staticRenderFns__$T = [];
@@ -15044,7 +15112,8 @@
           return _c("option", {
             domProps: { value: value, innerHTML: _vm._s(label) }
           })
-        })
+        }),
+        0
       )
     };
     var __vue_staticRenderFns__$U = [];

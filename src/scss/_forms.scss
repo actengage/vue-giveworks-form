@@ -105,8 +105,6 @@ $custom-control-transition: $input-transition, padding .15s ease-out;
     }
 }
 
-
-.credit-card-field-wrapper .form-control,
 .custom-select-field .form-group-inner,
 .custom-input-field .custom-control,
 .custom-textarea-field .custom-control {
@@ -224,10 +222,12 @@ $custom-control-transition: $input-transition, padding .15s ease-out;
         }
     }
 
-    &:not(.is-empty) {
+    &:not(.is-empty),
+    &.has-changed {
         label {
             top: 0;
             opacity: 1;
+            z-index: 2;
             transform: none;
             font-size: $custom-control-label-font-size;
             line-height: $custom-control-label-font-size;
@@ -509,7 +509,6 @@ $custom-control-transition: $input-transition, padding .15s ease-out;
         background: inherit;
     }
 }
-
 
 .stripe-field {
     position: relative;

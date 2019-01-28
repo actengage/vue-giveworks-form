@@ -1,7 +1,9 @@
 <template>
-    <alert variant="danger" :heading="`Error: ${status}`" :style="{'width': widthUnit, 'min-width': minWidthUnit, 'max-width': maxWidthUnit}">
-        {{ formattedMessage }}
-    </alert>
+    <div class="text-left">
+        <alert variant="danger" :heading="`Error: ${status}`" :style="{'width': widthUnit, 'min-width': minWidthUnit, 'max-width': maxWidthUnit}">
+            {{ formattedMessage }}
+        </alert>
+    </div>
 </template>
 
 <script>

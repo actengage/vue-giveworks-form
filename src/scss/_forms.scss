@@ -511,11 +511,12 @@ $custom-control-transition: $input-transition, padding .15s ease-out;
 }
 
 .stripe-field {
+    font-size: 1em;
     position: relative;
 
     .form-control {
         width: 100%;
-        padding: .8em;
+        padding: 1em;
         transition: all .15s ease-in-out;
         height: calc((1em * 1.5) + (0.75em * 2));
     }

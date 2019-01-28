@@ -36,7 +36,7 @@ import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
 
 export default {
 
-    name: 'giveworks-form',
+    name: 'GiveworksForm',
 
     components: {
         ActivityIndicator,
@@ -111,12 +111,17 @@ export default {
     },
 
     mounted() {
-        if(!this.page.id) {
+        if(!this.page.id && this.apiKey) {
             Page.find(this.pageId).then(model => {
                 this.page = model.toJson();
             }, error => {
+                console.log(error);
                 this.error = error;
             });
+        }
+        else if(!this.apiKey) {
+            this.error = new Error('Missing required prop: "api-key"');
+            this.error.status = 500;
         }
 
         window.addEventListener('resize', this.onResize());

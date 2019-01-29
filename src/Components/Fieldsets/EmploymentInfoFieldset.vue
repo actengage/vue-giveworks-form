@@ -4,7 +4,7 @@
 
 		<!-- <h3 v-if="legends">Employment Information</h3> -->
 
-		<p v-if="!recurring">
+		<p v-if="!form.recurring">
 			<small class="text-muted" v-html="employmentOccurMessage"/>
 		</p>
 

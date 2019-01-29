@@ -18,6 +18,10 @@ export default {
 
     computed: {
 
+        buttonLabel() {
+            return this.page.options.button;
+        },
+
         shouldShowEmployment() {
             return this.page.site.type === 'PAC' || this.page.site.type === 'Campaign';
         }
@@ -46,9 +50,9 @@ export default {
             this.submitButton().disabled = false;
         },
 
-        redirect(url) {
+        handleRedirect(url) {
             setTimeout(() => {
-                window.location = url || this.page.next_page.url;
+                window.location = url || this.redirect || this.page.next_page.url;
             });
         },
 
@@ -93,8 +97,7 @@ export default {
         },
 
         onSubmitSuccess() {
-            console.log('onSubmitSuccess');
-            this.redirect();
+            this.handleRedirect();
         }
 
     },

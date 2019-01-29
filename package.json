@@ -1,10 +1,9 @@
 {
-  "name": "test",
-  "version": "0.1.0",
-  "private": true,
+  "name": "vue-giveworks-form",
+  "version": "0.3.0",
   "scripts": {
     "serve": "vue-cli-service serve --https",
-    "build": "vue-cli-service build --target lib --name vue-giveworks-form",
+    "build": "vue-cli-service build --target lib --name GiveworksForm ./src/export.js",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
     "release-patch": "npm version patch --no-git-tag-version; npm run release;",
@@ -20,11 +19,11 @@
     "@fortawesome/vue-fontawesome": "^0.1.2",
     "axios": "^0.18.0",
     "bootstrap": "^4.1.3",
+    "register-service-worker": "^1.5.2",
     "vue": "^2.5.21",
+    "vue-place-autocomplete": "^0.3.0",
     "vue-credit-card-field": "^0.2.7",
-    "vue-interface": "^0.2.95",
-    "vue-place-autocomplete": "^0.2.0",
-    "register-service-worker": "^1.5.2"
+    "vue-interface": "^0.2.95"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.3.0",

@@ -1,6 +1,6 @@
 <template>
 
-    <div v-else class="form-group" :class="{'was-validated': !!errors.token}">
+    <div class="form-group" :class="{'was-validated': !!error || !!errors.token}">
 
         <div v-if="!loaded" class="row my-5 py-1">
             <div class="col-xs-12">
@@ -8,16 +8,16 @@
             </div>
         </div>
 
-        <label v-else class="d-block mt-3">
-            <div class="stripe-field" :class="{'has-activity': activity}">
-                <div class="form-control" :class="{'is-invalid': !!errors.token}">
+        <label v-else class="d-block mt-3" :class="{'has-activity': activity}">
+            <div class="stripe-field">
+                <div class="form-control" :class="{'is-invalid': !!error || !!errors.token}">
                     <div ref="input" class="stripe-field-input"/>
                 </div>
-                <div class="stripe-field-activity">
-                    <activity-indicator size="xs" center/>
-                </div>
+                <div class="invalid-feedback" v-if="error || errors.token" v-html="error || errors.token.join('<br>')"/>
             </div>
-            <div class="invalid-feedback" v-if="errors.token" v-html="errors.token.join('<br>')"/>
+            <div class="stripe-field-activity">
+                <activity-indicator size="xs"/>
+            </div>
         </label>
     </div>
 
@@ -66,12 +66,14 @@ export default {
                         }).then((result) => {
                             wait(this.activity ? 750 : 0, (resolve, reject) => {
                                 if(result.error) {
-                                    reject(this.errors.token = [event.error.message]);
+                                    this.error = result.error.message;
+
+                                    reject(result.error.message);
                                 }
                                 else {
                                     this.form.token = result.token.id;
                                     this.pageType.enableSubmitButton();
-                                    // this.$dispatch.request('submit:enable');
+                                    
                                     resolve(result);
                                 }
                             }).then(resolve, reject);
@@ -93,8 +95,9 @@ export default {
 
     data() {
         return {
-            activity: false,
-            loaded: false
+            error: null,
+            loaded: false,
+            activity: false
         };
     }
 

@@ -7,7 +7,14 @@
     </div>
 
     <div v-else class="form-group">
-        <credit-card-field :activity="activity" :error="error || errors.token" @change="onChange" @complete="onComplete"/>
+        <alert v-if="!gateway.options.login_id || !gateway.options.public_key" variant="danger" class="d-flex align-items-center">
+            <icon icon="exclamation-triangle" size="2x" class="mr-2" /> 
+            <h6 class="font-weight-light my-0">
+                This account has NOT been configured for the new Giveworks Forms.<br>
+                <b>Reason:</b> <template v-if="!gateway.options.login_id">The <em>login_id</em> is missing.</template> <template v-if="!gateway.options.public_key">The <em>public_key</em> is missing.</template>
+            </h6>
+        </alert>
+        <credit-card-field v-else :activity="activity" :error="error || errors.token" @change="onChange" @complete="onComplete"/>
     </div>
 
 </template>
@@ -15,6 +22,7 @@
 <script>
 import Gateway from '../Gateway';
 import wait from 'vue-interface/src/Helpers/Wait';
+import Alert from 'vue-interface/src/Components/Alert';
 import elapsed from 'vue-interface/src/Helpers/Elapsed';
 import CreditCardField from 'vue-credit-card-field/src/CreditCardField';
 import PaymentGateway from '../../../Mixins/PaymentGateway';
@@ -24,6 +32,7 @@ export default {
     name: 'authorize-net-credit-card',
 
     components: {
+        Alert,
         CreditCardField
     },
 

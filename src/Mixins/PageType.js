@@ -98,13 +98,19 @@ export default {
 
         onSubmitSuccess() {
             this.handleRedirect();
+        },
+
+        onSubmitError(e) {
+            throw e;
         }
 
     },
 
     data() {
         return {
-            form: {},
+            form: {
+                recurring: this.page.site.recurring ? (this.page.options.recurring_only ? 1 : 0) : 0
+            },
             errors: {},
             submitting: false,
             model: new Page({

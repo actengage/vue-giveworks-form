@@ -10,7 +10,7 @@
                 type="button"
                 @click="activate(button)">
                 <icon :icon="typeof button.icon === 'string' ? ['far', button.icon]: button.icon" :size="button.size || 'lg'" :class="{'mt-2 mb-1': !button.label}"/>
-                <div v-if="button.label" class="pb-1 small" v-html="button.label"/>
+                <div v-if="button.label" class="small" v-html="button.label"/>
             </btn>
         </div>
 
@@ -20,7 +20,7 @@
         </alert>
 
         <div v-else>
-            <div v-if="button.active" v-for="button in buttons">
+            <div v-if="button.active" v-for="button in buttons" :key="button.component">
                 <component :is="button.component" :page-type="pageType" :form="form" :page="page" :errors="errors" :gateway="button.gateway"/>
             </div>
         </div>
@@ -102,10 +102,6 @@ export default {
         onResize(event) {
             this.width = this.$el.offsetWidth;
             return this.onResize;
-        },
-
-        onSubmit() {
-            console.log('asd');
         }
 
     },

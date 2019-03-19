@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import States from '../../Config/States';
 import FormComponent from '../../Mixins/FormComponent';
 import InputField from 'vue-interface/src/Components/InputField';
 import SelectField from 'vue-interface/src/Components/SelectField';
@@ -89,7 +88,12 @@ export default {
         },
 
         states() {
-            return States;
+            const states = Object.assign({}, this.page.site.config.states);
+
+            delete states[''];
+            delete states[' '];
+
+            return states;
         }
     }
 

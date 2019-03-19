@@ -27,7 +27,7 @@ export default {
         width: String,
 
         error: {
-            type: Error,
+            type: [Object, Error],
             required: true
         }
 
@@ -52,7 +52,14 @@ export default {
         },
 
         formattedMessage() {
-            if(this.error.data && this.error.data.message) {
+            if(this.error.data && this.error.data.errors) {
+                return Object.keys(this.error.data.errors)
+                    .reduce((carry, key) => {
+                       return carry.concat([this.error.data.errors[key]]);
+                    }, [])
+                    .join('<br>');
+            }
+            else if(this.error.data && this.error.data.message) {
                 return this.error.data.message;
             }
 

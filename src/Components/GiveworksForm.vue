@@ -49,6 +49,8 @@ export default {
 
     props: {
 
+        env: String,
+
         data: [Boolean, Object],
 
         pageId: [Number, String],
@@ -87,8 +89,8 @@ export default {
 
         submit(e) {
             this.$refs.type.submit(e).then(
-                this.pageType.onSubmitSuccess,
-                this.pageType.onSubmitError
+                this.$refs.type.onSubmitSuccess,
+                this.$refs.type.onSubmitError
             );
         },
 
@@ -104,7 +106,7 @@ export default {
     },
 
     created() {
-        Request.defaults = HttpConfig;
+        Request.defaults = HttpConfig(this.env);
         Request.defaults.headers = {
             'Authorization': `Bearer ${this.apiKey}`
         };
@@ -115,7 +117,6 @@ export default {
             Page.find(this.pageId).then(model => {
                 this.page = model.toJson();
             }, error => {
-                console.log(error);
                 this.error = error;
             });
         }

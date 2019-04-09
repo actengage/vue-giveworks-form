@@ -1,6 +1,6 @@
 <template>
 
-    <div class="form-group" :class="{'is-invalid': !!invalidFeedback}">
+    <form-group :class="{'is-invalid': !!invalidFeedback}">
 
         <label>
             {{question.question}}
@@ -52,7 +52,7 @@
             <form-feedback v-if="invalidFeedback" v-html="invalidFeedback" invalid />
         </slot>
 
-    </div>
+    </form-group>
 
 </template>
 

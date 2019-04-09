@@ -3,9 +3,9 @@ import App from './App.vue';
 import router from './router';
 import VueRouter from 'vue-router';
 
-import './scss/_global.scss';
-import './scss/_buttons.scss';
-import './scss/_forms.scss';
+import './assets/scss/_global.scss';
+import './assets/scss/_buttons.scss';
+import './assets/scss/_forms.scss';
 
 Vue.use(VueRouter);
 Vue.config.productionTip = false;

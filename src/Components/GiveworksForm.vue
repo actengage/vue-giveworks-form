@@ -25,11 +25,11 @@
 
 <script>
 import Page from '../Models/Page';
+import Signup from './Types/Signup';
+import Survey from './Types/Survey';
 import HttpConfig from '../Config/Http';
 import Donation from './Types/Donation';
 import Petition from './Types/Petition';
-import Signup from './Types/Signup';
-import Survey from './Types/Survey';
 import HttpErrorResponse from './HttpErrorResponse';
 import Request from 'vue-interface/src/Http/Request';
 import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
@@ -48,19 +48,15 @@ export default {
     },
 
     props: {
-
-        env: String,
-
-        data: [Boolean, Object],
-
-        pageId: [Number, String],
-
-        redirect: [Boolean, String],
-
+        
         apiKey: {
             type: String,
             required: true
         },
+
+        data: [Boolean, Object],
+
+        mode: String,
 
         orientation: {
             type: String,
@@ -68,7 +64,12 @@ export default {
             validator: value => {
                 return ['vertical', 'horizontal'].indexOf(value) !== -1;
             }
-        }
+        },
+
+        pageId: [Number, String],
+
+        redirect: [Boolean, String]
+
     },
 
     computed: {
@@ -106,7 +107,7 @@ export default {
     },
 
     created() {
-        Request.defaults = HttpConfig(this.env);
+        Request.defaults = HttpConfig(this.mode);
         Request.defaults.headers = {
             'Authorization': `Bearer ${this.apiKey}`
         };

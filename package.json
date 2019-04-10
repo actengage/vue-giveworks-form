@@ -1,9 +1,9 @@
 {
   "name": "vue-giveworks-form",
-  "version": "0.3.9",
+  "version": "0.3.11",
   "scripts": {
     "serve": "vue-cli-service serve --https",
-    "build": "vue-cli-service build ./src/export.js --target lib --name GiveworksForm ",
+    "build": "vue-cli-service build ./src/export.js --target lib --name GiveworksForm; npm run build-demo;",
     "build-demo": "vue-cli-service build ./src/main.js --demo --target app",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",

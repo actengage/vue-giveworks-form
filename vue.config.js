@@ -19,7 +19,8 @@ module.exports = {
         plugins: [
             new PurgecssPlugin({
                 paths: paths,
-                whitelist: ['btn-primary']
+                whitelist: ['btn-primary'],                
+                whitelistPatterns: [/^custom/],
             })
         ],
         externals: !isDemo ? {

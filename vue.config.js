@@ -18,7 +18,7 @@ module.exports = {
         ],
         externals: !isDemo ? {
             axios: 'axios',
-            vue: 'vue'
+            //vue: 'vue'
         } : undefined
     }
 };

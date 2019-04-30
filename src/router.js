@@ -8,7 +8,7 @@ const router = new Router({
     routes: [
         {
             name: 'index',
-            path: '/:short?/:slug?',
+            path: '/:short?/:slug?/:source?',
             component: () => import('@/Views/Index')
         }
     ]

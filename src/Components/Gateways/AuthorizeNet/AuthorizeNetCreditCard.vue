@@ -22,9 +22,7 @@
 <script>
 import Gateway from '../Gateway';
 import wait from 'vue-interface/src/Helpers/Wait';
-import Alert from 'vue-interface/src/Components/Alert';
 import elapsed from 'vue-interface/src/Helpers/Elapsed';
-import CreditCardField from 'vue-credit-card-field/src/CreditCardField';
 import PaymentGateway from '../../../Mixins/PaymentGateway';
 
 export default {
@@ -32,8 +30,8 @@ export default {
     name: 'authorize-net-credit-card',
 
     components: {
-        Alert,
-        CreditCardField
+        Alert: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/Alert'),
+        CreditCardField: () => import(/* webpackChunkName: "vue-credit-card-field" */'vue-credit-card-field/src/CreditCardField'),
     },
 
     mixins: [

@@ -38,9 +38,7 @@ import '../../Config/Icons';
 import ToggleButton from '../Fields/ToggleButton';
 import PaymentButtons from '../Fields/PaymentButtons';
 import FormComponent from '../../Mixins/FormComponent';
-import Alert from 'vue-interface/src/Components/Alert';
 import { FontAwesomeIcon as Icon } from '@fortawesome/vue-fontawesome';
-import AlertHeading from 'vue-interface/src/Components/Alert/AlertHeading';
 
 export default {
 
@@ -48,10 +46,10 @@ export default {
 
     components: {
         Icon,
-        Alert,
-        AlertHeading,
         ToggleButton,
-        PaymentButtons
+        PaymentButtons,
+        Alert: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/Alert'),
+        AlertHeading: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/Alert/AlertHeading'),
     },
 
     mixins: [

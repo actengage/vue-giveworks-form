@@ -13,6 +13,7 @@
                 :is="pageTypeComponent"
                 :orientation="orientation"
                 :page="page"
+                :source="source"
                 :redirect="redirect"
                 @error="onError"
             />
@@ -25,26 +26,21 @@
 
 <script>
 import Page from '../Models/Page';
-import Signup from './Types/Signup';
-import Survey from './Types/Survey';
 import HttpConfig from '../Config/Http';
-import Donation from './Types/Donation';
-import Petition from './Types/Petition';
 import HttpErrorResponse from './HttpErrorResponse';
 import Request from 'vue-interface/src/Http/Request';
-import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
 
 export default {
 
     name: 'GiveworksForm',
 
     components: {
-        ActivityIndicator,
         HttpErrorResponse,
-        Donation,
-        Petition,
-        Signup,
-        Survey
+        Signup: () => import(/* webpackChunkName: "signup-type" */'./Types/Signup'),
+        Survey: () => import(/* webpackChunkName: "survey-type" */'./Types/Survey'),
+        Petition: () => import(/* webpackChunkName: "petition-type" */'./Types/Petition'),
+        Donation: () => import(/* webpackChunkName: "donation-type" */'./Types/Donation'),
+        ActivityIndicator: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/ActivityIndicator')
     },
 
     props: {
@@ -67,6 +63,8 @@ export default {
         },
 
         pageId: [Number, String],
+
+        source: [String, Number],
 
         redirect: [Boolean, String]
 
@@ -109,17 +107,26 @@ export default {
     created() {
         Request.defaults = HttpConfig(this.mode);
         Request.defaults.headers = {
+            'Accept': 'application/json',
             'Authorization': `Bearer ${this.apiKey}`
         };
     },
 
     mounted() {
+        /*
+        bugsnag('e66068bbbefd6ad235c13b0c178480da').use(bugsnagVue, Vue);
+
+        import bugsnag from '@bugsnag/js';
+        import bugsnagVue from '@bugsnag/plugin-vue';
+        */
+
         if(!this.page.id && this.apiKey) {
-            Page.find(this.pageId).then(model => {
-                this.page = model.toJson();
-            }, error => {
-                this.error = error;
-            });
+            Page.find(this.pageId)
+                .then(model => {
+                    this.page = model.toJson();
+                }, error => {
+                    this.error = error;
+                });
         }
         else if(!this.apiKey) {
             this.error = new Error('Missing required prop: "api-key"');

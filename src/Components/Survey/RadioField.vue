@@ -35,8 +35,6 @@
 
 <script>
 import SurveyField from './SurveyField';
-import RadioField from '../Fields/RadioField';
-import FormFeedback from 'vue-interface/src/Components/FormFeedback';
 
 export default {
 
@@ -45,8 +43,8 @@ export default {
     extends: SurveyField,
 
     components: {
-        RadioField,
-        FormFeedback
+        RadioField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/RadioField'),
+        FormFeedback: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/FormFeedback')
     }
 
 };

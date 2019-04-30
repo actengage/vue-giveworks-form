@@ -5,11 +5,16 @@ import { isFunction } from 'vue-interface/src/Helpers/Functions';
 export default {
 
     props: {
+
+        source: [String, Number],
+
+        redirect: [Boolean, String],
+
         page: {
             type: Object,
             required: true
-        },
-        redirect: [Boolean, String]
+        }
+
     },
 
     mixins: [
@@ -52,7 +57,13 @@ export default {
 
         handleRedirect(url) {
             setTimeout(() => {
-                window.location = url || this.redirect || this.page.next_page.url;
+                url = url || this.redirect || this.page.external_reply || (
+                    this.page.next_page ? this.page.next_page.url : undefined
+                );
+                
+                if(url) {
+                    window.location = url;
+                }
             });
         },
 
@@ -107,9 +118,14 @@ export default {
     },
 
     data() {
+        const recurring = this.page.site.recurring ? (
+            this.page.options.recurring_only ? 1 : 0
+        ) : 0;
+        
         return {
             form: {
-                recurring: this.page.site.recurring ? (this.page.options.recurring_only ? 1 : 0) : 0
+                source: this.source,
+                recurring: recurring
             },
             errors: {},
             submitting: false,

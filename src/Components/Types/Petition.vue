@@ -24,11 +24,6 @@
 
 <script>
 import PageType from '../../Mixins/PageType';
-import BtnActivity from 'vue-interface/src/Components/BtnActivity';
-import ContactInfoFieldset from '../Fieldsets/ContactInfoFieldset';
-import CheckboxField from 'vue-interface/src/Components/CheckboxField';
-import EmploymentInfoFieldset from '../Fieldsets/EmploymentInfoFieldset';
-import SelectDonationFieldset from '../Fieldsets/SelectDonationFieldset';
 
 export default {
 
@@ -37,11 +32,11 @@ export default {
     extends: PageType,
 
     components: {
-        BtnActivity,
-        CheckboxField,
-        ContactInfoFieldset,
-        EmploymentInfoFieldset,
-        SelectDonationFieldset
+        CheckboxField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/CheckboxField'),
+        BtnActivity: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/BtnActivity'),
+        TextareaField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/TextareaField'),
+        ContactInfoFieldset: () => import(/* webpackChunkName: "contact-info-fieldset" */'../Fieldsets/ContactInfoFieldset'),
+        EmploymentInfoFieldset: () => import(/* webpackChunkName: "employment-info-fieldset" */'../Fieldsets/EmploymentInfoFieldset')
     }
 
 };

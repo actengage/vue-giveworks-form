@@ -1,7 +1,7 @@
 <template>
 
     <div>
-        <div v-for="question in page.questions">
+        <div v-for="question in page.questions" :key="question.id">
             <component
                 :value="form[`field_${question.id}`]"
                 :is="component(question.type)"
@@ -24,16 +24,15 @@
 </template>
 
 <script>
+import PageType from '../../Mixins/PageType';
 import AltEmailField from '../Survey/AltEmailField';
 import AltPhoneField from '../Survey/AltPhoneField';
-import BtnActivity from 'vue-interface/src/Components/BtnActivity';
 import CheckboxField from '../Survey/CheckboxField';
 import CityField from '../Survey/CityField';
 import DollarAmountField from '../Survey/DollarAmountField';
 import FirstField from '../Survey/FirstField';
 import InputField from '../Survey/InputField';
 import LastField from '../Survey/LastField';
-import PageType from '../../Mixins/PageType';
 import PrimaryEmailField from '../Survey/PrimaryEmailField';
 import PrimaryPhoneField from '../Survey/PrimaryPhoneField';
 import RadioField from '../Survey/RadioField';
@@ -71,7 +70,6 @@ export default {
     components: {
         AltEmailField,
         AltPhoneField,
-        BtnActivity,
         CheckboxField,
         CityField,
         DollarAmountField,
@@ -85,7 +83,8 @@ export default {
         StateField,
         StreetField,
         TextareaField,
-        ZipField
+        ZipField,
+        BtnActivity: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/BtnActivity'),
     },
 
     methods: {

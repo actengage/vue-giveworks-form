@@ -15,15 +15,14 @@
 <script>
 import FormComponent from '../../Mixins/FormComponent';
 import PaymentGateways from '../Gateways/PaymentGateways';
-import TextareaField from 'vue-interface/src/Components/TextareaField';
 
 export default {
 
     name: 'payment-info-fieldset',
 
     components: {
-        TextareaField,
-        PaymentGateways
+        PaymentGateways,
+        TextareaField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/TextareaField'),
     },
 
     props: {

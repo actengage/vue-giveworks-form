@@ -28,11 +28,7 @@
 </template>
 
 <script>
-import Btn from 'vue-interface/src/Components/Btn';
 import FormControl from 'vue-interface/src/Mixins/FormControl';
-import InputField from 'vue-interface/src/Components/InputField';
-import InputGroup from 'vue-interface/src/Components/InputGroup';
-import FormFeedback from 'vue-interface/src/Components/FormFeedback';
 
 export default {
 
@@ -43,10 +39,10 @@ export default {
     ],
 
     components: {
-        Btn,
-        InputField,
-        InputGroup,
-        FormFeedback
+        Btn: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/Btn'),
+        InputField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/InputField'),
+        InputGroup: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/InputGroup'),
+        FormFeedback: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/FormFeedback')
     },
 
     props: {

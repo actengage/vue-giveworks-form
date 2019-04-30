@@ -50,10 +50,7 @@
 
 <script>
 import FormComponent from '../../Mixins/FormComponent';
-import InputField from 'vue-interface/src/Components/InputField';
-import SelectField from 'vue-interface/src/Components/SelectField';
 import PlaceAutofill from 'vue-place-autocomplete/src/PlaceAutofill';
-import PlaceAutocompleteField from 'vue-place-autocomplete/src/PlaceAutocompleteField';
 
 export default {
 
@@ -64,9 +61,9 @@ export default {
     ],
 
     components: {
-        InputField,
-        SelectField,
-        PlaceAutocompleteField
+        InputField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/InputField'),
+        SelectField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/SelectField'),
+        PlaceAutocompleteField: () => import(/* webpackChunkName: "place-autocomplete-field" */'vue-place-autocomplete/src/PlaceAutocompleteField')
     },
 
     directives: {

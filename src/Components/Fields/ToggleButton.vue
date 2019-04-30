@@ -15,8 +15,6 @@
 </template>
 
 <script>
-import Btn from 'vue-interface/src/Components/Btn';
-import BtnGroup from 'vue-interface/src/Components/BtnGroup';
 import FormControl from 'vue-interface/src/Mixins/FormControl';
 
 export default {
@@ -30,8 +28,8 @@ export default {
     ],
 
     components: {
-        Btn,
-        BtnGroup
+        Btn: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/Btn'),
+        BtnGroup: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/BtnGroup')
     },
 
     props: {

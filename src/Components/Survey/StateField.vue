@@ -16,7 +16,6 @@
 
 <script>
 import SurveyField from './SurveyField';
-import SelectField from '../Fields/SelectField';
 
 export default {
 
@@ -25,7 +24,7 @@ export default {
     extends: SurveyField,
 
     components: {
-        SelectField
+        SelectField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/SelectField')
     }
 
 };

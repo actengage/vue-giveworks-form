@@ -1,12 +1,11 @@
 <script>
-import FormGroup from 'vue-interface/src/Components/FormGroup';
 import FormControl from 'vue-interface/src/Mixins/FormControl';
 import { isFunction } from 'vue-interface/src/Helpers/Functions';
 
 export default {
 
     components: {
-        FormGroup
+        FormGroup: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/FormGroup'),
     },
 
     mixins: [

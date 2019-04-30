@@ -8,8 +8,6 @@
 
 <script>
 import PageType from '../../Mixins/PageType';
-import GoToWebinar from '../Signups/GoToWebinar';
-
 export default {
 
     name: 'page-type-signup',
@@ -17,7 +15,7 @@ export default {
     extends: PageType,
 
     components: {
-        GoToWebinar
+        GoToWebinar: import(/* webpackChunkName: "go-to-webinar" */'../Signups/GoToWebinar')
     }
 
 };

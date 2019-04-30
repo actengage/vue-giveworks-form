@@ -9,9 +9,11 @@
                         <p><code><pre class="p-2 bg-light text-danger">/ffff/tell_congress_to_end_bi</pre></code></p>
                     </alert>
                     <form @submit.prevent="onSubmit">
-                        <input-field v-model="form.short" label="Site Short Name" placeholder="Site Short Name" help-text="Example: 'ffff'" custom />
-                        <input-field v-model="form.slug" label="Page Slug" placeholder="Page Slug" help-text="Example: 'tell_congress_to_end_bi'" custom />
-                        <input-field v-model="form.apiKey" label="API Key" placeholder="API Key" help-text="The Giveworks API for site" custom />
+                        <p>* Indicates required fields.</p>
+                        <input-field v-model="form.short" label="Site Short Name*" placeholder="Site Short Name*" help-text="Example: 'ffff'" custom />
+                        <input-field v-model="form.slug" label="Page Slug*" placeholder="Page Slug*" help-text="Example: 'tell_congress_to_end_bi'" custom />
+                        <input-field v-model="form.apiKey" label="API Key*" placeholder="API Key*   " help-text="The Giveworks API for site." custom />
+                        <input-field v-model="form.source" label="Source Code" placeholder="Source Code" help-text="Source codes are optional." custom />
                         <div class="card mb-3">
                             <div class="card-body">
                                 <strong>Server</strong>
@@ -30,6 +32,7 @@
             v-else
             :env="this.$route.query.env"
             :page-id="this.$route.params.slug"
+            :source="this.$route.params.source"
             :api-key="this.$route.query.apiKey"
             :mode="this.$route.query.mode"
             class="container">
@@ -45,6 +48,7 @@ import InputField from 'vue-interface/src/Components/InputField';
 import RadioField from 'vue-interface/src/Components/RadioField';
 
 export default {
+    
     components: {
         Btn,
         Alert,
@@ -52,7 +56,20 @@ export default {
         RadioField,
         GiveworksForm,
     },
+
+    watch: {
+
+        form: {
+            deep: true,
+            handler(value) {
+                this.$store.commit('form', value);
+            }
+        }
+
+    },
+
     methods: {
+
         onSubmit() {
             this.$router.push({
                 name: 'index',
@@ -63,21 +80,25 @@ export default {
                 params: {
                     apiKey: null,
                     slug: this.form.slug,
-                    short: this.form.short
+                    short: this.form.short,
+                    source: this.form.source
                 }
             });
 
             window.location.reload();
         }
+
     },
+
     data() {
         return {
-            form: {
+            form: Object.assign({
                 mode: 'production',
+                source: this.$route.query.source || null,
                 slug: null,
                 short: null,
                 apiKey: null
-            }
+            }, this.$store.state.form)
         }
     }
 };

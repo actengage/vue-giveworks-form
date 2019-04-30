@@ -37,12 +37,6 @@
 
 <script>
 import PageType from '../../Mixins/PageType';
-import PaymentGateways from '../Gateways/PaymentGateways';
-import BtnActivity from 'vue-interface/src/Components/BtnActivity';
-import ContactInfoFieldset from '../Fieldsets/ContactInfoFieldset';
-import TextareaField from 'vue-interface/src/Components/TextareaField';
-import EmploymentInfoFieldset from '../Fieldsets/EmploymentInfoFieldset';
-import SelectDonationFieldset from '../Fieldsets/SelectDonationFieldset';
 
 export default {
 
@@ -51,12 +45,12 @@ export default {
     extends: PageType,
 
     components: {
-        BtnActivity,
-        TextareaField,
-        PaymentGateways,
-        ContactInfoFieldset,
-        EmploymentInfoFieldset,
-        SelectDonationFieldset
+        PaymentGateways: () => import(/* webpackChunkName: "donation-type" */'../Gateways/PaymentGateways'),
+        BtnActivity: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/BtnActivity'),
+        TextareaField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/TextareaField'),
+        ContactInfoFieldset: () => import(/* webpackChunkName: "contact-info-fieldset" */'../Fieldsets/ContactInfoFieldset'),
+        EmploymentInfoFieldset: () => import(/* webpackChunkName: "employment-info-fieldset" */'../Fieldsets/EmploymentInfoFieldset'),
+        SelectDonationFieldset: () => import(/* webpackChunkName: "donation-type" */'../Fieldsets/SelectDonationFieldset')
     }
 
 };

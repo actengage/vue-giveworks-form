@@ -19,8 +19,8 @@
             <div>There are not payment gateways configured for this site!</div>
         </alert>
 
-        <div v-else>
-            <div v-if="button.active" v-for="button in buttons" :key="button.component">
+        <div v-else-if="button.active">
+            <div v-for="button in buttons" :key="button.component">
                 <component :is="button.component" :page-type="pageType" :form="form" :page="page" :errors="errors" :gateway="button.gateway"/>
             </div>
         </div>
@@ -31,8 +31,6 @@
 
 <script>
 import Gateway from '../Gateways/Gateway';
-import Btn from 'vue-interface/src/Components/Btn';
-import Alert from 'vue-interface/src/Components/Alert';
 import FormComponent from '../../Mixins/FormComponent';
 import { FontAwesomeIcon as Icon } from '@fortawesome/vue-fontawesome';
 import StripeCreditCard from '../Gateways/Stripe/StripeCreditCard';
@@ -45,13 +43,13 @@ export default {
     name: 'payment-gateways',
 
     components: {
-        Btn,
         Icon,
-        Alert,
         StripeCreditCard,
         StripePaymentButton,
         PaypalPaymentButton,
-        AuthorizeNetCreditCard
+        AuthorizeNetCreditCard,
+        Btn: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/Btn'),
+        Alert: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/Alert')
     },
 
     mixins: [

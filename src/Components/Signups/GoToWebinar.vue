@@ -55,11 +55,7 @@
 <script>
 import FormComponent from '../../Mixins/FormComponent';
 import Autogrow from 'vue-interface/src/Directives/Autogrow';
-import InputField from 'vue-interface/src/Components/InputField';
-import BtnActivity from 'vue-interface/src/Components/BtnActivity';
-import TextareaField from 'vue-interface/src/Components/TextareaField';
 import PlaceAutofill from 'vue-place-autocomplete/src/PlaceAutofill';
-import PlaceAutocompleteField from 'vue-place-autocomplete/src/PlaceAutocompleteField';
 
 export default {
 
@@ -70,10 +66,10 @@ export default {
     ],
 
     components: {
-        BtnActivity,
-        InputField,
-        TextareaField,
-        PlaceAutocompleteField
+        InputField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/InputField'),
+        BtnActivity: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/BtnActivity'),
+        TextareaField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/TextareaField'),
+        PlaceAutocompleteField: () => import(/* webpackChunkName: "vue-place-autocomplete" */'vue-place-autocomplete/src/PlaceAutocompleteField'),
     },
 
     directives: {

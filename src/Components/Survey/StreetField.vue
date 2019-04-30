@@ -22,7 +22,6 @@
 <script>
 import SurveyField from './SurveyField';
 import PlaceAutofill from 'vue-place-autocomplete/src/PlaceAutofill';
-import PlaceAutocompleteField from 'vue-place-autocomplete/src/PlaceAutocompleteField';
 
 export default {
 
@@ -31,7 +30,7 @@ export default {
     extends: SurveyField,
 
     components: {
-        PlaceAutocompleteField
+        PlaceAutocompleteField: () => import(/* webpackChunkName: "vue-place-autocomplete" */'vue-place-autocomplete/src/PlaceAutocompleteField'),
     },
 
     directives: {

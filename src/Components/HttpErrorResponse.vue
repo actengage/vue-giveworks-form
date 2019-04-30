@@ -8,14 +8,13 @@
 
 <script>
 import unit from 'vue-interface/src/Helpers/Unit';
-import Alert from 'vue-interface/src/Components/Alert';
 
 export default {
 
     name: 'http-error-response',
 
     components: {
-        Alert
+        Alert: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/Alert'),
     },
 
     props: {

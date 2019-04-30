@@ -18,8 +18,6 @@
 
 <script>
 import FormComponent from '../../Mixins/FormComponent';
-import InputField from 'vue-interface/src/Components/InputField';
-import CheckboxField from 'vue-interface/src/Components/CheckboxField';
 
 export default {
 
@@ -37,8 +35,8 @@ export default {
     },
 
     components: {
-        InputField,
-        CheckboxField
+        InputField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/InputField'),
+        CheckboxField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/CheckboxField'),
     },
 
     watch: {

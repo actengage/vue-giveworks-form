@@ -16,8 +16,6 @@
 
 <script>
 import SurveyField from './SurveyField';
-// import Autogrow from 'vue-interface/src/Directives/Autogrow';
-import TextareaField from '../Fields/TextareaField';
 
 export default {
 
@@ -26,11 +24,7 @@ export default {
     extends: SurveyField,
 
     components: {
-        TextareaField
-    },
-
-    directives: {
-        // Autogrow
+        TextareaField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/TextareaField')
     }
 
 };

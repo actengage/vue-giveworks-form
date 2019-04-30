@@ -1,16 +1,13 @@
 import '../Config/Icons';
-import Btn from 'vue-interface/src/Components/Btn';
-import Alert from 'vue-interface/src/Components/Alert';
 import { FontAwesomeIcon as Icon } from '@fortawesome/vue-fontawesome';
-import ActivityIndicator from 'vue-interface/src/Components/ActivityIndicator';
 
 export default {
 
     components: {
-        Btn,
         Icon,
-        Alert,
-        ActivityIndicator
+        Btn: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/Btn'),
+        Alert: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/Alert'),
+        ActivityIndicator: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/ActivityIndicator')
     },
 
     props: {

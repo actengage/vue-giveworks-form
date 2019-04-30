@@ -36,8 +36,6 @@
 
 <script>
 import SurveyField from './SurveyField';
-import InputGroup from 'vue-interface/src/Components/InputGroup';
-import RadioField from '../Fields/RadioField';
 import { chunk } from 'vue-interface/src/Helpers/Functions';
 
 export default {
@@ -47,8 +45,8 @@ export default {
     extends: SurveyField,
 
     components: {
-        InputGroup,
-        RadioField
+        InputGroup: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/InputGroup'),
+        RadioField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/RadioField')
     },
 
     computed: {

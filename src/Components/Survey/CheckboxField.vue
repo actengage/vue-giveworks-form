@@ -58,9 +58,6 @@
 
 <script>
 import SurveyField from './SurveyField';
-import InputField from '../Fields/InputField';
-import CheckboxField from '../Fields/CheckboxField';
-import FormFeedback from 'vue-interface/src/Components/FormFeedback';
 
 export default {
 
@@ -69,9 +66,9 @@ export default {
     extends: SurveyField,
 
     components: {
-        CheckboxField,
-        FormFeedback,
-        InputField
+        InputField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/InputField'),
+        FormFeedback: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/FormFeedback'),
+        CheckboxField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/CheckboxField')
     }
 
 };

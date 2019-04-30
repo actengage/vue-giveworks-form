@@ -1,3 +1,6 @@
+const path = require('path');
+const glob = require('glob');
+const PurgecssPlugin = require('purgecss-webpack-plugin');
 const isDemo = process.argv.indexOf('--demo') > -1;
 
 module.exports = {
@@ -7,6 +10,15 @@ module.exports = {
     configureWebpack: {
         output: {
             libraryExport: 'default'
-        }
+        },
+        plugins: [
+            new PurgecssPlugin({
+                paths: glob.sync(`${path.join(__dirname, 'src')}/**/*`, { nodir: true }),
+            })
+        ],
+        externals: !isDemo ? {
+            axios: 'axios',
+            vue: 'vue'
+        } : undefined
     }
 };

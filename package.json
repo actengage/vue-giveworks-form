@@ -11,7 +11,7 @@
     "release-patch": "git add . -A && git commit -m 'Pre-release commit' && npm version patch && npm run release;",
     "release-minor": "git add . -A && git commit -m 'Pre-release commit' && npm version minor && npm run release;",
     "release-major": "git add . -A && git commit -m 'Pre-release commit' && npm version major && npm run release;",
-    "release": "npm run build; npm publish; git push;"
+    "release": "npm run build; npm publish; git add . -A && git commit; git push;"
   },
   "dependencies": {
     "@bugsnag/js": "^5.2.0",

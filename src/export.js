@@ -5,7 +5,7 @@ import './assets/scss/_global.scss';
 import './assets/scss/_buttons.scss';
 import './assets/scss/_forms.scss';
 
-Vue.config.productionTip = false;
+// Vue.config.productionTip = false;
 
 export default new Vue({
     el: '#app',

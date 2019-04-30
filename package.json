@@ -8,9 +8,9 @@
     "build-demo": "vue-cli-service build ./src/main.js --demo --target app",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
-    "release-patch": "git add . -A && git commit -m 'Pre-release commit'; npm version patch; npm run release;",
-    "release-minor": "git add . -A && git commit -m 'Pre-release commit'; npm version minor; npm run release;",
-    "release-major": "git add . -A && git commit -m 'Pre-release commit'; npm version major; npm run release;",
+    "release-patch": "git add . -A && git commit -m 'Pre-release commit' && npm version patch && npm run release;",
+    "release-minor": "git add . -A && git commit -m 'Pre-release commit' && npm version minor && npm run release;",
+    "release-major": "git add . -A && git commit -m 'Pre-release commit' && npm version major && npm run release;",
     "release": "npm run build; npm publish; git push;"
   },
   "dependencies": {

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="giveworks-form">
         <div v-if="!this.$route.params.slug || !this.$route.query.apiKey" class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-6">
@@ -28,15 +28,15 @@
             </div>
         </div>
 
-        <giveworks-form
-            v-else
-            :env="this.$route.query.env"
-            :page-id="this.$route.params.slug"
-            :source="this.$route.params.source"
-            :api-key="this.$route.query.apiKey"
-            :mode="this.$route.query.mode"
-            class="container">
-        </giveworks-form>
+        <div v-else class="container">
+            <giveworks-form
+                :env="this.$route.query.env"
+                :page-id="this.$route.params.slug"
+                :source="this.$route.params.source"
+                :api-key="this.$route.query.apiKey"
+                :mode="this.$route.query.mode">
+            </giveworks-form>
+        </div>
     </div>
 </template>
 

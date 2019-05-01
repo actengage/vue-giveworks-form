@@ -1,12 +1,7 @@
 const path = require('path');
-const glob = require('glob');
-const PurgecssPlugin = require('purgecss-webpack-plugin');
+const glob = require('glob-all');
 const isDemo = process.argv.indexOf('--demo') > -1;
-
-let paths = [];
-
-paths = paths.concat(glob.sync(`${path.join(__dirname, 'src')}/**/*.vue`, { nodir: true }));
-paths = paths.concat(glob.sync(`${path.join(__dirname, 'node_modules')}/vue-interface/src/**/*.vue`, { nodir: true }));
+const PurgecssPlugin = require('purgecss-webpack-plugin');
 
 module.exports = {
     lintOnSave: false,
@@ -18,14 +13,19 @@ module.exports = {
         },
         plugins: [
             new PurgecssPlugin({
-                paths: paths,
-                whitelist: ['btn-primary'],                
-                whitelistPatterns: [/^custom/],
+                whitelist: [
+                    'container'
+                ],
+                paths: glob.sync([
+                    path.join(__dirname, './src/index.html'),
+                    path.join(__dirname, './**/*.vue'),
+                    path.join(__dirname, './src/**/*.js')
+                ])
             })
         ],
         externals: !isDemo ? {
             axios: 'axios',
-            //vue: 'vue'
+            vue: 'vue'
         } : undefined
     }
 };

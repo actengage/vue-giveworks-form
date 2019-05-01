@@ -19,9 +19,9 @@
             <div>There are not payment gateways configured for this site!</div>
         </alert>
 
-        <div v-else-if="button.active">
+        <div v-else>
             <div v-for="button in buttons" :key="button.component">
-                <component :is="button.component" :page-type="pageType" :form="form" :page="page" :errors="errors" :gateway="button.gateway"/>
+                <component v-if="button.active" :is="button.component" :page-type="pageType" :form="form" :page="page" :errors="errors" :gateway="button.gateway"/>
             </div>
         </div>
 

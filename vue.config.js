@@ -12,16 +12,7 @@ module.exports = {
             libraryExport: 'default'
         },
         plugins: [
-            new PurgecssPlugin({
-                whitelist: [
-                    'container'
-                ],
-                paths: glob.sync([
-                    path.join(__dirname, './src/index.html'),
-                    path.join(__dirname, './**/*.vue'),
-                    path.join(__dirname, './src/**/*.js')
-                ])
-            })
+            
         ],
         externals: !isDemo ? {
             axios: 'axios',

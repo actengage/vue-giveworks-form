@@ -2,7 +2,7 @@
 
     <div>
 
-        <div class="payment-gateway-buttons">
+        <div v-if="buttons.length > 1" class="payment-gateway-buttons">
             <btn
                 v-for="(button, i) in buttons"
                 :key="i"

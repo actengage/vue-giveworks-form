@@ -19,11 +19,14 @@
             <div>There are not payment gateways configured for this site!</div>
         </alert>
 
-        <div v-else>
-            <div v-for="button in buttons" :key="button.component">
-                <component v-if="button.active" :is="button.component" :page-type="pageType" :form="form" :page="page" :errors="errors" :gateway="button.gateway"/>
-            </div>
-        </div>
+        <component
+            v-if="activeButton"
+            :is="activeButton.component"
+            :form="form"
+            :page="page"
+            :errors="errors"
+            :page-type="pageType"
+            :gateway="activeButton.gateway" />
 
     </div>
 
@@ -105,6 +108,10 @@ export default {
     },
 
     computed: {
+
+        activeButton() {
+            return this.buttons.filter(button => button.active).pop();
+        },
 
         classes() {
             return {

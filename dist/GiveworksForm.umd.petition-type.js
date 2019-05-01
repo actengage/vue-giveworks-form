@@ -6,7 +6,7 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"05f12613-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Types/Petition.vue?vue&type=template&id=907be180&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"00845329-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Types/Petition.vue?vue&type=template&id=907be180&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('contact-info-fieldset',{attrs:{"legends":false,"form":_vm.form,"errors":_vm.errors,"page":_vm.page}}),(_vm.shouldShowEmployment)?_c('employment-info-fieldset',{attrs:{"legends":false,"form":_vm.form,"errors":_vm.errors,"page":_vm.page}}):_vm._e(),(_vm.page.options.add_comment)?_c('textarea-field',{directives:[{name:"autogrow",rawName:"v-autogrow"}],attrs:{"id":"comment","label":_vm.commentMessage},model:{value:(_vm.form.comment),callback:function ($$v) {_vm.$set(_vm.form, "comment", $$v)},expression:"form.comment"}}):_vm._e(),_c('btn-activity',{attrs:{"size":"lg","type":"submit","orientation":"right","block":true,"activity":_vm.submitting,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.petition}}),(_vm.page.options.add_optin)?_c('checkbox-field',{attrs:{"label":_vm.optinMessage,"value":"1","custom":""}}):_vm._e()],1)}
 var staticRenderFns = []
 
@@ -148,7 +148,7 @@ const EVENTS = ['submit', 'redirect', 'submit-enable', 'submit-disable', 'submit
   },
   methods: {
     submitButton() {
-      return this.$refs.submit || this.$el.querySelector('[type=submit]');
+      return this.$refs.submit ? this.$refs.submit.$el : this.$el.querySelector('[type=submit]');
     },
 
     hideSubmitButton() {
@@ -227,6 +227,10 @@ const EVENTS = ['submit', 'redirect', 'submit-enable', 'submit-disable', 'submit
 
   },
 
+  mounted() {
+    this.loaded = true;
+  },
+
   data() {
     const recurring = this.page.site.recurring ? this.page.options.recurring_only ? 1 : 0 : 0;
     return {
@@ -235,6 +239,7 @@ const EVENTS = ['submit', 'redirect', 'submit-enable', 'submit-disable', 'submit
         recurring: recurring
       },
       errors: {},
+      loaded: false,
       submitting: false,
       model: new _Models_Page__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"]({
         id: this.page.id

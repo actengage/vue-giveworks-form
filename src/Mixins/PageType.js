@@ -36,7 +36,7 @@ export default {
     methods: {
 
         submitButton() {
-            return this.$refs.submit || this.$el.querySelector('[type=submit]');
+            return this.$refs.submit ? this.$refs.submit.$el : this.$el.querySelector('[type=submit]');
         },
 
         hideSubmitButton() {
@@ -117,6 +117,10 @@ export default {
 
     },
 
+    mounted() {
+        this.loaded = true;
+    },
+
     data() {
         const recurring = this.page.site.recurring ? (
             this.page.options.recurring_only ? 1 : 0
@@ -128,6 +132,7 @@ export default {
                 recurring: recurring
             },
             errors: {},
+            loaded: false,
             submitting: false,
             model: new Page({
                 id: this.page.id

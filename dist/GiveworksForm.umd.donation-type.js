@@ -1,32 +1,5 @@
 ((typeof self !== 'undefined' ? self : this)["webpackJsonpGiveworksForm"] = (typeof self !== 'undefined' ? self : this)["webpackJsonpGiveworksForm"] || []).push([[4],{
 
-/***/ "025c":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var vue_credit_card_field_src_icons__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("6123");
-/* harmony import */ var _fortawesome_free_brands_svg_icons_faPaypal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("eb94");
-/* harmony import */ var _fortawesome_free_brands_svg_icons_faPaypal__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_free_brands_svg_icons_faPaypal__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _fortawesome_free_brands_svg_icons_faApplePay__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("886b");
-/* harmony import */ var _fortawesome_free_brands_svg_icons_faApplePay__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_free_brands_svg_icons_faApplePay__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _fortawesome_free_regular_svg_icons_faCheckCircle__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("1698");
-/* harmony import */ var _fortawesome_free_regular_svg_icons_faCheckCircle__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_free_regular_svg_icons_faCheckCircle__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _fortawesome_free_brands_svg_icons_faGoogleWallet__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("859b");
-/* harmony import */ var _fortawesome_free_brands_svg_icons_faGoogleWallet__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_free_brands_svg_icons_faGoogleWallet__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("ecee");
-// Load the icons
-
-
-
-
- // Load the font awesome library
-
-
-_fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_5__[/* library */ "c"].add(_fortawesome_free_brands_svg_icons_faPaypal__WEBPACK_IMPORTED_MODULE_1__["faPaypal"], _fortawesome_free_brands_svg_icons_faApplePay__WEBPACK_IMPORTED_MODULE_2__["faApplePay"], _fortawesome_free_regular_svg_icons_faCheckCircle__WEBPACK_IMPORTED_MODULE_3__["faCheckCircle"], _fortawesome_free_brands_svg_icons_faGoogleWallet__WEBPACK_IMPORTED_MODULE_4__["faGoogleWallet"]);
-
-
-/***/ }),
-
 /***/ "0809":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -129,324 +102,28 @@ class Gateway {
 
 /***/ }),
 
-/***/ "5b3b":
+/***/ "9ceb":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"05f12613-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Fieldsets/SelectDonationFieldset.vue?vue&type=template&id=4fccb91e&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('fieldset',[(_vm.legends)?_c('h3',{class:{'mb-0': _vm.hasMinimumAmount}},[_vm._v("Donation amount")]):_vm._e(),(_vm.hasMinimumAmount)?_c('div',{staticClass:"mb-2"},[_c('small',{staticClass:"text-muted"},[_vm._v("Minimum accepted amount is $"+_vm._s(_vm.page.options.min_amount))])]):_vm._e(),_c('payment-buttons',{attrs:{"name":"amount","amounts":_vm.amounts,"errors":_vm.errors,"page":_vm.page},model:{value:(_vm.form.amount),callback:function ($$v) {_vm.$set(_vm.form, "amount", $$v)},expression:"form.amount"}}),(_vm.page.site.recurring && !_vm.page.options.recurring_only)?_c('div',{staticClass:"form-group mt-3"},[_c('label',{domProps:{"innerHTML":_vm._s(_vm.recurringMessage)}}),_c('toggle-button',{attrs:{"size":"lg"},model:{value:(_vm.form.recurring),callback:function ($$v) {_vm.$set(_vm.form, "recurring", _vm._n($$v))},expression:"form.recurring"}}),(!_vm.form.recurring)?_c('small',{staticClass:"text-muted form-text"},[_vm._v("You are making a single donation of the amount entered above. Click the 'monthly' button to make your gift go further as an automatic monthly donation.")]):_c('small',{staticClass:"text-muted form-text"},[_vm._v("This amount will be charged automatically once each month, on or about the "+_vm._s(_vm.chargeDate)+". You may cancel your donation at any time by contacting us.")])],1):(_vm.page.site.recurring && _vm.page.options.recurring_only)?_c('alert',{staticClass:"mt-3",attrs:{"variant":"warning"}},[_c('alert-heading',{staticClass:"h3 d-flex align-items-center"},[_c('icon',{staticClass:"mr-3",attrs:{"icon":"exclamation-triangle","size":"1.5x"}}),_vm._v(" Monthly Donation\n        ")],1),(_vm.page.options.recur_message)?_c('p',{staticClass:"font-weight-light",domProps:{"innerHTML":_vm._s(_vm.page.options.recur_message)}}):_c('p',[_vm._v("\n            Please note that this will be a monthly recurring donation. The\n            amount you select will be charged automatically once each month\n            on or about "),_c('em',[_vm._v(_vm._s(_vm.chargeDate))]),_vm._v(".  You may cancel your donation\n            at any time by contacting us.\n        ")])],1):_vm._e()],1)}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"00845329-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Types/Donation.vue?vue&type=template&id=73ebd932&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('select-donation-fieldset',{attrs:{"form":_vm.form,"errors":_vm.errors,"page":_vm.page}}),_c('contact-info-fieldset',{attrs:{"form":_vm.form,"errors":_vm.errors,"page":_vm.page,"address":""}}),_c('hr'),(_vm.shouldShowEmployment)?[_c('employment-info-fieldset',{attrs:{"form":_vm.form,"errors":_vm.errors,"page":_vm.page}}),_c('hr')]:_vm._e(),(_vm.$refs.submit)?_c('payment-gateways',{attrs:{"page-type":this,"form":_vm.form,"errors":_vm.errors,"page":_vm.page}}):_vm._e(),(_vm.page.options.add_comment)?_c('textarea-field',{directives:[{name:"autogrow",rawName:"v-autogrow"}],attrs:{"id":"comment","label":_vm.commentMessage},model:{value:(_vm.form.comment),callback:function ($$v) {_vm.$set(_vm.form, "comment", $$v)},expression:"form.comment"}}):_vm._e(),_c('btn-activity',{ref:"submit",attrs:{"type":"submit","size":"lg","activity":_vm.submitting,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.donate,"block":""}}),(_vm.page.options.add_optin)?_c('div',[_c('label',{staticClass:"custom-control custom-checkbox"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.form.optin),expression:"form.optin"}],staticClass:"custom-control-input",attrs:{"type":"checkbox","checked":""},domProps:{"checked":Array.isArray(_vm.form.optin)?_vm._i(_vm.form.optin,null)>-1:(_vm.form.optin)},on:{"change":function($event){var $$a=_vm.form.optin,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.$set(_vm.form, "optin", $$a.concat([$$v])))}else{$$i>-1&&(_vm.$set(_vm.form, "optin", $$a.slice(0,$$i).concat($$a.slice($$i+1))))}}else{_vm.$set(_vm.form, "optin", $$c)}}}}),_c('span',{staticClass:"custom-control-indicator"}),_c('small',{staticClass:"custom-control-label text-muted form-text",domProps:{"innerHTML":_vm._s(_vm.optinMessage)}})])]):_vm._e(),(_vm.page.site.disclaimer)?_c('div',{staticClass:"mt-3"},[_c('small',{staticClass:"text-muted",domProps:{"innerHTML":_vm._s(_vm.page.site.disclaimer)}})]):_vm._e()],2)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Fieldsets/SelectDonationFieldset.vue?vue&type=template&id=4fccb91e&
+// CONCATENATED MODULE: ./src/Components/Types/Donation.vue?vue&type=template&id=73ebd932&
 
-// EXTERNAL MODULE: ./src/Config/Icons.js
-var Icons = __webpack_require__("025c");
+// EXTERNAL MODULE: ./src/Mixins/PageType.js
+var PageType = __webpack_require__("b791");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"05f12613-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Fields/ToggleButton.vue?vue&type=template&id=3b8c0e1e&
-var ToggleButtonvue_type_template_id_3b8c0e1e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('btn-group',{staticClass:"toggle-button",attrs:{"size":_vm.size}},[_vm._l((_vm.buttons),function(label,i){return _c('btn',{key:i,ref:"buttons",refInFor:true,attrs:{"outline":i !== _vm.value.toString(),"variant":i === _vm.value.toString() ? 'success' : 'secondary',"type":"button"},domProps:{"innerHTML":_vm._s(label)},on:{"click":function($event){return _vm.$emit('input', i)}}})}),_vm._t("default")],2)}
-var ToggleButtonvue_type_template_id_3b8c0e1e_staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/Components/Fields/ToggleButton.vue?vue&type=template&id=3b8c0e1e&
-
-// EXTERNAL MODULE: ./node_modules/vue-interface/src/Mixins/FormControl/index.js + 1 modules
-var FormControl = __webpack_require__("0ab3");
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Fields/ToggleButton.vue?vue&type=script&lang=js&
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ var ToggleButtonvue_type_script_lang_js_ = ({
-  name: 'toggle-button',
-  inheritAttrs: false,
-  mixins: [FormControl["a" /* default */]],
-  components: {
-    Btn: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "9719")),
-    BtnGroup: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "25bb"))
-  },
-  props: {
-    value: {
-      default: 0
-    },
-    buttons: {
-      type: Object,
-
-      default() {
-        return {
-          0: 'One-Time',
-          1: 'Monthly Gift'
-        };
-      }
-
-    }
-  },
-
-  mounted() {
-    this.$refs.buttons.map((vnode, i) => {
-      if (vnode.$el.classList.contains('btn-success')) {
-        this.$emit('input', Object.keys(this.buttons).find(key => this.buttons[key] === vnode.$el.innerHTML));
-      }
-    });
-  }
-
-});
-// CONCATENATED MODULE: ./src/Components/Fields/ToggleButton.vue?vue&type=script&lang=js&
- /* harmony default export */ var Fields_ToggleButtonvue_type_script_lang_js_ = (ToggleButtonvue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
-var componentNormalizer = __webpack_require__("2877");
-
-// CONCATENATED MODULE: ./src/Components/Fields/ToggleButton.vue
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"00845329-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Gateways/PaymentGateways.vue?vue&type=template&id=5d9de5fb&
+var PaymentGatewaysvue_type_template_id_5d9de5fb_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"payment-gateway-buttons"},_vm._l((_vm.buttons),function(button,i){return _c('btn',{key:i,class:{'btn-success': button.active, 'btn-secondary': !button.active},attrs:{"type":"button"},on:{"click":function($event){return _vm.activate(button)}}},[_c('icon',{class:{'mt-2 mb-1': !button.label},attrs:{"icon":typeof button.icon === 'string' ? ['far', button.icon]: button.icon,"size":button.size || 'lg'}}),(button.label)?_c('div',{staticClass:"small",domProps:{"innerHTML":_vm._s(button.label)}}):_vm._e()],1)}),1),(!_vm.buttons || !_vm.buttons.length)?_c('alert',{staticClass:"d-flex align-items-center",attrs:{"variant":"danger"}},[_c('icon',{staticClass:"mr-2",attrs:{"icon":"exclamation-triangle","size":"2x"}}),_c('div',[_vm._v("There are not payment gateways configured for this site!")])],1):_vm._e(),(_vm.activeButton)?_c(_vm.activeButton.component,{tag:"component",attrs:{"form":_vm.form,"page":_vm.page,"errors":_vm.errors,"page-type":_vm.pageType,"gateway":_vm.activeButton.gateway}}):_vm._e()],1)}
+var PaymentGatewaysvue_type_template_id_5d9de5fb_staticRenderFns = []
 
 
-
-
-
-/* normalize component */
-
-var component = Object(componentNormalizer["a" /* default */])(
-  Fields_ToggleButtonvue_type_script_lang_js_,
-  ToggleButtonvue_type_template_id_3b8c0e1e_render,
-  ToggleButtonvue_type_template_id_3b8c0e1e_staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* harmony default export */ var ToggleButton = (component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"05f12613-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Fields/PaymentButtons.vue?vue&type=template&id=91a20398&
-var PaymentButtonsvue_type_template_id_91a20398_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"payment-buttons",class:{'was-validated': !!_vm.errors.amount}},[_c('div',{staticClass:"payment-buttons-grid mb-2"},_vm._l((_vm.amounts),function(amount){return _c('btn',{key:amount,attrs:{"type":"button","outline":"","variant":"success","active":_vm.value ? _vm.value.toString() === amount.toString() : false},domProps:{"innerHTML":_vm._s(("$" + amount))},on:{"click":function($event){return _vm.onClickButton(amount)}}})}),1),_c('input-group',{class:{'is-invalid': !!_vm.errors.amount, 'mb-3': !_vm.page.site.recurring},attrs:{"prepend":"$"}},[_c('input-field',{attrs:{"custom":"","label":"Other Amount","placeholder":"Other Amount","group":false,"value":_vm.value},on:{"keydown":_vm.onKeyDown,"input":function (value) { return _vm.$emit('input', value); }}})],1),(_vm.errors.amount)?_c('form-feedback',{staticClass:"d-block",attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.errors.amount.join('<br>'))}}):_vm._e()],1)}
-var PaymentButtonsvue_type_template_id_91a20398_staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/Components/Fields/PaymentButtons.vue?vue&type=template&id=91a20398&
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Fields/PaymentButtons.vue?vue&type=script&lang=js&
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ var PaymentButtonsvue_type_script_lang_js_ = ({
-  name: 'payment-buttons',
-  mixins: [FormControl["a" /* default */]],
-  components: {
-    Btn: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "9719")),
-    InputField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "46d8")),
-    InputGroup: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "3588")),
-    FormFeedback: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "a892"))
-  },
-  props: {
-    page: {
-      type: Object,
-      required: true
-    },
-    amounts: {
-      type: Array,
-      required: true
-    }
-  },
-  methods: {
-    onClickButton(value) {
-      this.$emit('input', parseFloat(this.value) !== (value = parseFloat(value)) ? value : null);
-    },
-
-    onKeyDown(e) {
-      if ((e.keyCode < 48 || e.keyCode > 57 && e.keyCode !== 190) && !e.metaKey && e.key.length === 1) {
-        e.preventDefault();
-      }
-    }
-
-  }
-});
-// CONCATENATED MODULE: ./src/Components/Fields/PaymentButtons.vue?vue&type=script&lang=js&
- /* harmony default export */ var Fields_PaymentButtonsvue_type_script_lang_js_ = (PaymentButtonsvue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/Components/Fields/PaymentButtons.vue
-
-
-
-
-
-/* normalize component */
-
-var PaymentButtons_component = Object(componentNormalizer["a" /* default */])(
-  Fields_PaymentButtonsvue_type_script_lang_js_,
-  PaymentButtonsvue_type_template_id_91a20398_render,
-  PaymentButtonsvue_type_template_id_91a20398_staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* harmony default export */ var PaymentButtons = (PaymentButtons_component.exports);
-// EXTERNAL MODULE: ./src/Mixins/FormComponent.js
-var FormComponent = __webpack_require__("bb4b");
-
-// EXTERNAL MODULE: ./node_modules/@fortawesome/vue-fontawesome/index.es.js
-var index_es = __webpack_require__("ad3d");
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Fieldsets/SelectDonationFieldset.vue?vue&type=script&lang=js&
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-
-
-/* harmony default export */ var SelectDonationFieldsetvue_type_script_lang_js_ = ({
-  name: 'select-donation-fieldset',
-  components: {
-    Icon: index_es["a" /* FontAwesomeIcon */],
-    ToggleButton: ToggleButton,
-    PaymentButtons: PaymentButtons,
-    Alert: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "3259")),
-    AlertHeading: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "426a"))
-  },
-  mixins: [FormComponent["a" /* default */]],
-  props: {
-    legends: {
-      type: Boolean,
-      default: true
-    }
-  },
-  computed: {
-    recurringMessage() {
-      return this.page.options.recur_mess || this.page.site.config.giveworks.recur_mess;
-    },
-
-    chargeDate() {
-      const now = new Date();
-      return [now.getMonth() + 1, now.getDate(), now.getFullYear()].join('/');
-    },
-
-    hasMinimumAmount() {
-      return this.page.options.min_amount && (parseFloat(this.page.options.min_amount) || 0) > 0;
-    },
-
-    amounts() {
-      const values = this.page.options.amounts ? this.page.options.amounts.split(',') : this.page.site.config.giveworks.ask_amounts;
-      return values.filter(value => {
-        return value >= (parseFloat(this.page.options.min_amount) || 0);
-      });
-    }
-
-  }
-});
-// CONCATENATED MODULE: ./src/Components/Fieldsets/SelectDonationFieldset.vue?vue&type=script&lang=js&
- /* harmony default export */ var Fieldsets_SelectDonationFieldsetvue_type_script_lang_js_ = (SelectDonationFieldsetvue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/Components/Fieldsets/SelectDonationFieldset.vue
-
-
-
-
-
-/* normalize component */
-
-var SelectDonationFieldset_component = Object(componentNormalizer["a" /* default */])(
-  Fieldsets_SelectDonationFieldsetvue_type_script_lang_js_,
-  render,
-  staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* harmony default export */ var SelectDonationFieldset = __webpack_exports__["default"] = (SelectDonationFieldset_component.exports);
-
-/***/ }),
-
-/***/ "8b94":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"05f12613-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Gateways/PaymentGateways.vue?vue&type=template&id=acc75698&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"payment-gateway-buttons"},_vm._l((_vm.buttons),function(button,i){return _c('btn',{key:i,class:{'btn-success': button.active, 'btn-secondary': !button.active},attrs:{"type":"button"},on:{"click":function($event){return _vm.activate(button)}}},[_c('icon',{class:{'mt-2 mb-1': !button.label},attrs:{"icon":typeof button.icon === 'string' ? ['far', button.icon]: button.icon,"size":button.size || 'lg'}}),(button.label)?_c('div',{staticClass:"small",domProps:{"innerHTML":_vm._s(button.label)}}):_vm._e()],1)}),1),(!_vm.buttons || !_vm.buttons.length)?_c('alert',{staticClass:"d-flex align-items-center",attrs:{"variant":"danger"}},[_c('icon',{staticClass:"mr-2",attrs:{"icon":"exclamation-triangle","size":"2x"}}),_c('div',[_vm._v("There are not payment gateways configured for this site!")])],1):_c('div',_vm._l((_vm.buttons),function(button){return _c('div',{key:button.component},[(button.active)?_c(button.component,{tag:"component",attrs:{"page-type":_vm.pageType,"form":_vm.form,"page":_vm.page,"errors":_vm.errors,"gateway":button.gateway}}):_vm._e()],1)}),0)],1)}
-var staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/Components/Gateways/PaymentGateways.vue?vue&type=template&id=acc75698&
+// CONCATENATED MODULE: ./src/Components/Gateways/PaymentGateways.vue?vue&type=template&id=5d9de5fb&
 
 // EXTERNAL MODULE: ./src/Components/Gateways/Api.js
 var Api = __webpack_require__("2953");
@@ -642,12 +319,12 @@ var FormComponent = __webpack_require__("bb4b");
 // EXTERNAL MODULE: ./node_modules/@fortawesome/vue-fontawesome/index.es.js
 var index_es = __webpack_require__("ad3d");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"05f12613-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Gateways/Stripe/StripeCreditCard.vue?vue&type=template&id=1b129096&
-var StripeCreditCardvue_type_template_id_1b129096_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"form-group",class:{'was-validated': !!_vm.error || !!_vm.errors.token}},[(!_vm.loaded)?_c('div',{staticClass:"row my-5 py-1"},[_c('div',{staticClass:"col-xs-12"},[_c('activity-indicator',{attrs:{"size":"sm","center":true}})],1)]):_c('label',{staticClass:"d-block mt-3",class:{'has-activity': _vm.activity}},[_c('div',{staticClass:"stripe-field"},[_c('div',{staticClass:"form-control",class:{'is-invalid': !!_vm.error || !!_vm.errors.token}},[_c('div',{ref:"input",staticClass:"stripe-field-input"})]),(_vm.error || _vm.errors.token)?_c('div',{staticClass:"invalid-feedback",domProps:{"innerHTML":_vm._s(_vm.error || _vm.errors.token.join('<br>'))}}):_vm._e()]),_c('div',{staticClass:"stripe-field-activity"},[_c('activity-indicator',{attrs:{"size":"xs"}})],1)])])}
-var StripeCreditCardvue_type_template_id_1b129096_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"00845329-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Gateways/Stripe/StripeCreditCard.vue?vue&type=template&id=27c6661a&
+var StripeCreditCardvue_type_template_id_27c6661a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"form-group",class:{'was-validated': !!_vm.error || !!_vm.errors.token}},[(!_vm.loaded)?_c('div',{staticClass:"row my-5 py-1"},[_c('div',{staticClass:"col-xs-12"},[_c('activity-indicator',{attrs:{"size":"sm","center":"","width":"100%"}})],1)]):_c('label',{staticClass:"d-block mt-3",class:{'has-activity': _vm.activity}},[_c('div',{staticClass:"stripe-field"},[_c('div',{staticClass:"form-control",class:{'is-invalid': !!_vm.error || !!_vm.errors.token}},[_c('div',{ref:"input",staticClass:"stripe-field-input"})]),(_vm.error || _vm.errors.token)?_c('div',{staticClass:"invalid-feedback",domProps:{"innerHTML":_vm._s(_vm.error || _vm.errors.token.join('<br>'))}}):_vm._e()]),_c('div',{staticClass:"stripe-field-activity"},[_c('activity-indicator',{attrs:{"size":"xs"}})],1)])])}
+var StripeCreditCardvue_type_template_id_27c6661a_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Gateways/Stripe/StripeCreditCard.vue?vue&type=template&id=1b129096&
+// CONCATENATED MODULE: ./src/Components/Gateways/Stripe/StripeCreditCard.vue?vue&type=template&id=27c6661a&
 
 // EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Wait/index.js + 1 modules
 var Wait = __webpack_require__("7a4d");
@@ -655,8 +332,34 @@ var Wait = __webpack_require__("7a4d");
 // EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Elapsed/index.js + 1 modules
 var Elapsed = __webpack_require__("611e");
 
-// EXTERNAL MODULE: ./src/Config/Icons.js
-var Icons = __webpack_require__("025c");
+// EXTERNAL MODULE: ./node_modules/vue-credit-card-field/src/icons.js
+var icons = __webpack_require__("6123");
+
+// EXTERNAL MODULE: ./node_modules/@fortawesome/free-brands-svg-icons/faPaypal.js
+var faPaypal = __webpack_require__("eb94");
+
+// EXTERNAL MODULE: ./node_modules/@fortawesome/free-brands-svg-icons/faApplePay.js
+var faApplePay = __webpack_require__("886b");
+
+// EXTERNAL MODULE: ./node_modules/@fortawesome/free-regular-svg-icons/faCheckCircle.js
+var faCheckCircle = __webpack_require__("1698");
+
+// EXTERNAL MODULE: ./node_modules/@fortawesome/free-brands-svg-icons/faGoogleWallet.js
+var faGoogleWallet = __webpack_require__("859b");
+
+// EXTERNAL MODULE: ./node_modules/@fortawesome/fontawesome-svg-core/index.es.js
+var fontawesome_svg_core_index_es = __webpack_require__("ecee");
+
+// CONCATENATED MODULE: ./src/Config/Icons.js
+// Load the icons
+
+
+
+
+ // Load the font awesome library
+
+
+fontawesome_svg_core_index_es["c" /* library */].add(faPaypal["faPaypal"], faApplePay["faApplePay"], faCheckCircle["faCheckCircle"], faGoogleWallet["faGoogleWallet"]);
 
 // CONCATENATED MODULE: ./src/Mixins/PaymentGateway.js
 
@@ -745,28 +448,28 @@ var Icons = __webpack_require__("025c");
         this.errors.token = event.error ? [event.error.message] : null;
 
         if (event.complete) {
-          Object(Elapsed["a" /* default */])(500, (resolve, reject) => {
-            gateway.createToken(this.$card, {
-              currency: 'usd'
-            }).then(result => {
-              Object(Wait["a" /* default */])(this.activity ? 750 : 0, (resolve, reject) => {
-                if (result.error) {
-                  this.error = result.error.message;
-                  reject(result.error.message);
-                } else {
-                  this.form.token = result.token.id;
-                  this.pageType.enableSubmitButton();
-                  resolve(result);
-                }
-              }).then(resolve, reject);
-            });
-          }, () => {
-            this.activity = true;
-          }).then(() => {
-            this.activity = false;
-          }, () => {
-            this.activity = false;
+          // elapsed(500, (resolve, reject) => {
+          gateway.createToken(this.$card, {
+            currency: 'usd'
+          }).then(result => {
+            //wait(this.activity ? 750 : 0, (resolve, reject) => {
+            if (result.error) {
+              this.error = result.error.message; //reject(result.error.message);
+            } else {
+              this.form.token = result.token.id;
+              this.pageType.enableSubmitButton(); //resolve(result);
+            } //}).then(resolve, reject);
+
           });
+          /*
+          }, () => {
+              this.activity = true;
+          }).then(() => {
+              this.activity = false;
+          }, () => {
+              this.activity = false;
+          });
+          */
         }
       });
       this.loaded = true;
@@ -798,8 +501,8 @@ var componentNormalizer = __webpack_require__("2877");
 
 var component = Object(componentNormalizer["a" /* default */])(
   Stripe_StripeCreditCardvue_type_script_lang_js_,
-  StripeCreditCardvue_type_template_id_1b129096_render,
-  StripeCreditCardvue_type_template_id_1b129096_staticRenderFns,
+  StripeCreditCardvue_type_template_id_27c6661a_render,
+  StripeCreditCardvue_type_template_id_27c6661a_staticRenderFns,
   false,
   null,
   null,
@@ -808,7 +511,7 @@ var component = Object(componentNormalizer["a" /* default */])(
 )
 
 /* harmony default export */ var StripeCreditCard = (component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"05f12613-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Gateways/PayPal/PayPalPaymentButton.vue?vue&type=template&id=396dcf2e&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"00845329-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Gateways/PayPal/PayPalPaymentButton.vue?vue&type=template&id=396dcf2e&
 var PayPalPaymentButtonvue_type_template_id_396dcf2e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(!_vm.loaded || _vm.submitting)?_c('div',{staticClass:"row my-5 py-1"},[_c('div',{staticClass:"col-xs-12"},[_c('activity-indicator',{attrs:{"size":"sm","center":true}})],1)]):_c('div',[(_vm.error)?_c('alert',{staticClass:"d-flex align-items-center",attrs:{"variant":"danger"}},[_c('icon',{staticClass:"mr-2",attrs:{"icon":"exclamation-triangle","size":"2x"}}),_c('div',{domProps:{"innerHTML":_vm._s(_vm.error)}})],1):(_vm.form.payerId && _vm.form.paymentId)?_c('alert',{staticClass:"d-flex align-items-center",attrs:{"variant":"success"}},[_c('icon',{staticClass:"mr-2",attrs:{"icon":['far', 'check-circle'],"size":"2x"}}),_c('div',[_vm._v("Your PayPal payment information has been collected and is ready to be processed. "),_c('a',{attrs:{"href":"#"},on:{"click":function($event){$event.preventDefault();return _vm.removePaymentInfo($event)}}},[_vm._v("Cancel Payment")])])],1):_vm._e()],1),_c('div',{staticClass:"paypal-payment-button mt-2 mb-4",class:{'disabled': _vm.disabled, 'd-none': _vm.submitting}})])}
 var PayPalPaymentButtonvue_type_template_id_396dcf2e_staticRenderFns = []
 
@@ -1072,12 +775,12 @@ var PayPalPaymentButton_component = Object(componentNormalizer["a" /* default */
 )
 
 /* harmony default export */ var PayPalPaymentButton = (PayPalPaymentButton_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"05f12613-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Gateways/Stripe/StripePaymentButton.vue?vue&type=template&id=3d51c5fd&
-var StripePaymentButtonvue_type_template_id_3d51c5fd_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(!_vm.error)?_c('div',[(_vm.card)?_c('div',{staticClass:"my-3"},[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-xs-2"},[_c('div',{staticClass:"mr-6"},[(_vm.card.brand === 'Visa')?_c('icon',{attrs:{"icon":['fab', 'cc-visa'],"scale":"3.5"}}):(_vm.card.brand === 'MasterCard')?_c('icon',{attrs:{"icon":['fab', 'cc-mastercard'],"scale":"3.5"}}):(_vm.card.brand === 'American Express')?_c('icon',{attrs:{"icon":['fab', 'cc-amex'],"scale":"3.5"}}):(_vm.card.brand === 'Discover')?_c('icon',{attrs:{"icon":['fab', 'cc-discover'],"scale":"3.5"}}):(_vm.card.brand === 'JCB')?_c('icon',{attrs:{"icon":['fab', 'cc-jcb'],"scale":"3.5"}}):(_vm.card.brand === 'Diners Club')?_c('icon',{attrs:{"icon":['fab', 'cc-diners-club'],"scale":"3.5"}}):_c('icon',{attrs:{"icon":['far', 'credit-card'],"scale":"3.5"}})],1)]),_c('div',{staticClass:"col-xs-10"},[_c('div',{staticClass:"pl-2"},[_c('btn',{staticClass:"float-right",attrs:{"type":"button","variant":"warning","disabled":_vm.submitting},on:{"click":function($event){return _vm.changeCard($event)}}},[_vm._v("Change Card")]),(_vm.card.name)?_c('span',[_vm._v(_vm._s(_vm.card.name)),_c('br')]):_vm._e(),_c('small',[_vm._v("****"+_vm._s(_vm.card.last4)+" "),_c('span',{staticClass:"pl-2"},[_vm._v(_vm._s(_vm.card.exp_month)+"/"+_vm._s(_vm.card.exp_year))])])],1)])])]):_vm._e(),(!_vm.loaded || _vm.submitting)?_c('div',{staticClass:"row my-5 py-1"},[_c('div',{staticClass:"col-xs-12"},[_c('activity-indicator',{attrs:{"size":"sm","center":true}})],1)]):_c('div',[_c('div',{staticClass:"stripe-payment-button mt-2 mb-4"})])]):_c('alert',{staticClass:"d-flex align-items-center",attrs:{"variant":"danger"}},[_c('icon',{staticClass:"mr-3",attrs:{"icon":"exclamation-triangle","size":"2x"}}),_c('div',{domProps:{"innerHTML":_vm._s(_vm.error.message)}})],1)],1)}
-var StripePaymentButtonvue_type_template_id_3d51c5fd_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"00845329-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Gateways/Stripe/StripePaymentButton.vue?vue&type=template&id=7c8c0d7d&
+var StripePaymentButtonvue_type_template_id_7c8c0d7d_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(!_vm.error)?_c('div',[(_vm.card)?_c('div',{staticClass:"my-3"},[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-xs-2"},[_c('div',{staticClass:"mr-6"},[(_vm.card.brand === 'Visa')?_c('icon',{attrs:{"icon":['fab', 'cc-visa'],"scale":"3.5"}}):(_vm.card.brand === 'MasterCard')?_c('icon',{attrs:{"icon":['fab', 'cc-mastercard'],"scale":"3.5"}}):(_vm.card.brand === 'American Express')?_c('icon',{attrs:{"icon":['fab', 'cc-amex'],"scale":"3.5"}}):(_vm.card.brand === 'Discover')?_c('icon',{attrs:{"icon":['fab', 'cc-discover'],"scale":"3.5"}}):(_vm.card.brand === 'JCB')?_c('icon',{attrs:{"icon":['fab', 'cc-jcb'],"scale":"3.5"}}):(_vm.card.brand === 'Diners Club')?_c('icon',{attrs:{"icon":['fab', 'cc-diners-club'],"scale":"3.5"}}):_c('icon',{attrs:{"icon":['far', 'credit-card'],"scale":"3.5"}})],1)]),_c('div',{staticClass:"col-xs-10"},[_c('div',{staticClass:"pl-2"},[_c('btn',{staticClass:"float-right",attrs:{"type":"button","variant":"warning","disabled":_vm.submitting},on:{"click":function($event){return _vm.changeCard($event)}}},[_vm._v("Change Card")]),(_vm.card.name)?_c('span',[_vm._v(_vm._s(_vm.card.name)),_c('br')]):_vm._e(),_c('small',[_vm._v("****"+_vm._s(_vm.card.last4)+" "),_c('span',{staticClass:"pl-2"},[_vm._v(_vm._s(_vm.card.exp_month)+"/"+_vm._s(_vm.card.exp_year))])])],1)])])]):_vm._e(),(!_vm.loaded || _vm.submitting)?_c('div',{staticClass:"row my-5 py-1"},[_c('div',{staticClass:"col-xs-12"})]):_c('div',[_c('div',{staticClass:"stripe-payment-button mt-2 mb-4"})])]):_c('alert',{staticClass:"d-flex align-items-center",attrs:{"variant":"danger"}},[_c('icon',{staticClass:"mr-3",attrs:{"icon":"exclamation-triangle","size":"2x"}}),_c('div',{domProps:{"innerHTML":_vm._s(_vm.error.message)}})],1)],1)}
+var StripePaymentButtonvue_type_template_id_7c8c0d7d_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Gateways/Stripe/StripePaymentButton.vue?vue&type=template&id=3d51c5fd&
+// CONCATENATED MODULE: ./src/Components/Gateways/Stripe/StripePaymentButton.vue?vue&type=template&id=7c8c0d7d&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Gateways/Stripe/StripePaymentButton.vue?vue&type=script&lang=js&
 //
@@ -1246,8 +949,8 @@ var StripePaymentButtonvue_type_template_id_3d51c5fd_staticRenderFns = []
 
 var StripePaymentButton_component = Object(componentNormalizer["a" /* default */])(
   Stripe_StripePaymentButtonvue_type_script_lang_js_,
-  StripePaymentButtonvue_type_template_id_3d51c5fd_render,
-  StripePaymentButtonvue_type_template_id_3d51c5fd_staticRenderFns,
+  StripePaymentButtonvue_type_template_id_7c8c0d7d_render,
+  StripePaymentButtonvue_type_template_id_7c8c0d7d_staticRenderFns,
   false,
   null,
   null,
@@ -1256,7 +959,7 @@ var StripePaymentButton_component = Object(componentNormalizer["a" /* default */
 )
 
 /* harmony default export */ var StripePaymentButton = (StripePaymentButton_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"05f12613-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Gateways/AuthorizeNet/AuthorizeNetCreditCard.vue?vue&type=template&id=1f31d805&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"00845329-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Gateways/AuthorizeNet/AuthorizeNetCreditCard.vue?vue&type=template&id=1f31d805&
 var AuthorizeNetCreditCardvue_type_template_id_1f31d805_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (!_vm.loaded)?_c('div',{staticClass:"row my-5 py-1"},[_c('div',{staticClass:"col-xs-12"},[_c('activity-indicator',{attrs:{"size":"sm","center":true}})],1)]):_c('div',{staticClass:"form-group"},[(!_vm.gateway.options.login_id || !_vm.gateway.options.public_key)?_c('alert',{staticClass:"d-flex align-items-center",attrs:{"variant":"danger"}},[_c('icon',{staticClass:"mr-2",attrs:{"icon":"exclamation-triangle","size":"2x"}}),_c('h6',{staticClass:"font-weight-light my-0"},[_vm._v("\n            This account has NOT been configured for the new Giveworks Forms."),_c('br'),_c('b',[_vm._v("Reason:")]),(!_vm.gateway.options.login_id)?[_vm._v("The "),_c('em',[_vm._v("login_id")]),_vm._v(" is missing.")]:_vm._e(),(!_vm.gateway.options.public_key)?[_vm._v("The "),_c('em',[_vm._v("public_key")]),_vm._v(" is missing.")]:_vm._e()],2)],1):_c('credit-card-field',{attrs:{"activity":_vm.activity,"error":_vm.error || _vm.errors.token},on:{"change":_vm.onChange,"complete":_vm.onComplete}})],1)}
 var AuthorizeNetCreditCardvue_type_template_id_1f31d805_staticRenderFns = []
 
@@ -1406,6 +1109,9 @@ var AuthorizeNetCreditCard_component = Object(componentNormalizer["a" /* default
 //
 //
 //
+//
+//
+//
 
 
 
@@ -1467,6 +1173,10 @@ var AuthorizeNetCreditCard_component = Object(componentNormalizer["a" /* default
 
   },
   computed: {
+    activeButton() {
+      return this.buttons.filter(button => button.active).pop();
+    },
+
     classes() {
       return {
         'col-sm-6': this.width < 310,
@@ -1510,8 +1220,8 @@ var AuthorizeNetCreditCard_component = Object(componentNormalizer["a" /* default
 
 var PaymentGateways_component = Object(componentNormalizer["a" /* default */])(
   Gateways_PaymentGatewaysvue_type_script_lang_js_,
-  render,
-  staticRenderFns,
+  PaymentGatewaysvue_type_template_id_5d9de5fb_render,
+  PaymentGatewaysvue_type_template_id_5d9de5fb_staticRenderFns,
   false,
   null,
   null,
@@ -1519,26 +1229,292 @@ var PaymentGateways_component = Object(componentNormalizer["a" /* default */])(
   
 )
 
-/* harmony default export */ var PaymentGateways = __webpack_exports__["default"] = (PaymentGateways_component.exports);
-
-/***/ }),
-
-/***/ "9ceb":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"05f12613-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Types/Donation.vue?vue&type=template&id=1a9b6ecc&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('select-donation-fieldset',{attrs:{"form":_vm.form,"errors":_vm.errors,"page":_vm.page}}),_c('contact-info-fieldset',{attrs:{"form":_vm.form,"errors":_vm.errors,"page":_vm.page,"address":""}}),_c('hr'),(_vm.shouldShowEmployment)?[_c('employment-info-fieldset',{attrs:{"form":_vm.form,"errors":_vm.errors,"page":_vm.page}}),_c('hr')]:_vm._e(),_c('payment-gateways',{attrs:{"page-type":this,"form":_vm.form,"errors":_vm.errors,"page":_vm.page}}),(_vm.page.options.add_comment)?_c('textarea-field',{directives:[{name:"autogrow",rawName:"v-autogrow"}],attrs:{"id":"comment","label":_vm.commentMessage},model:{value:(_vm.form.comment),callback:function ($$v) {_vm.$set(_vm.form, "comment", $$v)},expression:"form.comment"}}):_vm._e(),_c('btn-activity',{attrs:{"type":"submit","size":"lg","activity":_vm.submitting,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.donate,"block":""}}),(_vm.page.options.add_optin)?_c('div',[_c('label',{staticClass:"custom-control custom-checkbox"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.form.optin),expression:"form.optin"}],staticClass:"custom-control-input",attrs:{"type":"checkbox","checked":""},domProps:{"checked":Array.isArray(_vm.form.optin)?_vm._i(_vm.form.optin,null)>-1:(_vm.form.optin)},on:{"change":function($event){var $$a=_vm.form.optin,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.$set(_vm.form, "optin", $$a.concat([$$v])))}else{$$i>-1&&(_vm.$set(_vm.form, "optin", $$a.slice(0,$$i).concat($$a.slice($$i+1))))}}else{_vm.$set(_vm.form, "optin", $$c)}}}}),_c('span',{staticClass:"custom-control-indicator"}),_c('small',{staticClass:"custom-control-label text-muted form-text",domProps:{"innerHTML":_vm._s(_vm.optinMessage)}})])]):_vm._e(),(_vm.page.site.disclaimer)?_c('div',{staticClass:"mt-3"},[_c('small',{staticClass:"text-muted",domProps:{"innerHTML":_vm._s(_vm.page.site.disclaimer)}})]):_vm._e()],2)}
-var staticRenderFns = []
+/* harmony default export */ var PaymentGateways = (PaymentGateways_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"00845329-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Fieldsets/SelectDonationFieldset.vue?vue&type=template&id=4fccb91e&
+var SelectDonationFieldsetvue_type_template_id_4fccb91e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('fieldset',[(_vm.legends)?_c('h3',{class:{'mb-0': _vm.hasMinimumAmount}},[_vm._v("Donation amount")]):_vm._e(),(_vm.hasMinimumAmount)?_c('div',{staticClass:"mb-2"},[_c('small',{staticClass:"text-muted"},[_vm._v("Minimum accepted amount is $"+_vm._s(_vm.page.options.min_amount))])]):_vm._e(),_c('payment-buttons',{attrs:{"name":"amount","amounts":_vm.amounts,"errors":_vm.errors,"page":_vm.page},model:{value:(_vm.form.amount),callback:function ($$v) {_vm.$set(_vm.form, "amount", $$v)},expression:"form.amount"}}),(_vm.page.site.recurring && !_vm.page.options.recurring_only)?_c('div',{staticClass:"form-group mt-3"},[_c('label',{domProps:{"innerHTML":_vm._s(_vm.recurringMessage)}}),_c('toggle-button',{attrs:{"size":"lg"},model:{value:(_vm.form.recurring),callback:function ($$v) {_vm.$set(_vm.form, "recurring", _vm._n($$v))},expression:"form.recurring"}}),(!_vm.form.recurring)?_c('small',{staticClass:"text-muted form-text"},[_vm._v("You are making a single donation of the amount entered above. Click the 'monthly' button to make your gift go further as an automatic monthly donation.")]):_c('small',{staticClass:"text-muted form-text"},[_vm._v("This amount will be charged automatically once each month, on or about the "+_vm._s(_vm.chargeDate)+". You may cancel your donation at any time by contacting us.")])],1):(_vm.page.site.recurring && _vm.page.options.recurring_only)?_c('alert',{staticClass:"mt-3",attrs:{"variant":"warning"}},[_c('alert-heading',{staticClass:"h3 d-flex align-items-center"},[_c('icon',{staticClass:"mr-3",attrs:{"icon":"exclamation-triangle","size":"1.5x"}}),_vm._v(" Monthly Donation\n        ")],1),(_vm.page.options.recur_message)?_c('p',{staticClass:"font-weight-light",domProps:{"innerHTML":_vm._s(_vm.page.options.recur_message)}}):_c('p',[_vm._v("\n            Please note that this will be a monthly recurring donation. The\n            amount you select will be charged automatically once each month\n            on or about "),_c('em',[_vm._v(_vm._s(_vm.chargeDate))]),_vm._v(".  You may cancel your donation\n            at any time by contacting us.\n        ")])],1):_vm._e()],1)}
+var SelectDonationFieldsetvue_type_template_id_4fccb91e_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Types/Donation.vue?vue&type=template&id=1a9b6ecc&
+// CONCATENATED MODULE: ./src/Components/Fieldsets/SelectDonationFieldset.vue?vue&type=template&id=4fccb91e&
 
-// EXTERNAL MODULE: ./src/Mixins/PageType.js
-var PageType = __webpack_require__("b791");
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"00845329-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Fields/ToggleButton.vue?vue&type=template&id=3b8c0e1e&
+var ToggleButtonvue_type_template_id_3b8c0e1e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('btn-group',{staticClass:"toggle-button",attrs:{"size":_vm.size}},[_vm._l((_vm.buttons),function(label,i){return _c('btn',{key:i,ref:"buttons",refInFor:true,attrs:{"outline":i !== _vm.value.toString(),"variant":i === _vm.value.toString() ? 'success' : 'secondary',"type":"button"},domProps:{"innerHTML":_vm._s(label)},on:{"click":function($event){return _vm.$emit('input', i)}}})}),_vm._t("default")],2)}
+var ToggleButtonvue_type_template_id_3b8c0e1e_staticRenderFns = []
 
+
+// CONCATENATED MODULE: ./src/Components/Fields/ToggleButton.vue?vue&type=template&id=3b8c0e1e&
+
+// EXTERNAL MODULE: ./node_modules/vue-interface/src/Mixins/FormControl/index.js + 1 modules
+var FormControl = __webpack_require__("0ab3");
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Fields/ToggleButton.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ var ToggleButtonvue_type_script_lang_js_ = ({
+  name: 'toggle-button',
+  inheritAttrs: false,
+  mixins: [FormControl["a" /* default */]],
+  components: {
+    Btn: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "9719")),
+    BtnGroup: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "25bb"))
+  },
+  props: {
+    value: {
+      default: 0
+    },
+    buttons: {
+      type: Object,
+
+      default() {
+        return {
+          0: 'One-Time',
+          1: 'Monthly Gift'
+        };
+      }
+
+    }
+  },
+
+  mounted() {
+    this.$refs.buttons.map((vnode, i) => {
+      if (vnode.$el.classList.contains('btn-success')) {
+        this.$emit('input', Object.keys(this.buttons).find(key => this.buttons[key] === vnode.$el.innerHTML));
+      }
+    });
+  }
+
+});
+// CONCATENATED MODULE: ./src/Components/Fields/ToggleButton.vue?vue&type=script&lang=js&
+ /* harmony default export */ var Fields_ToggleButtonvue_type_script_lang_js_ = (ToggleButtonvue_type_script_lang_js_); 
+// CONCATENATED MODULE: ./src/Components/Fields/ToggleButton.vue
+
+
+
+
+
+/* normalize component */
+
+var ToggleButton_component = Object(componentNormalizer["a" /* default */])(
+  Fields_ToggleButtonvue_type_script_lang_js_,
+  ToggleButtonvue_type_template_id_3b8c0e1e_render,
+  ToggleButtonvue_type_template_id_3b8c0e1e_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var ToggleButton = (ToggleButton_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"00845329-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Fields/PaymentButtons.vue?vue&type=template&id=91a20398&
+var PaymentButtonsvue_type_template_id_91a20398_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"payment-buttons",class:{'was-validated': !!_vm.errors.amount}},[_c('div',{staticClass:"payment-buttons-grid mb-2"},_vm._l((_vm.amounts),function(amount){return _c('btn',{key:amount,attrs:{"type":"button","outline":"","variant":"success","active":_vm.value ? _vm.value.toString() === amount.toString() : false},domProps:{"innerHTML":_vm._s(("$" + amount))},on:{"click":function($event){return _vm.onClickButton(amount)}}})}),1),_c('input-group',{class:{'is-invalid': !!_vm.errors.amount, 'mb-3': !_vm.page.site.recurring},attrs:{"prepend":"$"}},[_c('input-field',{attrs:{"custom":"","label":"Other Amount","placeholder":"Other Amount","group":false,"value":_vm.value},on:{"keydown":_vm.onKeyDown,"input":function (value) { return _vm.$emit('input', value); }}})],1),(_vm.errors.amount)?_c('form-feedback',{staticClass:"d-block",attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.errors.amount.join('<br>'))}}):_vm._e()],1)}
+var PaymentButtonsvue_type_template_id_91a20398_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/Components/Fields/PaymentButtons.vue?vue&type=template&id=91a20398&
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Fields/PaymentButtons.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ var PaymentButtonsvue_type_script_lang_js_ = ({
+  name: 'payment-buttons',
+  mixins: [FormControl["a" /* default */]],
+  components: {
+    Btn: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "9719")),
+    InputField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "46d8")),
+    InputGroup: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "3588")),
+    FormFeedback: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "a892"))
+  },
+  props: {
+    page: {
+      type: Object,
+      required: true
+    },
+    amounts: {
+      type: Array,
+      required: true
+    }
+  },
+  methods: {
+    onClickButton(value) {
+      this.$emit('input', parseFloat(this.value) !== (value = parseFloat(value)) ? value : null);
+    },
+
+    onKeyDown(e) {
+      if ((e.keyCode < 48 || e.keyCode > 57 && e.keyCode !== 190) && !e.metaKey && e.key.length === 1) {
+        e.preventDefault();
+      }
+    }
+
+  }
+});
+// CONCATENATED MODULE: ./src/Components/Fields/PaymentButtons.vue?vue&type=script&lang=js&
+ /* harmony default export */ var Fields_PaymentButtonsvue_type_script_lang_js_ = (PaymentButtonsvue_type_script_lang_js_); 
+// CONCATENATED MODULE: ./src/Components/Fields/PaymentButtons.vue
+
+
+
+
+
+/* normalize component */
+
+var PaymentButtons_component = Object(componentNormalizer["a" /* default */])(
+  Fields_PaymentButtonsvue_type_script_lang_js_,
+  PaymentButtonsvue_type_template_id_91a20398_render,
+  PaymentButtonsvue_type_template_id_91a20398_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var PaymentButtons = (PaymentButtons_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Fieldsets/SelectDonationFieldset.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+/* harmony default export */ var SelectDonationFieldsetvue_type_script_lang_js_ = ({
+  name: 'select-donation-fieldset',
+  components: {
+    Icon: index_es["a" /* FontAwesomeIcon */],
+    ToggleButton: ToggleButton,
+    PaymentButtons: PaymentButtons,
+    Alert: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "3259")),
+    AlertHeading: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "426a"))
+  },
+  mixins: [FormComponent["a" /* default */]],
+  props: {
+    legends: {
+      type: Boolean,
+      default: true
+    }
+  },
+  computed: {
+    recurringMessage() {
+      return this.page.options.recur_mess || this.page.site.config.giveworks.recur_mess;
+    },
+
+    chargeDate() {
+      const now = new Date();
+      return [now.getMonth() + 1, now.getDate(), now.getFullYear()].join('/');
+    },
+
+    hasMinimumAmount() {
+      return this.page.options.min_amount && (parseFloat(this.page.options.min_amount) || 0) > 0;
+    },
+
+    amounts() {
+      const values = this.page.options.amounts ? this.page.options.amounts.split(',') : this.page.site.config.giveworks.ask_amounts;
+      return values.filter(value => {
+        return value >= (parseFloat(this.page.options.min_amount) || 0);
+      });
+    }
+
+  }
+});
+// CONCATENATED MODULE: ./src/Components/Fieldsets/SelectDonationFieldset.vue?vue&type=script&lang=js&
+ /* harmony default export */ var Fieldsets_SelectDonationFieldsetvue_type_script_lang_js_ = (SelectDonationFieldsetvue_type_script_lang_js_); 
+// CONCATENATED MODULE: ./src/Components/Fieldsets/SelectDonationFieldset.vue
+
+
+
+
+
+/* normalize component */
+
+var SelectDonationFieldset_component = Object(componentNormalizer["a" /* default */])(
+  Fieldsets_SelectDonationFieldsetvue_type_script_lang_js_,
+  SelectDonationFieldsetvue_type_template_id_4fccb91e_render,
+  SelectDonationFieldsetvue_type_template_id_4fccb91e_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var SelectDonationFieldset = (SelectDonationFieldset_component.exports);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Types/Donation.vue?vue&type=script&lang=js&
 //
 //
@@ -1577,24 +1553,34 @@ var PageType = __webpack_require__("b791");
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 /* harmony default export */ var Donationvue_type_script_lang_js_ = ({
   name: 'page-type-donation',
   extends: PageType["a" /* default */],
   components: {
-    PaymentGateways: () => Promise.resolve(/* import() */).then(__webpack_require__.bind(null, "8b94")),
+    PaymentGateways: PaymentGateways,
+    SelectDonationFieldset: SelectDonationFieldset,
     BtnActivity: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "9863")),
     TextareaField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "31e0")),
     ContactInfoFieldset: () => __webpack_require__.e(/* import() | contact-info-fieldset */ 3).then(__webpack_require__.bind(null, "e3c2")),
-    EmploymentInfoFieldset: () => __webpack_require__.e(/* import() | employment-info-fieldset */ 5).then(__webpack_require__.bind(null, "33e3")),
-    SelectDonationFieldset: () => Promise.resolve(/* import() */).then(__webpack_require__.bind(null, "5b3b"))
+    EmploymentInfoFieldset: () => __webpack_require__.e(/* import() | employment-info-fieldset */ 5).then(__webpack_require__.bind(null, "33e3"))
   }
 });
 // CONCATENATED MODULE: ./src/Components/Types/Donation.vue?vue&type=script&lang=js&
  /* harmony default export */ var Types_Donationvue_type_script_lang_js_ = (Donationvue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
-var componentNormalizer = __webpack_require__("2877");
-
 // CONCATENATED MODULE: ./src/Components/Types/Donation.vue
 
 
@@ -1603,7 +1589,7 @@ var componentNormalizer = __webpack_require__("2877");
 
 /* normalize component */
 
-var component = Object(componentNormalizer["a" /* default */])(
+var Donation_component = Object(componentNormalizer["a" /* default */])(
   Types_Donationvue_type_script_lang_js_,
   render,
   staticRenderFns,
@@ -1614,7 +1600,7 @@ var component = Object(componentNormalizer["a" /* default */])(
   
 )
 
-/* harmony default export */ var Donation = __webpack_exports__["default"] = (component.exports);
+/* harmony default export */ var Donation = __webpack_exports__["default"] = (Donation_component.exports);
 
 /***/ }),
 
@@ -1685,7 +1671,7 @@ const EVENTS = ['submit', 'redirect', 'submit-enable', 'submit-disable', 'submit
   },
   methods: {
     submitButton() {
-      return this.$refs.submit || this.$el.querySelector('[type=submit]');
+      return this.$refs.submit ? this.$refs.submit.$el : this.$el.querySelector('[type=submit]');
     },
 
     hideSubmitButton() {
@@ -1764,6 +1750,10 @@ const EVENTS = ['submit', 'redirect', 'submit-enable', 'submit-disable', 'submit
 
   },
 
+  mounted() {
+    this.loaded = true;
+  },
+
   data() {
     const recurring = this.page.site.recurring ? this.page.options.recurring_only ? 1 : 0 : 0;
     return {
@@ -1772,6 +1762,7 @@ const EVENTS = ['submit', 'redirect', 'submit-enable', 'submit-disable', 'submit
         recurring: recurring
       },
       errors: {},
+      loaded: false,
       submitting: false,
       model: new _Models_Page__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"]({
         id: this.page.id

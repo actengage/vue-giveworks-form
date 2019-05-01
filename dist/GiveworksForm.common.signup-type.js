@@ -6,7 +6,7 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"05f12613-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Types/Signup.vue?vue&type=template&id=46c83313&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"00845329-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Types/Signup.vue?vue&type=template&id=46c83313&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c(_vm.page.options.service.split('\\').pop(),{tag:"component",attrs:{"submitting":_vm.submitting,"page":_vm.page,"form":_vm.form,"errors":_vm.errors}})],1)}
 var staticRenderFns = []
 
@@ -128,7 +128,7 @@ const EVENTS = ['submit', 'redirect', 'submit-enable', 'submit-disable', 'submit
   },
   methods: {
     submitButton() {
-      return this.$refs.submit || this.$el.querySelector('[type=submit]');
+      return this.$refs.submit ? this.$refs.submit.$el : this.$el.querySelector('[type=submit]');
     },
 
     hideSubmitButton() {
@@ -207,6 +207,10 @@ const EVENTS = ['submit', 'redirect', 'submit-enable', 'submit-disable', 'submit
 
   },
 
+  mounted() {
+    this.loaded = true;
+  },
+
   data() {
     const recurring = this.page.site.recurring ? this.page.options.recurring_only ? 1 : 0 : 0;
     return {
@@ -215,6 +219,7 @@ const EVENTS = ['submit', 'redirect', 'submit-enable', 'submit-disable', 'submit
         recurring: recurring
       },
       errors: {},
+      loaded: false,
       submitting: false,
       model: new _Models_Page__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"]({
         id: this.page.id

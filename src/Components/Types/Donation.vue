@@ -13,11 +13,22 @@
             <hr>
         </template>
 
-        <payment-gateways :page-type="this" :form="form" :errors="errors" :page="page"/>
+        <payment-gateways v-if="$refs.submit" :page-type="this" :form="form" :errors="errors" :page="page"/>
 
-        <textarea-field v-if="page.options.add_comment" v-autogrow v-model="form.comment" id="comment" :label="commentMessage"/>
+        <textarea-field
+            v-if="page.options.add_comment"
+            v-autogrow
+            v-model="form.comment"
+            id="comment"
+            :label="commentMessage" />
 
-        <btn-activity type="submit" size="lg" :activity="submitting" :label="buttonLabel || page.site.config.giveworks.button.donate" block/>
+        <btn-activity
+            ref="submit"
+            type="submit"
+            size="lg"
+            :activity="submitting"
+            :label="buttonLabel || page.site.config.giveworks.button.donate"
+            block />
 
         <div v-if="page.options.add_optin">
             <label class="custom-control custom-checkbox">
@@ -37,6 +48,8 @@
 
 <script>
 import PageType from '../../Mixins/PageType';
+import PaymentGateways from '../Gateways/PaymentGateways';
+import SelectDonationFieldset from '../Fieldsets/SelectDonationFieldset';
 
 export default {
 
@@ -45,12 +58,12 @@ export default {
     extends: PageType,
 
     components: {
-        PaymentGateways: () => import(/* webpackChunkName: "donation-type" */'../Gateways/PaymentGateways'),
+        PaymentGateways,
+        SelectDonationFieldset,
         BtnActivity: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/BtnActivity'),
         TextareaField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/TextareaField'),
         ContactInfoFieldset: () => import(/* webpackChunkName: "contact-info-fieldset" */'../Fieldsets/ContactInfoFieldset'),
-        EmploymentInfoFieldset: () => import(/* webpackChunkName: "employment-info-fieldset" */'../Fieldsets/EmploymentInfoFieldset'),
-        SelectDonationFieldset: () => import(/* webpackChunkName: "donation-type" */'../Fieldsets/SelectDonationFieldset')
+        EmploymentInfoFieldset: () => import(/* webpackChunkName: "employment-info-fieldset" */'../Fieldsets/EmploymentInfoFieldset')
     }
 
 };

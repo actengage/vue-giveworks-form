@@ -4,7 +4,7 @@
 
         <div v-if="!loaded" class="row my-5 py-1">
             <div class="col-xs-12">
-                <activity-indicator size="sm" :center="true"/>
+                <activity-indicator size="sm" center width="100%"/>
             </div>
         </div>
 
@@ -41,6 +41,7 @@ export default {
         const gateway = Gateway(this.gateway);
 
         this.pageType.disableSubmitButton();
+        
         // this.$dispatch.request('submit:disable');
 
         gateway.script((event) => {
@@ -60,24 +61,25 @@ export default {
                 this.errors.token = event.error ? [event.error.message] : null;
 
                 if(event.complete) {
-                    elapsed(500, (resolve, reject) => {
+                    // elapsed(500, (resolve, reject) => {
                         gateway.createToken(this.$card, {
                             currency: 'usd'
                         }).then((result) => {
-                            wait(this.activity ? 750 : 0, (resolve, reject) => {
+                            //wait(this.activity ? 750 : 0, (resolve, reject) => {
                                 if(result.error) {
                                     this.error = result.error.message;
 
-                                    reject(result.error.message);
+                                    //reject(result.error.message);
                                 }
                                 else {
                                     this.form.token = result.token.id;
                                     this.pageType.enableSubmitButton();
                                     
-                                    resolve(result);
+                                    //resolve(result);
                                 }
-                            }).then(resolve, reject);
+                            //}).then(resolve, reject);
                         });
+                    /*
                     }, () => {
                         this.activity = true;
                     }).then(() => {
@@ -85,6 +87,7 @@ export default {
                     }, () => {
                         this.activity = false;
                     });
+                    */
                 }
             });
 

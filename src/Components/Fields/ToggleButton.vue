@@ -51,11 +51,13 @@ export default {
     },
 
     mounted() {
-        this.$refs.buttons.map((vnode, i) => {
-            if(vnode.$el.classList.contains('btn-success')) {
-                this.$emit('input', Object.keys(this.buttons).find(key => this.buttons[key] === vnode.$el.innerHTML));
-            }
-        });
+        if(this.$refs.buttons) {
+            this.$refs.buttons.map((vnode, i) => {
+                if(vnode.$el.classList.contains('btn-success')) {
+                    this.$emit('input', Object.keys(this.buttons).find(key => this.buttons[key] === vnode.$el.innerHTML));
+                }
+            });
+        }
     }
 
 };

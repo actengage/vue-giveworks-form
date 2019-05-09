@@ -11,7 +11,7 @@
                     <form @submit.prevent="onSubmit">
                         <p>* Indicates required fields.</p>
                         <input-field v-model="form.short" label="Site Short Name*" placeholder="Site Short Name*" help-text="Example: 'ffff'" custom />
-                        <input-field v-model="form.slug" label="Page Slug*" placeholder="Page Slug*" help-text="Example: 'tell_congress_to_end_bi'" custom />
+                        <input-field v-model="form.slug" label="Page ID or Slug*" placeholder="Page ID or Slug*" help-text="Example: 'tell_congress_to_end_bi'" custom />
                         <input-field v-model="form.apiKey" label="API Key*" placeholder="API Key*   " help-text="The Giveworks API for site." custom />
                         <input-field v-model="form.source" label="Source Code" placeholder="Source Code" help-text="Source codes are optional." custom />
                         <div class="card mb-3">

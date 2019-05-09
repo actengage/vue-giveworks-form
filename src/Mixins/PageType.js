@@ -57,9 +57,13 @@ export default {
 
         handleRedirect(url) {
             setTimeout(() => {
-                url = url || this.redirect || this.page.external_reply || (
-                    this.page.next_page ? this.page.next_page.url : undefined
-                );
+                url = url || this.redirect || this.page.external_reply;
+                
+                if(!url && this.page.next_page) {
+                    url = this.page.next_page.url.replace(/\/$/, '') + (
+                        this.form.source ? '/' + this.form.source : ''
+                    );
+                }
                 
                 if(url) {
                     window.location = url;

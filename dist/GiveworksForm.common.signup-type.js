@@ -6,7 +6,7 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"7a01fe4a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Types/Signup.vue?vue&type=template&id=46c83313&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"00e43c6e-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Types/Signup.vue?vue&type=template&id=46c83313&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c(_vm.page.options.service.split('\\').pop(),{tag:"component",attrs:{"submitting":_vm.submitting,"page":_vm.page,"form":_vm.form,"errors":_vm.errors}})],1)}
 var staticRenderFns = []
 
@@ -149,7 +149,11 @@ const EVENTS = ['submit', 'redirect', 'submit-enable', 'submit-disable', 'submit
 
     handleRedirect(url) {
       setTimeout(() => {
-        url = url || this.redirect || this.page.external_reply || (this.page.next_page ? this.page.next_page.url : undefined);
+        url = url || this.redirect || this.page.external_reply;
+
+        if (!url && this.page.next_page) {
+          url = this.page.next_page.url.replace(/\/$/, '') + (this.form.source ? '/' + this.form.source : '');
+        }
 
         if (url) {
           window.location = url;

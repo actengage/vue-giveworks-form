@@ -6,13 +6,21 @@
 
         <payment-gateways :form="form" :errors="errors" :page="page"/>
 
-        <textarea-field v-if="page.options.add_comment" v-autogrow v-model="form.comment" id="comment" :label="commentMessage"/>
+        <textarea-field
+            v-query
+            v-autogrow
+            v-model="form.comment"
+            v-if="page.options.add_comment"
+            :label="commentMessage"
+            id="comment"
+        />
 
     </fieldset>
 
 </template>
 
 <script>
+import Query from '../../Directives/Query';
 import FormComponent from '../../Mixins/FormComponent';
 import PaymentGateways from '../Gateways/PaymentGateways';
 
@@ -34,7 +42,11 @@ export default {
 
     mixins: [
         FormComponent
-    ]
+    ],
+
+    directives: {
+        Query
+    }
 
 };
 </script>

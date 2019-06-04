@@ -2,6 +2,7 @@
 
     <input-field
         v-model="form.first"
+        v-query
         id="first"
         name="first"
         :label="`${question.question}${question.required ? '*' : ''}`"

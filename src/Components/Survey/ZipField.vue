@@ -2,6 +2,7 @@
 
     <input-field
         v-model="form.zip"
+        v-query
         :label="`${question.question}${question.required ? '*' : ''}`"
         :placeholder="`${question.question}${question.required ? '*' : ''}`"
         :required="question.required"

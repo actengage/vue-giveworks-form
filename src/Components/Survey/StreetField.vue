@@ -2,9 +2,10 @@
 
     <place-autocomplete-field
         v-model="form.street"
+        v-query
         id="street"
         name="street"
-        api-key="AIzaSyAhSv9zWvisiTXRPRw6K8AE0DCmrRMpQcU"
+        :api-key="mapApiKey"
         :errors="errors"
         :label="`${question.question}${question.required ? '*' : ''}`"
         :placeholder="`${question.question}${question.required ? '*' : ''}`"
@@ -21,6 +22,7 @@
 
 <script>
 import SurveyField from './SurveyField';
+import GoogleMapsApiKey from '../../Mixins/GoogleMapsApiKey';
 import PlaceAutofill from 'vue-place-autocomplete/src/PlaceAutofill';
 
 export default {
@@ -29,12 +31,22 @@ export default {
 
     extends: SurveyField,
 
+    mixins: [
+        GoogleMapsApiKey
+    ],
+
     components: {
         PlaceAutocompleteField: () => import(/* webpackChunkName: "vue-place-autocomplete" */'vue-place-autocomplete/src/PlaceAutocompleteField'),
     },
 
     directives: {
         PlaceAutofill
+    },
+
+    computed: {
+        apiKey() {
+            return process.env.VUE_APP_GOOGLE_MAPS_KEY;
+        }
     }
 
 };

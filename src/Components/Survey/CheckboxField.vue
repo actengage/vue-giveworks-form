@@ -8,8 +8,9 @@
         </label>
 
         <checkbox-field
-            v-model="form[name]"
             v-for="(answer, key) in question.answers"
+            v-model="form[name]"
+            v-query
             :key="key"
             :label="answer"
             :value="answer"
@@ -22,8 +23,9 @@
 
         <template v-if="question.accept_other">
             <checkbox-field
-                v-changed
                 v-model="form[name]"
+                v-changed
+                v-query
                 label="Other:"
                 value="other"
                 :name="name"
@@ -35,6 +37,7 @@
 
             <input-field
                 v-model="form[`${name}_other`]"
+                v-query
                 type="text"
                 label="Other"
                 placeholder="Other"

@@ -7,8 +7,9 @@
         </label>
 
         <radio-field
-            v-model="form[name]"
             v-for="(answer, key) in question.answers"
+            v-model="form[name]"
+            v-query
             :key="key"
             :label="answer"
             :value="answer"

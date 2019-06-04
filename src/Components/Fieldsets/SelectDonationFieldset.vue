@@ -8,11 +8,11 @@
             <small class="text-muted">Minimum accepted amount is ${{ page.options.min_amount }}</small>
         </div>
 
-        <payment-buttons v-model="form.amount" name="amount" :amounts="amounts" :errors="errors" :page="page"/>
+        <payment-buttons v-model="form.amount" v-query name="amount" :amounts="amounts" :errors="errors" :page="page"/>
 
         <div class="form-group mt-3" v-if="page.site.recurring && !page.options.recurring_only">
             <label v-html="recurringMessage"/>
-            <toggle-button size="lg" v-model.number="form.recurring"/>
+            <toggle-button size="lg" v-model.number="form.recurring" />
             <small v-if="!form.recurring" class="text-muted form-text">You are making a single donation of the amount entered above. Click the 'monthly' button to make your gift go further as an automatic monthly donation.</small>
             <small v-else class="text-muted form-text">This amount will be charged automatically once each month, on or about the {{ chargeDate }}. You may cancel your donation at any time by contacting us.</small>
         </div>
@@ -35,6 +35,7 @@
 
 <script>
 import '../../Config/Icons';
+import Query from '../../Directives/Query';
 import ToggleButton from '../Fields/ToggleButton';
 import PaymentButtons from '../Fields/PaymentButtons';
 import FormComponent from '../../Mixins/FormComponent';
@@ -52,15 +53,19 @@ export default {
         AlertHeading: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/Alert/AlertHeading'),
     },
 
-    mixins: [
-        FormComponent
-    ],
-
     props: {
         legends: {
             type: Boolean,
             default: true
         }
+    },
+
+    mixins: [
+        FormComponent
+    ],
+
+    directives: {
+        Query
     },
 
     computed: {

@@ -6,8 +6,8 @@
 
             <legend>Select an amount</legend>
 
-            <div v-for="chunk in amounts" class="row">
-                <div v-for="amount in chunk" class="col-sm-6">
+            <div v-for="(chunk, i) in amounts" :key="i" class="row">
+                <div v-for="amount in chunk" :key="amount" class="col-sm-6">
                     <radio-field v-model="form.donation" name="donation" :label="amount" :value="amount" custom/>
                 </div>
             </div>

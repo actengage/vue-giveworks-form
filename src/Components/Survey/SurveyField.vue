@@ -1,4 +1,5 @@
 <script>
+import Query from '../../Directives/Query';
 import FormControl from 'vue-interface/src/Mixins/FormControl';
 import { isFunction } from 'vue-interface/src/Helpers/Functions';
 
@@ -11,6 +12,10 @@ export default {
     mixins: [
         FormControl
     ],
+
+    directives: {
+        Query
+    },
 
     props: {
 

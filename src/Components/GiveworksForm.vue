@@ -25,10 +25,12 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import Page from '../Models/Page';
 import HttpConfig from '../Config/Http';
 import HttpErrorResponse from './HttpErrorResponse';
 import Request from 'vue-interface/src/Http/Request';
+import bugsnag, { Bugsnag } from '@bugsnag/js';
 
 export default {
 
@@ -113,12 +115,19 @@ export default {
     },
 
     mounted() {
-        /*
-        bugsnag('e66068bbbefd6ad235c13b0c178480da').use(bugsnagVue, Vue);
-
-        import bugsnag from '@bugsnag/js';
-        import bugsnagVue from '@bugsnag/plugin-vue';
-        */
+        Promise.all([
+            import('@bugsnag/js'),
+            import('@bugsnag/plugin-vue')
+        ])
+        .then(([ {'default': bugsnag}, {'default': bugsnagVue} ]) => {
+            bugsnag({
+                apiKey: process.env.VUE_APP_BUGSNAG_KEY,
+                releaseStage: process.env.NODE_ENV,
+                notifyReleaseStages: [
+                    'production'
+                ]
+            }).use(bugsnagVue, Vue);
+        });
 
         if(!this.page.id && this.apiKey) {
             Page.find(this.pageId)

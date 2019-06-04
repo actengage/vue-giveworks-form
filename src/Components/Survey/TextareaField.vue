@@ -2,6 +2,7 @@
 
     <textarea-field
         v-model="form[name]"
+        v-query
         :label="`${question.question}${question.required ? '*' : ''}`"
         :placeholder="`${question.question}${question.required ? '*' : ''}`"
         :name="name"

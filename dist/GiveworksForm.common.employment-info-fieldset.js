@@ -6,12 +6,15 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"00e43c6e-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Fieldsets/EmploymentInfoFieldset.vue?vue&type=template&id=40813e6e&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('fieldset',[(!_vm.form.recurring)?_c('p',[_c('small',{staticClass:"text-muted",domProps:{"innerHTML":_vm._s(_vm.employmentOccurMessage)}})]):_vm._e(),(!_vm.isRetired)?_c('input-field',{ref:"employer",attrs:{"id":"employer","name":"employer","label":"Employer","placeholder":"Employer","disabled":_vm.isRetired,"errors":_vm.errors,"custom":""},model:{value:(_vm.form.employer),callback:function ($$v) {_vm.$set(_vm.form, "employer", $$v)},expression:"form.employer"}}):_vm._e(),(!_vm.isRetired)?_c('input-field',{ref:"occupation",attrs:{"id":"occupation","name":"occupation","label":"Occupation","placeholder":"Occupation","disabled":_vm.isRetired,"errors":_vm.errors,"custom":""},model:{value:(_vm.form.occupation),callback:function ($$v) {_vm.$set(_vm.form, "occupation", $$v)},expression:"form.occupation"}}):_vm._e(),_c('checkbox-field',{attrs:{"label":"I'm retired","value":"1","custom":""},model:{value:(_vm.form.retired),callback:function ($$v) {_vm.$set(_vm.form, "retired", $$v)},expression:"form.retired"}})],1)}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c7dd3ec2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Fieldsets/EmploymentInfoFieldset.vue?vue&type=template&id=6c1e1234&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('fieldset',[(!_vm.form.recurring)?_c('p',[_c('small',{staticClass:"text-muted",domProps:{"innerHTML":_vm._s(_vm.employmentOccurMessage)}})]):_vm._e(),(!_vm.isRetired)?_c('input-field',{directives:[{name:"query",rawName:"v-query"}],ref:"employer",attrs:{"id":"employer","name":"employer","label":"Employer","placeholder":"Employer","disabled":_vm.isRetired,"errors":_vm.errors,"custom":""},model:{value:(_vm.form.employer),callback:function ($$v) {_vm.$set(_vm.form, "employer", $$v)},expression:"form.employer"}}):_vm._e(),(!_vm.isRetired)?_c('input-field',{directives:[{name:"query",rawName:"v-query"}],ref:"occupation",attrs:{"id":"occupation","name":"occupation","label":"Occupation","placeholder":"Occupation","disabled":_vm.isRetired,"errors":_vm.errors,"custom":""},model:{value:(_vm.form.occupation),callback:function ($$v) {_vm.$set(_vm.form, "occupation", $$v)},expression:"form.occupation"}}):_vm._e(),_c('div',{staticClass:"form-group"},[_c('checkbox-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"label":"I'm retired","value":"1","custom":""},model:{value:(_vm.form.retired),callback:function ($$v) {_vm.$set(_vm.form, "retired", $$v)},expression:"form.retired"}})],1)],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Fieldsets/EmploymentInfoFieldset.vue?vue&type=template&id=40813e6e&
+// CONCATENATED MODULE: ./src/Components/Fieldsets/EmploymentInfoFieldset.vue?vue&type=template&id=6c1e1234&
+
+// EXTERNAL MODULE: ./src/Directives/Query.js
+var Query = __webpack_require__("b4ea");
 
 // EXTERNAL MODULE: ./src/Mixins/FormComponent.js
 var FormComponent = __webpack_require__("bb4b");
@@ -35,19 +38,26 @@ var FormComponent = __webpack_require__("bb4b");
 //
 //
 //
+//
+//
+//
+
 
 /* harmony default export */ var EmploymentInfoFieldsetvue_type_script_lang_js_ = ({
   name: 'employment-info-fieldset',
-  mixins: [FormComponent["a" /* default */]],
+  components: {
+    InputField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "46d8")),
+    CheckboxField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "e067"))
+  },
   props: {
     legends: {
       type: Boolean,
       default: true
     }
   },
-  components: {
-    InputField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "46d8")),
-    CheckboxField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "e067"))
+  mixins: [FormComponent["a" /* default */]],
+  directives: {
+    Query: Query["a" /* default */]
   },
   watch: {
     'form.retired': function (value) {
@@ -94,6 +104,38 @@ var component = Object(componentNormalizer["a" /* default */])(
 )
 
 /* harmony default export */ var EmploymentInfoFieldset = __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "b4ea":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+function input(el) {
+  if (['input', 'textarea', 'select'].indexOf(el.tagName) !== -1) {
+    return el;
+  }
+
+  return Array.from(el.querySelectorAll('input, textarea, select')).reverse().pop();
+}
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  inserted(el, binding, vnode) {
+    const field = input(el);
+    const params = new URLSearchParams(location.search);
+    const key = binding.value || input(el).getAttribute('name');
+    const value = params.get(key);
+
+    if (field && !field.value && !!value) {
+      if (vnode.componentInstance) {
+        vnode.componentInstance.$emit('input', value);
+      } else {
+        vnode.elm.value = value;
+      }
+    }
+  }
+
+});
 
 /***/ }),
 

@@ -2,6 +2,7 @@
 
     <select-field
         v-model="form.state"
+        v-query
         name="state"
         :id="question.id"
         :label="`${question.question}${question.required ? '*' : ''}`"

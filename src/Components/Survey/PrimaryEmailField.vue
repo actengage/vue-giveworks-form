@@ -2,6 +2,7 @@
 
     <input-field
         v-model="form.email"
+        v-query
         type="email"
         name="email"
         id="email"

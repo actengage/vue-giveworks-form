@@ -2,6 +2,7 @@
 
     <input-field
         v-model="form[name]"
+        v-query
         type="phone"
         :name="name"
         :id="question.id"

@@ -17,7 +17,7 @@
             name="address"
             label="Address"
             placeholder="Address"
-            api-key="AIzaSyAhSv9zWvisiTXRPRw6K8AE0DCmrRMpQcU"
+            :api-key="mapApiKey"
             :errors="errors"
             v-place-autofill:street.query="form.address"
             v-place-autofill:city="form.city"
@@ -55,14 +55,17 @@
 <script>
 import FormComponent from '../../Mixins/FormComponent';
 import Autogrow from 'vue-interface/src/Directives/Autogrow';
+import GoogleMapsApiKey from '../../Mixins/GoogleMapsApiKey';
 import PlaceAutofill from 'vue-place-autocomplete/src/PlaceAutofill';
+
 
 export default {
 
     name: 'go-to-webinar',
 
     mixins: [
-        FormComponent
+        FormComponent,
+        GoogleMapsApiKey
     ],
 
     components: {

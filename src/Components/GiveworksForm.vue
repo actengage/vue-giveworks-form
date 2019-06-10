@@ -134,7 +134,7 @@ export default {
                 .then(model => {
                     this.page = model.toJson();
 
-                    console.log(this.page);
+                    console.log(model.toJson());
                 }, error => {
                     this.error = error;
                 });

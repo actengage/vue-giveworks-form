@@ -1,4 +1,4 @@
-((typeof self !== 'undefined' ? self : this)["webpackJsonpGiveworksForm"] = (typeof self !== 'undefined' ? self : this)["webpackJsonpGiveworksForm"] || []).push([[10],{
+((typeof self !== 'undefined' ? self : this)["webpackJsonpGiveworksForm"] = (typeof self !== 'undefined' ? self : this)["webpackJsonpGiveworksForm"] || []).push([[9],{
 
 /***/ "0ab3":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -2636,7 +2636,7 @@ function makeInlineSvgAbstract(params) {
       'data-prefix': prefix,
       'data-icon': iconName,
       'class': attrClass,
-      'role': 'img',
+      'role': extra.attributes.role || 'img',
       'xmlns': 'http://www.w3.org/2000/svg',
       'viewBox': "0 0 ".concat(width, " ").concat(height)
     })
@@ -2777,7 +2777,7 @@ var p = config.measurePerformance && PERFORMANCE && PERFORMANCE.mark && PERFORMA
   mark: noop$1,
   measure: noop$1
 };
-var preamble = "FA \"5.8.1\"";
+var preamble = "FA \"5.9.0\"";
 
 var begin = function begin(name) {
   p.mark("".concat(preamble, " ").concat(name, " begins"));
@@ -2843,6 +2843,17 @@ var reduce = function fastReduceObject(subject, fn, initialValue, thisContext) {
 
   return result;
 };
+
+function toHex(unicode) {
+  var result = '';
+
+  for (var i = 0; i < unicode.length; i++) {
+    var hex = unicode.charCodeAt(i).toString(16);
+    result += ('000' + hex).slice(-4);
+  }
+
+  return result;
+}
 
 function defineIcons(prefix, icons) {
   var params = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
@@ -2926,10 +2937,10 @@ var build = function build() {
 };
 build();
 function byUnicode(prefix, unicode) {
-  return _byUnicode[prefix][unicode];
+  return (_byUnicode[prefix] || {})[unicode];
 }
 function byLigature(prefix, ligature) {
-  return _byLigature[prefix][ligature];
+  return (_byLigature[prefix] || {})[ligature];
 }
 function byOldName(name) {
   return _byOldName[name] || {
@@ -3162,17 +3173,6 @@ function styleParser (node) {
   }
 
   return val;
-}
-
-function toHex(unicode) {
-  var result = '';
-
-  for (var i = 0; i < unicode.length; i++) {
-    var hex = unicode.charCodeAt(i).toString(16);
-    result += ('000' + hex).slice(-4);
-  }
-
-  return result;
 }
 
 function classParser (node) {
@@ -3558,7 +3558,12 @@ function onTree(root) {
     return;
   }
 
-  var candidates = toArray(root.querySelectorAll(prefixesDomQuery));
+  var candidates = [];
+
+  try {
+    candidates = toArray(root.querySelectorAll(prefixesDomQuery));
+  } catch (e) {// noop
+  }
 
   if (candidates.length > 0) {
     hclAdd('pending');
@@ -3635,11 +3640,13 @@ function replaceForPosition(node, position) {
     } else if (fontFamily) {
       var content = styles.getPropertyValue('content');
       var prefix = ~['Light', 'Regular', 'Solid', 'Brands'].indexOf(fontFamily[1]) ? STYLE_TO_PREFIX[fontFamily[1].toLowerCase()] : FONT_WEIGHT_TO_PREFIX[fontWeight];
-      var iconName = byUnicode(prefix, toHex(content.length === 3 ? content.substr(1, 1) : content)); // Only convert the pseudo element in this :before/:after position into an icon if we haven't
+      var hexValue = toHex(content.length === 3 ? content.substr(1, 1) : content);
+      var iconName = byUnicode(prefix, hexValue);
+      var iconIdentifier = iconName; // Only convert the pseudo element in this :before/:after position into an icon if we haven't
       // already done so with the same prefix and iconName
 
-      if (!alreadyProcessedPseudoElement || alreadyProcessedPseudoElement.getAttribute(DATA_PREFIX) !== prefix || alreadyProcessedPseudoElement.getAttribute(DATA_ICON) !== iconName) {
-        node.setAttribute(pendingAttribute, iconName);
+      if (iconName && (!alreadyProcessedPseudoElement || alreadyProcessedPseudoElement.getAttribute(DATA_PREFIX) !== prefix || alreadyProcessedPseudoElement.getAttribute(DATA_ICON) !== iconIdentifier)) {
+        node.setAttribute(pendingAttribute, iconIdentifier);
 
         if (alreadyProcessedPseudoElement) {
           // Delete the old one, since we're replacing it with a new one
@@ -3656,7 +3663,7 @@ function replaceForPosition(node, position) {
               mask: emptyCanonicalIcon()
             },
             prefix: prefix,
-            iconName: iconName,
+            iconName: iconIdentifier,
             extra: extra,
             watchable: true
           }));

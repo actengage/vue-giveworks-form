@@ -15,6 +15,7 @@
                 :page="page"
                 :source="source"
                 :redirect="redirect"
+                :http-options="httpOptions"
                 @error="onError"
             />
         </form>
@@ -80,6 +81,15 @@ export default {
             };
         },
 
+        httpOptions() {
+            return Object.assign({}, HttpConfig(this.mode), {
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${this.apiKey}`
+                }
+            });
+        },
+
         pageTypeComponent() {
             return this.page.special;
         }
@@ -106,14 +116,6 @@ export default {
 
     },
 
-    created() {
-        Request.defaults = HttpConfig(this.mode);
-        Request.defaults.headers = {
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${this.apiKey}`
-        };
-    },
-
     mounted() {
         Promise.all([
             import('@bugsnag/js'),
@@ -129,8 +131,8 @@ export default {
             }).use(bugsnagVue, Vue);
         });
 
-        if(!this.page.id && this.apiKey) {
-            Page.find(this.pageId)
+        if(!this.page.id && this.apiKey) {            
+            Page.find(this.pageId, this.httpOptions)
                 .then(model => {
                     this.page = model.toJson();
                 }, error => {

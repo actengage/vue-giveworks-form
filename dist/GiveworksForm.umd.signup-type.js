@@ -1,4 +1,4 @@
-((typeof self !== 'undefined' ? self : this)["webpackJsonpGiveworksForm"] = (typeof self !== 'undefined' ? self : this)["webpackJsonpGiveworksForm"] || []).push([[8],{
+((typeof self !== 'undefined' ? self : this)["webpackJsonpGiveworksForm"] = (typeof self !== 'undefined' ? self : this)["webpackJsonpGiveworksForm"] || []).push([[7],{
 
 /***/ "0dce":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -6,7 +6,7 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"71a72afc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Types/Signup.vue?vue&type=template&id=46c83313&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"7d00edbd-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Types/Signup.vue?vue&type=template&id=46c83313&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c(_vm.page.options.service.split('\\').pop(),{tag:"component",attrs:{"submitting":_vm.submitting,"page":_vm.page,"form":_vm.form,"errors":_vm.errors}})],1)}
 var staticRenderFns = []
 
@@ -30,7 +30,7 @@ var PageType = __webpack_require__("b791");
   name: 'page-type-signup',
   extends: PageType["a" /* default */],
   components: {
-    GoToWebinar: __webpack_require__.e(/* import() | go-to-webinar */ 6).then(__webpack_require__.bind(null, "4898"))
+    GoToWebinar: __webpack_require__.e(/* import() | go-to-webinar */ 5).then(__webpack_require__.bind(null, "4898"))
   }
 });
 // CONCATENATED MODULE: ./src/Components/Types/Signup.vue?vue&type=script&lang=js&
@@ -110,6 +110,7 @@ const EVENTS = ['submit', 'redirect', 'submit-enable', 'submit-disable', 'submit
   props: {
     source: [String, Number],
     redirect: [Boolean, String],
+    httpOptions: Object,
     page: {
       type: Object,
       required: true
@@ -171,9 +172,9 @@ const EVENTS = ['submit', 'redirect', 'submit-enable', 'submit-disable', 'submit
           this.errors = {};
           this.submitting = true;
           this.$emit('submit');
-          this.model.save(this.form, {
+          this.model.save(this.form, Object.assign({
             method: 'post'
-          }).then(response => {
+          }, this.httpOptions)).then(response => {
             this.submitting = false;
             this.$emit('submit-complete', true, response);
             this.$emit('submit-success', response);

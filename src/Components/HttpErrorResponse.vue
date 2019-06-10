@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import unit from 'vue-interface/src/Helpers/Unit';
+import unit from 'vue-interface/src/Helpers/Functions/unit';
 
 export default {
 

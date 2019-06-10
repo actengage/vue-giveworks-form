@@ -10,6 +10,8 @@ export default {
 
         redirect: [Boolean, String],
 
+        httpOptions: Object,
+
         page: {
             type: Object,
             required: true
@@ -81,7 +83,9 @@ export default {
                     this.errors = {};
                     this.submitting = true;
                     this.$emit('submit');
-                    this.model.save(this.form, { method: 'post' })
+                    this.model.save(this.form, Object.assign({
+                        method: 'post'
+                    }, this.httpOptions))
                         .then(response => {
                             this.submitting = false;
                             this.$emit('submit-complete', true, response);

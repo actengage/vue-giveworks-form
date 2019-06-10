@@ -7,7 +7,7 @@
                 </div>
             </div>
         </div>
-        <form v-else-if="page" novalidate="novalidate" :class="classes" @submit.prevent="submit" class="container">
+        <form v-else-if="page.id" novalidate="novalidate" :class="classes" @submit.prevent="submit" class="container">
             <component
                 ref="type"
                 :is="pageTypeComponent"
@@ -129,12 +129,10 @@ export default {
             }).use(bugsnagVue, Vue);
         });
 
-        if(this.pageId) {
+        if(!this.page.id && this.apiKey) {
             Page.find(this.pageId)
                 .then(model => {
                     this.page = model.toJson();
-
-                    console.log(model.toJson());
                 }, error => {
                     this.error = error;
                 });

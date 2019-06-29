@@ -27,7 +27,7 @@
     "bootstrap": "^4.3.1",
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.10",
-    "vue-credit-card-field": "^0.3.4",
+    "vue-credit-card-field": "^0.3.6",
     "vue-interface": "^0.4.12",
     "vue-place-autocomplete": "^0.4.0",
     "vue-router": "^3.0.6"

@@ -1,4 +1,4 @@
-((typeof self !== 'undefined' ? self : this)["webpackJsonpGiveworksForm"] = (typeof self !== 'undefined' ? self : this)["webpackJsonpGiveworksForm"] || []).push([[9],{
+((typeof self !== 'undefined' ? self : this)["webpackJsonpGiveworksForm"] = (typeof self !== 'undefined' ? self : this)["webpackJsonpGiveworksForm"] || []).push([[10],{
 
 /***/ "0ab3":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -219,14 +219,7 @@ function addEmptyClass(el, vnode) {
          *
          * @property String
          */
-        helpText: [Number, String],
-
-        /**
-         * The maxlength attribute
-         *
-         * @property String
-         */
-        maxlength: [Number, String]
+        helpText: [Number, String]
 
     },
 
@@ -515,7 +508,7 @@ exports.svgPathData = svgPathData;
 
 "use strict";
 
-// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js + 29 modules
+// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js + 32 modules
 var Functions = __webpack_require__("ca14");
 
 // CONCATENATED MODULE: ./node_modules/vue-interface/src/Helpers/Elapsed/Elapsed.js
@@ -543,7 +536,7 @@ function elapsed(milliseconds, callback, elapsedCallback) {
             return resolver(response || hasElapsed);
         };
 
-        callback(Object(Functions["p" /* wrap */])(resolve, resolver), Object(Functions["p" /* wrap */])(reject, resolver));
+        callback(Object(Functions["q" /* wrap */])(resolve, resolver), Object(Functions["q" /* wrap */])(reject, resolver));
     });
 
     return promise.finally(stop, stop);
@@ -551,7 +544,7 @@ function elapsed(milliseconds, callback, elapsedCallback) {
 
 // CONCATENATED MODULE: ./node_modules/vue-interface/src/Helpers/Elapsed/index.js
 
-/* harmony default export */ var Elapsed = __webpack_exports__["a"] = (elapsed);
+/* harmony default export */ var Elapsed = (elapsed);
 
 
 /***/ }),
@@ -615,7 +608,7 @@ _fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_9__[/* library */ "c"
 
 "use strict";
 
-// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js + 29 modules
+// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js + 32 modules
 var Functions = __webpack_require__("ca14");
 
 // CONCATENATED MODULE: ./node_modules/vue-interface/src/Helpers/Wait/Wait.js
@@ -649,15 +642,15 @@ function wait(milliseconds, callback) {
             return resolver(response);
         };
 
-        restart(Object(Functions["p" /* wrap */])(callback, callback => {
-            return callback(Object(Functions["p" /* wrap */])(resolve, resolver), Object(Functions["p" /* wrap */])(reject, resolver));
+        restart(Object(Functions["q" /* wrap */])(callback, callback => {
+            return callback(Object(Functions["q" /* wrap */])(resolve, resolver), Object(Functions["q" /* wrap */])(reject, resolver));
         }), milliseconds);
     });
 }
 
 // CONCATENATED MODULE: ./node_modules/vue-interface/src/Helpers/Wait/index.js
 
-/* harmony default export */ var Wait = __webpack_exports__["a"] = (wait);
+/* harmony default export */ var Wait = (wait);
 
 
 /***/ }),
@@ -1436,7 +1429,7 @@ var FontAwesomeLayersText = {
 
 "use strict";
 
-// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js + 29 modules
+// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js + 32 modules
 var Functions = __webpack_require__("ca14");
 
 // CONCATENATED MODULE: ./node_modules/vue-interface/src/Mixins/MergeClasses/MergeClasses.js

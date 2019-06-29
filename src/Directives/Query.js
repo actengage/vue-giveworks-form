@@ -11,7 +11,7 @@ export default {
     inserted(el, binding, vnode) {
         const field = input(el);
         const params = new URLSearchParams(location.search);
-        const key = binding.value || input(el).getAttribute('name');
+        const key = binding.value || field && field.getAttribute('name');
         const value = params.get(key);
 
         if(field && !field.value && !!value) {

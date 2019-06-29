@@ -14,16 +14,19 @@
                 <b>Reason:</b> <template v-if="!gateway.options.login_id">The <em>login_id</em> is missing.</template> <template v-if="!gateway.options.public_key">The <em>public_key</em> is missing.</template>
             </h6>
         </alert>
-        <credit-card-field v-else :activity="activity" :error="error || errors.token" @change="onChange" @complete="onComplete"/>
+        <credit-card-field v-else :activity="activity" :error="error || errors.token" @change="onChange" @valid="onValid"/>
     </div>
 
 </template>
 
 <script>
 import Gateway from '../Gateway';
-import wait from 'vue-interface/src/Helpers/Wait';
-import elapsed from 'vue-interface/src/Helpers/Elapsed';
 import PaymentGateway from '../../../Mixins/PaymentGateway';
+import { throttle } from 'vue-interface/src/Helpers/Functions';
+
+const throttled = throttle(fn => {
+    fn();
+}, 1000);
 
 export default {
 
@@ -31,7 +34,7 @@ export default {
 
     components: {
         Alert: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/Alert'),
-        CreditCardField: () => import(/* webpackChunkName: "vue-credit-card-field" */'vue-credit-card-field/src/CreditCardField'),
+        CreditCardField: () => import(/* webpackChunkName: "vue-credit-card-field" */'vue-credit-card-field/src/Components/CreditCardField'),
     },
 
     mixins: [
@@ -39,44 +42,40 @@ export default {
     ],
 
     methods: {
+
         onChange: function(event) {
             if(!event || !event.complete) {
                 this.pageType.disableSubmitButton();
-                // this.$dispatch.request('submit:disable');
             }
         },
-        onComplete: function(event) {
-            elapsed(500, (resolve, reject) => {
+
+        onValid: function(event) {
+            throttled(() => {
+                this.activity = true;
+
                 Gateway(this.gateway).createToken({
                     cardNumber: event.card.number,
                     month: event.card.expMonth,
                     year: event.card.expYear,
                     cardCode: event.card.cvc
                 }, event => {
-                    wait(this.activity ? 750 : 0, (resolve, reject) => {
+                    throttled(() => {
+                        this.activity = false;
+
                         if(event.messages.resultCode === 'Ok') {
                             this.$set(this.form, 'token', event.opaqueData.dataValue);
                             this.$set(this.form, 'tokenDescriptor', event.opaqueData.dataDescriptor);
                             this.pageType.enableSubmitButton();
-                            // this.$dispatch.request('submit:enable');
-                            resolve(event);
                         }
                         else if(event.messages.resultCode === 'Error') {
                             this.error = event.messages.message[0].text;
                             this.pageType.disableSubmitButton();
-                            // this.$dispatch.request('submit:disable');
-                            reject(this.error);
                         }
-                    }).then(resolve, reject);
+                    });
                 });
-            }, () => {
-                this.activity = true;
-            }).then(() => {
-                this.activity = false;
-            }, () => {
-                this.activity = false;
             });
         }
+        
     },
 
     mounted() {

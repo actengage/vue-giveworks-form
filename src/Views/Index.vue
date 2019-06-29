@@ -31,10 +31,10 @@
         <div v-else class="container">
             <giveworks-form
                 :env="this.$route.query.env"
+                :mode="this.$route.query.mode"
                 :page-id="this.$route.params.slug"
                 :source="this.$route.params.source"
-                :api-key="this.$route.query.apiKey"
-                :mode="this.$route.query.mode">
+                :api-key="this.$route.query.apiKey">
             </giveworks-form>
         </div>
     </div>
@@ -44,6 +44,7 @@
 import Btn from 'vue-interface/src/Components/Btn';
 import Alert from 'vue-interface/src/Components/Alert';
 import GiveworksForm from '@/Components/GiveworksForm.vue';
+import { pickBy } from 'vue-interface/src/Helpers/Functions';
 import InputField from 'vue-interface/src/Components/InputField';
 import RadioField from 'vue-interface/src/Components/RadioField';
 
@@ -77,15 +78,15 @@ export default {
                     mode: this.form.mode,
                     apiKey: this.form.apiKey
                 },
-                params: {
+                params: pickBy({
                     apiKey: null,
                     slug: this.form.slug,
                     short: this.form.short,
                     source: this.form.source
-                }
+                }, value => !!value)
             });
 
-            window.location.reload();
+            //window.location.reload();
         }
 
     },

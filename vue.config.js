@@ -1,4 +1,7 @@
+const path = require('path');
+const glob = require('glob-all');
 const isDemo = process.argv.indexOf('--demo') > -1;
+const PurgecssPlugin = require('purgecss-webpack-plugin');
 
 module.exports = {
     lintOnSave: false,

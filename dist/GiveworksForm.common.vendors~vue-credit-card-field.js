@@ -1426,14 +1426,14 @@ module.exports = cardTypes;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"096791e2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-credit-card-field/src/Components/CreditCardField.vue?vue&type=template&id=f06d7018&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"f358080c-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-credit-card-field/src/Components/CreditCardField.vue?vue&type=template&id=e031d660&
 var render = function () {
 var _obj;
-var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',{staticClass:"credit-card-field",class:( _obj = {'has-brand': !!_vm.type, 'has-errors': _vm.hasErrors}, _obj[("is-focused-" + _vm.focused)] = _vm.focused, _obj )},[_c('div',{staticClass:"credit-card-field-rows"},[_c('div',{staticClass:"credit-card-field-row",class:{'has-error': _vm.currentErrors.number}},[_c('input-field',{directives:[{name:"card-number",rawName:"v-card-number"},{name:"bubble",rawName:"v-bubble:blur",value:(_vm.onBlur),expression:"onBlur",arg:"blur"},{name:"bubble",rawName:"v-bubble:focus",value:(function () { return _vm.focused = 'number'; }),expression:"() => focused = 'number'",arg:"focus"},{name:"validate",rawName:"v-validate:number",value:(_vm.validated.number),expression:"validated.number",arg:"number"}],ref:"number",attrs:{"disabled":_vm.activity,"errors":_vm.currentErrors,"custom":"","id":"number","name":"number","label":"Card Number","placeholder":"Credit Card Number"},on:{"validate":_vm.onValidate},nativeOn:{"card-types":function($event){return _vm.onCardTypeChange($event)},"valid":function($event){return (function () { return _vm.onValid('number', _vm.showName ? 'name' : 'month'); })($event)}},scopedSlots:_vm._u([{key:"activity",fn:function(){return [_c('animate-css',{attrs:{"name":"fade"}},[(_vm.activity)?_c('activity-indicator',{key:"activity",attrs:{"size":_vm.size}}):_c('div',{key:"icons",staticClass:"credit-card-icons"},[_c('animate-css',{attrs:{"mode":"out-in","name":"flip","y":""}},[(_vm.focused !== 'cvc')?_c('div',{key:"front",staticClass:"credit-card-field-icon-card"},[_c('icon',{staticClass:"credit-card-field-icon",attrs:{"icon":[_vm.icon ? 'fab' : 'far', _vm.icon || 'credit-card'],"data-brand":_vm.type && _vm.type.niceType || 'unknown',"width":"20","height":"18"}})],1):_c('div',{key:"back",staticClass:"credit-card-field-icon-card"},[_c('icon',{staticClass:"credit-card-field-icon",attrs:{"icon":['fas', 'credit-card'],"width":"23.33","height":"20"}})],1)])],1)],1)]},proxy:true}]),model:{value:(_vm.card.numberFormatted),callback:function ($$v) {_vm.$set(_vm.card, "numberFormatted", $$v)},expression:"card.numberFormatted"}})],1),_c('animate-css',{attrs:{"name":"fade"}},[(_vm.showSecurityFields && _vm.showName)?_c('div',{staticClass:"credit-card-field-row",class:{'has-error': _vm.currentErrors.name}},[_c('input-field',{directives:[{name:"bubble",rawName:"v-bubble:focus",value:(function () { return _vm.focused = 'name'; }),expression:"() => focused = 'name'",arg:"focus"}],ref:"name",staticClass:"credit-card-field-name",attrs:{"disabled":_vm.activity,"errors":_vm.currentErrors,"custom":"","id":"name","name":"name","label":"Name","placeholder":"Name on Card"},on:{"blur":function (e) { return e.target.value && (_vm.validated.name = !!e.target.value); }},model:{value:(_vm.card.name),callback:function ($$v) {_vm.$set(_vm.card, "name", $$v)},expression:"card.name"}})],1):_vm._e()]),_c('animate-css',{attrs:{"name":"fade"}},[(_vm.showSecurityFields)?_c('div',{staticClass:"credit-card-field-row d-flex",class:{'has-error': _vm.currentErrors.month || _vm.currentErrors.year || _vm.currentErrors.cvc || _vm.currentErrors.zip}},[_c('select-field',{directives:[{name:"bubble",rawName:"v-bubble"},{name:"bubble",rawName:"v-bubble:blur",value:(_vm.onBlur),expression:"onBlur",arg:"blur"},{name:"bubble",rawName:"v-bubble:focus",value:(function () { return _vm.focused = 'month'; }),expression:"() => focused = 'month'",arg:"focus"},{name:"validate",rawName:"v-validate:month",value:(_vm.validated.month),expression:"validated.month",arg:"month"}],ref:"month",staticClass:"credit-card-field-month",attrs:{"disabled":_vm.activity,"errors":_vm.currentErrors,"custom":"","id":"month","name":"month","label":"Month","placeholder":"Month"},nativeOn:{"valid":function($event){return (function () { return _vm.onValid('month', 'year'); })($event)}},model:{value:(_vm.card.expMonth),callback:function ($$v) {_vm.$set(_vm.card, "expMonth", $$v)},expression:"card.expMonth"}},_vm._l((12),function(i){return _c('option',{key:i},[_vm._v(_vm._s(_vm.padZero(i, 2)))])}),0),_c('select-field',{directives:[{name:"bubble",rawName:"v-bubble"},{name:"bubble",rawName:"v-bubble:blur",value:(_vm.onBlur),expression:"onBlur",arg:"blur"},{name:"bubble",rawName:"v-bubble:focus",value:(function () { return _vm.focused = 'year'; }),expression:"() => focused = 'year'",arg:"focus"},{name:"validate",rawName:"v-validate:year",value:(_vm.validated.year),expression:"validated.year",arg:"year"}],ref:"year",staticClass:"credit-card-field-year",attrs:{"disabled":_vm.activity,"errors":_vm.currentErrors,"custom":"","id":"year","name":"year","label":"Year","placeholder":"Year"},nativeOn:{"valid":function($event){return (function () { return _vm.onValid('year', 'cvc'); })($event)}},model:{value:(_vm.card.expYear),callback:function ($$v) {_vm.$set(_vm.card, "expYear", $$v)},expression:"card.expYear"}},_vm._l((_vm.years),function(i){return _c('option',{key:i},[_vm._v(_vm._s(i))])}),0),_c('input-field',{directives:[{name:"bubble",rawName:"v-bubble"},{name:"bubble",rawName:"v-bubble:blur",value:(_vm.onBlur),expression:"onBlur",arg:"blur"},{name:"bubble",rawName:"v-bubble:focus",value:(function () { return _vm.focused = 'cvc'; }),expression:"() => focused = 'cvc'",arg:"focus"},{name:"validate",rawName:"v-validate:cvc",value:(_vm.validated.cvc),expression:"validated.cvc",arg:"cvc"}],ref:"cvc",staticClass:"credit-card-field-cvc",attrs:{"disabled":_vm.activity,"errors":_vm.currentErrors,"maxlength":_vm.code && _vm.code.size,"label":_vm.code && _vm.code.name || 'CVC',"placeholder":_vm.code && _vm.code.name || 'CVC',"validator":function () { return _vm.type && _vm.type.code.size; },"custom":"","id":"cvc","name":"cvc"},nativeOn:{"valid":function($event){return (function () { return _vm.onValid('cvc', 'zip'); })($event)}},model:{value:(_vm.card.cvc),callback:function ($$v) {_vm.$set(_vm.card, "cvc", $$v)},expression:"card.cvc"}}),(_vm.showZip)?_c('input-field',{directives:[{name:"bubble",rawName:"v-bubble"},{name:"bubble",rawName:"v-bubble:blur",value:(_vm.onBlur),expression:"onBlur",arg:"blur"},{name:"bubble",rawName:"v-bubble:focus",value:(function () { return _vm.focused = 'zip'; }),expression:"() => focused = 'zip'",arg:"focus"},{name:"validate",rawName:"v-validate:zip",value:(_vm.validated.zip),expression:"validated.zip",arg:"zip"}],ref:"zip",staticClass:"credit-card-field-zip",attrs:{"disabled":_vm.activity,"errors":_vm.currentErrors,"validator":{minLength: 5},"custom":"","id":"zip","name":"zip","maxlength":"5","label":"Zip Code","placeholder":"Zip Code"},nativeOn:{"valid":function($event){return (function () { return _vm.onValid('zip'); })($event)}},model:{value:(_vm.card.zip),callback:function ($$v) {_vm.$set(_vm.card, "zip", $$v)},expression:"card.zip"}}):_vm._e()],1):_vm._e()])],1),_vm._t("default"),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()]),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)}
+var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"credit-card-field",class:( _obj = {'has-brand': !!_vm.type, 'has-errors': _vm.hasErrors}, _obj[("is-focused-" + _vm.focused)] = _vm.focused, _obj )},[_c('form-group',[_c('div',{staticClass:"credit-card-field-rows"},[_c('div',{staticClass:"credit-card-field-row",class:{'has-error': _vm.currentErrors.number}},[_c('input-field',{directives:[{name:"card-number",rawName:"v-card-number"},{name:"bubble",rawName:"v-bubble:blur",value:(_vm.onBlur),expression:"onBlur",arg:"blur"},{name:"bubble",rawName:"v-bubble:focus",value:(function () { return _vm.focused = 'number'; }),expression:"() => focused = 'number'",arg:"focus"},{name:"validate",rawName:"v-validate:number",value:(_vm.validated.number),expression:"validated.number",arg:"number"}],ref:"number",attrs:{"disabled":_vm.activity,"error":_vm.error,"errors":_vm.currentErrors,"custom":"","id":"number","name":"number","label":"Card Number","placeholder":"Credit Card Number"},on:{"validate":_vm.onValidate},nativeOn:{"card-types":function($event){return _vm.onCardTypeChange($event)},"valid":function($event){return (function () { return _vm.onValid('number', _vm.showName ? 'name' : 'expMonth'); })($event)}},scopedSlots:_vm._u([{key:"activity",fn:function(){return [_c('animate-css',{attrs:{"name":"fade"}},[(_vm.activity)?_c('activity-indicator',{key:"activity",attrs:{"size":_vm.size}}):_c('div',{key:"icons",staticClass:"credit-card-icons"},[_c('animate-css',{attrs:{"mode":"out-in","name":"flip","y":""}},[(_vm.focused !== 'cvc')?_c('div',{key:"front",staticClass:"credit-card-field-icon-card"},[_c('icon',{staticClass:"credit-card-field-icon",attrs:{"icon":[_vm.icon ? 'fab' : 'far', _vm.icon || 'credit-card'],"data-brand":_vm.type && _vm.type.niceType || 'unknown',"width":"20","height":"18"}})],1):_c('div',{key:"back",staticClass:"credit-card-field-icon-card"},[_c('icon',{staticClass:"credit-card-field-icon",attrs:{"icon":['fas', 'credit-card'],"width":"23.33","height":"20"}})],1)])],1)],1)]},proxy:true}]),model:{value:(_vm.card.numberFormatted),callback:function ($$v) {_vm.$set(_vm.card, "numberFormatted", $$v)},expression:"card.numberFormatted"}})],1),_c('animate-css',{attrs:{"name":"fade"}},[(_vm.showSecurityFields && _vm.showName)?_c('div',{staticClass:"credit-card-field-row",class:{'has-error': _vm.currentErrors.name}},[_c('input-field',{directives:[{name:"bubble",rawName:"v-bubble:focus",value:(function () { return _vm.focused = 'name'; }),expression:"() => focused = 'name'",arg:"focus"},{name:"validate",rawName:"v-validate:name",value:(_vm.validated.name),expression:"validated.name",arg:"name"}],ref:"name",staticClass:"credit-card-field-name",attrs:{"disabled":_vm.activity,"errors":_vm.currentErrors,"custom":"","id":"name","name":"name","label":"Name","placeholder":"Name on Card"},model:{value:(_vm.card.name),callback:function ($$v) {_vm.$set(_vm.card, "name", $$v)},expression:"card.name"}})],1):_vm._e()]),_c('animate-css',{attrs:{"name":"fade"}},[(_vm.showSecurityFields)?_c('div',{staticClass:"credit-card-field-row d-flex",class:{'has-error': _vm.currentErrors.expMonth || _vm.currentErrors.expYear || _vm.currentErrors.cvc || _vm.currentErrors.zip}},[_c('select-field',{directives:[{name:"bubble",rawName:"v-bubble"},{name:"bubble",rawName:"v-bubble:blur",value:(_vm.onBlur),expression:"onBlur",arg:"blur"},{name:"bubble",rawName:"v-bubble:focus",value:(function () { return _vm.focused = 'expMonth'; }),expression:"() => focused = 'expMonth'",arg:"focus"},{name:"validate",rawName:"v-validate:month",value:(_vm.validated.expMonth),expression:"validated.expMonth",arg:"month"}],ref:"expMonth",staticClass:"credit-card-field-month",attrs:{"disabled":_vm.activity,"errors":_vm.currentErrors,"custom":"","id":"expMonth","name":"expMonth","label":"Month","placeholder":"Month"},nativeOn:{"valid":function($event){return (function () { return _vm.onValid('expMonth', 'expYear'); })($event)}},model:{value:(_vm.card.expMonth),callback:function ($$v) {_vm.$set(_vm.card, "expMonth", $$v)},expression:"card.expMonth"}},_vm._l((12),function(i){return _c('option',{key:i},[_vm._v(_vm._s(_vm.padZero(i, 2)))])}),0),_c('select-field',{directives:[{name:"bubble",rawName:"v-bubble"},{name:"bubble",rawName:"v-bubble:blur",value:(_vm.onBlur),expression:"onBlur",arg:"blur"},{name:"bubble",rawName:"v-bubble:focus",value:(function () { return _vm.focused = 'expYear'; }),expression:"() => focused = 'expYear'",arg:"focus"},{name:"validate",rawName:"v-validate:year",value:(_vm.validated.expYear),expression:"validated.expYear",arg:"year"}],ref:"expYear",staticClass:"credit-card-field-year",attrs:{"disabled":_vm.activity,"errors":_vm.currentErrors,"custom":"","id":"expYear","name":"expYear","label":"Year","placeholder":"Year"},nativeOn:{"valid":function($event){return (function () { return _vm.onValid('expYear', 'cvc'); })($event)}},model:{value:(_vm.card.expYear),callback:function ($$v) {_vm.$set(_vm.card, "expYear", $$v)},expression:"card.expYear"}},_vm._l((_vm.years),function(i){return _c('option',{key:i},[_vm._v(_vm._s(i))])}),0),_c('input-field',{directives:[{name:"bubble",rawName:"v-bubble"},{name:"bubble",rawName:"v-bubble:blur",value:(_vm.onBlur),expression:"onBlur",arg:"blur"},{name:"bubble",rawName:"v-bubble:focus",value:(function () { return _vm.focused = 'cvc'; }),expression:"() => focused = 'cvc'",arg:"focus"},{name:"validate",rawName:"v-validate:cvc",value:(_vm.validated.cvc),expression:"validated.cvc",arg:"cvc"}],ref:"cvc",staticClass:"credit-card-field-cvc",attrs:{"disabled":_vm.activity,"errors":_vm.currentErrors,"maxlength":_vm.code && _vm.code.size,"label":_vm.code && _vm.code.name || 'CVC',"placeholder":_vm.code && _vm.code.name || 'CVC',"validator":function () { return _vm.type && _vm.type.code.size; },"custom":"","id":"cvc","name":"cvc"},nativeOn:{"valid":function($event){return (function () { return _vm.onValid('cvc', 'zip'); })($event)}},model:{value:(_vm.card.cvc),callback:function ($$v) {_vm.$set(_vm.card, "cvc", $$v)},expression:"card.cvc"}}),(_vm.showZip)?_c('input-field',{directives:[{name:"bubble",rawName:"v-bubble"},{name:"bubble",rawName:"v-bubble:blur",value:(_vm.onBlur),expression:"onBlur",arg:"blur"},{name:"bubble",rawName:"v-bubble:focus",value:(function () { return _vm.focused = 'zip'; }),expression:"() => focused = 'zip'",arg:"focus"},{name:"validate",rawName:"v-validate:zip",value:(_vm.validated.zip),expression:"validated.zip",arg:"zip"}],ref:"zip",staticClass:"credit-card-field-zip",attrs:{"disabled":_vm.activity,"errors":_vm.currentErrors,"validator":{minLength: 5},"custom":"","id":"zip","name":"zip","maxlength":"5","label":"Zip Code","placeholder":"Zip Code"},nativeOn:{"valid":function($event){return (function () { return _vm.onValid('zip'); })($event)}},model:{value:(_vm.card.zip),callback:function ($$v) {_vm.$set(_vm.card, "zip", $$v)},expression:"card.zip"}}):_vm._e()],1):_vm._e()])],1),_vm._t("default")],2),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()]),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./node_modules/vue-credit-card-field/src/Components/CreditCardField.vue?vue&type=template&id=f06d7018&
+// CONCATENATED MODULE: ./node_modules/vue-credit-card-field/src/Components/CreditCardField.vue?vue&type=template&id=e031d660&
 
 // EXTERNAL MODULE: ./node_modules/vue-credit-card-field/src/icons.js
 var icons = __webpack_require__("6123");
@@ -1484,16 +1484,9 @@ function set_set(value) {
 }
         
 // CONCATENATED MODULE: ./node_modules/vue-credit-card-field/src/Helpers/shouldFormat.js
-const ZERO_KEY_CODE = 48;
-const NINE_KEY_CODE = 57;
-
 function shouldFormat(e) {
     return (
-        (
-            !e.keyCode ||
-            ZERO_KEY_CODE <= e.keyCode && 
-            NINE_KEY_CODE >= e.keyCode
-        ) &&
+        !e.altKey &&
         !e.ctrlKey &&
         !e.metaKey && 
         !e.shiftyKey
@@ -1548,6 +1541,16 @@ const METHODS = {
     'month': 'expirationMonth'
 };
 
+card_validator_default.a.name = function name(value) {
+    const isValid = value && value.length;
+    const isPotentiallyValid = isValid || !value;
+
+    return {
+        isValid,
+        isPotentiallyValid
+    };
+};
+
 /* harmony default export */ var Validate = ({
 
     bind(el, binding, vnode) {
@@ -1561,8 +1564,8 @@ const METHODS = {
 
         function get() {
             return binding.expression.split('.').reduce((carry, attr) => {
-                return vnode.context[attr] || carry[attr];
-            }, null);
+                return carry[attr];
+            }, vnode.context);
         }
 
         function set(value) {
@@ -1579,10 +1582,11 @@ const METHODS = {
         function validate(force = false) {
             return e => {
                 if( shouldFormat(e) && 
-                    e.target.value && 
+                    !!e.target.value && 
                     (e.target.value !== prevValue || force)) {
+                        
                     dispatch(e.target.value, force);
-
+                    
                     prevValue = e.target.value;
                 }            
             };
@@ -1590,7 +1594,7 @@ const METHODS = {
         
         function dispatch(str, force = false) {
             const response = method(str, value_value(vnode.data.attrs.validator));
-                        
+                  
             if(!response.isValid && (!response.isPotentiallyValid || force)) {
                 el.dispatchEvent(new Event('invalid'));
             }
@@ -1608,20 +1612,34 @@ const METHODS = {
 
         const inputEl = input(el);
 
-        inputEl.addEventListener('paste', e => {
-            const clipboardData = e.clipboardData || window.clipboardData;
-            const value = clipboardData.getData('text/plain');
-            
+        inputEl.addEventListener('paste', () => {
             setTimeout(() => {
-                dispatch(value);
+                dispatch(inputEl.value);
             });
         });
 
-        inputEl.addEventListener('blur', validate(true));
-        inputEl.addEventListener('keyup', validate());
-        inputEl.addEventListener('change', validate());
         inputEl.addEventListener('revalidate', dispatch);
+        inputEl.addEventListener('blur', validate(true));
 
+        if(inputEl.tagName === 'SELECT') {
+            inputEl.addEventListener('change', e => {
+                set(null);
+
+                setTimeout(() => {
+                    dispatch(inputEl.value);
+                });
+            });
+        }
+        else {
+            inputEl.addEventListener('keyup',  validate());
+        }
+
+        inputEl.addEventListener('keydown', e => {
+            if(shouldFormat(e)) {
+                prevValue = e.target.value;
+            }
+        });
+        
         el.addEventListener('valid', e => set(true));
         el.addEventListener('invalid', e => set(false));
         el.addEventListener('potentially-valid', e =>  set(null));
@@ -1631,7 +1649,11 @@ const METHODS = {
         });
 
         if(inputEl.value) {
-            dispatch(inputEl.value);
+            if(get() !== false) {
+                set(null);
+
+                dispatch(inputEl.value);
+            }
         }
     }
 
@@ -1695,6 +1717,9 @@ var Variant = __webpack_require__("485b");
 // EXTERNAL MODULE: ./node_modules/vue-interface/src/Components/HelpText/index.js + 5 modules
 var HelpText = __webpack_require__("5138");
 
+// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js + 32 modules
+var Functions = __webpack_require__("ca14");
+
 // EXTERNAL MODULE: ./node_modules/vue-interface/src/Mixins/FormControl/index.js + 1 modules
 var FormControl = __webpack_require__("0ab3");
 
@@ -1707,7 +1732,7 @@ var InputField = __webpack_require__("46d8");
 // EXTERNAL MODULE: ./node_modules/vue-interface/src/Mixins/MergeClasses/index.js + 1 modules
 var MergeClasses = __webpack_require__("bc02");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"096791e2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-interface/src/Components/AnimateCss/AnimateCss.vue?vue&type=template&id=1b6b5aa0&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"f358080c-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-interface/src/Components/AnimateCss/AnimateCss.vue?vue&type=template&id=1b6b5aa0&
 var AnimateCssvue_type_template_id_1b6b5aa0_render = function () {
 var this$1 = this;
 var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('transition',{attrs:{"mode":_vm.mode,"duration":_vm.duration,"enter-class":_vm.enterClass,"enter-to-class":_vm.enterToClass,"enter-active-class":_vm.enterActiveClassName,"leave-class":_vm.leaveClass,"leave-to-class":_vm.leaveToClass,"leave-active-class":_vm.leaveActiveClassName},on:{"before-enter":function () {
@@ -2117,6 +2142,12 @@ var ActivityIndicator = __webpack_require__("a633");
 //
 //
 //
+//
+//
+//
+//
+//
+
 
 
 
@@ -2137,8 +2168,7 @@ var ActivityIndicator = __webpack_require__("a633");
 
 
 const ICONS = {
-    'american-express': 'amex',
-    'diners-club': 'dinersclub',
+    'american-express': 'amex'
 };
 
 /* harmony default export */ var CreditCardFieldvue_type_script_lang_js_ = ({
@@ -2181,9 +2211,19 @@ const ICONS = {
 
         zip: String,
         
-        showName: Boolean,
-        
-        showZip: Boolean
+        showName: {
+            type: Boolean,
+            default() {
+                return !!this.name;
+            }
+        },
+
+        showZip: {
+            type: Boolean,
+            default() {
+                return !!this.zip;
+            }
+        }
 
     },
 
@@ -2198,15 +2238,7 @@ const ICONS = {
         card: {
             deep: true,
             handler(value) {
-                this.$emit('input', Object.assign({
-                    name: null,
-                    number: null,
-                    numberFormatted: null,
-                    expMonth: null,
-                    expYear: null,
-                    expiration: null,
-                    zip: null
-                }, value));
+                this.$emit('input', Object.assign(this.blankCard(), value));
             }
         },
 
@@ -2216,7 +2248,7 @@ const ICONS = {
                 const entries = Object.entries(value);
 
                 entries.forEach(([key, value]) => {
-                    this.$set(this.currentErrors, key, value === false);
+                    this.$set(this.currentErrors, key, value === false ? (this.currentErrors[key] || true) : false);
                 });
 
                 if(this.showSecurityFields) {
@@ -2245,15 +2277,11 @@ const ICONS = {
         },
 
         ['card.expMonth'](value) {
-            if(this.card.expMonth && this.card.expYear) {
-                this.$set(this.card, 'expiration', `${this.card.expMonth} / ${this.card.expYear}`);
-            }
+            this.updateExpiration();
         },
 
         ['card.expYear'](value) {
-            if(this.card.expMonth && this.card.expYear) {
-                this.$set(this.card, 'expiration', `${this.card.expMonth} / ${this.card.expYear}`);
-            }
+            this.updateExpiration();
         },
 
         ['validated.number'](value, old) {
@@ -2273,7 +2301,7 @@ const ICONS = {
 
         showSecurityFields(value) {
             this.$nextTick(() => {
-                const field = this.showName ? 'name' : 'month';
+                const field = this.showName ? 'name' : 'expMonth';
 
                 this.$refs[field] && this.$refs[field].focus();
             });
@@ -2282,6 +2310,13 @@ const ICONS = {
     },
 
     computed: {
+
+        invalidFeedback() {
+            return this.error || Object.entries(this.currentErrors)
+                .filter(([key, value]) => !!value && value.toString)
+                .map(([key, value]) => value.toString())
+                .join('<br>');
+        },
 
         isPotentiallyValid() {
             return this.isValid !== false;
@@ -2304,7 +2339,7 @@ const ICONS = {
         },
 
         hasErrors() {
-            return !!Object.entries(this.currentErrors)
+            return !!this.error || !!Object.entries(this.currentErrors)
                 .filter(([key, value]) => !!value)
                 .length;
         },
@@ -2323,16 +2358,26 @@ const ICONS = {
 
     methods: {
 
-        dispatch(event) {
-            const el = this.$el.querySelector(':focus');
+        blankCard(defaultValues) {
+            return Object(Functions["o" /* pickBy */])(Object.assign({
+                number: null,
+                numberFormatted: null,
+                expMonth: null,
+                expYear: null,
+                expiration: null,
+                name: this.showName ? null : undefined,
+                zip: this.showZip ? null : undefined,
+            }, defaultValues || {}), value => value !== undefined);
+        },
 
+        dispatch(event) {
             this.$emit(event, {
                 card: this.card,
                 type: this.type,
                 isValid: this.isValid,
                 isPotentiallyValid: this.isPotentiallyValid,
                 input: {
-                    el,
+                    el: this.$el.querySelector(':focus'),
                     isValid: null,
                     isPotentiallyValid: null,
                 }
@@ -2343,6 +2388,12 @@ const ICONS = {
             const zero = places - num.toString().length + 1;
 
             return Array(+(zero > 0 && zero)).join('0') + num;
+        },
+
+        updateExpiration() {
+            if(this.card.expMonth && this.card.expYear) {
+                this.$set(this.card, 'expiration', `${this.card.expMonth} / ${this.card.expYear}`);
+            }
         },
 
         onBlur() {
@@ -2392,27 +2443,40 @@ const ICONS = {
 
     },
 
+    created() {
+        this.card.numberFormatted = this.card.number;
+        this.updateExpiration();
+    },
+
     data() {
-        const card = {
-            name: this.name,
+        const card = this.blankCard({
             number: this.number,
-            numberFormatted: this.number,
             expMonth: this.expMonth,
             expYear: this.expYear,
             cvc: this.cvc,
-            zip: this.zip
-        };
+            zip: this.zip,
+            name: this.name
+        });
+
+        const validated = Object.keys(card)
+            .reduce((carry, value) => {
+                carry[value] = this.errors[value] ? false : null;
+
+                return carry;
+            }, {});
 
         return {
             card,
+            validated,
             icon: null,
             code: null,
             type: null,
             focused: null,
             isValid: null,
             showSecurityFields: !!card.number,
-            validated: Object.assign({}, card),
-            currentErrors: Object.assign({}, this.errors)
+            currentErrors: Object.assign({
+                number: this.error
+            }, this.errors)
         }
     }
 
@@ -2581,7 +2645,7 @@ module.exports = luhn10;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"096791e2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-interface/src/Components/SelectField/SelectField.vue?vue&type=template&id=1afb7aa5&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"f358080c-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-interface/src/Components/SelectField/SelectField.vue?vue&type=template&id=1afb7aa5&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',{class:_vm.formGroupClasses,attrs:{"group":_vm.group}},[_vm._t("label",[(_vm.label)?_c('form-label',{attrs:{"for":_vm.$attrs.id},domProps:{"innerHTML":_vm._s(_vm.label)}}):_vm._e()]),_c('div',{staticClass:"form-group-inner"},[_vm._t("control",[_c('select',_vm._b({directives:[{name:"bind-events",rawName:"v-bind-events"}],domProps:{"value":_vm.value},on:{"input":function($event){return _vm.$emit('input', $event.target.value)}}},'select',_vm.controlAttributes,false),[_vm._t("default")],2)]),_vm._t("activity",[_c('transition',{attrs:{"name":"slide-fade"}},[(_vm.activity)?_c('activity-indicator',{key:"test",ref:"activity",attrs:{"type":"dots","size":_vm.size}}):_vm._e()],1)])],2),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()]),_vm._t("help",[(_vm.helpText)?_c('help-text',{domProps:{"innerHTML":_vm._s(_vm.helpText)}}):_vm._e()])],2)}
 var staticRenderFns = []
 

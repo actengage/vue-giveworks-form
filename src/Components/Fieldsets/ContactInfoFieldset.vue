@@ -51,7 +51,7 @@
 import Query from '../../Directives/Query';
 import FormComponent from '../../Mixins/FormComponent';
 import GoogleMapsApiKey from '../../Mixins/GoogleMapsApiKey';
-import PlaceAutofill from 'vue-place-autocomplete/src/PlaceAutofill';
+import PlaceAutofill from 'vue-place-autocomplete/src/Directives/PlaceAutofill';
 
 export default {
 

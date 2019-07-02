@@ -56,7 +56,7 @@
 import FormComponent from '../../Mixins/FormComponent';
 import Autogrow from 'vue-interface/src/Directives/Autogrow';
 import GoogleMapsApiKey from '../../Mixins/GoogleMapsApiKey';
-import PlaceAutofill from 'vue-place-autocomplete/src/PlaceAutofill';
+import PlaceAutofill from 'vue-place-autocomplete/src/Directives/PlaceAutofill';
 
 
 export default {

@@ -18,7 +18,7 @@
         </div>
         <alert v-else-if="page.site.recurring && page.options.recurring_only" variant="warning" class="mt-3">
             <alert-heading class="h3 d-flex align-items-center">
-                <icon icon="exclamation-triangle" size="1.5x" class="mr-3"/> Monthly Donation
+                <icon icon="exclamation-triangle" class="mr-3"/> Monthly Donation
             </alert-heading>
             <p v-if="page.options.recur_message" class="font-weight-light" v-html="page.options.recur_message"/>
             <p v-else>

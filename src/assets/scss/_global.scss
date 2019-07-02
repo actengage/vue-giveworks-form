@@ -30,4 +30,12 @@ $font-family-base: 'Helvetica Nueue', Helvetica, Arial, sans-serif;
     .show.fade {
         opacity: 1;
     }
+
+    fieldset > .custom-input-field,
+    fieldset > .custom-select-field,
+    fieldset > .custom-textarea-field {
+        &.form-group:last-child {
+            margin-bottom: 0;
+        }
+    }
 }

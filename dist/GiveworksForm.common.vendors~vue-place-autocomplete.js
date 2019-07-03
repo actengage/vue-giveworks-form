@@ -46,10 +46,10 @@ var kebabCase = __webpack_require__("5471");
 
 
 
-const emptyClass = 'is-empty';
-const focusClass = 'has-focus';
-const changedClass = 'has-changed';
-const customPrefix = 'custom';
+const EMPTY_CLASS = 'is-empty';
+const FOCUS_CLASS = 'has-focus';
+const CHANGED_CLASS = 'has-changed';
+const CUSTOM_PREFIX = 'custom';
 
 function addClass(el, vnode, css) {
     // el.classList.add(css);
@@ -63,7 +63,7 @@ function removeClass(el, vnode, css) {
 
 function addEmptyClass(el, vnode) {
     if(Object(isEmpty["a" /* default */])(el.value) || (el.tagName === 'SELECT' && el.selectedIndex === -1)) {
-        addClass(el, vnode, emptyClass);
+        addClass(el, vnode, EMPTY_CLASS);
     }
 }
 
@@ -234,13 +234,13 @@ function addEmptyClass(el, vnode) {
         bindEvents: {
             bind(el, binding, vnode) {
                 function changedValue(el, value) {
-                    addClass(el, vnode, changedClass);
+                    addClass(el, vnode, CHANGED_CLASS);
 
                     if(!Object(isEmpty["a" /* default */])(value) || (el.selectedIndex && el.selectedIndex > -1)) {
-                        removeClass(el, vnode, emptyClass);
+                        removeClass(el, vnode, EMPTY_CLASS);
                     }
-                    else if(!el.classList.contains(changedClass)) {
-                        addClass(el, vnode, emptyClass);
+                    else if(!el.classList.contains(CHANGED_CLASS)) {
+                        addClass(el, vnode, EMPTY_CLASS);
                     }
 
                     if(el.tagName === 'SELECT' && el.querySelector('[value=""]')) {
@@ -253,11 +253,11 @@ function addEmptyClass(el, vnode) {
                 });
 
                 el.addEventListener('blur', event => {
-                    if(el.classList.contains(emptyClass)) {
-                        removeClass(el, vnode, changedClass);
+                    if(el.classList.contains(EMPTY_CLASS)) {
+                        removeClass(el, vnode, CHANGED_CLASS);
                     }
 
-                    removeClass(el, vnode, focusClass);
+                    removeClass(el, vnode, FOCUS_CLASS);
                 });
 
                 el.addEventListener('input', event => {
@@ -266,7 +266,7 @@ function addEmptyClass(el, vnode) {
 
                 // Add/remove the has-focus class from the form control
                 el.addEventListener('focus', event => {
-                    addClass(el, vnode, focusClass);
+                    addClass(el, vnode, FOCUS_CLASS);
                 });
 
                 // Bubble the native events up to the vue component.
@@ -275,12 +275,16 @@ function addEmptyClass(el, vnode) {
                         vnode.context.$emit(name, event);
                     });
                 });
+
+                el.setAttribute('data-selected-index', el.selectedIndex);
             },
             inserted(el, binding, vnode) {
+                el.selectedIndex = el.getAttribute('data-selected-index');
+                
                 addEmptyClass(el, vnode);
 
                 if(el.selectedIndex > -1) {
-                    addClass(el, vnode, changedClass);
+                    addClass(el, vnode, CHANGED_CLASS);
                 }
             },
             update(el, binding, vnode) {
@@ -353,7 +357,7 @@ function addEmptyClass(el, vnode) {
         },
 
         formGroupClasses() {
-            const name = Object(Prefix["a" /* default */])(Object(kebabCase["a" /* default */])(this.$options.name), this.custom ? customPrefix : '');
+            const name = Object(Prefix["a" /* default */])(Object(kebabCase["a" /* default */])(this.$options.name), this.custom ? CUSTOM_PREFIX : '');
 
             return this.mergeClasses(name, Object(Prefix["a" /* default */])(this.size, name), {
                 'has-activity': this.activity,
@@ -499,7 +503,7 @@ var Functions = __webpack_require__("ca14");
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0c8fb1d7-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-place-autocomplete/src/PlaceAutocompleteField.vue?vue&type=template&id=6be410b0&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"a8ba7f4c-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-place-autocomplete/src/PlaceAutocompleteField.vue?vue&type=template&id=6be410b0&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"autocomplete-field",on:{"keydown":_vm.onKeydown,"keyup":_vm.onKeyup}},[_c('input-field',_vm._b({directives:[{name:"bind-events",rawName:"v-bind-events"}],attrs:{"label":_vm.label,"errors":_vm.errors,"value":_vm.value,"custom":_vm.custom,"autocomplete":"no"},on:{"blur":_vm.onBlur,"focus":_vm.onFocus,"input":function($event){return _vm.$emit('input', _vm.query)}},model:{value:(_vm.query),callback:function ($$v) {_vm.query=$$v},expression:"query"}},'input-field',_vm.$attrs,false),[(_vm.showActivityIndicator)?_c('activity-indicator',{attrs:{"size":"xs","type":"spinner"}}):_vm._e()],1),(_vm.predictions && _vm.showPredictions)?_c('place-autocomplete-list',{attrs:{"items":_vm.predictions},on:{"item:click":_vm.onItemClick,"item:blur":_vm.onItemBlur}}):_vm._e()],1)}
 var staticRenderFns = []
 
@@ -530,14 +534,14 @@ function geocode(options) {
 // EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Script/index.js + 1 modules
 var Script = __webpack_require__("cfc3");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0c8fb1d7-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-place-autocomplete/src/PlaceAutocompleteList.vue?vue&type=template&id=6bef404f&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"a8ba7f4c-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-place-autocomplete/src/PlaceAutocompleteList.vue?vue&type=template&id=6bef404f&
 var PlaceAutocompleteListvue_type_template_id_6bef404f_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"autocomplete-list-wrapper"},[_c('ul',{staticClass:"autocomplete-list"},_vm._l((_vm.items),function(item,i){return _c('place-autocomplete-list-item',{key:item.id,attrs:{"item":item},on:{"click":_vm.onClick,"focus":_vm.onFocus,"blur":_vm.onBlur}},[_vm._v("\n            "+_vm._s(item[_vm.display])+"\n        ")])}),1)])}
 var PlaceAutocompleteListvue_type_template_id_6bef404f_staticRenderFns = []
 
 
 // CONCATENATED MODULE: ./node_modules/vue-place-autocomplete/src/PlaceAutocompleteList.vue?vue&type=template&id=6bef404f&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0c8fb1d7-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-place-autocomplete/src/PlaceAutocompleteListItem.vue?vue&type=template&id=6a77178f&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"a8ba7f4c-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-place-autocomplete/src/PlaceAutocompleteListItem.vue?vue&type=template&id=6a77178f&
 var PlaceAutocompleteListItemvue_type_template_id_6a77178f_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('li',{staticClass:"autocomplete-list-item",on:{"focus":_vm.onFocus,"onBlur":_vm.onBlur}},[_c('a',{attrs:{"href":"#","tabindex":"0"},on:{"click":function($event){$event.preventDefault();return _vm.onClick($event)},"focus":_vm.onFocus,"blur":_vm.onBlur}},[_c('span',{staticClass:"autocomplete-list-item-icon"}),_c('span',{staticClass:"autocomplete-list-item-label"},[_vm._t("default")],2)])])}
 var PlaceAutocompleteListItemvue_type_template_id_6a77178f_staticRenderFns = []
 

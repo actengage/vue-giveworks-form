@@ -31,10 +31,10 @@ $font-family-base: 'Helvetica Nueue', Helvetica, Arial, sans-serif;
         opacity: 1;
     }
 
-    fieldset > .custom-input-field,
-    fieldset > .custom-select-field,
-    fieldset > .custom-textarea-field {
-        &.form-group:last-child {
+    fieldset > .form-group.custom-input-field,
+    fieldset > .form-group.custom-select-field,
+    fieldset > .form-group.custom-textarea-field {
+        &:last-child {
             margin-bottom: 0;
         }
     }

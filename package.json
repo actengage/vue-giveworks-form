@@ -1,6 +1,6 @@
 {
   "name": "vue-giveworks-form",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "repository": "https://github.com/actengage/vue-giveworks-form",
   "scripts": {
     "serve": "vue-cli-service serve --https --demo",

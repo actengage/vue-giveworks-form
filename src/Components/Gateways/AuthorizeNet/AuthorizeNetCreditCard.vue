@@ -7,11 +7,10 @@
     </div>
 
     <div v-else class="form-group">
-        <alert v-if="!gateway.options.login_id || !gateway.options.public_key" variant="danger" class="d-flex align-items-center">
+        <alert v-if="hasGatewaySettings" variant="danger" class="d-flex align-items-center">
             <icon icon="exclamation-triangle" size="2x" class="mr-2" /> 
             <h6 class="font-weight-light my-0">
-                This account has NOT been configured for the new Giveworks Forms.<br>
-                <b>Reason:</b> <template v-if="!gateway.options.login_id">The <em>login_id</em> is missing.</template> <template v-if="!gateway.options.public_key">The <em>public_key</em> is missing.</template>
+                This account has NOT been configured for the new Giveworks Forms. Check the Gateways settings in Site Settings > Gateways in Giveworks.
             </h6>
         </alert>
         <credit-card-field v-else :activity="activity" :error="error || errors.token" @change="onChange" @valid="onValid"/>
@@ -40,6 +39,14 @@ export default {
     mixins: [
         PaymentGateway
     ],
+
+    computed: {
+        
+        hasGatewaySettings() {
+            return !this.gateway.options.login_id || !this.gateway.options.public_key;
+        }
+
+    },
 
     methods: {
 
@@ -80,8 +87,7 @@ export default {
 
     mounted() {
         this.pageType.disableSubmitButton();
-        // this.$dispatch.request('submit:disable');
-
+        
         Gateway(this.gateway).script((event) => {
             this.loaded = true;
         });

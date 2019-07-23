@@ -12,7 +12,7 @@ export default class Stripe extends Api {
             icon: ['far', 'credit-card'],
             label: 'Credit Card',
             size: '2x',
-            component: 'stripe-credit-card'
+            component: import('./StripeCreditCard')
         }/*
         , {
             icon: ['fab', 'apple-pay'],
@@ -38,8 +38,8 @@ export default class Stripe extends Api {
         });
     }
 
-    createToken(card, options) {
-        return this.stripe().createToken(card, options);
+    createToken(card) {
+        return this.stripe().createToken(card);
     }
 
     paymentRequestButton(paymentRequest) {

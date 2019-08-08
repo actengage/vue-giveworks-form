@@ -85,7 +85,8 @@ export default {
             return Object.assign({}, HttpConfig(this.mode), {
                 headers: {
                     'Accept': 'application/json',
-                    'Authorization': `Bearer ${this.apiKey}`
+                    'Authorization': `Bearer ${this.apiKey}`,
+                    'Session-Id': (new URLSearchParams(location.search)).get('sessionid')
                 }
             });
         },

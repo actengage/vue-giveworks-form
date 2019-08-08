@@ -43,11 +43,7 @@ export default class AuthorizetNet extends Api {
     }
 
     accept() {
-        if(!this._accept) {
-            this._accept = window.Accept;
-        }
-
-        return this._accept;
+        return window.Accept;
     }
 
     script(success, error) {

@@ -57,10 +57,8 @@ export default {
             this.submitButton().disabled = false;
         },
 
-        handleRedirect(url) {
+        handleRedirect(url, sessionid) {
             setTimeout(() => {
-                url = url || this.redirect || this.page.external_reply;
-                
                 if(!url && this.page.next_page) {
                     url = this.page.next_page.url.replace(/\/$/, '') + (
                         this.form.source ? '/' + this.form.source : ''
@@ -68,7 +66,7 @@ export default {
                 }
                 
                 if(url) {
-                    window.location = url;
+                    window.location = url + (sessionid && (url.match(/\?/) ? '&' : '?') + `sessionid=${sessionid}`);
                 }
             });
         },
@@ -115,8 +113,8 @@ export default {
             });
         },
 
-        onSubmitSuccess() {
-            this.handleRedirect();
+        onSubmitSuccess(page) {
+            this.handleRedirect(this.redirect || this.page.external_reply, page.get('sessionid'));
         },
 
         onSubmitError(e) {

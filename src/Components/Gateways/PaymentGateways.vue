@@ -19,31 +19,27 @@
             <div>There are not payment gateways configured for this site!</div>
         </alert>
 
-        <gateway-loader
+        <component
             v-if="activeButton"
-            :load="activeButton.component"
+            :is="activeButton.component"
             :form="form"
             :page="page"
             :errors="errors"
             :page-type="pageType"
-            :gateway="activeButton.gateway"
-            v-bind="Object.assign({}, $attrs, activeButton.component && activeButton.component.props)"
-        />
-        
+            :gateway="activeButton.gateway" />
+
     </div>
 
 </template>
 
 <script>
 import Gateway from '../Gateways/Gateway';
-import GatewayLoader from './GatewayLoader';
 import FormComponent from '../../Mixins/FormComponent';
 import { FontAwesomeIcon as Icon } from '@fortawesome/vue-fontawesome';
-
-// import StripeCreditCard from '../Gateways/Stripe/StripeCreditCard';
-// import PaypalPaymentButton from '../Gateways/PayPal/PayPalPaymentButton';
-// import StripePaymentButton from '../Gateways/Stripe/StripePaymentButton';
-// import AuthorizeNetCreditCard from '../Gateways/AuthorizeNet/AuthorizeNetCreditCard';
+import StripeCreditCard from '../Gateways/Stripe/StripeCreditCard';
+import PaypalPaymentButton from '../Gateways/PayPal/PayPalPaymentButton';
+import StripePaymentButton from '../Gateways/Stripe/StripePaymentButton';
+import AuthorizeNetCreditCard from '../Gateways/AuthorizeNet/AuthorizeNetCreditCard';
 
 export default {
 
@@ -51,11 +47,10 @@ export default {
 
     components: {
         Icon,
-        GatewayLoader,
-        // StripeCreditCard,
-        // StripePaymentButton,
-        // PaypalPaymentButton,
-        // AuthorizeNetCreditCard,
+        StripeCreditCard,
+        StripePaymentButton,
+        PaypalPaymentButton,
+        AuthorizeNetCreditCard,
         Btn: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/Btn'),
         Alert: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/Alert')
     },

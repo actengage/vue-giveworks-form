@@ -11,39 +11,26 @@ export default class AuthorizetNet extends Api {
         return [{
             icon: ['far', 'credit-card'],
             label: 'Credit Card',
-            component: {
-                module: import('../../Fields/CreditCardField'),
-                props: {
-                    tokenData({ card }) {
-                        return {
-                            cardNumber: card.number,
-                            month: card.expMonth,
-                            year: card.expYear,
-                            cardCode: card.cvc
-                        };
-                    },
-                    validateGateway(gateway) {
-                        return !!(gateway.options.login_id && gateway.options.public_key);
-                    }
-                }
-            }
+            component: 'authorize-net-credit-card'
         }];
     }
 
-    createToken(card) {
-        return new Promise((resolve, reject) => {
-            this.accept().dispatchData({
-                cardData: card,
-                authData: {
-                    apiLoginID: this.options.login_id,
-                    clientKey: this.options.public_key
-                }
-            }, e => e.messages.resultCode === 'Ok' ? resolve(e) : reject(e));
-        });
+    createToken(card, callback) {
+        return this.accept().dispatchData({
+            cardData: card,
+            authData: {
+                apiLoginID: this.options.login_id,
+                clientKey: this.options.public_key
+            }
+        }, callback);
     }
 
     accept() {
-        return window.Accept;
+        if(!this._accept) {
+            this._accept = window.Accept;
+        }
+
+        return this._accept;
     }
 
     script(success, error) {

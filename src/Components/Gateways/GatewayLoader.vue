@@ -17,7 +17,7 @@ export default {
     props: {
         
         load: {
-            type: [Object, String, Promise],
+            type: [Object, Promise],
             required: true
         }
 
@@ -32,10 +32,8 @@ export default {
                 return this.loadComponent(component.module);
             }
 
-            return new Promise((resolve, reject) => {
-                const promise = component instanceof Promise ? component : import(component);
-                                
-                promise
+            return new Promise((resolve, reject) => {           
+                component
                     .then(({['default']: component}) => {
                         this.component = component;
 

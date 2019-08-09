@@ -10,7 +10,7 @@ export default class PayPal extends Api {
         return [{
             icon: ['fab', 'paypal'],
             label: 'PayPal',
-            component: 'paypal-payment-button'
+            component: import('./PayPalPaymentButton')
         }];
     }
 

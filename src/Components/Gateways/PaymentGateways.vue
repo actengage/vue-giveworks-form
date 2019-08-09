@@ -39,6 +39,7 @@ import Gateway from '../Gateways/Gateway';
 import GatewayLoader from './GatewayLoader';
 import FormComponent from '../../Mixins/FormComponent';
 import { FontAwesomeIcon as Icon } from '@fortawesome/vue-fontawesome';
+
 // import StripeCreditCard from '../Gateways/Stripe/StripeCreditCard';
 // import PaypalPaymentButton from '../Gateways/PayPal/PayPalPaymentButton';
 // import StripePaymentButton from '../Gateways/Stripe/StripePaymentButton';

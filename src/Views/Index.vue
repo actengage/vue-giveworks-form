@@ -22,7 +22,9 @@
                                 <radio-field v-model="form.mode" label="Development" value="development" />
                             </div>
                         </div>
-                        <btn :disabled="!form.short || !form.slug || !form.apiKey" size="lg" block>Go To Page</btn>
+                        <btn :disabled="!form.short || !form.slug || !form.apiKey" size="lg" block>
+                            Go To Page
+                        </btn>
                     </form>
                 </div>
             </div>
@@ -30,12 +32,11 @@
 
         <div v-else class="container">
             <giveworks-form
-                :env="this.$route.query.env"
-                :mode="this.$route.query.mode"
-                :page-id="this.$route.params.slug"
-                :source="this.$route.params.source"
-                :api-key="this.$route.query.apiKey">
-            </giveworks-form>
+            :env="this.$route.query.env"
+            :mode="this.$route.query.mode"
+            :page-id="this.$route.params.slug"
+            :source="this.$route.params.source"
+            :api-key="this.$route.query.apiKey" />
         </div>
     </div>
 </template>
@@ -56,6 +57,18 @@ export default {
         InputField,
         RadioField,
         GiveworksForm,
+    },
+
+    data() {
+        return {
+            form: Object.assign({
+                mode: 'production',
+                source: this.$route.query.source || null,
+                slug: null,
+                short: null,
+                apiKey: null
+            }, this.$store.state.form)
+        };
     },
 
     watch: {
@@ -89,18 +102,6 @@ export default {
             //window.location.reload();
         }
 
-    },
-
-    data() {
-        return {
-            form: Object.assign({
-                mode: 'production',
-                source: this.$route.query.source || null,
-                slug: null,
-                short: null,
-                apiKey: null
-            }, this.$store.state.form)
-        }
     }
 };
 </script>

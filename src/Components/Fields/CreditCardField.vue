@@ -1,8 +1,7 @@
 <template>
-
     <div v-if="!loaded" class="row my-5 py-1">
         <div class="col-xs-12">
-            <activity-indicator size="sm" :center="true"/>
+            <activity-indicator size="sm" :center="true" />
         </div>
     </div>
 
@@ -13,9 +12,8 @@
                 This account has NOT been configured for the new Giveworks Forms.<br>Check the Gateways settings in <b>Site Settings > Gateways</b> in Giveworks.
             </h6>
         </alert>
-        <vue-credit-card-field v-else :activity="activity" :error="error || errors.token" @change="onChange" @valid="onValid"/>
+        <vue-credit-card-field v-else :activity="activity" :error="error || errors.token" @change="onChange" @valid="onValid" />
     </div>
-
 </template>
 
 <script>
@@ -54,12 +52,28 @@ export default {
 
     },
 
+    data() {
+        return {
+            error: false,
+            loaded: false,
+            activity: false
+        };
+    },
+
     computed: {
 
         hasValidGateway() {
             return this.validateGateway(this.gateway);
         }
 
+    },
+
+    mounted() {
+        this.pageType.disableSubmitButton();
+        
+        Gateway(this.gateway).script((event) => {
+            this.loaded = true;
+        });
     },
 
     methods: {
@@ -94,28 +108,12 @@ export default {
                     })
                     .finally(() => {
                         throttled(() => {
-                            this.activity = false
+                            this.activity = false;
                         });
                     });
             });
         }
         
-    },
-
-    mounted() {
-        this.pageType.disableSubmitButton();
-        
-        Gateway(this.gateway).script((event) => {
-            this.loaded = true;
-        });
-    },
-
-    data() {
-        return {
-            error: false,
-            loaded: false,
-            activity: false
-        };
     }
 
 };

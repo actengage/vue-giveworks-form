@@ -1,18 +1,16 @@
 <template>
-
     <select-field
-        v-model="form.state"
-        v-query
-        name="state"
-        :id="question.id"
-        :label="`${question.question}${question.required ? '*' : ''}`"
-        :required="question.required"
-        :errors="errors"
-        @input="updated"
-        custom>
-        <option v-for="(label, value) in page.site.config.states" :value="value" v-html="label"/>
+    :id="question.id"
+    v-model="form.state"
+    v-query
+    name="state"
+    :label="`${question.question}${question.required ? '*' : ''}`"
+    :required="question.required"
+    :errors="errors"
+    custom
+    @input="updated">
+        <option v-for="(label, value) in page.site.config.states" :value="value" v-html="label" />
     </select-field>
-
 </template>
 
 <script>
@@ -20,13 +18,13 @@ import SurveyField from './SurveyField';
 
 export default {
 
-    name: 'survey-state-field',
-
-    extends: SurveyField,
+    name: 'SurveyStateField',
 
     components: {
         SelectField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/SelectField')
-    }
+    },
+
+    extends: SurveyField
 
 };
 </script>

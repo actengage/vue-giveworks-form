@@ -9,13 +9,25 @@ export default {
         FormGroup: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/FormGroup'),
     },
 
-    mixins: [
-        FormControl
-    ],
-
     directives: {
         Query
     },
+
+    directives: {
+
+        changed(el, binding, vnode) {
+            el.addEventListener('change', event => {
+                if(event.target.checked && isFunction(binding.value)) {
+                    binding.value(el);
+                }
+            });
+        }
+
+    },
+
+    mixins: [
+        FormControl
+    ],
 
     props: {
 
@@ -45,18 +57,6 @@ export default {
 
         name() {
             return this.$attrs.name;
-        }
-
-    },
-
-    directives: {
-
-        changed(el, binding, vnode) {
-            el.addEventListener('change', event => {
-                if(event.target.checked && isFunction(binding.value)) {
-                    binding.value(el);
-                }
-            });
         }
 
     },

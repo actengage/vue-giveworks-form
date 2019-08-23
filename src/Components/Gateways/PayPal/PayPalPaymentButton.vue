@@ -2,21 +2,21 @@
     <div>
         <div v-if="!loaded || submitting" class="row my-5 py-1">
             <div class="col-xs-12">
-                <activity-indicator size="sm" :center="true"/>
+                <activity-indicator size="sm" :center="true" />
             </div>
         </div>
         <div v-else>
             <alert v-if="error" variant="danger" class="d-flex align-items-center">
-                <icon icon="exclamation-triangle" size="2x" class="mr-2"/>
-                <div v-html="error"/>
+                <icon icon="exclamation-triangle" size="2x" class="mr-2" />
+                <div v-html="error" />
             </alert>
             <alert v-else-if="form.payerId && form.paymentId" variant="success" class="d-flex align-items-center">
-                <icon :icon="['far', 'check-circle']" size="2x" class="mr-2"/>
+                <icon :icon="['far', 'check-circle']" size="2x" class="mr-2" />
                 <div>Your PayPal payment information has been collected and is ready to be processed. <a href="#" @click.prevent="removePaymentInfo($event)">Cancel Payment</a></div>
             </alert>
         </div>
 
-        <div class="paypal-payment-button mt-2 mb-4" :class="{'disabled': disabled, 'd-none': submitting}"/>
+        <div class="paypal-payment-button mt-2 mb-4" :class="{'disabled': disabled, 'd-none': submitting}" />
     </div>
 </template>
 
@@ -35,11 +35,49 @@ function handleDisabledState(disable) {
 
 export default {
 
-    name: 'paypal-payment-button',
+    name: 'PaypalPaymentButton',
 
     mixins: [
         PaymentGateway
     ],
+
+    /*
+    beforeDestroy() {
+        if(this.$unwatchAmount) {
+            this.$unwatchAmount();
+        }
+
+        if(this.$unwatchRecurring) {
+            this.$unwatchRecurring();
+        }
+    },
+    */
+
+    data() {
+        return {
+            button: null,
+            actions: null,
+            loaded: false,
+            submitting: false,
+            disabled: !this.form.amount
+        };
+    },
+
+    computed: {
+        error: function() {
+            const errors = [];
+
+            if(this.errors.payerId) {
+                errors.push(this.errors.payerId.join('<b>'));
+            }
+
+            if(this.errors.paymentId) {
+                errors.push(this.errors.paymentId.join('<b>'));
+            }
+
+            return errors.length ? errors.join('<br>') : false;
+        }
+    },
 
     watch: {
         'form.recurring': function(value) {
@@ -56,102 +94,6 @@ export default {
         },
         disabled: function(value) {
             handleDisabledState.call(this, !!value || this.hasPaymentInfo());
-        }
-    },
-
-    methods: {
-
-        hasError() {
-            return this.errors.payerId || this.errors.paymentId;
-        },
-
-        hasPaymentInfo() {
-            return !!this.form.amount && (this.form.recurring === 1 || !!(
-                this.form.payerId && this.form.paymentId
-            ));
-        },
-
-        removePaymentInfo(event) {
-            this.enable();
-            this.$set(this.form, 'payerId', null);
-            this.$set(this.form, 'paymentId', null);
-            this.$set(this.errors, 'payerId', null);
-            this.$set(this.errors, 'paymentId', null);
-        },
-
-        shouldMountButton() {
-            return this.$el.querySelector('.paypal-payment-button') && !this.$el.querySelector('.paypal-payment-button iframe');
-        },
-
-        onSubmitError() {
-            this.disabled = !this.form.amount;
-        },
-
-        onSubmitSuccess(model) {
-            // this.disabled = false;
-
-            if(model.get('recur')) {
-                window.location = model.get('meta').redirect_url;
-            }
-        },
-
-        onPaypalValidate(actions) {
-            this.actions = actions;
-            this.enable = actions.enable;
-            this.disable = actions.disable;
-
-            if(this.form.amount) {
-                actions.enable();
-            }
-            else {
-                actions.disable();
-            }
-
-            return !!this.form.amount;
-        },
-
-        onPaypalClick() {
-            if(this.hasPaymentInfo()) {
-                this.disabled = true;
-                this.pageType.submit().then(
-                    this.pageType.onSubmitSuccess,
-                    this.pageType.onSubmitError
-                ).then(
-                    this.onSubmitSuccess,
-                    this.onSubmitError
-                );
-            }
-        },
-
-        onPaypalAuthorize(data) {
-            if(!this.hasPaymentInfo()) {
-                this.$set(this.form, 'payerId', data.payerID);
-                this.$set(this.form, 'paymentId', data.paymentID);
-                this.pageType.submit().then(
-                    this.pageType.onSubmitSuccess,
-                    this.pageType.onSubmitError
-                ).then(
-                    this.onSubmitSuccess,
-                    this.onSubmitError
-                );
-            }
-        }
-
-    },
-
-    computed: {
-        error: function() {
-            const errors = [];
-
-            if(this.errors.payerId) {
-                errors.push(this.errors.payerId.join('<b>'));
-            }
-
-            if(this.errors.paymentId) {
-                errors.push(this.errors.paymentId.join('<b>'));
-            }
-
-            return errors.length ? errors.join('<br>') : false;
         }
     },
 
@@ -242,26 +184,84 @@ export default {
         });
     },
 
-    /*
-    beforeDestroy() {
-        if(this.$unwatchAmount) {
-            this.$unwatchAmount();
+    methods: {
+
+        hasError() {
+            return this.errors.payerId || this.errors.paymentId;
+        },
+
+        hasPaymentInfo() {
+            return !!this.form.amount && (this.form.recurring === 1 || !!(
+                this.form.payerId && this.form.paymentId
+            ));
+        },
+
+        removePaymentInfo(event) {
+            this.enable();
+            this.$set(this.form, 'payerId', null);
+            this.$set(this.form, 'paymentId', null);
+            this.$set(this.errors, 'payerId', null);
+            this.$set(this.errors, 'paymentId', null);
+        },
+
+        shouldMountButton() {
+            return this.$el.querySelector('.paypal-payment-button') && !this.$el.querySelector('.paypal-payment-button iframe');
+        },
+
+        onSubmitError() {
+            this.disabled = !this.form.amount;
+        },
+
+        onSubmitSuccess(model) {
+            // this.disabled = false;
+
+            if(model.get('recur')) {
+                window.location = model.get('meta').redirect_url;
+            }
+        },
+
+        onPaypalValidate(actions) {
+            this.actions = actions;
+            this.enable = actions.enable;
+            this.disable = actions.disable;
+
+            if(this.form.amount) {
+                actions.enable();
+            }
+            else {
+                actions.disable();
+            }
+
+            return !!this.form.amount;
+        },
+
+        onPaypalClick() {
+            if(this.hasPaymentInfo()) {
+                this.disabled = true;
+                this.pageType.submit().then(
+                    this.pageType.onSubmitSuccess,
+                    this.pageType.onSubmitError
+                ).then(
+                    this.onSubmitSuccess,
+                    this.onSubmitError
+                );
+            }
+        },
+
+        onPaypalAuthorize(data) {
+            if(!this.hasPaymentInfo()) {
+                this.$set(this.form, 'payerId', data.payerID);
+                this.$set(this.form, 'paymentId', data.paymentID);
+                this.pageType.submit().then(
+                    this.pageType.onSubmitSuccess,
+                    this.pageType.onSubmitError
+                ).then(
+                    this.onSubmitSuccess,
+                    this.onSubmitError
+                );
+            }
         }
 
-        if(this.$unwatchRecurring) {
-            this.$unwatchRecurring();
-        }
-    },
-    */
-
-    data() {
-        return {
-            button: null,
-            actions: null,
-            loaded: false,
-            submitting: false,
-            disabled: !this.form.amount
-        };
     }
 
 };

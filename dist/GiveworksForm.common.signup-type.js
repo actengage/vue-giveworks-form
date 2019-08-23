@@ -6,12 +6,12 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1c68dd81-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Types/Signup.vue?vue&type=template&id=46c83313&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Types/Signup.vue?vue&type=template&id=3cc7899d&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c(_vm.page.options.service.split('\\').pop(),{tag:"component",attrs:{"submitting":_vm.submitting,"page":_vm.page,"form":_vm.form,"errors":_vm.errors}})],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Types/Signup.vue?vue&type=template&id=46c83313&
+// CONCATENATED MODULE: ./src/Components/Types/Signup.vue?vue&type=template&id=3cc7899d&
 
 // EXTERNAL MODULE: ./src/Mixins/PageType.js
 var PageType = __webpack_require__("b791");
@@ -23,11 +23,9 @@ var PageType = __webpack_require__("b791");
 //
 //
 //
-//
-//
 
 /* harmony default export */ var Signupvue_type_script_lang_js_ = ({
-  name: 'page-type-signup',
+  name: 'PageTypeSignup',
   extends: PageType["a" /* default */],
   components: {
     GoToWebinar: __webpack_require__.e(/* import() | go-to-webinar */ 6).then(__webpack_require__.bind(null, "4898"))

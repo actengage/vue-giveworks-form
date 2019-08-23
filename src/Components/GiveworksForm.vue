@@ -7,20 +7,19 @@
                 </div>
             </div>
         </div>
-        <form v-else-if="page.id" novalidate="novalidate" :class="classes" @submit.prevent="submit" class="container">
+        <form v-else-if="page.id" novalidate="novalidate" :class="classes" class="container" @submit.prevent="submit">
             <component
-                ref="type"
-                :is="pageTypeComponent"
-                :orientation="orientation"
-                :page="page"
-                :source="source"
-                :redirect="redirect"
-                :http-options="httpOptions"
-                @error="onError"
-            />
+            :is="pageTypeComponent"
+            ref="type"
+            :orientation="orientation"
+            :page="page"
+            :source="source"
+            :redirect="redirect"
+            :http-options="httpOptions"
+            @error="onError" />
         </form>
         <div v-else>
-            <activity-indicator size="lg" center/>
+            <activity-indicator size="lg" center />
         </div>
     </div>
 </template>
@@ -73,6 +72,13 @@ export default {
 
     },
 
+    data() {
+        return {
+            error: null,
+            page: this.data || {}
+        };
+    },
+
     computed: {
 
         classes() {
@@ -97,40 +103,20 @@ export default {
 
     },
 
-    methods: {
-
-        submit(e) {
-            this.$refs.type.submit(e).then(
-                this.$refs.type.onSubmitSuccess,
-                this.$refs.type.onSubmitError
-            );
-        },
-
-        onResize() {
-            this.width = this.$el.offsetWidth;
-            return this.onResize;
-        },
-
-        onError(error) {
-            this.error = error;
-        }
-
-    },
-
     mounted() {
         Promise.all([
             import('@bugsnag/js'),
             import('@bugsnag/plugin-vue')
         ])
-        .then(([ {'default': bugsnag}, {'default': bugsnagVue} ]) => {
-            bugsnag({
-                apiKey: process.env.VUE_APP_BUGSNAG_KEY,
-                releaseStage: process.env.NODE_ENV,
-                notifyReleaseStages: [
-                    'production'
-                ]
-            }).use(bugsnagVue, Vue);
-        });
+            .then(([ {'default': bugsnag}, {'default': bugsnagVue} ]) => {
+                bugsnag({
+                    apiKey: process.env.VUE_APP_BUGSNAG_KEY,
+                    releaseStage: process.env.NODE_ENV,
+                    notifyReleaseStages: [
+                        'production'
+                    ]
+                }).use(bugsnagVue, Vue);
+            });
 
         if(!this.page.id && this.apiKey) {            
             Page.find(this.pageId, this.httpOptions)
@@ -152,11 +138,24 @@ export default {
         window.removeEventListener('resize', this.onResize);
     },
 
-    data() {
-        return {
-            error: null,
-            page: this.data || {}
-        };
+    methods: {
+
+        submit(e) {
+            this.$refs.type.submit(e).then(
+                this.$refs.type.onSubmitSuccess,
+                this.$refs.type.onSubmitError
+            );
+        },
+
+        onResize() {
+            this.width = this.$el.offsetWidth;
+            return this.onResize;
+        },
+
+        onError(error) {
+            this.error = error;
+        }
+
     }
 
 };

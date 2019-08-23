@@ -1,26 +1,23 @@
 <template>
-
     <div class="form-group" :class="{'was-validated': !!error || !!errors.token}">
-
         <div v-if="!loaded" class="row my-5 py-1">
             <div class="col-xs-12">
-                <activity-indicator size="sm" center width="100%"/>
+                <activity-indicator size="sm" center width="100%" />
             </div>
         </div>
 
         <label v-else class="d-block mt-3" :class="{'has-activity': activity}">
             <div class="stripe-field">
                 <div class="form-control" :class="{'is-invalid': !!error || !!errors.token}">
-                    <div ref="input" class="stripe-field-input"/>
+                    <div ref="input" class="stripe-field-input" />
                 </div>
-                <div class="invalid-feedback" v-if="error || errors.token" v-html="error || errors.token.join('<br>')"/>
+                <div v-if="error || errors.token" class="invalid-feedback" v-html="error || errors.token.join('<br>')" />
             </div>
             <div class="stripe-field-activity">
-                <activity-indicator size="xs"/>
+                <activity-indicator size="xs" />
             </div>
         </label>
     </div>
-
 </template>
 
 <script>
@@ -31,11 +28,19 @@ import PaymentGateway from '../../../Mixins/PaymentGateway';
 
 export default {
 
-    name: 'stripe-credit-card',
+    name: 'StripeCreditCard',
 
     mixins: [
         PaymentGateway
     ],
+
+    data() {
+        return {
+            error: null,
+            loaded: false,
+            activity: false
+        };
+    },
 
     mounted() {
         const gateway = Gateway(this.gateway);
@@ -62,23 +67,23 @@ export default {
 
                 if(event.complete) {
                     // elapsed(500, (resolve, reject) => {
-                        gateway.createToken(this.$card, {
-                            currency: 'usd'
-                        }).then((result) => {
-                            //wait(this.activity ? 750 : 0, (resolve, reject) => {
-                                if(result.error) {
-                                    this.error = result.error.message;
+                    gateway.createToken(this.$card, {
+                        currency: 'usd'
+                    }).then((result) => {
+                        //wait(this.activity ? 750 : 0, (resolve, reject) => {
+                        if(result.error) {
+                            this.error = result.error.message;
 
-                                    //reject(result.error.message);
-                                }
-                                else {
-                                    this.form.token = result.token.id;
-                                    this.pageType.enableSubmitButton();
+                            //reject(result.error.message);
+                        }
+                        else {
+                            this.form.token = result.token.id;
+                            this.pageType.enableSubmitButton();
                                     
-                                    //resolve(result);
-                                }
-                            //}).then(resolve, reject);
-                        });
+                            //resolve(result);
+                        }
+                        //}).then(resolve, reject);
+                    });
                     /*
                     }, () => {
                         this.activity = true;
@@ -94,14 +99,6 @@ export default {
             this.loaded = true;
             this.$nextTick(() => this.$card.mount(this.$refs.input));
         });
-    },
-
-    data() {
-        return {
-            error: null,
-            loaded: false,
-            activity: false
-        };
     }
 
 };

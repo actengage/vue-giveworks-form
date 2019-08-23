@@ -11,7 +11,7 @@ import unit from 'vue-interface/src/Helpers/Functions/unit';
 
 export default {
 
-    name: 'http-error-response',
+    name: 'HttpErrorResponse',
 
     components: {
         Alert: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/Alert'),
@@ -54,7 +54,7 @@ export default {
             if(this.error.data && this.error.data.errors) {
                 return Object.keys(this.error.data.errors)
                     .reduce((carry, key) => {
-                       return carry.concat([this.error.data.errors[key]]);
+                        return carry.concat([this.error.data.errors[key]]);
                     }, [])
                     .join('<br>');
             }

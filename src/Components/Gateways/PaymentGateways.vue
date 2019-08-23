@@ -1,35 +1,31 @@
 <template>
-
     <div>
-
         <div v-if="buttons.length > 1" class="payment-gateway-buttons">
             <btn
-                v-for="(button, i) in buttons"
-                :key="i"
-                :class="{'btn-success': button.active, 'btn-secondary': !button.active}"
-                type="button"
-                @click="activate(button)">
-                <icon :icon="typeof button.icon === 'string' ? ['far', button.icon]: button.icon" :size="button.size || 'lg'" :class="{'mt-2 mb-1': !button.label}"/>
-                <div v-if="button.label" class="small" v-html="button.label"/>
+            v-for="(button, i) in buttons"
+            :key="i"
+            :class="{'btn-success': button.active, 'btn-secondary': !button.active}"
+            type="button"
+            @click="activate(button)">
+                <icon :icon="typeof button.icon === 'string' ? ['far', button.icon]: button.icon" :size="button.size || 'lg'" :class="{'mt-2 mb-1': !button.label}" />
+                <div v-if="button.label" class="small" v-html="button.label" />
             </btn>
         </div>
 
         <alert v-if="!buttons || !buttons.length" variant="danger" class="d-flex align-items-center">
-            <icon icon="exclamation-triangle" size="2x" class="mr-2"/>
+            <icon icon="exclamation-triangle" size="2x" class="mr-2" />
             <div>There are not payment gateways configured for this site!</div>
         </alert>
 
         <component
-            v-if="activeButton"
-            :is="activeButton.component"
-            :form="form"
-            :page="page"
-            :errors="errors"
-            :page-type="pageType"
-            :gateway="activeButton.gateway" />
-
+        :is="activeButton.component"
+        v-if="activeButton"
+        :form="form"
+        :page="page"
+        :errors="errors"
+        :page-type="pageType"
+        :gateway="activeButton.gateway" />
     </div>
-
 </template>
 
 <script>
@@ -43,7 +39,7 @@ import AuthorizeNetCreditCard from '../Gateways/AuthorizeNet/AuthorizeNetCreditC
 
 export default {
 
-    name: 'payment-gateways',
+    name: 'PaymentGateways',
 
     components: {
         Icon,
@@ -66,6 +62,44 @@ export default {
             required: true
         }
 
+    },
+
+    data() {
+        return {
+            width: null,
+            gateway: null,
+            buttons: this.getButtons()
+        };
+    },
+
+    computed: {
+
+        activeButton() {
+            return this.buttons.filter(button => button.active).pop();
+        },
+
+        classes() {
+            return {
+                'col-sm-6': this.width < 310,
+                'col-sm-6 col-lg-4': this.width >= 310
+            };
+        }
+
+    },
+
+    mounted() {
+        if(this.buttons && this.buttons[0]) {
+            this.activate(this.buttons[0]);
+        }
+        else {
+            // this.$dispatch.request('submit:hide');
+        }
+
+        window.addEventListener('resize', this.onResize());
+    },
+
+    destroyed() {
+        window.removeEventListener('resize', this.onResize);
     },
 
     methods: {
@@ -105,44 +139,6 @@ export default {
             return this.onResize;
         }
 
-    },
-
-    computed: {
-
-        activeButton() {
-            return this.buttons.filter(button => button.active).pop();
-        },
-
-        classes() {
-            return {
-                'col-sm-6': this.width < 310,
-                'col-sm-6 col-lg-4': this.width >= 310
-            };
-        }
-
-    },
-
-    mounted() {
-        if(this.buttons && this.buttons[0]) {
-            this.activate(this.buttons[0]);
-        }
-        else {
-            // this.$dispatch.request('submit:hide');
-        }
-
-        window.addEventListener('resize', this.onResize());
-    },
-
-    destroyed() {
-        window.removeEventListener('resize', this.onResize);
-    },
-
-    data() {
-        return {
-            width: null,
-            gateway: null,
-            buttons: this.getButtons()
-        };
     }
 
 };

@@ -1,29 +1,28 @@
 <template>
     <div class="payment-buttons" :class="{'was-validated': !!errors.amount}">
-
         <div class="payment-buttons-grid mb-2">
-            <btn type="button"
-                outline
-                variant="success"
-                v-for="amount in amounts"
-                v-html="`$${amount}`"
-                :key="amount"
-                :active="value ? value.toString() === amount.toString() : false"
-                @click="onClickButton(amount)"/>
+            <btn v-for="amount in amounts"
+            :key="amount"
+            type="button"
+            outline
+            variant="success"
+            :active="value ? value.toString() === amount.toString() : false"
+            @click="onClickButton(amount)"
+            v-html="`$${amount}`" />
         </div>
 
         <input-group prepend="$" :class="{'is-invalid': !!errors.amount, 'mb-3': !page.site.recurring}">
             <input-field
-                custom
-                label="Other Amount"
-                placeholder="Other Amount"
-                :group="false"
-                :value="value"
-                @keydown="onKeyDown"
-                @input="value => $emit('input', value)"/>
+            custom
+            label="Other Amount"
+            placeholder="Other Amount"
+            :group="false"
+            :value="value"
+            @keydown="onKeyDown"
+            @input="value => $emit('input', value)" />
         </input-group>
 
-        <form-feedback v-if="errors.amount" v-html="errors.amount.join('<br>')" class="d-block" invalid/>
+        <form-feedback v-if="errors.amount" class="d-block" invalid v-html="errors.amount.join('<br>')" />
     </div>
 </template>
 
@@ -32,11 +31,7 @@ import FormControl from 'vue-interface/src/Mixins/FormControl';
 
 export default {
 
-    name: 'payment-buttons',
-
-    mixins: [
-        FormControl
-    ],
+    name: 'PaymentButtons',
 
     components: {
         Btn: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/Btn'),
@@ -44,6 +39,10 @@ export default {
         InputGroup: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/InputGroup'),
         FormFeedback: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/FormFeedback')
     },
+
+    mixins: [
+        FormControl
+    ],
 
     props: {
 

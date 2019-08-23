@@ -1,22 +1,17 @@
 <template>
-
     <fieldset>
-
         <legend>Payment Information</legend>
 
-        <payment-gateways :form="form" :errors="errors" :page="page"/>
+        <payment-gateways :form="form" :errors="errors" :page="page" />
 
         <textarea-field
-            v-query
-            v-autogrow
-            v-model="form.comment"
-            v-if="page.options.add_comment"
-            :label="commentMessage"
-            id="comment"
-        />
-
+        v-if="page.options.add_comment"
+        id="comment"
+        v-model="form.comment"
+        v-query
+        v-autogrow
+        :label="commentMessage" />
     </fieldset>
-
 </template>
 
 <script>
@@ -26,26 +21,26 @@ import PaymentGateways from '../Gateways/PaymentGateways';
 
 export default {
 
-    name: 'payment-info-fieldset',
+    name: 'PaymentInfoFieldset',
 
     components: {
         PaymentGateways,
         TextareaField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/TextareaField'),
     },
 
-    props: {
-        legends: {
-            type: Boolean,
-            default: true
-        }
+    directives: {
+        Query
     },
 
     mixins: [
         FormComponent
     ],
 
-    directives: {
-        Query
+    props: {
+        legends: {
+            type: Boolean,
+            default: true
+        }
     }
 
 };

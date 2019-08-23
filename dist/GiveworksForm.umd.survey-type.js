@@ -795,22 +795,22 @@ var Functions = __webpack_require__("ca14");
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1c68dd81-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Types/Survey.vue?vue&type=template&id=b1661cf4&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Types/Survey.vue?vue&type=template&id=e8fe51e4&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._l((_vm.page.questions),function(question){return _c('div',{key:question.id},[_c(_vm.component(question.type),{tag:"component",attrs:{"value":_vm.form[("field_" + (question.id))],"name":("field_" + (question.id)),"page":_vm.page,"form":_vm.form,"errors":_vm.errors,"question":question}})],1)}),_c('btn-activity',{attrs:{"size":"lg","type":"submit","block":true,"orientation":"right","activity":_vm.submitting,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.survey}})],2)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Types/Survey.vue?vue&type=template&id=b1661cf4&
+// CONCATENATED MODULE: ./src/Components/Types/Survey.vue?vue&type=template&id=e8fe51e4&
 
 // EXTERNAL MODULE: ./src/Mixins/PageType.js
 var PageType = __webpack_require__("b791");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1c68dd81-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/AltEmailField.vue?vue&type=template&id=16c0d113&
-var AltEmailFieldvue_type_template_id_16c0d113_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"type":"email","name":_vm.name,"id":_vm.question.id,"label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"placeholder":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"errors":_vm.errors,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form[_vm.name]),callback:function ($$v) {_vm.$set(_vm.form, _vm.name, $$v)},expression:"form[name]"}})}
-var AltEmailFieldvue_type_template_id_16c0d113_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/AltEmailField.vue?vue&type=template&id=7d75f3ec&
+var AltEmailFieldvue_type_template_id_7d75f3ec_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"id":_vm.question.id,"type":"email","name":_vm.name,"label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"placeholder":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"errors":_vm.errors,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form[_vm.name]),callback:function ($$v) {_vm.$set(_vm.form, _vm.name, $$v)},expression:"form[name]"}})}
+var AltEmailFieldvue_type_template_id_7d75f3ec_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Survey/AltEmailField.vue?vue&type=template&id=16c0d113&
+// CONCATENATED MODULE: ./src/Components/Survey/AltEmailField.vue?vue&type=template&id=7d75f3ec&
 
 // EXTERNAL MODULE: ./src/Directives/Query.js
 var Query = __webpack_require__("b4ea");
@@ -829,10 +829,20 @@ var Functions = __webpack_require__("ca14");
   components: {
     FormGroup: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "2848"))
   },
-  mixins: [FormControl["a" /* default */]],
   directives: {
     Query: Query["a" /* default */]
   },
+  directives: {
+    changed(el, binding, vnode) {
+      el.addEventListener('change', event => {
+        if (event.target.checked && Object(Functions["i" /* isFunction */])(binding.value)) {
+          binding.value(el);
+        }
+      });
+    }
+
+  },
+  mixins: [FormControl["a" /* default */]],
   props: {
     form: {
       type: Object,
@@ -854,16 +864,6 @@ var Functions = __webpack_require__("ca14");
   computed: {
     name() {
       return this.$attrs.name;
-    }
-
-  },
-  directives: {
-    changed(el, binding, vnode) {
-      el.addEventListener('change', event => {
-        if (event.target.checked && Object(Functions["i" /* isFunction */])(binding.value)) {
-          binding.value(el);
-        }
-      });
     }
 
   },
@@ -917,16 +917,13 @@ var component = Object(componentNormalizer["a" /* default */])(
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ var AltEmailFieldvue_type_script_lang_js_ = ({
-  name: 'survey-alt-email-field',
-  extends: SurveyField,
+  name: 'SurveyAltEmailField',
   components: {
     InputField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "46d8"))
-  }
+  },
+  extends: SurveyField
 });
 // CONCATENATED MODULE: ./src/Components/Survey/AltEmailField.vue?vue&type=script&lang=js&
  /* harmony default export */ var Survey_AltEmailFieldvue_type_script_lang_js_ = (AltEmailFieldvue_type_script_lang_js_); 
@@ -940,8 +937,8 @@ var component = Object(componentNormalizer["a" /* default */])(
 
 var AltEmailField_component = Object(componentNormalizer["a" /* default */])(
   Survey_AltEmailFieldvue_type_script_lang_js_,
-  AltEmailFieldvue_type_template_id_16c0d113_render,
-  AltEmailFieldvue_type_template_id_16c0d113_staticRenderFns,
+  AltEmailFieldvue_type_template_id_7d75f3ec_render,
+  AltEmailFieldvue_type_template_id_7d75f3ec_staticRenderFns,
   false,
   null,
   null,
@@ -950,12 +947,12 @@ var AltEmailField_component = Object(componentNormalizer["a" /* default */])(
 )
 
 /* harmony default export */ var AltEmailField = (AltEmailField_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1c68dd81-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/AltPhoneField.vue?vue&type=template&id=2bb818d7&
-var AltPhoneFieldvue_type_template_id_2bb818d7_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"type":"phone","name":_vm.name,"id":_vm.question.id,"label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"errors":_vm.errors,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form[_vm.name]),callback:function ($$v) {_vm.$set(_vm.form, _vm.name, $$v)},expression:"form[name]"}})}
-var AltPhoneFieldvue_type_template_id_2bb818d7_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/AltPhoneField.vue?vue&type=template&id=470e4100&
+var AltPhoneFieldvue_type_template_id_470e4100_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"id":_vm.question.id,"type":"phone","name":_vm.name,"label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"errors":_vm.errors,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form[_vm.name]),callback:function ($$v) {_vm.$set(_vm.form, _vm.name, $$v)},expression:"form[name]"}})}
+var AltPhoneFieldvue_type_template_id_470e4100_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Survey/AltPhoneField.vue?vue&type=template&id=2bb818d7&
+// CONCATENATED MODULE: ./src/Components/Survey/AltPhoneField.vue?vue&type=template&id=470e4100&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/AltPhoneField.vue?vue&type=script&lang=js&
 //
@@ -972,16 +969,13 @@ var AltPhoneFieldvue_type_template_id_2bb818d7_staticRenderFns = []
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ var AltPhoneFieldvue_type_script_lang_js_ = ({
-  name: 'survey-alt-phone-field',
-  extends: SurveyField,
+  name: 'SurveyAltPhoneField',
   components: {
     InputField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "46d8"))
-  }
+  },
+  extends: SurveyField
 });
 // CONCATENATED MODULE: ./src/Components/Survey/AltPhoneField.vue?vue&type=script&lang=js&
  /* harmony default export */ var Survey_AltPhoneFieldvue_type_script_lang_js_ = (AltPhoneFieldvue_type_script_lang_js_); 
@@ -995,8 +989,8 @@ var AltPhoneFieldvue_type_template_id_2bb818d7_staticRenderFns = []
 
 var AltPhoneField_component = Object(componentNormalizer["a" /* default */])(
   Survey_AltPhoneFieldvue_type_script_lang_js_,
-  AltPhoneFieldvue_type_template_id_2bb818d7_render,
-  AltPhoneFieldvue_type_template_id_2bb818d7_staticRenderFns,
+  AltPhoneFieldvue_type_template_id_470e4100_render,
+  AltPhoneFieldvue_type_template_id_470e4100_staticRenderFns,
   false,
   null,
   null,
@@ -1005,12 +999,12 @@ var AltPhoneField_component = Object(componentNormalizer["a" /* default */])(
 )
 
 /* harmony default export */ var AltPhoneField = (AltPhoneField_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1c68dd81-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/CheckboxField.vue?vue&type=template&id=f878d6d2&
-var CheckboxFieldvue_type_template_id_f878d6d2_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',{class:{'is-invalid': !!_vm.invalidFeedback}},[_c('label',[_vm._v("\n        "+_vm._s(_vm.question.question)+"\n        "),(_vm.question.required)?_c('sup',[_vm._v("*")]):_vm._e()]),_vm._l((_vm.question.answers),function(answer,key){return _c('checkbox-field',{directives:[{name:"query",rawName:"v-query"}],key:key,attrs:{"label":answer,"value":answer,"checkedValues":_vm.value || [],"name":_vm.name,"id":(_vm.name + "_" + key),"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form[_vm.name]),callback:function ($$v) {_vm.$set(_vm.form, _vm.name, $$v)},expression:"form[name]"}})}),(_vm.question.accept_other)?[_c('checkbox-field',{directives:[{name:"changed",rawName:"v-changed"},{name:"query",rawName:"v-query"}],attrs:{"label":"Other:","value":"other","name":_vm.name,"id":(_vm.name + "_50"),"checkedValues":_vm.value || [],"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form[_vm.name]),callback:function ($$v) {_vm.$set(_vm.form, _vm.name, $$v)},expression:"form[name]"}}),_c('input-field',{directives:[{name:"query",rawName:"v-query"}],staticClass:"mt-2",class:{'is-invalid': _vm.errors[_vm.name]},attrs:{"type":"text","label":"Other","placeholder":"Other","name":(_vm.name + "_other"),"id":(_vm.name + "_other"),"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form[(_vm.name + "_other")]),callback:function ($$v) {_vm.$set(_vm.form, (_vm.name + "_other"), $$v)},expression:"form[`${name}_other`]"}})]:_vm._e(),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)}
-var CheckboxFieldvue_type_template_id_f878d6d2_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/CheckboxField.vue?vue&type=template&id=4a94580f&
+var CheckboxFieldvue_type_template_id_4a94580f_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',{class:{'is-invalid': !!_vm.invalidFeedback}},[_c('label',[_vm._v("\n        "+_vm._s(_vm.question.question)+"\n        "),(_vm.question.required)?_c('sup',[_vm._v("*")]):_vm._e()]),_vm._l((_vm.question.answers),function(answer,key){return _c('checkbox-field',{directives:[{name:"query",rawName:"v-query"}],key:key,attrs:{"id":(_vm.name + "_" + key),"label":answer,"value":answer,"checked-values":_vm.value || [],"name":_vm.name,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form[_vm.name]),callback:function ($$v) {_vm.$set(_vm.form, _vm.name, $$v)},expression:"form[name]"}})}),(_vm.question.accept_other)?[_c('checkbox-field',{directives:[{name:"changed",rawName:"v-changed"},{name:"query",rawName:"v-query"}],attrs:{"id":(_vm.name + "_50"),"label":"Other:","value":"other","name":_vm.name,"checked-values":_vm.value || [],"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form[_vm.name]),callback:function ($$v) {_vm.$set(_vm.form, _vm.name, $$v)},expression:"form[name]"}}),_c('input-field',{directives:[{name:"query",rawName:"v-query"}],staticClass:"mt-2",class:{'is-invalid': _vm.errors[_vm.name]},attrs:{"id":(_vm.name + "_other"),"type":"text","label":"Other","placeholder":"Other","name":(_vm.name + "_other"),"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form[(_vm.name + "_other")]),callback:function ($$v) {_vm.$set(_vm.form, (_vm.name + "_other"), $$v)},expression:"form[`${name}_other`]"}})]:_vm._e(),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)}
+var CheckboxFieldvue_type_template_id_4a94580f_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Survey/CheckboxField.vue?vue&type=template&id=f878d6d2&
+// CONCATENATED MODULE: ./src/Components/Survey/CheckboxField.vue?vue&type=template&id=4a94580f&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/CheckboxField.vue?vue&type=script&lang=js&
 //
@@ -1067,22 +1061,15 @@ var CheckboxFieldvue_type_template_id_f878d6d2_staticRenderFns = []
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ var CheckboxFieldvue_type_script_lang_js_ = ({
-  name: 'survey-checkbox-field',
-  extends: SurveyField,
+  name: 'SurveyCheckboxField',
   components: {
     InputField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "46d8")),
     FormFeedback: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "a892")),
     CheckboxField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "e067"))
-  }
+  },
+  extends: SurveyField
 });
 // CONCATENATED MODULE: ./src/Components/Survey/CheckboxField.vue?vue&type=script&lang=js&
  /* harmony default export */ var Survey_CheckboxFieldvue_type_script_lang_js_ = (CheckboxFieldvue_type_script_lang_js_); 
@@ -1096,8 +1083,8 @@ var CheckboxFieldvue_type_template_id_f878d6d2_staticRenderFns = []
 
 var CheckboxField_component = Object(componentNormalizer["a" /* default */])(
   Survey_CheckboxFieldvue_type_script_lang_js_,
-  CheckboxFieldvue_type_template_id_f878d6d2_render,
-  CheckboxFieldvue_type_template_id_f878d6d2_staticRenderFns,
+  CheckboxFieldvue_type_template_id_4a94580f_render,
+  CheckboxFieldvue_type_template_id_4a94580f_staticRenderFns,
   false,
   null,
   null,
@@ -1106,12 +1093,12 @@ var CheckboxField_component = Object(componentNormalizer["a" /* default */])(
 )
 
 /* harmony default export */ var CheckboxField = (CheckboxField_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1c68dd81-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/CityField.vue?vue&type=template&id=899ac62a&
-var CityFieldvue_type_template_id_899ac62a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"id":"city","name":"city","label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"placeholder":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"errors":_vm.errors,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form.city),callback:function ($$v) {_vm.$set(_vm.form, "city", $$v)},expression:"form.city"}})}
-var CityFieldvue_type_template_id_899ac62a_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/CityField.vue?vue&type=template&id=3ed46b06&
+var CityFieldvue_type_template_id_3ed46b06_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"id":"city","name":"city","label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"placeholder":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"errors":_vm.errors,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form.city),callback:function ($$v) {_vm.$set(_vm.form, "city", $$v)},expression:"form.city"}})}
+var CityFieldvue_type_template_id_3ed46b06_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Survey/CityField.vue?vue&type=template&id=899ac62a&
+// CONCATENATED MODULE: ./src/Components/Survey/CityField.vue?vue&type=template&id=3ed46b06&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/CityField.vue?vue&type=script&lang=js&
 //
@@ -1128,16 +1115,13 @@ var CityFieldvue_type_template_id_899ac62a_staticRenderFns = []
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ var CityFieldvue_type_script_lang_js_ = ({
-  name: 'survey-city-field',
-  extends: SurveyField,
+  name: 'SurveyCityField',
   components: {
     InputField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "46d8"))
-  }
+  },
+  extends: SurveyField
 });
 // CONCATENATED MODULE: ./src/Components/Survey/CityField.vue?vue&type=script&lang=js&
  /* harmony default export */ var Survey_CityFieldvue_type_script_lang_js_ = (CityFieldvue_type_script_lang_js_); 
@@ -1151,8 +1135,8 @@ var CityFieldvue_type_template_id_899ac62a_staticRenderFns = []
 
 var CityField_component = Object(componentNormalizer["a" /* default */])(
   Survey_CityFieldvue_type_script_lang_js_,
-  CityFieldvue_type_template_id_899ac62a_render,
-  CityFieldvue_type_template_id_899ac62a_staticRenderFns,
+  CityFieldvue_type_template_id_3ed46b06_render,
+  CityFieldvue_type_template_id_3ed46b06_staticRenderFns,
   false,
   null,
   null,
@@ -1161,21 +1145,14 @@ var CityField_component = Object(componentNormalizer["a" /* default */])(
 )
 
 /* harmony default export */ var CityField = (CityField_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1c68dd81-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/DollarAmountField.vue?vue&type=template&id=16c9c50e&
-var DollarAmountFieldvue_type_template_id_16c9c50e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"form-group"},[_c('fieldset',[_c('legend',[_vm._v("Select an amount")]),_vm._l((_vm.amounts),function(chunk,i){return _c('div',{key:i,staticClass:"row"},_vm._l((chunk),function(amount){return _c('div',{key:amount,staticClass:"col-sm-6"},[_c('radio-field',{attrs:{"name":"donation","label":amount,"value":amount,"custom":""},model:{value:(_vm.form.donation),callback:function ($$v) {_vm.$set(_vm.form, "donation", $$v)},expression:"form.donation"}})],1)}),0)}),_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-md-6"},[_c('label',{attrs:{"for":_vm.question.id},domProps:{"innerHTML":_vm._s(_vm.question.question)}}),_c('input-group',{attrs:{"prepend":"$"}},[_c('input',{staticClass:"form-control",class:{'is-invalid': !!_vm.invalidFeedback},attrs:{"type":"text","name":_vm.name,"required":_vm.question.required},domProps:{"value":_vm.value}})])],1)])],2)])}
-var DollarAmountFieldvue_type_template_id_16c9c50e_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/DollarAmountField.vue?vue&type=template&id=2f69bc9c&
+var DollarAmountFieldvue_type_template_id_2f69bc9c_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"form-group"},[_c('fieldset',[_c('legend',[_vm._v("Select an amount")]),_vm._l((_vm.amounts),function(chunk,i){return _c('div',{key:i,staticClass:"row"},_vm._l((chunk),function(amount){return _c('div',{key:amount,staticClass:"col-sm-6"},[_c('radio-field',{attrs:{"name":"donation","label":amount,"value":amount,"custom":""},model:{value:(_vm.form.donation),callback:function ($$v) {_vm.$set(_vm.form, "donation", $$v)},expression:"form.donation"}})],1)}),0)}),_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-md-6"},[_c('label',{attrs:{"for":_vm.question.id},domProps:{"innerHTML":_vm._s(_vm.question.question)}}),_c('input-group',{attrs:{"prepend":"$"}},[_c('input',{staticClass:"form-control",class:{'is-invalid': !!_vm.invalidFeedback},attrs:{"type":"text","name":_vm.name,"required":_vm.question.required},domProps:{"value":_vm.value}})])],1)])],2)])}
+var DollarAmountFieldvue_type_template_id_2f69bc9c_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Survey/DollarAmountField.vue?vue&type=template&id=16c9c50e&
+// CONCATENATED MODULE: ./src/Components/Survey/DollarAmountField.vue?vue&type=template&id=2f69bc9c&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/DollarAmountField.vue?vue&type=script&lang=js&
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -1208,12 +1185,12 @@ var DollarAmountFieldvue_type_template_id_16c9c50e_staticRenderFns = []
 
 
 /* harmony default export */ var DollarAmountFieldvue_type_script_lang_js_ = ({
-  name: 'survey-dollar-amount-field',
-  extends: SurveyField,
+  name: 'SurveyDollarAmountField',
   components: {
     InputGroup: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "3588")),
     RadioField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "b78d"))
   },
+  extends: SurveyField,
   computed: {
     amounts() {
       const values = this.question.answers ? this.question.answers.split('|') : this.page.site.config.giveworks.ask_amounts;
@@ -1236,8 +1213,8 @@ var DollarAmountFieldvue_type_template_id_16c9c50e_staticRenderFns = []
 
 var DollarAmountField_component = Object(componentNormalizer["a" /* default */])(
   Survey_DollarAmountFieldvue_type_script_lang_js_,
-  DollarAmountFieldvue_type_template_id_16c9c50e_render,
-  DollarAmountFieldvue_type_template_id_16c9c50e_staticRenderFns,
+  DollarAmountFieldvue_type_template_id_2f69bc9c_render,
+  DollarAmountFieldvue_type_template_id_2f69bc9c_staticRenderFns,
   false,
   null,
   null,
@@ -1246,12 +1223,12 @@ var DollarAmountField_component = Object(componentNormalizer["a" /* default */])
 )
 
 /* harmony default export */ var DollarAmountField = (DollarAmountField_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1c68dd81-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/FirstField.vue?vue&type=template&id=3f179d14&
-var FirstFieldvue_type_template_id_3f179d14_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"id":"first","name":"first","label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"placeholder":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"errors":_vm.errors,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form.first),callback:function ($$v) {_vm.$set(_vm.form, "first", $$v)},expression:"form.first"}})}
-var FirstFieldvue_type_template_id_3f179d14_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/FirstField.vue?vue&type=template&id=da545fc8&
+var FirstFieldvue_type_template_id_da545fc8_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"id":"first","name":"first","label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"placeholder":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"errors":_vm.errors,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form.first),callback:function ($$v) {_vm.$set(_vm.form, "first", $$v)},expression:"form.first"}})}
+var FirstFieldvue_type_template_id_da545fc8_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Survey/FirstField.vue?vue&type=template&id=3f179d14&
+// CONCATENATED MODULE: ./src/Components/Survey/FirstField.vue?vue&type=template&id=da545fc8&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/FirstField.vue?vue&type=script&lang=js&
 //
@@ -1268,16 +1245,13 @@ var FirstFieldvue_type_template_id_3f179d14_staticRenderFns = []
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ var FirstFieldvue_type_script_lang_js_ = ({
-  name: 'survey-first-field',
-  extends: SurveyField,
+  name: 'SurveyFirstField',
   components: {
     InputField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "46d8"))
-  }
+  },
+  extends: SurveyField
 });
 // CONCATENATED MODULE: ./src/Components/Survey/FirstField.vue?vue&type=script&lang=js&
  /* harmony default export */ var Survey_FirstFieldvue_type_script_lang_js_ = (FirstFieldvue_type_script_lang_js_); 
@@ -1291,8 +1265,8 @@ var FirstFieldvue_type_template_id_3f179d14_staticRenderFns = []
 
 var FirstField_component = Object(componentNormalizer["a" /* default */])(
   Survey_FirstFieldvue_type_script_lang_js_,
-  FirstFieldvue_type_template_id_3f179d14_render,
-  FirstFieldvue_type_template_id_3f179d14_staticRenderFns,
+  FirstFieldvue_type_template_id_da545fc8_render,
+  FirstFieldvue_type_template_id_da545fc8_staticRenderFns,
   false,
   null,
   null,
@@ -1301,12 +1275,12 @@ var FirstField_component = Object(componentNormalizer["a" /* default */])(
 )
 
 /* harmony default export */ var FirstField = (FirstField_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1c68dd81-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/InputField.vue?vue&type=template&id=a58fac7e&
-var InputFieldvue_type_template_id_a58fac7e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"name":_vm.name,"id":_vm.question.id,"label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"placeholder":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"errors":_vm.errors,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form[_vm.name]),callback:function ($$v) {_vm.$set(_vm.form, _vm.name, $$v)},expression:"form[name]"}})}
-var InputFieldvue_type_template_id_a58fac7e_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/InputField.vue?vue&type=template&id=264e2285&
+var InputFieldvue_type_template_id_264e2285_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"id":_vm.question.id,"name":_vm.name,"label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"placeholder":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"errors":_vm.errors,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form[_vm.name]),callback:function ($$v) {_vm.$set(_vm.form, _vm.name, $$v)},expression:"form[name]"}})}
+var InputFieldvue_type_template_id_264e2285_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Survey/InputField.vue?vue&type=template&id=a58fac7e&
+// CONCATENATED MODULE: ./src/Components/Survey/InputField.vue?vue&type=template&id=264e2285&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/InputField.vue?vue&type=script&lang=js&
 //
@@ -1323,16 +1297,13 @@ var InputFieldvue_type_template_id_a58fac7e_staticRenderFns = []
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ var InputFieldvue_type_script_lang_js_ = ({
-  name: 'survey-input-field',
-  extends: SurveyField,
+  name: 'SurveyInputField',
   components: {
     InputField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "46d8"))
-  }
+  },
+  extends: SurveyField
 });
 // CONCATENATED MODULE: ./src/Components/Survey/InputField.vue?vue&type=script&lang=js&
  /* harmony default export */ var Survey_InputFieldvue_type_script_lang_js_ = (InputFieldvue_type_script_lang_js_); 
@@ -1346,8 +1317,8 @@ var InputFieldvue_type_template_id_a58fac7e_staticRenderFns = []
 
 var InputField_component = Object(componentNormalizer["a" /* default */])(
   Survey_InputFieldvue_type_script_lang_js_,
-  InputFieldvue_type_template_id_a58fac7e_render,
-  InputFieldvue_type_template_id_a58fac7e_staticRenderFns,
+  InputFieldvue_type_template_id_264e2285_render,
+  InputFieldvue_type_template_id_264e2285_staticRenderFns,
   false,
   null,
   null,
@@ -1356,12 +1327,12 @@ var InputField_component = Object(componentNormalizer["a" /* default */])(
 )
 
 /* harmony default export */ var InputField = (InputField_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1c68dd81-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/LastField.vue?vue&type=template&id=3cd1b2e0&
-var LastFieldvue_type_template_id_3cd1b2e0_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"id":"last","name":"last","label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"placeholder":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"errors":_vm.errors,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form.last),callback:function ($$v) {_vm.$set(_vm.form, "last", $$v)},expression:"form.last"}})}
-var LastFieldvue_type_template_id_3cd1b2e0_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/LastField.vue?vue&type=template&id=1baaa59e&
+var LastFieldvue_type_template_id_1baaa59e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"id":"last","name":"last","label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"placeholder":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"errors":_vm.errors,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form.last),callback:function ($$v) {_vm.$set(_vm.form, "last", $$v)},expression:"form.last"}})}
+var LastFieldvue_type_template_id_1baaa59e_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Survey/LastField.vue?vue&type=template&id=3cd1b2e0&
+// CONCATENATED MODULE: ./src/Components/Survey/LastField.vue?vue&type=template&id=1baaa59e&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/LastField.vue?vue&type=script&lang=js&
 //
@@ -1378,16 +1349,13 @@ var LastFieldvue_type_template_id_3cd1b2e0_staticRenderFns = []
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ var LastFieldvue_type_script_lang_js_ = ({
-  name: 'survey-last-field',
-  extends: SurveyField,
+  name: 'SurveyLastField',
   components: {
     InputField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "46d8"))
-  }
+  },
+  extends: SurveyField
 });
 // CONCATENATED MODULE: ./src/Components/Survey/LastField.vue?vue&type=script&lang=js&
  /* harmony default export */ var Survey_LastFieldvue_type_script_lang_js_ = (LastFieldvue_type_script_lang_js_); 
@@ -1401,8 +1369,8 @@ var LastFieldvue_type_template_id_3cd1b2e0_staticRenderFns = []
 
 var LastField_component = Object(componentNormalizer["a" /* default */])(
   Survey_LastFieldvue_type_script_lang_js_,
-  LastFieldvue_type_template_id_3cd1b2e0_render,
-  LastFieldvue_type_template_id_3cd1b2e0_staticRenderFns,
+  LastFieldvue_type_template_id_1baaa59e_render,
+  LastFieldvue_type_template_id_1baaa59e_staticRenderFns,
   false,
   null,
   null,
@@ -1411,12 +1379,12 @@ var LastField_component = Object(componentNormalizer["a" /* default */])(
 )
 
 /* harmony default export */ var LastField = (LastField_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1c68dd81-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/PrimaryEmailField.vue?vue&type=template&id=290b2ea6&
-var PrimaryEmailFieldvue_type_template_id_290b2ea6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"type":"email","name":"email","id":"email","label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"placeholder":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"errors":_vm.errors,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form.email),callback:function ($$v) {_vm.$set(_vm.form, "email", $$v)},expression:"form.email"}})}
-var PrimaryEmailFieldvue_type_template_id_290b2ea6_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/PrimaryEmailField.vue?vue&type=template&id=6392b63d&
+var PrimaryEmailFieldvue_type_template_id_6392b63d_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"id":"email","type":"email","name":"email","label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"placeholder":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"errors":_vm.errors,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form.email),callback:function ($$v) {_vm.$set(_vm.form, "email", $$v)},expression:"form.email"}})}
+var PrimaryEmailFieldvue_type_template_id_6392b63d_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Survey/PrimaryEmailField.vue?vue&type=template&id=290b2ea6&
+// CONCATENATED MODULE: ./src/Components/Survey/PrimaryEmailField.vue?vue&type=template&id=6392b63d&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/PrimaryEmailField.vue?vue&type=script&lang=js&
 //
@@ -1434,16 +1402,13 @@ var PrimaryEmailFieldvue_type_template_id_290b2ea6_staticRenderFns = []
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ var PrimaryEmailFieldvue_type_script_lang_js_ = ({
-  name: 'survey-primary-email-field',
-  extends: SurveyField,
+  name: 'SurveyPrimaryEmailField',
   components: {
     InputField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "46d8"))
-  }
+  },
+  extends: SurveyField
 });
 // CONCATENATED MODULE: ./src/Components/Survey/PrimaryEmailField.vue?vue&type=script&lang=js&
  /* harmony default export */ var Survey_PrimaryEmailFieldvue_type_script_lang_js_ = (PrimaryEmailFieldvue_type_script_lang_js_); 
@@ -1457,8 +1422,8 @@ var PrimaryEmailFieldvue_type_template_id_290b2ea6_staticRenderFns = []
 
 var PrimaryEmailField_component = Object(componentNormalizer["a" /* default */])(
   Survey_PrimaryEmailFieldvue_type_script_lang_js_,
-  PrimaryEmailFieldvue_type_template_id_290b2ea6_render,
-  PrimaryEmailFieldvue_type_template_id_290b2ea6_staticRenderFns,
+  PrimaryEmailFieldvue_type_template_id_6392b63d_render,
+  PrimaryEmailFieldvue_type_template_id_6392b63d_staticRenderFns,
   false,
   null,
   null,
@@ -1467,12 +1432,12 @@ var PrimaryEmailField_component = Object(componentNormalizer["a" /* default */])
 )
 
 /* harmony default export */ var PrimaryEmailField = (PrimaryEmailField_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1c68dd81-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/PrimaryPhoneField.vue?vue&type=template&id=374be7e6&
-var PrimaryPhoneFieldvue_type_template_id_374be7e6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"type":"phone","name":"phone","id":"phone","label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"placeholder":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"errors":_vm.errors,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form.phone),callback:function ($$v) {_vm.$set(_vm.form, "phone", $$v)},expression:"form.phone"}})}
-var PrimaryPhoneFieldvue_type_template_id_374be7e6_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/PrimaryPhoneField.vue?vue&type=template&id=1fab0e7d&
+var PrimaryPhoneFieldvue_type_template_id_1fab0e7d_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"id":"phone","type":"phone","name":"phone","label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"placeholder":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"errors":_vm.errors,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form.phone),callback:function ($$v) {_vm.$set(_vm.form, "phone", $$v)},expression:"form.phone"}})}
+var PrimaryPhoneFieldvue_type_template_id_1fab0e7d_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Survey/PrimaryPhoneField.vue?vue&type=template&id=374be7e6&
+// CONCATENATED MODULE: ./src/Components/Survey/PrimaryPhoneField.vue?vue&type=template&id=1fab0e7d&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/PrimaryPhoneField.vue?vue&type=script&lang=js&
 //
@@ -1490,16 +1455,13 @@ var PrimaryPhoneFieldvue_type_template_id_374be7e6_staticRenderFns = []
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ var PrimaryPhoneFieldvue_type_script_lang_js_ = ({
-  name: 'survey-primary-phone-field',
-  extends: SurveyField,
+  name: 'SurveyPrimaryPhoneField',
   components: {
     InputField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "46d8"))
-  }
+  },
+  extends: SurveyField
 });
 // CONCATENATED MODULE: ./src/Components/Survey/PrimaryPhoneField.vue?vue&type=script&lang=js&
  /* harmony default export */ var Survey_PrimaryPhoneFieldvue_type_script_lang_js_ = (PrimaryPhoneFieldvue_type_script_lang_js_); 
@@ -1513,8 +1475,8 @@ var PrimaryPhoneFieldvue_type_template_id_374be7e6_staticRenderFns = []
 
 var PrimaryPhoneField_component = Object(componentNormalizer["a" /* default */])(
   Survey_PrimaryPhoneFieldvue_type_script_lang_js_,
-  PrimaryPhoneFieldvue_type_template_id_374be7e6_render,
-  PrimaryPhoneFieldvue_type_template_id_374be7e6_staticRenderFns,
+  PrimaryPhoneFieldvue_type_template_id_1fab0e7d_render,
+  PrimaryPhoneFieldvue_type_template_id_1fab0e7d_staticRenderFns,
   false,
   null,
   null,
@@ -1523,12 +1485,12 @@ var PrimaryPhoneField_component = Object(componentNormalizer["a" /* default */])
 )
 
 /* harmony default export */ var PrimaryPhoneField = (PrimaryPhoneField_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1c68dd81-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/RadioField.vue?vue&type=template&id=19ac163f&
-var RadioFieldvue_type_template_id_19ac163f_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',{class:{'is-invalid': !!_vm.invalidFeedback}},[_c('label',[_vm._v("\n        "+_vm._s(_vm.question.question)+" "),(_vm.question.required)?_c('sup',[_vm._v("*")]):_vm._e()]),_vm._l((_vm.question.answers),function(answer,key){return _c('radio-field',{directives:[{name:"query",rawName:"v-query"}],key:key,attrs:{"label":answer,"value":answer,"checkedValue":_vm.value,"name":_vm.name,"id":(_vm.name + "_" + key),"custom":""},on:{"change":_vm.updated},model:{value:(_vm.form[_vm.name]),callback:function ($$v) {_vm.$set(_vm.form, _vm.name, $$v)},expression:"form[name]"}})}),(_vm.question.accept_other)?[_c('radio-field',{directives:[{name:"changed",rawName:"v-changed"}],attrs:{"value":"other","label":"Other:","name":_vm.name,"id":(_vm.name + "_50"),"checkedValue":_vm.value},on:{"change":_vm.updated},model:{value:(_vm.form[_vm.name]),callback:function ($$v) {_vm.$set(_vm.form, _vm.name, $$v)},expression:"form[name]"}}),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.form[(_vm.name + "_other")]),expression:"form[`${name}_other`]"}],staticClass:"form-control",class:{'is-invalid': _vm.errors[_vm.name]},attrs:{"type":"text","name":(_vm.name + "_other"),"id":(_vm.name + "_other")},domProps:{"value":(_vm.form[(_vm.name + "_other")])},on:{"input":[function($event){if($event.target.composing){ return; }_vm.$set(_vm.form, (_vm.name + "_other"), $event.target.value)},function($event){return _vm.updated($event.target.value);}]}})]:_vm._e(),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)}
-var RadioFieldvue_type_template_id_19ac163f_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/RadioField.vue?vue&type=template&id=045761c4&
+var RadioFieldvue_type_template_id_045761c4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('form-group',{class:{'is-invalid': !!_vm.invalidFeedback}},[_c('label',[_vm._v("\n        "+_vm._s(_vm.question.question)+" "),(_vm.question.required)?_c('sup',[_vm._v("*")]):_vm._e()]),_vm._l((_vm.question.answers),function(answer,key){return _c('radio-field',{directives:[{name:"query",rawName:"v-query"}],key:key,attrs:{"id":(_vm.name + "_" + key),"label":answer,"value":answer,"checked-value":_vm.value,"name":_vm.name,"custom":""},on:{"change":_vm.updated},model:{value:(_vm.form[_vm.name]),callback:function ($$v) {_vm.$set(_vm.form, _vm.name, $$v)},expression:"form[name]"}})}),(_vm.question.accept_other)?[_c('radio-field',{directives:[{name:"changed",rawName:"v-changed"}],attrs:{"id":(_vm.name + "_50"),"value":"other","label":"Other:","name":_vm.name,"checked-value":_vm.value},on:{"change":_vm.updated},model:{value:(_vm.form[_vm.name]),callback:function ($$v) {_vm.$set(_vm.form, _vm.name, $$v)},expression:"form[name]"}}),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.form[(_vm.name + "_other")]),expression:"form[`${name}_other`]"}],staticClass:"form-control",class:{'is-invalid': _vm.errors[_vm.name]},attrs:{"id":(_vm.name + "_other"),"type":"text","name":(_vm.name + "_other")},domProps:{"value":(_vm.form[(_vm.name + "_other")])},on:{"input":[function($event){if($event.target.composing){ return; }_vm.$set(_vm.form, (_vm.name + "_other"), $event.target.value)},function($event){return _vm.updated($event.target.value);}]}})]:_vm._e(),_vm._t("feedback",[(_vm.validFeedback)?_c('form-feedback',{attrs:{"valid":""},domProps:{"innerHTML":_vm._s(_vm.validFeedback)}}):_vm._e(),(_vm.invalidFeedback)?_c('form-feedback',{attrs:{"invalid":""},domProps:{"innerHTML":_vm._s(_vm.invalidFeedback)}}):_vm._e()])],2)}
+var RadioFieldvue_type_template_id_045761c4_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Survey/RadioField.vue?vue&type=template&id=19ac163f&
+// CONCATENATED MODULE: ./src/Components/Survey/RadioField.vue?vue&type=template&id=045761c4&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/RadioField.vue?vue&type=script&lang=js&
 //
@@ -1567,14 +1529,22 @@ var RadioFieldvue_type_template_id_19ac163f_staticRenderFns = []
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ var RadioFieldvue_type_script_lang_js_ = ({
-  name: 'survey-radio-field',
-  extends: SurveyField,
+  name: 'SurveyRadioField',
   components: {
     RadioField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "b78d")),
     FormFeedback: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "a892"))
-  }
+  },
+  extends: SurveyField
 });
 // CONCATENATED MODULE: ./src/Components/Survey/RadioField.vue?vue&type=script&lang=js&
  /* harmony default export */ var Survey_RadioFieldvue_type_script_lang_js_ = (RadioFieldvue_type_script_lang_js_); 
@@ -1588,8 +1558,8 @@ var RadioFieldvue_type_template_id_19ac163f_staticRenderFns = []
 
 var RadioField_component = Object(componentNormalizer["a" /* default */])(
   Survey_RadioFieldvue_type_script_lang_js_,
-  RadioFieldvue_type_template_id_19ac163f_render,
-  RadioFieldvue_type_template_id_19ac163f_staticRenderFns,
+  RadioFieldvue_type_template_id_045761c4_render,
+  RadioFieldvue_type_template_id_045761c4_staticRenderFns,
   false,
   null,
   null,
@@ -1598,12 +1568,12 @@ var RadioField_component = Object(componentNormalizer["a" /* default */])(
 )
 
 /* harmony default export */ var RadioField = (RadioField_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1c68dd81-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/SelectField.vue?vue&type=template&id=5189b9e3&
-var SelectFieldvue_type_template_id_5189b9e3_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('select-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"name":_vm.name,"id":_vm.question.id,"errors":_vm.errors,"required":_vm.question.required,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form[_vm.name]),callback:function ($$v) {_vm.$set(_vm.form, _vm.name, $$v)},expression:"form[name]"}},_vm._l((_vm.question.answers),function(value,key){return _c('option',{domProps:{"value":value,"innerHTML":_vm._s(value)}})}),0)}
-var SelectFieldvue_type_template_id_5189b9e3_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/SelectField.vue?vue&type=template&id=5f6a336e&
+var SelectFieldvue_type_template_id_5f6a336e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('select-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"id":_vm.question.id,"label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"name":_vm.name,"errors":_vm.errors,"required":_vm.question.required,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form[_vm.name]),callback:function ($$v) {_vm.$set(_vm.form, _vm.name, $$v)},expression:"form[name]"}},_vm._l((_vm.question.answers),function(value,key){return _c('option',{domProps:{"value":value,"innerHTML":_vm._s(value)}})}),0)}
+var SelectFieldvue_type_template_id_5f6a336e_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Survey/SelectField.vue?vue&type=template&id=5189b9e3&
+// CONCATENATED MODULE: ./src/Components/Survey/SelectField.vue?vue&type=template&id=5f6a336e&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/SelectField.vue?vue&type=script&lang=js&
 //
@@ -1621,15 +1591,13 @@ var SelectFieldvue_type_template_id_5189b9e3_staticRenderFns = []
 //
 //
 //
-//
-//
 
 /* harmony default export */ var SelectFieldvue_type_script_lang_js_ = ({
-  name: 'survey-select-field',
-  extends: SurveyField,
+  name: 'SurveySelectField',
   components: {
     SelectField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "8cec"))
-  }
+  },
+  extends: SurveyField
 });
 // CONCATENATED MODULE: ./src/Components/Survey/SelectField.vue?vue&type=script&lang=js&
  /* harmony default export */ var Survey_SelectFieldvue_type_script_lang_js_ = (SelectFieldvue_type_script_lang_js_); 
@@ -1643,8 +1611,8 @@ var SelectFieldvue_type_template_id_5189b9e3_staticRenderFns = []
 
 var SelectField_component = Object(componentNormalizer["a" /* default */])(
   Survey_SelectFieldvue_type_script_lang_js_,
-  SelectFieldvue_type_template_id_5189b9e3_render,
-  SelectFieldvue_type_template_id_5189b9e3_staticRenderFns,
+  SelectFieldvue_type_template_id_5f6a336e_render,
+  SelectFieldvue_type_template_id_5f6a336e_staticRenderFns,
   false,
   null,
   null,
@@ -1653,12 +1621,12 @@ var SelectField_component = Object(componentNormalizer["a" /* default */])(
 )
 
 /* harmony default export */ var SelectField = (SelectField_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1c68dd81-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/StateField.vue?vue&type=template&id=0ce300de&
-var StateFieldvue_type_template_id_0ce300de_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('select-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"name":"state","id":_vm.question.id,"label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"errors":_vm.errors,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form.state),callback:function ($$v) {_vm.$set(_vm.form, "state", $$v)},expression:"form.state"}},_vm._l((_vm.page.site.config.states),function(label,value){return _c('option',{domProps:{"value":value,"innerHTML":_vm._s(label)}})}),0)}
-var StateFieldvue_type_template_id_0ce300de_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/StateField.vue?vue&type=template&id=27c4cc54&
+var StateFieldvue_type_template_id_27c4cc54_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('select-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"id":_vm.question.id,"name":"state","label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"errors":_vm.errors,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form.state),callback:function ($$v) {_vm.$set(_vm.form, "state", $$v)},expression:"form.state"}},_vm._l((_vm.page.site.config.states),function(label,value){return _c('option',{domProps:{"value":value,"innerHTML":_vm._s(label)}})}),0)}
+var StateFieldvue_type_template_id_27c4cc54_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Survey/StateField.vue?vue&type=template&id=0ce300de&
+// CONCATENATED MODULE: ./src/Components/Survey/StateField.vue?vue&type=template&id=27c4cc54&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/StateField.vue?vue&type=script&lang=js&
 //
@@ -1676,15 +1644,13 @@ var StateFieldvue_type_template_id_0ce300de_staticRenderFns = []
 //
 //
 //
-//
-//
 
 /* harmony default export */ var StateFieldvue_type_script_lang_js_ = ({
-  name: 'survey-state-field',
-  extends: SurveyField,
+  name: 'SurveyStateField',
   components: {
     SelectField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "8cec"))
-  }
+  },
+  extends: SurveyField
 });
 // CONCATENATED MODULE: ./src/Components/Survey/StateField.vue?vue&type=script&lang=js&
  /* harmony default export */ var Survey_StateFieldvue_type_script_lang_js_ = (StateFieldvue_type_script_lang_js_); 
@@ -1698,8 +1664,8 @@ var StateFieldvue_type_template_id_0ce300de_staticRenderFns = []
 
 var StateField_component = Object(componentNormalizer["a" /* default */])(
   Survey_StateFieldvue_type_script_lang_js_,
-  StateFieldvue_type_template_id_0ce300de_render,
-  StateFieldvue_type_template_id_0ce300de_staticRenderFns,
+  StateFieldvue_type_template_id_27c4cc54_render,
+  StateFieldvue_type_template_id_27c4cc54_staticRenderFns,
   false,
   null,
   null,
@@ -1708,12 +1674,12 @@ var StateField_component = Object(componentNormalizer["a" /* default */])(
 )
 
 /* harmony default export */ var StateField = (StateField_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1c68dd81-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/StreetField.vue?vue&type=template&id=c73beeaa&
-var StreetFieldvue_type_template_id_c73beeaa_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('place-autocomplete-field',{directives:[{name:"query",rawName:"v-query"},{name:"place-autofill",rawName:"v-place-autofill:street",value:(_vm.form.street),expression:"form.street",arg:"street"},{name:"place-autofill",rawName:"v-place-autofill:city",value:(_vm.form.city),expression:"form.city",arg:"city"},{name:"place-autofill",rawName:"v-place-autofill:state",value:(_vm.form.state),expression:"form.state",arg:"state"},{name:"place-autofill",rawName:"v-place-autofill:zip",value:(_vm.form.zip),expression:"form.zip",arg:"zip"}],attrs:{"id":"street","name":"street","api-key":_vm.mapApiKey,"errors":_vm.errors,"label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"placeholder":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form.street),callback:function ($$v) {_vm.$set(_vm.form, "street", $$v)},expression:"form.street"}})}
-var StreetFieldvue_type_template_id_c73beeaa_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/StreetField.vue?vue&type=template&id=4807365f&
+var StreetFieldvue_type_template_id_4807365f_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('place-autocomplete-field',{directives:[{name:"query",rawName:"v-query"},{name:"place-autofill",rawName:"v-place-autofill:street",value:(_vm.form.street),expression:"form.street",arg:"street"},{name:"place-autofill",rawName:"v-place-autofill:city",value:(_vm.form.city),expression:"form.city",arg:"city"},{name:"place-autofill",rawName:"v-place-autofill:state",value:(_vm.form.state),expression:"form.state",arg:"state"},{name:"place-autofill",rawName:"v-place-autofill:zip",value:(_vm.form.zip),expression:"form.zip",arg:"zip"}],attrs:{"id":"street","name":"street","api-key":_vm.mapApiKey,"errors":_vm.errors,"label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"placeholder":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form.street),callback:function ($$v) {_vm.$set(_vm.form, "street", $$v)},expression:"form.street"}})}
+var StreetFieldvue_type_template_id_4807365f_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Survey/StreetField.vue?vue&type=template&id=c73beeaa&
+// CONCATENATED MODULE: ./src/Components/Survey/StreetField.vue?vue&type=template&id=4807365f&
 
 // EXTERNAL MODULE: ./src/Mixins/GoogleMapsApiKey.js
 var GoogleMapsApiKey = __webpack_require__("add3");
@@ -1741,22 +1707,19 @@ var PlaceAutofill = __webpack_require__("8541");
 //
 //
 //
-//
-//
-//
 
 
 
 /* harmony default export */ var StreetFieldvue_type_script_lang_js_ = ({
-  name: 'survey-street-field',
-  extends: SurveyField,
-  mixins: [GoogleMapsApiKey["a" /* default */]],
+  name: 'SurveyStreetField',
   components: {
     PlaceAutocompleteField: () => Promise.all(/* import() | vue-place-autocomplete */[__webpack_require__.e(0), __webpack_require__.e(1)]).then(__webpack_require__.bind(null, "c182"))
   },
   directives: {
     PlaceAutofill: PlaceAutofill["a" /* default */]
   },
+  extends: SurveyField,
+  mixins: [GoogleMapsApiKey["a" /* default */]],
   computed: {
     apiKey() {
       return "AIzaSyAhSv9zWvisiTXRPRw6K8AE0DCmrRMpQcU";
@@ -1776,8 +1739,8 @@ var PlaceAutofill = __webpack_require__("8541");
 
 var StreetField_component = Object(componentNormalizer["a" /* default */])(
   Survey_StreetFieldvue_type_script_lang_js_,
-  StreetFieldvue_type_template_id_c73beeaa_render,
-  StreetFieldvue_type_template_id_c73beeaa_staticRenderFns,
+  StreetFieldvue_type_template_id_4807365f_render,
+  StreetFieldvue_type_template_id_4807365f_staticRenderFns,
   false,
   null,
   null,
@@ -1786,12 +1749,12 @@ var StreetField_component = Object(componentNormalizer["a" /* default */])(
 )
 
 /* harmony default export */ var StreetField = (StreetField_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1c68dd81-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/TextareaField.vue?vue&type=template&id=fe0d9bea&
-var TextareaFieldvue_type_template_id_fe0d9bea_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('textarea-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"placeholder":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"name":_vm.name,"required":_vm.question.required,"id":_vm.question.id,"errors":_vm.errors,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form[_vm.name]),callback:function ($$v) {_vm.$set(_vm.form, _vm.name, $$v)},expression:"form[name]"}})}
-var TextareaFieldvue_type_template_id_fe0d9bea_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/TextareaField.vue?vue&type=template&id=26672553&
+var TextareaFieldvue_type_template_id_26672553_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('textarea-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"id":_vm.question.id,"label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"placeholder":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"name":_vm.name,"required":_vm.question.required,"errors":_vm.errors,"custom":""},on:{"input":_vm.updated},model:{value:(_vm.form[_vm.name]),callback:function ($$v) {_vm.$set(_vm.form, _vm.name, $$v)},expression:"form[name]"}})}
+var TextareaFieldvue_type_template_id_26672553_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Survey/TextareaField.vue?vue&type=template&id=fe0d9bea&
+// CONCATENATED MODULE: ./src/Components/Survey/TextareaField.vue?vue&type=template&id=26672553&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/TextareaField.vue?vue&type=script&lang=js&
 //
@@ -1808,16 +1771,13 @@ var TextareaFieldvue_type_template_id_fe0d9bea_staticRenderFns = []
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ var TextareaFieldvue_type_script_lang_js_ = ({
-  name: 'survey-textarea-field',
-  extends: SurveyField,
+  name: 'SurveyTextareaField',
   components: {
     TextareaField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "31e0"))
-  }
+  },
+  extends: SurveyField
 });
 // CONCATENATED MODULE: ./src/Components/Survey/TextareaField.vue?vue&type=script&lang=js&
  /* harmony default export */ var Survey_TextareaFieldvue_type_script_lang_js_ = (TextareaFieldvue_type_script_lang_js_); 
@@ -1831,8 +1791,8 @@ var TextareaFieldvue_type_template_id_fe0d9bea_staticRenderFns = []
 
 var TextareaField_component = Object(componentNormalizer["a" /* default */])(
   Survey_TextareaFieldvue_type_script_lang_js_,
-  TextareaFieldvue_type_template_id_fe0d9bea_render,
-  TextareaFieldvue_type_template_id_fe0d9bea_staticRenderFns,
+  TextareaFieldvue_type_template_id_26672553_render,
+  TextareaFieldvue_type_template_id_26672553_staticRenderFns,
   false,
   null,
   null,
@@ -1841,12 +1801,12 @@ var TextareaField_component = Object(componentNormalizer["a" /* default */])(
 )
 
 /* harmony default export */ var TextareaField = (TextareaField_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1c68dd81-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/ZipField.vue?vue&type=template&id=6a3c2b7e&
-var ZipFieldvue_type_template_id_6a3c2b7e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"placeholder":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"errors":_vm.errors,"id":"zip","name":"zip","maxlength":"9","x_autocompletetype":"postal-code","custom":""},on:{"input":_vm.updated},model:{value:(_vm.form.zip),callback:function ($$v) {_vm.$set(_vm.form, "zip", $$v)},expression:"form.zip"}})}
-var ZipFieldvue_type_template_id_6a3c2b7e_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/ZipField.vue?vue&type=template&id=0bac6738&
+var ZipFieldvue_type_template_id_0bac6738_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('input-field',{directives:[{name:"query",rawName:"v-query"}],attrs:{"id":"zip","label":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"placeholder":("" + (_vm.question.question) + (_vm.question.required ? '*' : '')),"required":_vm.question.required,"errors":_vm.errors,"name":"zip","maxlength":"9","x_autocompletetype":"postal-code","custom":""},on:{"input":_vm.updated},model:{value:(_vm.form.zip),callback:function ($$v) {_vm.$set(_vm.form, "zip", $$v)},expression:"form.zip"}})}
+var ZipFieldvue_type_template_id_0bac6738_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/Survey/ZipField.vue?vue&type=template&id=6a3c2b7e&
+// CONCATENATED MODULE: ./src/Components/Survey/ZipField.vue?vue&type=template&id=0bac6738&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Survey/ZipField.vue?vue&type=script&lang=js&
 //
@@ -1865,16 +1825,13 @@ var ZipFieldvue_type_template_id_6a3c2b7e_staticRenderFns = []
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ var ZipFieldvue_type_script_lang_js_ = ({
-  name: 'survey-zip-field',
-  extends: SurveyField,
+  name: 'SurveyZipField',
   components: {
     InputField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "46d8"))
-  }
+  },
+  extends: SurveyField
 });
 // CONCATENATED MODULE: ./src/Components/Survey/ZipField.vue?vue&type=script&lang=js&
  /* harmony default export */ var Survey_ZipFieldvue_type_script_lang_js_ = (ZipFieldvue_type_script_lang_js_); 
@@ -1888,8 +1845,8 @@ var ZipFieldvue_type_template_id_6a3c2b7e_staticRenderFns = []
 
 var ZipField_component = Object(componentNormalizer["a" /* default */])(
   Survey_ZipFieldvue_type_script_lang_js_,
-  ZipFieldvue_type_template_id_6a3c2b7e_render,
-  ZipFieldvue_type_template_id_6a3c2b7e_staticRenderFns,
+  ZipFieldvue_type_template_id_0bac6738_render,
+  ZipFieldvue_type_template_id_0bac6738_staticRenderFns,
   false,
   null,
   null,
@@ -1899,8 +1856,6 @@ var ZipField_component = Object(componentNormalizer["a" /* default */])(
 
 /* harmony default export */ var ZipField = (ZipField_component.exports);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Types/Survey.vue?vue&type=script&lang=js&
-//
-//
 //
 //
 //
@@ -1960,8 +1915,7 @@ const COMPONENTS = {
   'zip': 'ZipField'
 };
 /* harmony default export */ var Surveyvue_type_script_lang_js_ = ({
-  name: 'page-type-survey',
-  extends: PageType["a" /* default */],
+  name: 'PageTypeSurvey',
   components: {
     AltEmailField: AltEmailField,
     AltPhoneField: AltPhoneField,
@@ -1981,6 +1935,7 @@ const COMPONENTS = {
     ZipField: ZipField,
     BtnActivity: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "9863"))
   },
+  extends: PageType["a" /* default */],
   methods: {
     component(name) {
       return COMPONENTS[name] || name;

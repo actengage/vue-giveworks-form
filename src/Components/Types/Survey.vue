@@ -1,26 +1,24 @@
 <template>
-
     <div>
         <div v-for="question in page.questions" :key="question.id">
             <component
-                :value="form[`field_${question.id}`]"
-                :is="component(question.type)"
-                :name="`field_${question.id}`"
-                :page="page"
-                :form="form"
-                :errors="errors"
-                :question="question"/>
+            :is="component(question.type)"
+            :value="form[`field_${question.id}`]"
+            :name="`field_${question.id}`"
+            :page="page"
+            :form="form"
+            :errors="errors"
+            :question="question" />
         </div>
 
         <btn-activity
-            size="lg"
-            type="submit"
-            :block="true"
-            orientation="right"
-            :activity="submitting"
-            :label="buttonLabel || page.site.config.giveworks.button.survey"/>
+        size="lg"
+        type="submit"
+        :block="true"
+        orientation="right"
+        :activity="submitting"
+        :label="buttonLabel || page.site.config.giveworks.button.survey" />
     </div>
-
 </template>
 
 <script>
@@ -63,9 +61,7 @@ const COMPONENTS = {
 
 export default {
 
-    name: 'page-type-survey',
-
-    extends: PageType,
+    name: 'PageTypeSurvey',
 
     components: {
         AltEmailField,
@@ -86,6 +82,8 @@ export default {
         ZipField,
         BtnActivity: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/BtnActivity'),
     },
+
+    extends: PageType,
 
     methods: {
 

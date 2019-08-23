@@ -6,12 +6,12 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1c68dd81-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Signups/GoToWebinar.vue?vue&type=template&id=239a662a&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Signups/GoToWebinar.vue?vue&type=template&id=6f40fced&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('fieldset',[_c('legend',[_vm._v("Your information")]),_vm._m(0),_c('input-field',{attrs:{"id":"first","label":"First Name*","placeholder":"First Name*","errors":_vm.errors,"custom":""},model:{value:(_vm.form.first),callback:function ($$v) {_vm.$set(_vm.form, "first", $$v)},expression:"form.first"}}),_c('input-field',{attrs:{"id":"last","label":"Last Name*","placeholder":"Last Name*","errors":_vm.errors,"custom":""},model:{value:(_vm.form.last),callback:function ($$v) {_vm.$set(_vm.form, "last", $$v)},expression:"form.last"}}),_c('input-field',{attrs:{"id":"email","label":"Email*","placeholder":"Email*","errors":_vm.errors,"custom":""},model:{value:(_vm.form.email),callback:function ($$v) {_vm.$set(_vm.form, "email", $$v)},expression:"form.email"}}),(_vm.page.options.show_source)?_c('input-field',{attrs:{"id":"source","label":"Source","placeholder":"Source","errors":_vm.errors,"custom":""},model:{value:(_vm.form.source),callback:function ($$v) {_vm.$set(_vm.form, "source", $$v)},expression:"form.source"}}):_vm._e(),(_vm.address || _vm.page.options.show_address)?_c('place-autocomplete-field',{directives:[{name:"place-autofill",rawName:"v-place-autofill:street.query",value:(_vm.form.address),expression:"form.address",arg:"street",modifiers:{"query":true}},{name:"place-autofill",rawName:"v-place-autofill:city",value:(_vm.form.city),expression:"form.city",arg:"city"},{name:"place-autofill",rawName:"v-place-autofill:state.short",value:(_vm.form.state),expression:"form.state",arg:"state",modifiers:{"short":true}},{name:"place-autofill",rawName:"v-place-autofill:zip",value:(_vm.form.zip_code),expression:"form.zip_code",arg:"zip"}],attrs:{"name":"address","label":"Address","placeholder":"Address","api-key":_vm.mapApiKey,"errors":_vm.errors,"custom":""},model:{value:(_vm.form.address),callback:function ($$v) {_vm.$set(_vm.form, "address", $$v)},expression:"form.address"}}):_vm._e(),(_vm.page.options.show_city)?_c('input-field',{attrs:{"id":"city","label":"City","placeholder":"City","errors":_vm.errors,"custom":""},model:{value:(_vm.form.city),callback:function ($$v) {_vm.$set(_vm.form, "city", $$v)},expression:"form.city"}}):_vm._e(),(_vm.page.options.show_state)?_c('input-field',{attrs:{"id":"state","label":"State","placeholder":"State","errors":_vm.errors,"custom":""},model:{value:(_vm.form.state),callback:function ($$v) {_vm.$set(_vm.form, "state", $$v)},expression:"form.state"}}):_vm._e(),(_vm.page.options.show_zip)?_c('input-field',{attrs:{"id":"zip_code","label":"Zip Code","placeholder":"Zip Code","errors":_vm.errors,"custom":""},model:{value:(_vm.form.zip_code),callback:function ($$v) {_vm.$set(_vm.form, "zip_code", $$v)},expression:"form.zip_code"}}):_vm._e(),(_vm.page.options.show_country)?_c('input-field',{attrs:{"id":"country","label":"Country","placeholder":"Country","errors":_vm.errors,"custom":""},model:{value:(_vm.form.country),callback:function ($$v) {_vm.$set(_vm.form, "country", $$v)},expression:"form.country"}}):_vm._e(),(_vm.page.options.show_phone)?_c('input-field',{attrs:{"id":"phone","label":"Phone","placeholder":"Phone","errors":_vm.errors,"custom":""},model:{value:(_vm.form.phone),callback:function ($$v) {_vm.$set(_vm.form, "phone", $$v)},expression:"form.phone"}}):_vm._e(),(_vm.page.options.show_organization)?_c('input-field',{attrs:{"id":"organization","label":"Organization","placeholder":"Organization","errors":_vm.errors,"custom":""},model:{value:(_vm.form.organization),callback:function ($$v) {_vm.$set(_vm.form, "organization", $$v)},expression:"form.organization"}}):_vm._e(),(_vm.page.options.show_job_title)?_c('input-field',{attrs:{"id":"job_title","label":"Job Title","placeholder":"Job Title","errors":_vm.errors,"custom":""},model:{value:(_vm.form.job_title),callback:function ($$v) {_vm.$set(_vm.form, "job_title", $$v)},expression:"form.job_title"}}):_vm._e(),(_vm.page.options.show_questions)?_c('textarea-field',{directives:[{name:"autogrow",rawName:"v-autogrow"}],attrs:{"id":"questions_comments","label":"Questions and Comments","placeholder":"Questions and Comments","errors":_vm.errors,"custom":""},model:{value:(_vm.form.questions_comments),callback:function ($$v) {_vm.$set(_vm.form, "questions_comments", $$v)},expression:"form.questions_comments"}}):_vm._e(),(_vm.page.options.show_industry)?_c('input-field',{attrs:{"id":"industry","label":"Industry","placeholder":"Industry","errors":_vm.errors,"custom":""},model:{value:(_vm.form.industry),callback:function ($$v) {_vm.$set(_vm.form, "industry", $$v)},expression:"form.industry"}}):_vm._e(),(_vm.page.options.show_employees)?_c('input-field',{attrs:{"id":"number_employees","label":"Number of Employees","placeholder":"Number of Employees","errors":_vm.errors,"custom":""},model:{value:(_vm.form.number_employees),callback:function ($$v) {_vm.$set(_vm.form, "number_employees", $$v)},expression:"form.number_employees"}}):_vm._e(),(_vm.page.options.show_timeframe)?_c('input-field',{attrs:{"id":"purchasing_timeframe","label":"Purchasing Timeframe","placeholder":"Purchasing Timeframe","errors":_vm.errors,"custom":""},model:{value:(_vm.form.purchasing_timeframe),callback:function ($$v) {_vm.$set(_vm.form, "purchasing_timeframe", $$v)},expression:"form.purchasing_timeframe"}}):_vm._e(),(_vm.page.options.show_role)?_c('input-field',{attrs:{"id":"purchasing_role","label":"Purchasing Role","placeholder":"Purchasing Role","errors":_vm.errors,"custom":""},model:{value:(_vm.form.purchasing_role),callback:function ($$v) {_vm.$set(_vm.form, "purchasing_role", $$v)},expression:"form.purchasing_role"}}):_vm._e(),_c('btn-activity',{attrs:{"size":"lg","type":"submit","orientation":"right","activity":_vm.submitting,"block":true,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.signup}})],1)}
 var staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('p',[_c('em',[_vm._v("* Indicates required fields")])])}]
 
 
-// CONCATENATED MODULE: ./src/Components/Signups/GoToWebinar.vue?vue&type=template&id=239a662a&
+// CONCATENATED MODULE: ./src/Components/Signups/GoToWebinar.vue?vue&type=template&id=6f40fced&
 
 // EXTERNAL MODULE: ./src/Mixins/FormComponent.js
 var FormComponent = __webpack_require__("bb4b");
@@ -80,13 +80,101 @@ var PlaceAutofill = __webpack_require__("8541");
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 
 /* harmony default export */ var GoToWebinarvue_type_script_lang_js_ = ({
-  name: 'go-to-webinar',
-  mixins: [FormComponent["a" /* default */], GoogleMapsApiKey["a" /* default */]],
+  name: 'GoToWebinar',
   components: {
     InputField: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "46d8")),
     BtnActivity: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "9863")),
@@ -97,6 +185,7 @@ var PlaceAutofill = __webpack_require__("8541");
     Autogrow: Autogrow["a" /* default */],
     PlaceAutofill: PlaceAutofill["a" /* default */]
   },
+  mixins: [FormComponent["a" /* default */], GoogleMapsApiKey["a" /* default */]],
   props: {
     submitting: Boolean
   },

@@ -1,18 +1,15 @@
 <template>
-
     <textarea-field
-        v-model="form[name]"
-        v-query
-        :label="`${question.question}${question.required ? '*' : ''}`"
-        :placeholder="`${question.question}${question.required ? '*' : ''}`"
-        :name="name"
-        :required="question.required"
-        :id="question.id"
-        :errors="errors"
-        @input="updated"
-        custom
-    />
-
+    :id="question.id"
+    v-model="form[name]"
+    v-query
+    :label="`${question.question}${question.required ? '*' : ''}`"
+    :placeholder="`${question.question}${question.required ? '*' : ''}`"
+    :name="name"
+    :required="question.required"
+    :errors="errors"
+    custom
+    @input="updated" />
 </template>
 
 <script>
@@ -20,13 +17,13 @@ import SurveyField from './SurveyField';
 
 export default {
 
-    name: 'survey-textarea-field',
-
-    extends: SurveyField,
+    name: 'SurveyTextareaField',
 
     components: {
         TextareaField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/TextareaField')
-    }
+    },
+
+    extends: SurveyField
 
 };
 </script>

@@ -1,19 +1,16 @@
 <template>
-
     <input-field
-        v-model="form.email"
-        v-query
-        type="email"
-        name="email"
-        id="email"
-        :label="`${question.question}${question.required ? '*' : ''}`"
-        :placeholder="`${question.question}${question.required ? '*' : ''}`"
-        :required="question.required"
-        :errors="errors"
-        @input="updated"
-        custom
-    />
-
+    id="email"
+    v-model="form.email"
+    v-query
+    type="email"
+    name="email"
+    :label="`${question.question}${question.required ? '*' : ''}`"
+    :placeholder="`${question.question}${question.required ? '*' : ''}`"
+    :required="question.required"
+    :errors="errors"
+    custom
+    @input="updated" />
 </template>
 
 <script>
@@ -21,13 +18,13 @@ import SurveyField from './SurveyField';
 
 export default {
 
-    name: 'survey-primary-email-field',
-
-    extends: SurveyField,
+    name: 'SurveyPrimaryEmailField',
 
     components: {
         InputField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/InputField')
-    }
+    },
+
+    extends: SurveyField
 
 };
 </script>

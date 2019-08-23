@@ -1,22 +1,38 @@
 <template>
+    <fieldset>
+        <!-- <h3 v-if="legends">Employment Information</h3> -->
 
-	<fieldset>
+        <p v-if="!form.recurring">
+            <small class="text-muted" v-html="employmentOccurMessage" />
+        </p>
 
-		<!-- <h3 v-if="legends">Employment Information</h3> -->
-
-		<p v-if="!form.recurring">
-			<small class="text-muted" v-html="employmentOccurMessage"/>
-		</p>
-
-		<input-field v-if="!isRetired" ref="employer" v-model="form.employer" v-query id="employer" name="employer" label="Employer" placeholder="Employer" :disabled="isRetired" :errors="errors" custom/>
-		<input-field v-if="!isRetired" ref="occupation" v-model="form.occupation" v-query id="occupation" name="occupation" label="Occupation" placeholder="Occupation" :disabled="isRetired" :errors="errors" custom/>
+        <input-field v-if="!isRetired"
+        id="employer"
+        ref="employer"
+        v-model="form.employer"
+        v-query
+        name="employer"
+        label="Employer"
+        placeholder="Employer"
+        :disabled="isRetired"
+        :errors="errors"
+        custom />
+        <input-field v-if="!isRetired"
+        id="occupation"
+        ref="occupation"
+        v-model="form.occupation"
+        v-query
+        name="occupation"
+        label="Occupation"
+        placeholder="Occupation"
+        :disabled="isRetired"
+        :errors="errors"
+        custom />
 		
         <div class="form-group">
-            <checkbox-field v-model="form.retired" v-query label="I'm retired" value="1" custom/>
+            <checkbox-field v-model="form.retired" v-query label="I'm retired" value="1" custom />
         </div>
-        
-	</fieldset>
-
+    </fieldset>
 </template>
 
 <script>
@@ -25,12 +41,20 @@ import FormComponent from '../../Mixins/FormComponent';
 
 export default {
 
-    name: 'employment-info-fieldset',
+    name: 'EmploymentInfoFieldset',
 
     components: {
         InputField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/InputField'),
         CheckboxField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/CheckboxField'),
     },
+
+    directives: {
+        Query
+    },
+
+    mixins: [
+        FormComponent
+    ],
 
     props: {
         legends: {
@@ -39,12 +63,16 @@ export default {
         }
     },
 
-    mixins: [
-        FormComponent
-    ],
+    computed: {
 
-    directives: {
-        Query
+        isRetired() {
+            return !!(this.form.retired && this.form.retired.length);
+        },
+
+        employmentOccurMessage() {
+            return this.page.site.emp_occ_msg || this.page.site.config.giveworks.emp_occ_msg;
+        }
+
     },
 
     watch: {
@@ -56,18 +84,6 @@ export default {
             else {
                 this.form.employer = this.form.occupation = '';
             }
-        }
-
-    },
-
-    computed: {
-
-        isRetired() {
-            return !!(this.form.retired && this.form.retired.length);
-        },
-
-        employmentOccurMessage() {
-            return this.page.site.emp_occ_msg || this.page.site.config.giveworks.emp_occ_msg;
         }
 
     }

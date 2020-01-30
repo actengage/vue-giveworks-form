@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "precache-manifest.eade027849e617d071f6894b013a7a2c.js"
+  "precache-manifest.81eb5afb0027f1fbe02e2075d8d0e45b.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "vue-giveworks-form"});

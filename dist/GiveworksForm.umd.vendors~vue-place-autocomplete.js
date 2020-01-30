@@ -122,7 +122,7 @@ function addEmptyClass(el, vnode) {
          *
          * @property String|Boolean
          */
-        error: String,
+        error: [Boolean, String],
 
         /**
          * An inline field validation errors passed as object with key/value
@@ -167,6 +167,13 @@ function addEmptyClass(el, vnode) {
             type: String,
             default: 'form-control'
         },
+
+        /**
+         * The default label class assigned to the label element
+         *
+         * @property String
+         */
+        labelClass: [Object, String],
 
         /**
          * Hide the label for browsers, but leave it for screen readers.
@@ -253,7 +260,8 @@ function addEmptyClass(el, vnode) {
                     removeClass(el, vnode, FOCUS_CLASS);
                 });
 
-                el.addEventListener('input', event => {
+                
+                el.addEventListener('change', event => {
                     changedValue(event.target, event.target.value);
                 });
 
@@ -269,15 +277,15 @@ function addEmptyClass(el, vnode) {
                     });
                 });
 
-                el.setAttribute('data-selected-index', el.selectedIndex);
+                if(el.selectedIndex >= 0) {
+                    el.setAttribute('data-selected-index', el.selectedIndex);
+                }
             },
             inserted(el, binding, vnode) {
-                el.selectedIndex = el.getAttribute('data-selected-index');
-                
                 addEmptyClass(el, vnode);
 
-                if(el.selectedIndex > -1) {
-                    addClass(el, vnode, CHANGED_CLASS);
+                if(typeof el.selectedIndex === 'number' && el.selectedIndex > -1) {
+                    // addClass(el, vnode, CHANGED_CLASS);
                 }
             },
             update(el, binding, vnode) {
@@ -375,11 +383,15 @@ function addEmptyClass(el, vnode) {
         },
 
         invalidFeedback() {
+            if(this.error) {
+                return this.error;
+            }
+
             const errors = this.getFieldErrors();
 
-            return this.error || (
-                Object(isArray["a" /* default */])(errors) ? errors.join('<br>') : errors
-            );
+            return Object(isArray["a" /* default */])(errors) ? errors.filter(error => {
+                return error && typeof error === 'string';
+            }).join('<br>') : errors;
         },
 
         validFeedback() {
@@ -420,7 +432,7 @@ function addEmptyClass(el, vnode) {
             const classes = {};
 
             for(let i in this.$attrs) {
-                if(i.match(/^bg|text|border|bg-gradient-/)) {
+                if(i.match(/^bg|text|border|bg-gradient-/) && !!this.$attrs[i] || this.$attrs[i] === undefined) {
                     classes[i] = true;
                 }
             }
@@ -458,7 +470,7 @@ function addEmptyClass(el, vnode) {
 
 "use strict";
 
-// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js + 32 modules
+// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js + 33 modules
 var Functions = __webpack_require__("ca14");
 
 // CONCATENATED MODULE: ./node_modules/vue-interface/src/Mixins/MergeClasses/MergeClasses.js
@@ -503,7 +515,7 @@ var Functions = __webpack_require__("ca14");
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-place-autocomplete/src/PlaceAutocompleteField.vue?vue&type=template&id=6be410b0&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"629a4660-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-place-autocomplete/src/PlaceAutocompleteField.vue?vue&type=template&id=6be410b0&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"autocomplete-field",on:{"keydown":_vm.onKeydown,"keyup":_vm.onKeyup}},[_c('input-field',_vm._b({directives:[{name:"bind-events",rawName:"v-bind-events"}],attrs:{"label":_vm.label,"errors":_vm.errors,"value":_vm.value,"custom":_vm.custom,"autocomplete":"no"},on:{"blur":_vm.onBlur,"focus":_vm.onFocus,"input":function($event){return _vm.$emit('input', _vm.query)}},model:{value:(_vm.query),callback:function ($$v) {_vm.query=$$v},expression:"query"}},'input-field',_vm.$attrs,false),[(_vm.showActivityIndicator)?_c('activity-indicator',{attrs:{"size":"xs","type":"spinner"}}):_vm._e()],1),(_vm.predictions && _vm.showPredictions)?_c('place-autocomplete-list',{attrs:{"items":_vm.predictions},on:{"item:click":_vm.onItemClick,"item:blur":_vm.onItemBlur}}):_vm._e()],1)}
 var staticRenderFns = []
 
@@ -534,14 +546,14 @@ function geocode(options) {
 // EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Script/index.js + 1 modules
 var Script = __webpack_require__("cfc3");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-place-autocomplete/src/PlaceAutocompleteList.vue?vue&type=template&id=6bef404f&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"629a4660-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-place-autocomplete/src/PlaceAutocompleteList.vue?vue&type=template&id=6bef404f&
 var PlaceAutocompleteListvue_type_template_id_6bef404f_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"autocomplete-list-wrapper"},[_c('ul',{staticClass:"autocomplete-list"},_vm._l((_vm.items),function(item,i){return _c('place-autocomplete-list-item',{key:item.id,attrs:{"item":item},on:{"click":_vm.onClick,"focus":_vm.onFocus,"blur":_vm.onBlur}},[_vm._v("\n            "+_vm._s(item[_vm.display])+"\n        ")])}),1)])}
 var PlaceAutocompleteListvue_type_template_id_6bef404f_staticRenderFns = []
 
 
 // CONCATENATED MODULE: ./node_modules/vue-place-autocomplete/src/PlaceAutocompleteList.vue?vue&type=template&id=6bef404f&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-place-autocomplete/src/PlaceAutocompleteListItem.vue?vue&type=template&id=6a77178f&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"629a4660-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-place-autocomplete/src/PlaceAutocompleteListItem.vue?vue&type=template&id=6a77178f&
 var PlaceAutocompleteListItemvue_type_template_id_6a77178f_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('li',{staticClass:"autocomplete-list-item",on:{"focus":_vm.onFocus,"onBlur":_vm.onBlur}},[_c('a',{attrs:{"href":"#","tabindex":"0"},on:{"click":function($event){$event.preventDefault();return _vm.onClick($event)},"focus":_vm.onFocus,"blur":_vm.onBlur}},[_c('span',{staticClass:"autocomplete-list-item-icon"}),_c('span',{staticClass:"autocomplete-list-item-label"},[_vm._t("default")],2)])])}
 var PlaceAutocompleteListItemvue_type_template_id_6a77178f_staticRenderFns = []
 

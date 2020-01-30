@@ -122,7 +122,7 @@ function addEmptyClass(el, vnode) {
          *
          * @property String|Boolean
          */
-        error: String,
+        error: [Boolean, String],
 
         /**
          * An inline field validation errors passed as object with key/value
@@ -167,6 +167,13 @@ function addEmptyClass(el, vnode) {
             type: String,
             default: 'form-control'
         },
+
+        /**
+         * The default label class assigned to the label element
+         *
+         * @property String
+         */
+        labelClass: [Object, String],
 
         /**
          * Hide the label for browsers, but leave it for screen readers.
@@ -253,7 +260,8 @@ function addEmptyClass(el, vnode) {
                     removeClass(el, vnode, FOCUS_CLASS);
                 });
 
-                el.addEventListener('input', event => {
+                
+                el.addEventListener('change', event => {
                     changedValue(event.target, event.target.value);
                 });
 
@@ -269,15 +277,15 @@ function addEmptyClass(el, vnode) {
                     });
                 });
 
-                el.setAttribute('data-selected-index', el.selectedIndex);
+                if(el.selectedIndex >= 0) {
+                    el.setAttribute('data-selected-index', el.selectedIndex);
+                }
             },
             inserted(el, binding, vnode) {
-                el.selectedIndex = el.getAttribute('data-selected-index');
-                
                 addEmptyClass(el, vnode);
 
-                if(el.selectedIndex > -1) {
-                    addClass(el, vnode, CHANGED_CLASS);
+                if(typeof el.selectedIndex === 'number' && el.selectedIndex > -1) {
+                    // addClass(el, vnode, CHANGED_CLASS);
                 }
             },
             update(el, binding, vnode) {
@@ -375,11 +383,15 @@ function addEmptyClass(el, vnode) {
         },
 
         invalidFeedback() {
+            if(this.error) {
+                return this.error;
+            }
+
             const errors = this.getFieldErrors();
 
-            return this.error || (
-                Object(isArray["a" /* default */])(errors) ? errors.join('<br>') : errors
-            );
+            return Object(isArray["a" /* default */])(errors) ? errors.filter(error => {
+                return error && typeof error === 'string';
+            }).join('<br>') : errors;
         },
 
         validFeedback() {
@@ -492,7 +504,7 @@ exports.svgPathData = svgPathData;
             const classes = {};
 
             for(let i in this.$attrs) {
-                if(i.match(/^bg|text|border|bg-gradient-/)) {
+                if(i.match(/^bg|text|border|bg-gradient-/) && !!this.$attrs[i] || this.$attrs[i] === undefined) {
                     classes[i] = true;
                 }
             }
@@ -512,7 +524,7 @@ exports.svgPathData = svgPathData;
 
 "use strict";
 
-// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js + 32 modules
+// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js + 33 modules
 var Functions = __webpack_require__("ca14");
 
 // CONCATENATED MODULE: ./node_modules/vue-interface/src/Helpers/Elapsed/Elapsed.js
@@ -612,7 +624,7 @@ _fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_9__[/* library */ "c"
 
 "use strict";
 
-// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js + 32 modules
+// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js + 33 modules
 var Functions = __webpack_require__("ca14");
 
 // CONCATENATED MODULE: ./node_modules/vue-interface/src/Helpers/Wait/Wait.js
@@ -1228,9 +1240,10 @@ function classList(props) {
     'fa-fw': props.fixedWidth,
     'fa-border': props.border,
     'fa-li': props.listItem,
+    'fa-inverse': props.inverse,
     'fa-flip-horizontal': props.flip === 'horizontal' || props.flip === 'both',
     'fa-flip-vertical': props.flip === 'vertical' || props.flip === 'both'
-  }, defineProperty(_classes, 'fa-' + props.size, props.size !== null), defineProperty(_classes, 'fa-rotate-' + props.rotation, props.rotation !== null), defineProperty(_classes, 'fa-pull-' + props.pull, props.pull !== null), _classes);
+  }, defineProperty(_classes, 'fa-' + props.size, props.size !== null), defineProperty(_classes, 'fa-rotate-' + props.rotation, props.rotation !== null), defineProperty(_classes, 'fa-pull-' + props.pull, props.pull !== null), defineProperty(_classes, 'fa-swap-opacity', props.swapOpacity), _classes);
 
   return Object.keys(classes).map(function (key) {
     return classes[key] ? key : null;
@@ -1314,6 +1327,10 @@ var FontAwesomeIcon = {
         return [90, 180, 270].indexOf(parseInt(value, 10)) > -1;
       }
     },
+    swapOpacity: {
+      type: Boolean,
+      default: false
+    },
     size: {
       type: String,
       default: null,
@@ -1336,6 +1353,10 @@ var FontAwesomeIcon = {
     title: {
       type: String,
       default: null
+    },
+    inverse: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -1403,18 +1424,37 @@ var FontAwesomeLayersText = {
     transform: {
       type: [String, Object],
       default: null
+    },
+    counter: {
+      type: Boolean,
+      default: false
+    },
+    position: {
+      type: String,
+      default: null,
+      validator: function validator(value) {
+        return ['bottom-left', 'bottom-right', 'top-left', 'top-right'].indexOf(value) > -1;
+      }
     }
   },
 
   render: function render(createElement, context) {
+    var familyPrefix = _fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_0__[/* config */ "a"].familyPrefix;
     var props = context.props;
+
+
+    var classes = objectWithKey('classes', [].concat(toConsumableArray(props.counter ? [familyPrefix + '-layers-counter'] : []), toConsumableArray(props.position ? [familyPrefix + '-layers-' + props.position] : [])));
 
     var transform = objectWithKey('transform', typeof props.transform === 'string' ? _fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_0__[/* parse */ "d"].transform(props.transform) : props.transform);
 
-    var renderedText = Object(_fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_0__[/* text */ "e"])(props.value.toString(), _extends({}, transform));
+    var renderedText = Object(_fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_0__[/* text */ "e"])(props.value.toString(), _extends({}, transform, classes));
 
     var abstract = renderedText.abstract;
 
+
+    if (props.counter) {
+      abstract[0].attributes.class = abstract[0].attributes.class.replace('fa-layers-text', '');
+    }
 
     var convertCurry = convert.bind(null, createElement);
 
@@ -1433,7 +1473,7 @@ var FontAwesomeLayersText = {
 
 "use strict";
 
-// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js + 32 modules
+// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js + 33 modules
 var Functions = __webpack_require__("ca14");
 
 // CONCATENATED MODULE: ./node_modules/vue-interface/src/Mixins/MergeClasses/MergeClasses.js
@@ -2802,7 +2842,7 @@ var p = config.measurePerformance && PERFORMANCE && PERFORMANCE.mark && PERFORMA
   mark: noop$1,
   measure: noop$1
 };
-var preamble = "FA \"5.10.2\"";
+var preamble = "FA \"5.12.0\"";
 
 var begin = function begin(name) {
   p.mark("".concat(preamble, " ").concat(name, " begins"));
@@ -3068,6 +3108,7 @@ var mutators = {
 
     var forSvg = new RegExp("".concat(config.familyPrefix, "-.*"));
     delete abstract[0].attributes.style;
+    delete abstract[0].attributes.id;
     var splitClasses = abstract[0].attributes.class.split(' ').reduce(function (acc, cls) {
       if (cls === config.replacementClass || cls.match(forSvg)) {
         acc.toSvg.push(cls);
@@ -3512,6 +3553,12 @@ function findIcon(iconName, prefix) {
     if (iconName && prefix && styles$2[prefix] && styles$2[prefix][iconName]) {
       var icon = styles$2[prefix][iconName];
       return resolve(asFoundIcon(icon));
+    }
+
+    var headers = {};
+
+    if (_typeof(WINDOW.FontAwesomeKitConfig) === 'object' && typeof window.FontAwesomeKitConfig.token === 'string') {
+      headers['fa-kit-token'] = WINDOW.FontAwesomeKitConfig.token;
     }
 
     if (iconName && prefix && !config.showMissingIcons) {

@@ -96,7 +96,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
 /******/ 		else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
 /******/ 			promises.push(installedCssChunks[chunkId] = new Promise(function(resolve, reject) {
-/******/ 				var href = "css/" + ({"0":"vendors~vue-credit-card-field~vue-interface~vue-place-autocomplete","1":"vendors~vue-place-autocomplete","3":"contact-info-fieldset","4":"donation-type","5":"employment-info-fieldset","6":"go-to-webinar","7":"petition-type","8":"signup-type","9":"survey-type","10":"vendors~donation-type","11":"vendors~vue-credit-card-field","12":"vendors~vue-interface"}[chunkId]||chunkId) + "." + {"0":"c240a6cf","1":"0f9eb737","3":"31d6cfe0","4":"5346b420","5":"31d6cfe0","6":"31d6cfe0","7":"31d6cfe0","8":"31d6cfe0","9":"31d6cfe0","10":"31d6cfe0","11":"1626ab72","12":"beda44dd","13":"31d6cfe0"}[chunkId] + ".css";
+/******/ 				var href = "css/" + ({"0":"vendors~vue-credit-card-field~vue-interface~vue-place-autocomplete","1":"vendors~vue-place-autocomplete","3":"contact-info-fieldset","4":"donation-type","5":"employment-info-fieldset","6":"go-to-webinar","7":"petition-type","8":"signup-type","9":"survey-type","10":"vendors~donation-type","11":"vendors~vue-credit-card-field","12":"vendors~vue-interface"}[chunkId]||chunkId) + "." + {"0":"ce632dd9","1":"0f9eb737","3":"31d6cfe0","4":"5346b420","5":"31d6cfe0","6":"31d6cfe0","7":"31d6cfe0","8":"31d6cfe0","9":"31d6cfe0","10":"31d6cfe0","11":"252dcd99","12":"beda44dd","13":"31d6cfe0"}[chunkId] + ".css";
 /******/ 				var fullhref = __webpack_require__.p + href;
 /******/ 				var existingLinkTags = document.getElementsByTagName("link");
 /******/ 				for(var i = 0; i < existingLinkTags.length; i++) {
@@ -2364,7 +2364,9 @@ var _$inlineScriptContent_34 = {
         DOMContentLoaded = true;
       }
 
-      if (typeof prev === 'function') prev.apply(this, arguments);
+      try {
+        prev.apply(this, arguments);
+      } catch (e) {}
     };
 
     var _lastScript = null;
@@ -2391,9 +2393,9 @@ var _$inlineScriptContent_34 = {
       var htmlLines = ['<!-- DOC START -->'].concat(html.split('\n'));
       var zeroBasedLine = lineNumber - 1;
       var start = Math.max(zeroBasedLine - 3, 0);
-      var end = Math.min(zeroBasedLine + 3, htmlLines.length - 1);
+      var end = Math.min(zeroBasedLine + 3, htmlLines.length);
       return __reduce_34(htmlLines.slice(start, end), function (accum, line, i) {
-        accum[i + lineNumber - 3] = line.length <= MAX_LINE_LENGTH ? line : line.substr(0, MAX_LINE_LENGTH);
+        accum[start + 1 + i] = line.length <= MAX_LINE_LENGTH ? line : line.substr(0, MAX_LINE_LENGTH);
         return accum;
       }, {});
     };
@@ -2862,21 +2864,35 @@ var monkeyPatchFetch = function () {
   var oldFetch = win.fetch;
 
   win.fetch = function fetch() {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
+    var _arguments = arguments;
+    var urlOrRequest = arguments[0];
+    var options = arguments[1];
+    var method;
+    var url = null;
+
+    if (urlOrRequest && typeof urlOrRequest === 'object') {
+      url = urlOrRequest.url;
+
+      if (options && 'method' in options) {
+        method = options.method;
+      } else if (urlOrRequest && 'method' in urlOrRequest) {
+        method = urlOrRequest.method;
+      }
+    } else {
+      url = urlOrRequest;
+
+      if (options && 'method' in options) {
+        method = options.method;
+      }
     }
 
-    var url = args[0],
-        options = args[1];
-    var method = 'GET';
-
-    if (options && options.method) {
-      method = options.method;
+    if (method === undefined) {
+      method = 'GET';
     }
 
     return new Promise(function (resolve, reject) {
       // pass through to native fetch
-      oldFetch.apply(void 0, args).then(function (response) {
+      oldFetch.apply(void 0, _arguments).then(function (response) {
         handleFetchSuccess(response, method, url);
         resolve(response);
       })["catch"](function (error) {
@@ -3199,7 +3215,7 @@ var _$notifier_2 = {};
 function ___extends_2() { ___extends_2 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return ___extends_2.apply(this, arguments); }
 
 var name = 'Bugsnag JavaScript';
-var version = '6.4.0';
+var version = '6.5.0';
 var url = 'https://github.com/bugsnag/bugsnag-js';
 
 /* removed: var _$BugsnagClient_4 = require('@bugsnag/core/client'); */;
@@ -3294,10 +3310,8 @@ _$notifier_2 = function (opts) {
   bugsnag._logger.debug("Loaded!");
 
   return bugsnag.config.autoCaptureSessions ? bugsnag.startSession() : bugsnag;
-}; // Stub this value because this is what the type interface looks like
-// (types/bugsnag.d.ts). This is only an issue in Angular's development
-// mode as its TS/DI thingy attempts to use this value at runtime.
-// In most other situations, TS only uses the types at compile time.
+}; // Angular's DI system needs this interface to match what is exposed
+// in the type definition file (types/bugsnag.d.ts)
 
 
 _$notifier_2.Bugsnag = {
@@ -3336,7 +3350,7 @@ return _$notifier_2;
 var external_axios_ = __webpack_require__("cebe");
 var external_axios_default = /*#__PURE__*/__webpack_require__.n(external_axios_);
 
-// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js + 32 modules
+// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js + 33 modules
 var Functions = __webpack_require__("ca14");
 
 // CONCATENATED MODULE: ./node_modules/vue-interface/src/Support/BaseClass.js
@@ -3395,6 +3409,12 @@ class BaseClass_BaseClass {
 
 class Response_Response extends BaseClass_BaseClass {
     constructor(data) {
+        if(data instanceof Error) {
+            data = Object.assign({
+                error: data
+            }, data.response);
+        }
+        
         super(Object(Functions["e" /* extend */])({
             date: new Date()
         }, data));
@@ -3475,7 +3495,7 @@ class Request_Request extends BaseClass_BaseClass {
         return new Promise((resolve, reject) => {
             external_axios_default()(this.options).then(
                 response => resolve(this.response = new Response_Response(response)),
-                error => reject(this.response = new Response_Response(error.response))
+                error => reject(this.response = new Response_Response(error))
             );
         });
     }
@@ -3491,15 +3511,25 @@ class Request_Request extends BaseClass_BaseClass {
     }
 
     get options() {
+        const defaults = Object(Functions["o" /* pickBy */])(DEFAULTS, value => {
+            if(typeof value === 'array') {
+                return !!value.length;
+            }
+            else if(typeof value === 'object') {
+                return !!Object.entries(value).length;
+            }
+            else {
+                return !!value;
+            }
+        });
+
         const merged = Object(Functions["c" /* deepExtend */])({
             cancelToken: new external_axios_default.a.CancelToken(cancel => {
                 this.cancel = cancel;
 
                 return cancel;
             })
-        }, Object(Functions["o" /* pickBy */])(DEFAULTS, value => {
-            return !!value.length;
-        }), this.getPublicAttributes());
+        }, defaults, this.getPublicAttributes());
 
         if(this.data instanceof FormData) {
             merged.data = this.data;
@@ -3782,7 +3812,7 @@ function isUndefined(value) {
 // EXTERNAL MODULE: ./node_modules/vue-interface/src/Http/Request/index.js + 3 modules
 var Request = __webpack_require__("1757");
 
-// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js + 32 modules
+// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js + 33 modules
 var Functions = __webpack_require__("ca14");
 
 // CONCATENATED MODULE: ./node_modules/vue-interface/src/Http/Model/Model.js
@@ -3847,6 +3877,14 @@ class Model_Model {
         ]
             .filter(value => !!value)
             .concat([].slice.call(arguments))
+            .map(part => {                
+                Object.entries(this.attributes)
+                    .forEach(([key, value]) => {
+                        part = part.toString().replace(new RegExp(`\:${key}`), value);
+                    });
+
+                return part;
+            })
             .join('/');
     }
 
@@ -3940,8 +3978,17 @@ class Model_Model {
      *
      * @return array
      */
-    getAttributes() {
+    get attributes() {
         return this.$attributes;
+    }
+
+    /**
+     * Get all the defined attributes.
+     *
+     * @return array
+     */
+    getAttributes() {
+        return this.attributes;
     }
 
     /**
@@ -3992,6 +4039,15 @@ class Model_Model {
     }
 
     /**
+     * Set the attributes property.
+     *
+     * @return array
+     */
+    set attributes(value) {
+        return this.$attributes = value;
+    }
+
+    /**
      * Set an array or object of data as attributes.
      *
      * @param attributes array|object
@@ -4015,15 +4071,13 @@ class Model_Model {
      * @return void
      */
     setAttribute(key, value) {
-        if(this.getAttribute(key) !== value) {
-            this.handleAttributeChange(key, value);
+        this.handleAttributeChange(key, value);
 
-            if(Object(Functions["m" /* isUndefined */])(value)) {
-                delete this.$attributes[key];
-            }
-            else {
-                this.$attributes[key] = value;
-            }
+        if(Object(Functions["m" /* isUndefined */])(value)) {
+            delete this.$attributes[key];
+        }
+        else {
+            this.$attributes[key] = value;
         }
     }
 
@@ -4131,21 +4185,25 @@ class Model_Model {
         this.fill(fill);
 
         return new Promise((resolve, reject) => {
-            const data = !this.hasFiles() ? this.toJSON() : this.toFormData();
-            const uri = config.uri || this.uri();
+            const data = !this.hasFiles() ?
+                this.toJSON() :
+                this.toFormData();
+            
             const method = config.method || (
                 !this.exists() || this.hasFiles() ? 'post' : 'put'
             );
 
-            this.$request = this.constructor.request(method, uri, config);
+            this.$request = this.constructor.request(method, config.uri || this.uri(), config);
 
             if(this.hasFiles()) {
                 this.$request.headers['Content-Type'] = 'multipart/form-data';
             }
-
-            this.$request.send({
-                data: data
-            }).then(response => resolve(this.fill(response.data)), reject);
+            
+            this.$request
+                .send({data})
+                .then(response => {
+                    resolve(this.fill(response.data));
+                }, reject);
         });
     }
 
@@ -4270,10 +4328,15 @@ class Model_Model {
      * @param data object
      * @return bool
      */
-    static find(id, config = {}) {
+    static find(data, config = {}) {
         return new Promise((resolve, reject) => {
             const model = new this();
-            model.$request = this.request('get', (config.uri || model.uri(id)), config);
+
+            model.fill(typeof data === 'object' ? data : {
+                [(new this).key()]: data
+            });
+
+            model.$request = this.request('get', (config.uri || model.uri()), config);
             model.$request.send().then(response => {
                 resolve(model.initialize(response.data));
             }, error => {
@@ -5008,6 +5071,13 @@ function throttle(func, wait, options) {
 }
 
 /* harmony default export */ var Functions_throttle = (throttle);
+// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/unit.js
+var unit = __webpack_require__("0f2b");
+
+// CONCATENATED MODULE: ./node_modules/vue-interface/src/Helpers/Functions/value.js
+/* harmony default export */ var Functions_value = (function(value, ...args) {
+    return typeof value === 'function' ? value(...args) : value;
+});;
 // CONCATENATED MODULE: ./node_modules/vue-interface/src/Helpers/Functions/wrap.js
 
 
@@ -5059,7 +5129,11 @@ function wrap(subject, fn) {
 /* unused concated harmony import remove */
 /* concated harmony reexport throttle */__webpack_require__.d(__webpack_exports__, "p", function() { return Functions_throttle; });
 /* unused concated harmony import toNumber */
+/* unused concated harmony import unit */
+/* unused concated harmony import value */
 /* concated harmony reexport wrap */__webpack_require__.d(__webpack_exports__, "q", function() { return wrap; });
+
+
 
 
 
@@ -5243,7 +5317,7 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/GiveworksForm.vue?vue&type=template&id=6a0f704a&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"629a4660-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/GiveworksForm.vue?vue&type=template&id=6a0f704a&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"giveworks-form"},[(_vm.error)?_c('div',[_c('div',{staticClass:"center-wrapper"},[_c('div',{staticClass:"center-content"},[_c('http-error-response',{attrs:{"error":_vm.error}})],1)])]):(_vm.page.id)?_c('form',{staticClass:"container",class:_vm.classes,attrs:{"novalidate":"novalidate"},on:{"submit":function($event){$event.preventDefault();return _vm.submit($event)}}},[_c(_vm.pageTypeComponent,{ref:"type",tag:"component",attrs:{"orientation":_vm.orientation,"page":_vm.page,"source":_vm.source,"redirect":_vm.redirect,"http-options":_vm.httpOptions},on:{"error":_vm.onError}})],1):_c('div',[_c('activity-indicator',{attrs:{"size":"lg","center":""}})],1)])}
 var staticRenderFns = []
 
@@ -5281,7 +5355,7 @@ var Page = __webpack_require__("850f");
     baseURL: `${domain}/api/public/v1/`
   };
 });
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4d45c8cc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/HttpErrorResponse.vue?vue&type=template&id=04e07aa6&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"629a4660-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/HttpErrorResponse.vue?vue&type=template&id=04e07aa6&
 var HttpErrorResponsevue_type_template_id_04e07aa6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"text-left"},[_c('alert',{style:({'width': _vm.widthUnit, 'min-width': _vm.minWidthUnit, 'max-width': _vm.maxWidthUnit}),attrs:{"variant":"danger","heading":("Error: " + _vm.status)}},[_vm._v("\n        "+_vm._s(_vm.formattedMessage)+"\n    ")])],1)}
 var HttpErrorResponsevue_type_template_id_04e07aa6_staticRenderFns = []
 

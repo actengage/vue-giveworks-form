@@ -54,7 +54,10 @@ export default {
 
         data: [Boolean, Object],
 
-        mode: String,
+        mode: {
+            type: String,
+            default: process.env.NODE_ENV
+        },
 
         orientation: {
             type: String,
@@ -109,13 +112,15 @@ export default {
             import('@bugsnag/plugin-vue')
         ])
             .then(([ {'default': bugsnag}, {'default': bugsnagVue} ]) => {
-                bugsnag({
-                    apiKey: process.env.VUE_APP_BUGSNAG_KEY,
-                    releaseStage: process.env.NODE_ENV,
-                    notifyReleaseStages: [
-                        'production'
-                    ]
-                }).use(bugsnagVue, Vue);
+                if(this.bugsnagApiKey) {
+                    bugsnag({
+                        apiKey: 'e66068bbbefd6ad235c13b0c178480da',
+                        releaseStage: this.mode,
+                        notifyReleaseStages: [
+                            'production'
+                        ]
+                    }).use(bugsnagVue, Vue);
+                }
             });
 
         if(!this.page.id && this.apiKey) {            

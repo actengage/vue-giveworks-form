@@ -17,7 +17,7 @@ module.exports = {
           }
       }],
       "vue/html-indent": ["error", 4, {
-          "attribute": 0,
+          "attribute": 1,
           "baseIndent": 1,
           "closeBracket": 1,
           "alignAttributesVertically": false,

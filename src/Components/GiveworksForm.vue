@@ -9,14 +9,18 @@
         </div>
         <form v-else-if="page.id" novalidate="novalidate" :class="classes" class="container" @submit.prevent="submit">
             <component
-            :is="pageTypeComponent"
-            ref="type"
-            :orientation="orientation"
-            :page="page"
-            :source="source"
-            :redirect="redirect"
-            :http-options="httpOptions"
-            @error="onError" />
+                :is="pageTypeComponent"
+                ref="type"
+                :orientation="orientation"
+                :page="page"
+                :source="source"
+                :redirect="redirect"
+                :http-options="httpOptions"
+                @error="onError"
+                @submit="(...args) => this.$emit('submit', ...args)" 
+                @submit-success="(...args) => this.$emit('submit-success', ...args)" 
+                @submit-failed="(...args) => this.$emit('submit-failed', ...args)" 
+                @submit-complete="(...args) => this.$emit('submit-complete', ...args)" />
         </form>
         <div v-else>
             <activity-indicator size="lg" center />
@@ -25,7 +29,6 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import Page from '../Models/Page';
 import HttpConfig from '../Config/Http';
 import HttpErrorResponse from './HttpErrorResponse';
@@ -71,7 +74,9 @@ export default {
 
         source: [String, Number],
 
-        redirect: [Boolean, String]
+        redirect: [Boolean, String],
+
+        onSubmitSuccess: Function
 
     },
 
@@ -85,8 +90,10 @@ export default {
     computed: {
 
         classes() {
+            console.log(this.width);
+
             return {
-                'text-sm': this.width
+                'text-sm': this.width < 100
             };
         },
 
@@ -107,36 +114,37 @@ export default {
     },
 
     mounted() {
+        const apiKey =  process.env.VUE_APP_BUGSNAG_KEY || 'e66068bbbefd6ad235c13b0c178480da';
+
         Promise.all([
             import('@bugsnag/js'),
             import('@bugsnag/plugin-vue')
         ])
             .then(([ {'default': bugsnag}, {'default': bugsnagVue} ]) => {
-                if(this.bugsnagApiKey) {
-                    bugsnag({
-                        apiKey: 'e66068bbbefd6ad235c13b0c178480da',
-                        releaseStage: this.mode,
-                        notifyReleaseStages: [
-                            'production'
-                        ]
-                    }).use(bugsnagVue, Vue);
+                bugsnag({
+                    apiKey,
+                    releaseStage: this.mode,
+                    notifyReleaseStages: [
+                        'production'
+                    ]
+                }).use(bugsnagVue, this.$root.constructor);
+            })
+            .finally(() => {
+                if(!this.page.id && this.apiKey) {       
+                    Page.find(this.pageId, this.httpOptions)
+                        .then(model => {
+                            this.page = model.toJson();
+                        }, error => {
+                            this.error = error;
+                        });
                 }
+                else if(!this.apiKey) {
+                    this.error = new Error('Missing required prop: "api-key"');
+                    this.error.status = 500;
+                }
+
+                window.addEventListener('resize', this.onResize());
             });
-
-        if(!this.page.id && this.apiKey) {            
-            Page.find(this.pageId, this.httpOptions)
-                .then(model => {
-                    this.page = model.toJson();
-                }, error => {
-                    this.error = error;
-                });
-        }
-        else if(!this.apiKey) {
-            this.error = new Error('Missing required prop: "api-key"');
-            this.error.status = 500;
-        }
-
-        window.addEventListener('resize', this.onResize());
     },
 
     destroyed() {
@@ -154,6 +162,7 @@ export default {
 
         onResize() {
             this.width = this.$el.offsetWidth;
+
             return this.onResize;
         },
 

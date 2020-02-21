@@ -40,6 +40,10 @@ $font-family-base: 'Helvetica Nueue', Helvetica, Arial, sans-serif;
     @import '~bootstrap/scss/alert';
     @import '~bootstrap/scss/utilities';
 
+    & > .container {
+        font-size: inherit;
+    }
+
     .btn {
         font-size: 1em;
     }

@@ -97,8 +97,8 @@ export default {
                         }, response => {
                             this.submitting = false;
                             this.errors = response.data.errors;
-                            this.$emit('submit-complete', true, response);
-                            this.$emit('submit-success', response);
+                            this.$emit('submit-complete', false, response);
+                            this.$emit('submit-failed', response);
 
                             if(isFunction(failed)) {
                                 failed(response);
@@ -114,7 +114,9 @@ export default {
         },
 
         onSubmitSuccess(page) {
-            this.handleRedirect(this.redirect || this.page.external_reply, page.get('sessionid'));
+            if(this.redirect || this.redirect !== false && this.page.external_reply) {
+                this.handleRedirect(this.redirect || this.page.external_reply, page.get('sessionid'));
+            }
         },
 
         onSubmitError(e) {

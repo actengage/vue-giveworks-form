@@ -30,7 +30,7 @@
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.11",
     "vue-credit-card-field": "^0.3.14",
-    "vue-interface": "^0.4.52",
+    "vue-interface": "^0.4.54",
     "vue-place-autocomplete": "^0.5.3",
     "vue-router": "^3.1.5"
   },
@@ -49,7 +49,7 @@
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-html": "^6.0.0",
     "eslint-plugin-import": "^2.20.1",
-    "eslint-plugin-jest": "^23.7.0",
+    "eslint-plugin-jest": "^23.8.0",
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
@@ -60,7 +60,7 @@
     "purgecss": "^2.0.6",
     "purgecss-webpack-plugin": "^2.0.6",
     "sass-loader": "^8.0.2",
-    "terser": "^4.6.3",
+    "terser": "^4.6.4",
     "vue-template-compiler": "^2.6.11",
     "vuex-persistent-plugin": "^0.1.1"
   }

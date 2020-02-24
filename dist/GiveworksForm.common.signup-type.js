@@ -6,7 +6,7 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"36e1d998-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Types/Signup.vue?vue&type=template&id=3cc7899d&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c77d2f2c-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Types/Signup.vue?vue&type=template&id=3cc7899d&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c(_vm.page.options.service.split('\\').pop(),{tag:"component",attrs:{"submitting":_vm.submitting,"page":_vm.page,"form":_vm.form,"errors":_vm.errors}})],1)}
 var staticRenderFns = []
 
@@ -183,8 +183,8 @@ const EVENTS = ['submit', 'redirect', 'submit-enable', 'submit-disable', 'submit
           }, response => {
             this.submitting = false;
             this.errors = response.data.errors;
-            this.$emit('submit-complete', true, response);
-            this.$emit('submit-success', response);
+            this.$emit('submit-complete', false, response);
+            this.$emit('submit-failed', response);
 
             if (Object(vue_interface_src_Helpers_Functions__WEBPACK_IMPORTED_MODULE_2__[/* isFunction */ "i"])(failed)) {
               failed(response);
@@ -199,7 +199,9 @@ const EVENTS = ['submit', 'redirect', 'submit-enable', 'submit-disable', 'submit
     },
 
     onSubmitSuccess(page) {
-      this.handleRedirect(this.redirect || this.page.external_reply, page.get('sessionid'));
+      if (this.redirect || this.redirect !== false && this.page.external_reply) {
+        this.handleRedirect(this.redirect || this.page.external_reply, page.get('sessionid'));
+      }
     },
 
     onSubmitError(e) {

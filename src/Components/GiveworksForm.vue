@@ -144,6 +144,8 @@ export default {
                 }
 
                 window.addEventListener('resize', this.onResize());
+
+                this.$emit('init');
             });
     },
 

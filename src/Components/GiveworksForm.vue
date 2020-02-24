@@ -75,7 +75,10 @@ export default {
 
         source: [String, Number],
 
-        redirect: [Boolean, String],
+        redirect: {
+            type: [Boolean, String],
+            default: undefined
+        },
 
         onSubmitSuccess: Function
 

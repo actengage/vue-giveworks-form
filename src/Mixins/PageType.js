@@ -8,7 +8,10 @@ export default {
 
         source: [String, Number],
 
-        redirect: [Boolean, String],
+        redirect: {
+            type: [Boolean, String],
+            default: undefined
+        },
 
         httpOptions: Object,
 
@@ -114,8 +117,10 @@ export default {
         },
 
         onSubmitSuccess(page) {
-            if(this.redirect || this.redirect !== false && this.page.external_reply) {
-                this.handleRedirect(this.redirect || this.page.external_reply, page.get('sessionid'));
+            const redirect = this.redirect || this.page.external_reply || this.page.reply;
+
+            if(this.redirect !== false && redirect) {
+                this.handleRedirect(redirect, page.get('sessionid'));
             }
         },
 

@@ -32,11 +32,11 @@
 
         <div v-else class="container">
             <giveworks-form
-            :env="this.$route.query.env"
-            :mode="this.$route.query.mode"
-            :page-id="this.$route.params.slug"
-            :source="this.$route.params.source"
-            :api-key="this.$route.query.apiKey" />
+                :env="this.$route.query.env"
+                :mode="this.$route.query.mode"
+                :page-id="this.$route.params.slug"
+                :source="this.$route.params.source"
+                :api-key="this.$route.query.apiKey" />
         </div>
     </div>
 </template>

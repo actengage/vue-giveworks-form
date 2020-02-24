@@ -6,7 +6,7 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"1cba528d-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Types/Petition.vue?vue&type=template&id=54ed21e0&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"14de2632-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/Types/Petition.vue?vue&type=template&id=54ed21e0&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('contact-info-fieldset',{attrs:{"legends":false,"form":_vm.form,"errors":_vm.errors,"page":_vm.page}}),(_vm.shouldShowEmployment)?_c('employment-info-fieldset',{attrs:{"legends":false,"form":_vm.form,"errors":_vm.errors,"page":_vm.page}}):_vm._e(),(_vm.page.options.add_comment)?_c('textarea-field',{directives:[{name:"autogrow",rawName:"v-autogrow"}],attrs:{"id":"comment","label":_vm.commentMessage},model:{value:(_vm.form.comment),callback:function ($$v) {_vm.$set(_vm.form, "comment", $$v)},expression:"form.comment"}}):_vm._e(),_c('btn-activity',{attrs:{"size":"lg","type":"submit","orientation":"right","block":true,"activity":_vm.submitting,"label":_vm.buttonLabel || _vm.page.site.config.giveworks.button.petition}}),(_vm.page.options.add_optin)?_c('checkbox-field',{attrs:{"label":_vm.optinMessage,"value":"1","custom":""}}):_vm._e()],1)}
 var staticRenderFns = []
 
@@ -125,7 +125,10 @@ const EVENTS = ['submit', 'redirect', 'submit-enable', 'submit-disable', 'submit
 /* harmony default export */ __webpack_exports__["a"] = ({
   props: {
     source: [String, Number],
-    redirect: [Boolean, String],
+    redirect: {
+      type: [Boolean, String],
+      default: undefined
+    },
     httpOptions: Object,
     page: {
       type: Object,
@@ -217,8 +220,10 @@ const EVENTS = ['submit', 'redirect', 'submit-enable', 'submit-disable', 'submit
     },
 
     onSubmitSuccess(page) {
-      if (this.redirect || this.redirect !== false && this.page.external_reply) {
-        this.handleRedirect(this.redirect || this.page.external_reply, page.get('sessionid'));
+      const redirect = this.redirect || this.page.external_reply || this.page.reply;
+
+      if (this.redirect !== false && redirect) {
+        this.handleRedirect(redirect, page.get('sessionid'));
       }
     },
 

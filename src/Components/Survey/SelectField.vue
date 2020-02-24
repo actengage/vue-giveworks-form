@@ -1,15 +1,14 @@
 <template>
     <select-field
-    :id="question.id"
-    v-model="form[name]"
-    v-query
-    :label="`${question.question}${question.required ? '*' : ''}`"
-    :name="name"
-    :errors="errors"
-    :required="question.required"
-    custom
-    @input="updated">
-        <option v-for="(value, key) in question.answers" :value="value" v-html="value" />
+        :id="question.id"
+        v-model="form[name]"
+        :label="`${question.question}${question.required ? '*' : ''}`"
+        :name="name"
+        :errors="errors"
+        :required="question.required"
+        custom
+        @input="updated">
+        <option v-for="(value, key) in question.answers" :key="key" :value="value" v-html="value" />
     </select-field>
 </template>
 

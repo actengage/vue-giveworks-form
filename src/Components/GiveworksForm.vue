@@ -17,6 +17,7 @@
                 :redirect="redirect"
                 :http-options="httpOptions"
                 @error="onError"
+                @init="$emit('init')"
                 @submit="(...args) => this.$emit('submit', ...args)" 
                 @submit-success="(...args) => this.$emit('submit-success', ...args)" 
                 @submit-failed="(...args) => this.$emit('submit-failed', ...args)" 
@@ -90,8 +91,6 @@ export default {
     computed: {
 
         classes() {
-            console.log(this.width);
-
             return {
                 'text-sm': this.width < 100
             };
@@ -144,8 +143,6 @@ export default {
                 }
 
                 window.addEventListener('resize', this.onResize());
-
-                this.$emit('init');
             });
     },
 

@@ -127,6 +127,7 @@ export default {
 
     mounted() {
         this.loaded = true;
+        this.$nextTick(() => this.$emit('init'));
     },
 
     data() {

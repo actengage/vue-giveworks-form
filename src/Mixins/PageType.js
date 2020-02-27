@@ -117,7 +117,7 @@ export default {
         },
 
         onSubmitSuccess(page) {
-            const redirect = this.redirect || this.page.external_reply || this.page.reply;
+            const redirect = this.redirect || this.page.external_reply || this.page.next_page && this.page.next_page.url;
 
             if(this.redirect !== false && redirect) {
                 this.handleRedirect(redirect, page.get('sessionid'));

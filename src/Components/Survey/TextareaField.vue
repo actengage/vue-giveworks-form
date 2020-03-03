@@ -2,6 +2,7 @@
     <textarea-field
         :id="question.id"
         v-model="form[name]"
+        v-autogrow
         :label="`${question.question}${question.required ? '*' : ''}`"
         :placeholder="`${question.question}${question.required ? '*' : ''}`"
         :name="name"
@@ -13,6 +14,7 @@
 
 <script>
 import SurveyField from './SurveyField';
+import Autogrow from 'vue-interface/src/Directives/Autogrow';
 
 export default {
 
@@ -20,6 +22,10 @@ export default {
 
     components: {
         TextareaField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/TextareaField')
+    },
+
+    directives: {
+        Autogrow
     },
 
     extends: SurveyField

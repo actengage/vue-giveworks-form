@@ -7,27 +7,27 @@
         </p>
 
         <input-field v-if="!isRetired"
-        id="employer"
-        ref="employer"
-        v-model="form.employer"
-        v-query
-        name="employer"
-        label="Employer"
-        placeholder="Employer"
-        :disabled="isRetired"
-        :errors="errors"
-        custom />
+            id="employer"
+            ref="employer"
+            v-model="form.employer"
+            v-query
+            name="employer"
+            label="Employer"
+            placeholder="Employer"
+            :disabled="isRetired"
+            :errors="errors"
+            custom />
         <input-field v-if="!isRetired"
-        id="occupation"
-        ref="occupation"
-        v-model="form.occupation"
-        v-query
-        name="occupation"
-        label="Occupation"
-        placeholder="Occupation"
-        :disabled="isRetired"
-        :errors="errors"
-        custom />
+            id="occupation"
+            ref="occupation"
+            v-model="form.occupation"
+            v-query
+            name="occupation"
+            label="Occupation"
+            placeholder="Occupation"
+            :disabled="isRetired"
+            :errors="errors"
+            custom />
 		
         <div class="form-group">
             <checkbox-field v-model="form.retired" v-query label="I'm retired" value="1" custom />

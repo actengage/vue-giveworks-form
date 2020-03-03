@@ -1,16 +1,16 @@
 <template>
     <input-field
-    id="email"
-    v-model="form.email"
-    v-query
-    type="email"
-    name="email"
-    :label="`${question.question}${question.required ? '*' : ''}`"
-    :placeholder="`${question.question}${question.required ? '*' : ''}`"
-    :required="question.required"
-    :errors="errors"
-    custom
-    @input="updated" />
+        id="email"
+        v-model="form.email"
+        v-query
+        type="email"
+        name="email"
+        :label="`${question.question}${question.required ? '*' : ''}`"
+        :placeholder="`${question.question}${question.required ? '*' : ''}`"
+        :required="question.required"
+        :errors="errors"
+        custom
+        @input="updated" />
 </template>
 
 <script>

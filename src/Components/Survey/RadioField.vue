@@ -5,34 +5,34 @@
         </label>
 
         <radio-field
-        v-for="(answer, key) in question.answers"
-        :id="`${name}_${key}`"
-        :key="key"
-        v-model="form[name]"
-        v-query
-        :label="answer"
-        :value="answer"
-        :checked-value="value"
-        :name="name"
-        custom
-        @change="updated" />
+            v-for="(answer, key) in question.answers"
+            :id="`${name}_${key}`"
+            :key="key"
+            v-model="form[name]"
+            v-query
+            :label="answer"
+            :value="answer"
+            :checked-value="value"
+            :name="name"
+            custom
+            @change="updated" />
 
         <template v-if="question.accept_other">
             <radio-field :id="`${name}_50`"
-            v-model="form[name]"
-            v-changed
-            value="other"
-            label="Other:"
-            :name="name"
-            :checked-value="value"
-            @change="updated" />
+                v-model="form[name]"
+                v-changed
+                value="other"
+                label="Other:"
+                :name="name"
+                :checked-value="value"
+                @change="updated" />
             <input :id="`${name}_other`"
-            v-model="form[`${name}_other`]"
-            type="text"
-            class="form-control"
-            :class="{'is-invalid': errors[name]}"
-            :name="`${name}_other`"
-            @input="updated($event.target.value);">
+                v-model="form[`${name}_other`]"
+                type="text"
+                class="form-control"
+                :class="{'is-invalid': errors[name]}"
+                :name="`${name}_other`"
+                @input="updated($event.target.value);">
         </template>
 
         <slot name="feedback">

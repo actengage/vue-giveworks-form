@@ -9,11 +9,11 @@
         </div>
 
         <payment-buttons v-model="form.amount"
-        v-query
-        name="amount"
-        :amounts="amounts"
-        :errors="errors"
-        :page="page" />
+            v-query
+            name="amount"
+            :amounts="amounts"
+            :errors="errors"
+            :page="page" />
 
         <div v-if="page.site.recurring && !page.options.recurring_only" class="form-group mt-3">
             <label v-html="recurringMessage" />

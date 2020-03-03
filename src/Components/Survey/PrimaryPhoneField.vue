@@ -1,16 +1,16 @@
 <template>
     <input-field
-    id="phone"
-    v-model="form.phone"
-    v-query
-    type="phone"
-    name="phone"
-    :label="`${question.question}${question.required ? '*' : ''}`"
-    :placeholder="`${question.question}${question.required ? '*' : ''}`"
-    :required="question.required"
-    :errors="errors"
-    custom
-    @input="updated" />
+        id="phone"
+        v-model="form.phone"
+        v-query
+        type="phone"
+        name="phone"
+        :label="`${question.question}${question.required ? '*' : ''}`"
+        :placeholder="`${question.question}${question.required ? '*' : ''}`"
+        :required="question.required"
+        :errors="errors"
+        custom
+        @input="updated" />
 </template>
 
 <script>

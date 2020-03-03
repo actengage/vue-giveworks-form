@@ -1,15 +1,15 @@
 <template>
     <select-field
-    :id="question.id"
-    v-model="form.state"
-    v-query
-    name="state"
-    :label="`${question.question}${question.required ? '*' : ''}`"
-    :required="question.required"
-    :errors="errors"
-    custom
-    @input="updated">
-        <option v-for="(label, value) in page.site.config.states" :value="value" v-html="label" />
+        :id="question.id"
+        v-model="form.state"
+        v-query
+        name="state"
+        :label="`${question.question}${question.required ? '*' : ''}`"
+        :required="question.required"
+        :errors="errors"
+        custom
+        @input="updated">
+        <option v-for="(label, value) in page.site.config.states" :key="label" :value="value" v-html="label" />
     </select-field>
 </template>
 

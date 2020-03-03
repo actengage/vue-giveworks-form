@@ -14,12 +14,12 @@
                     <label :for="question.id" v-html="question.question" />
                     <input-group prepend="$">
                         <input
-                        type="text"
-                        class="form-control"
-                        :name="name"
-                        :value="value"
-                        :class="{'is-invalid': !!invalidFeedback}"
-                        :required="question.required">
+                            type="text"
+                            class="form-control"
+                            :name="name"
+                            :value="value"
+                            :class="{'is-invalid': !!invalidFeedback}"
+                            :required="question.required">
                     </input-group>
                 </div>
             </div>

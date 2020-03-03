@@ -1,15 +1,15 @@
 <template>
     <input-field
-    id="city"
-    v-model="form.city"
-    v-query
-    name="city"
-    :label="`${question.question}${question.required ? '*' : ''}`"
-    :placeholder="`${question.question}${question.required ? '*' : ''}`"
-    :required="question.required"
-    :errors="errors"
-    custom
-    @input="updated" />
+        id="city"
+        v-model="form.city"
+        v-query
+        name="city"
+        :label="`${question.question}${question.required ? '*' : ''}`"
+        :placeholder="`${question.question}${question.required ? '*' : ''}`"
+        :required="question.required"
+        :errors="errors"
+        custom
+        @input="updated" />
 </template>
 
 <script>

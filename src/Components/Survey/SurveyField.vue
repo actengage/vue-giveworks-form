@@ -10,10 +10,8 @@ export default {
     },
 
     directives: {
-        Query
-    },
-
-    directives: {
+        
+        Query,
 
         changed(el, binding, vnode) {
             el.addEventListener('change', event => {

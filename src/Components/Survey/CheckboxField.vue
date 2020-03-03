@@ -6,43 +6,43 @@
         </label>
 
         <checkbox-field
-        v-for="(answer, key) in question.answers"
-        :id="`${name}_${key}`"
-        :key="key"
-        v-model="form[name]"
-        v-query
-        :label="answer"
-        :value="answer"
-        :checked-values="value || []"
-        :name="name"
-        custom
-        @input="updated" />
+            v-for="(answer, key) in question.answers"
+            :id="`${name}_${key}`"
+            :key="key"
+            v-model="form[name]"
+            v-query
+            :label="answer"
+            :value="answer"
+            :checked-values="value || []"
+            :name="name"
+            custom
+            @input="updated" />
 
         <template v-if="question.accept_other">
             <checkbox-field
-            :id="`${name}_50`"
-            v-model="form[name]"
-            v-changed
-            v-query
-            label="Other:"
-            value="other"
-            :name="name"
-            :checked-values="value || []"
-            custom
-            @input="updated" />
+                :id="`${name}_50`"
+                v-model="form[name]"
+                v-changed
+                v-query
+                label="Other:"
+                value="other"
+                :name="name"
+                :checked-values="value || []"
+                custom
+                @input="updated" />
 
             <input-field
-            :id="`${name}_other`"
-            v-model="form[`${name}_other`]"
-            v-query
-            type="text"
-            label="Other"
-            placeholder="Other"
-            class="mt-2"
-            :class="{'is-invalid': errors[name]}"
-            :name="`${name}_other`"
-            custom
-            @input="updated" />
+                :id="`${name}_other`"
+                v-model="form[`${name}_other`]"
+                v-query
+                type="text"
+                label="Other"
+                placeholder="Other"
+                class="mt-2"
+                :class="{'is-invalid': errors[name]}"
+                :name="`${name}_other`"
+                custom
+                @input="updated" />
         </template>
 
         <slot name="feedback">

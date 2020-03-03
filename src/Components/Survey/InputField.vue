@@ -1,15 +1,15 @@
 <template>
     <input-field
-    :id="question.id"
-    v-model="form[name]"
-    v-query
-    :name="name"
-    :label="`${question.question}${question.required ? '*' : ''}`"
-    :placeholder="`${question.question}${question.required ? '*' : ''}`"
-    :required="question.required"
-    :errors="errors"
-    custom
-    @input="updated" />
+        :id="question.id"
+        v-model="form[name]"
+        v-query
+        :name="name"
+        :label="`${question.question}${question.required ? '*' : ''}`"
+        :placeholder="`${question.question}${question.required ? '*' : ''}`"
+        :required="question.required"
+        :errors="errors"
+        custom
+        @input="updated" />
 </template>
 
 <script>

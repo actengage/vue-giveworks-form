@@ -6,10 +6,10 @@
 
         <textarea-field
             v-if="page.options.add_comment"
+            id="comment"
             v-model="form.comment"
             v-query
             v-autogrow
-            id="comment"
             :label="commentMessage" />
     </fieldset>
 </template>

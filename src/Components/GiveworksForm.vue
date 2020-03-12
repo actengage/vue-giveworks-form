@@ -35,6 +35,7 @@ import HttpConfig from '../Config/Http';
 import HttpErrorResponse from './HttpErrorResponse';
 import Request from 'vue-interface/src/Http/Request';
 import bugsnag, { Bugsnag } from '@bugsnag/js';
+import { pickBy } from 'vue-interface/src/Helpers/Functions';
 
 export default {
 
@@ -75,6 +76,8 @@ export default {
 
         source: [String, Number],
 
+        session: [String, Number],
+
         redirect: {
             type: [Boolean, String],
             default: undefined
@@ -101,11 +104,11 @@ export default {
 
         httpOptions() {
             return Object.assign({}, HttpConfig(this.mode), {
-                headers: {
+                headers: pickBy({
                     'Accept': 'application/json',
                     'Authorization': `Bearer ${this.apiKey}`,
-                    'Session-Id': (new URLSearchParams(location.search)).get('sessionid')
-                }
+                    'Session-Id': this.session || (new URLSearchParams(location.search)).get('sessionid')
+                }, value => !!value)
             });
         },
 

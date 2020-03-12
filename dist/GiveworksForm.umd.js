@@ -5308,7 +5308,7 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"9c3661e8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/GiveworksForm.vue?vue&type=template&id=bc6ee956&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4c601c4e-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/GiveworksForm.vue?vue&type=template&id=513b1c20&
 var render = function () {
 var this$1 = this;
 var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"giveworks-form"},[(_vm.error)?_c('div',[_c('div',{staticClass:"center-wrapper"},[_c('div',{staticClass:"center-content"},[_c('http-error-response',{attrs:{"error":_vm.error}})],1)])]):(_vm.page.id)?_c('form',{staticClass:"container",class:_vm.classes,attrs:{"novalidate":"novalidate"},on:{"submit":function($event){$event.preventDefault();return _vm.submit($event)}}},[_c(_vm.pageTypeComponent,{ref:"type",tag:"component",attrs:{"orientation":_vm.orientation,"page":_vm.page,"source":_vm.source,"redirect":_vm.redirect,"http-options":_vm.httpOptions},on:{"error":_vm.onError,"init":function($event){return _vm.$emit('init')},"submit":function () {
@@ -5339,7 +5339,7 @@ var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/GiveworksForm.vue?vue&type=template&id=bc6ee956&
+// CONCATENATED MODULE: ./src/Components/GiveworksForm.vue?vue&type=template&id=513b1c20&
 
 // EXTERNAL MODULE: ./src/Models/Page.js + 2 modules
 var Page = __webpack_require__("850f");
@@ -5368,7 +5368,7 @@ var Page = __webpack_require__("850f");
     baseURL: `${domain}/api/public/v1/`
   };
 });
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"9c3661e8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/HttpErrorResponse.vue?vue&type=template&id=04e07aa6&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4c601c4e-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/HttpErrorResponse.vue?vue&type=template&id=04e07aa6&
 var HttpErrorResponsevue_type_template_id_04e07aa6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"text-left"},[_c('alert',{style:({'width': _vm.widthUnit, 'min-width': _vm.minWidthUnit, 'max-width': _vm.maxWidthUnit}),attrs:{"variant":"danger","heading":("Error: " + _vm.status)}},[_vm._v(" "+_vm._s(_vm.formattedMessage)+" ")])],1)}
 var HttpErrorResponsevue_type_template_id_04e07aa6_staticRenderFns = []
 
@@ -5464,6 +5464,9 @@ var Request = __webpack_require__("1757");
 // EXTERNAL MODULE: ./node_modules/@bugsnag/js/browser/notifier.js
 var notifier = __webpack_require__("353a");
 
+// EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js + 33 modules
+var Functions = __webpack_require__("ca14");
+
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/GiveworksForm.vue?vue&type=script&lang=js&
 //
 //
@@ -5501,6 +5504,7 @@ var notifier = __webpack_require__("353a");
 
 
 
+
 /* harmony default export */ var GiveworksFormvue_type_script_lang_js_ = ({
   name: 'GiveworksForm',
   components: {
@@ -5530,6 +5534,7 @@ var notifier = __webpack_require__("353a");
     },
     pageId: [Number, String],
     source: [String, Number],
+    session: [String, Number],
     redirect: {
       type: [Boolean, String],
       default: undefined
@@ -5553,11 +5558,11 @@ var notifier = __webpack_require__("353a");
 
     httpOptions() {
       return Object.assign({}, Http(this.mode), {
-        headers: {
+        headers: Object(Functions["o" /* pickBy */])({
           'Accept': 'application/json',
           'Authorization': `Bearer ${this.apiKey}`,
-          'Session-Id': new URLSearchParams(location.search).get('sessionid')
-        }
+          'Session-Id': this.session || new URLSearchParams(location.search).get('sessionid')
+        }, value => !!value)
       });
     },
 

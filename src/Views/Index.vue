@@ -14,6 +14,7 @@
                         <input-field v-model="form.slug" label="Page ID or Slug*" placeholder="Page ID or Slug*" help-text="Example: 'tell_congress_to_end_bi'" custom />
                         <input-field v-model="form.apiKey" label="API Key*" placeholder="API Key*   " help-text="The Giveworks API for site." custom />
                         <input-field v-model="form.source" label="Source Code" placeholder="Source Code" help-text="Source codes are optional." custom />
+                        <input-field v-model="form.session" label="Session Id" placeholder="Session Id" help-text="Sessions are optional." custom />
                         <div class="card mb-3">
                             <div class="card-body">
                                 <strong>Server</strong>
@@ -36,6 +37,7 @@
                 :mode="this.$route.query.mode"
                 :page-id="this.$route.params.slug"
                 :source="this.$route.params.source"
+                :session="this.$route.params.session"
                 :api-key="this.$route.query.apiKey" />
         </div>
     </div>
@@ -95,7 +97,8 @@ export default {
                     apiKey: null,
                     slug: this.form.slug,
                     short: this.form.short,
-                    source: this.form.source
+                    source: this.form.source,
+                    session: this.form.session
                 }, value => !!value)
             });
 

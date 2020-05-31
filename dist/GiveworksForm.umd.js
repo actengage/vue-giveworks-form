@@ -44,21 +44,21 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	// object to store loaded CSS chunks
 /******/ 	var installedCssChunks = {
-/******/ 		2: 0
+/******/ 		3: 0
 /******/ 	}
 /******/
 /******/ 	// object to store loaded and loading chunks
 /******/ 	// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 	// Promise = chunk loading, 0 = chunk loaded
 /******/ 	var installedChunks = {
-/******/ 		2: 0
+/******/ 		3: 0
 /******/ 	};
 /******/
 /******/
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "GiveworksForm.umd." + ({"0":"vendors~vue-credit-card-field~vue-interface~vue-place-autocomplete","1":"vendors~vue-place-autocomplete","3":"contact-info-fieldset","4":"donation-type","5":"employment-info-fieldset","6":"go-to-webinar","7":"petition-type","8":"signup-type","9":"survey-type","10":"vendors~donation-type","11":"vendors~vue-credit-card-field","12":"vendors~vue-interface"}[chunkId]||chunkId) + ".js"
+/******/ 		return __webpack_require__.p + "GiveworksForm.umd." + ({"0":"vendors~donation-type~vue-interface~vue-place-autocomplete","1":"vendors~vue-credit-card-field~vue-interface~vue-place-autocomplete","2":"vue-place-autocomplete","4":"contact-info-fieldset","5":"donation-type","6":"employment-info-fieldset","7":"go-to-webinar","8":"petition-type","9":"signup-type","10":"survey-type","11":"vendors~donation-type","12":"vendors~vue-credit-card-field","13":"vendors~vue-interface"}[chunkId]||chunkId) + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -92,11 +92,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 		// mini-css-extract-plugin CSS loading
-/******/ 		var cssChunks = {"0":1,"1":1,"4":1,"11":1,"12":1};
+/******/ 		var cssChunks = {"1":1,"2":1,"5":1,"12":1,"13":1};
 /******/ 		if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
 /******/ 		else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
 /******/ 			promises.push(installedCssChunks[chunkId] = new Promise(function(resolve, reject) {
-/******/ 				var href = "css/" + ({"0":"vendors~vue-credit-card-field~vue-interface~vue-place-autocomplete","1":"vendors~vue-place-autocomplete","3":"contact-info-fieldset","4":"donation-type","5":"employment-info-fieldset","6":"go-to-webinar","7":"petition-type","8":"signup-type","9":"survey-type","10":"vendors~donation-type","11":"vendors~vue-credit-card-field","12":"vendors~vue-interface"}[chunkId]||chunkId) + "." + {"0":"5e980a72","1":"0f9eb737","3":"31d6cfe0","4":"6783790e","5":"31d6cfe0","6":"31d6cfe0","7":"31d6cfe0","8":"31d6cfe0","9":"31d6cfe0","10":"31d6cfe0","11":"db344649","12":"2eca3817","13":"31d6cfe0"}[chunkId] + ".css";
+/******/ 				var href = "css/" + ({"0":"vendors~donation-type~vue-interface~vue-place-autocomplete","1":"vendors~vue-credit-card-field~vue-interface~vue-place-autocomplete","2":"vue-place-autocomplete","4":"contact-info-fieldset","5":"donation-type","6":"employment-info-fieldset","7":"go-to-webinar","8":"petition-type","9":"signup-type","10":"survey-type","11":"vendors~donation-type","12":"vendors~vue-credit-card-field","13":"vendors~vue-interface"}[chunkId]||chunkId) + "." + {"0":"31d6cfe0","1":"0d42abde","2":"0f9eb737","4":"31d6cfe0","5":"6783790e","6":"31d6cfe0","7":"31d6cfe0","8":"31d6cfe0","9":"31d6cfe0","10":"31d6cfe0","11":"31d6cfe0","12":"5d81c956","13":"73bb522b","14":"31d6cfe0"}[chunkId] + ".css";
 /******/ 				var fullhref = __webpack_require__.p + href;
 /******/ 				var existingLinkTags = document.getElementsByTagName("link");
 /******/ 				for(var i = 0; i < existingLinkTags.length; i++) {
@@ -3344,6 +3344,8 @@ return _$notifier_2;
 
 "use strict";
 
+// UNUSED EXPORTS: Response
+
 // EXTERNAL MODULE: external "axios"
 var external_axios_ = __webpack_require__("cebe");
 var external_axios_default = /*#__PURE__*/__webpack_require__.n(external_axios_);
@@ -3613,7 +3615,6 @@ class Request_Request extends BaseClass_BaseClass {
 }
 
 // CONCATENATED MODULE: ./node_modules/vue-interface/src/Http/Request/index.js
-/* unused concated harmony import Response */
 
 
 
@@ -3718,7 +3719,12 @@ function normalizeComponent (
     options._ssrRegister = hook
   } else if (injectStyles) {
     hook = shadowMode
-      ? function () { injectStyles.call(this, this.$root.$options.shadowRoot) }
+      ? function () {
+        injectStyles.call(
+          this,
+          (options.functional ? this.parent : this).$root.$options.shadowRoot
+        )
+      }
       : injectStyles
   }
 
@@ -3806,6 +3812,9 @@ function isUndefined(value) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ Page_Page; });
 
 // EXTERNAL MODULE: ./node_modules/vue-interface/src/Http/Request/index.js + 3 modules
 var Request = __webpack_require__("1757");
@@ -4359,7 +4368,6 @@ class Model_Model {
 /* harmony default export */ var Http_Model = (Model_Model);
 
 // CONCATENATED MODULE: ./src/Models/Page.js
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Page_Page; });
 
 class Page_Page extends Http_Model {
   endpoint() {
@@ -4367,6 +4375,84 @@ class Page_Page extends Http_Model {
   }
 
 }
+
+/***/ }),
+
+/***/ "8875":
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// addapted from the document.currentScript polyfill by Adam Miller
+// MIT license
+// source: https://github.com/amiller-gh/currentScript-polyfill
+
+// added support for Firefox https://bugzilla.mozilla.org/show_bug.cgi?id=1620505
+
+(function (root, factory) {
+  if (true) {
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else {}
+}(typeof self !== 'undefined' ? self : this, function () {
+  function getCurrentScript () {
+    if (document.currentScript) {
+      return document.currentScript
+    }
+  
+    // IE 8-10 support script readyState
+    // IE 11+ & Firefox support stack trace
+    try {
+      throw new Error();
+    }
+    catch (err) {
+      // Find the second match for the "at" string to get file src url from stack.
+      var ieStackRegExp = /.*at [^(]*\((.*):(.+):(.+)\)$/ig,
+        ffStackRegExp = /@([^@]*):(\d+):(\d+)\s*$/ig,
+        stackDetails = ieStackRegExp.exec(err.stack) || ffStackRegExp.exec(err.stack),
+        scriptLocation = (stackDetails && stackDetails[1]) || false,
+        line = (stackDetails && stackDetails[2]) || false,
+        currentLocation = document.location.href.replace(document.location.hash, ''),
+        pageSource,
+        inlineScriptSourceRegExp,
+        inlineScriptSource,
+        scripts = document.getElementsByTagName('script'); // Live NodeList collection
+  
+      if (scriptLocation === currentLocation) {
+        pageSource = document.documentElement.outerHTML;
+        inlineScriptSourceRegExp = new RegExp('(?:[^\\n]+?\\n){0,' + (line - 2) + '}[^<]*<script>([\\d\\D]*?)<\\/script>[\\d\\D]*', 'i');
+        inlineScriptSource = pageSource.replace(inlineScriptSourceRegExp, '$1').trim();
+      }
+  
+      for (var i = 0; i < scripts.length; i++) {
+        // If ready state is interactive, return the script tag
+        if (scripts[i].readyState === 'interactive') {
+          return scripts[i];
+        }
+  
+        // If src matches, return the script tag
+        if (scripts[i].src === scriptLocation) {
+          return scripts[i];
+        }
+  
+        // If inline source matches, return the script tag
+        if (
+          scriptLocation === currentLocation &&
+          scripts[i].innerHTML &&
+          scripts[i].innerHTML.trim() === inlineScriptSource
+        ) {
+          return scripts[i];
+        }
+      }
+  
+      // If no match, return null
+      return null;
+    }
+  };
+
+  return getCurrentScript
+}));
+
 
 /***/ }),
 
@@ -4405,6 +4491,27 @@ function isArray(value) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* reexport */ camelCase["a" /* default */]; });
+__webpack_require__.d(__webpack_exports__, "b", function() { return /* reexport */ chunk; });
+__webpack_require__.d(__webpack_exports__, "c", function() { return /* reexport */ deepExtend; });
+__webpack_require__.d(__webpack_exports__, "d", function() { return /* reexport */ each["a" /* default */]; });
+__webpack_require__.d(__webpack_exports__, "e", function() { return /* reexport */ extend; });
+__webpack_require__.d(__webpack_exports__, "f", function() { return /* reexport */ findKey_findIndex; });
+__webpack_require__.d(__webpack_exports__, "g", function() { return /* reexport */ isArray["a" /* default */]; });
+__webpack_require__.d(__webpack_exports__, "h", function() { return /* reexport */ isBoolean; });
+__webpack_require__.d(__webpack_exports__, "i", function() { return /* reexport */ isFunction; });
+__webpack_require__.d(__webpack_exports__, "j", function() { return /* reexport */ isNull["a" /* default */]; });
+__webpack_require__.d(__webpack_exports__, "k", function() { return /* reexport */ isObject["a" /* default */]; });
+__webpack_require__.d(__webpack_exports__, "l", function() { return /* reexport */ isString_isString; });
+__webpack_require__.d(__webpack_exports__, "m", function() { return /* reexport */ isUndefined["a" /* default */]; });
+__webpack_require__.d(__webpack_exports__, "n", function() { return /* reexport */ mapKeys; });
+__webpack_require__.d(__webpack_exports__, "o", function() { return /* reexport */ pickBy; });
+__webpack_require__.d(__webpack_exports__, "p", function() { return /* reexport */ Functions_throttle; });
+__webpack_require__.d(__webpack_exports__, "q", function() { return /* reexport */ wrap; });
+
+// UNUSED EXPORTS: cloneDeep, concatMap, debounce, deepFlatten, find, findIndex, first, flatten, get, isEmpty, isNumber, isNumeric, isSymbol, kebabCase, key, map, matches, matchesProperty, negate, noop, now, omitBy, property, remove, toNumber, unit, value
 
 // EXTERNAL MODULE: ./node_modules/vue-interface/src/Helpers/Functions/camelCase.js
 var camelCase = __webpack_require__("fea0");
@@ -4484,7 +4591,7 @@ function concatMap(fn) {
  * }, _.now());
  * // => Logs the number of milliseconds it took for the deferred invocation.
  */
-var now = function () {
+var now = function() {
     return Date.now();
 };
 
@@ -5079,50 +5186,6 @@ function wrap(subject, fn) {
 };
 
 // CONCATENATED MODULE: ./node_modules/vue-interface/src/Helpers/Functions/index.js
-/* concated harmony reexport camelCase */__webpack_require__.d(__webpack_exports__, "a", function() { return camelCase["a" /* default */]; });
-/* concated harmony reexport chunk */__webpack_require__.d(__webpack_exports__, "b", function() { return chunk; });
-/* unused concated harmony import cloneDeep */
-/* unused concated harmony import concatMap */
-/* unused concated harmony import debounce */
-/* concated harmony reexport deepExtend */__webpack_require__.d(__webpack_exports__, "c", function() { return deepExtend; });
-/* unused concated harmony import deepFlatten */
-/* concated harmony reexport each */__webpack_require__.d(__webpack_exports__, "d", function() { return each["a" /* default */]; });
-/* concated harmony reexport extend */__webpack_require__.d(__webpack_exports__, "e", function() { return extend; });
-/* unused concated harmony import find */
-/* unused concated harmony import findIndex */
-/* concated harmony reexport findKey */__webpack_require__.d(__webpack_exports__, "f", function() { return findKey_findIndex; });
-/* unused concated harmony import first */
-/* unused concated harmony import flatten */
-/* unused concated harmony import get */
-/* concated harmony reexport isArray */__webpack_require__.d(__webpack_exports__, "g", function() { return isArray["a" /* default */]; });
-/* concated harmony reexport isBoolean */__webpack_require__.d(__webpack_exports__, "h", function() { return isBoolean; });
-/* unused concated harmony import isEmpty */
-/* concated harmony reexport isFunction */__webpack_require__.d(__webpack_exports__, "i", function() { return isFunction; });
-/* concated harmony reexport isNull */__webpack_require__.d(__webpack_exports__, "j", function() { return isNull["a" /* default */]; });
-/* unused concated harmony import isNumber */
-/* unused concated harmony import isNumeric */
-/* concated harmony reexport isObject */__webpack_require__.d(__webpack_exports__, "k", function() { return isObject["a" /* default */]; });
-/* concated harmony reexport isString */__webpack_require__.d(__webpack_exports__, "l", function() { return isString_isString; });
-/* unused concated harmony import isSymbol */
-/* concated harmony reexport isUndefined */__webpack_require__.d(__webpack_exports__, "m", function() { return isUndefined["a" /* default */]; });
-/* unused concated harmony import kebabCase */
-/* unused concated harmony import key */
-/* unused concated harmony import map */
-/* concated harmony reexport mapKeys */__webpack_require__.d(__webpack_exports__, "n", function() { return mapKeys; });
-/* unused concated harmony import matches */
-/* unused concated harmony import matchesProperty */
-/* unused concated harmony import negate */
-/* unused concated harmony import noop */
-/* unused concated harmony import now */
-/* unused concated harmony import omitBy */
-/* concated harmony reexport pickBy */__webpack_require__.d(__webpack_exports__, "o", function() { return pickBy; });
-/* unused concated harmony import property */
-/* unused concated harmony import remove */
-/* concated harmony reexport throttle */__webpack_require__.d(__webpack_exports__, "p", function() { return Functions_throttle; });
-/* unused concated harmony import toNumber */
-/* unused concated harmony import unit */
-/* unused concated harmony import value */
-/* concated harmony reexport wrap */__webpack_require__.d(__webpack_exports__, "q", function() { return wrap; });
 
 
 
@@ -5225,49 +5288,6 @@ function isObject(value) {
 
 /***/ }),
 
-/***/ "f6fd":
-/***/ (function(module, exports) {
-
-// document.currentScript polyfill by Adam Miller
-
-// MIT license
-
-(function(document){
-  var currentScript = "currentScript",
-      scripts = document.getElementsByTagName('script'); // Live NodeList collection
-
-  // If browser needs currentScript polyfill, add get currentScript() to the document object
-  if (!(currentScript in document)) {
-    Object.defineProperty(document, currentScript, {
-      get: function(){
-
-        // IE 6-10 supports script readyState
-        // IE 10+ support stack trace
-        try { throw new Error(); }
-        catch (err) {
-
-          // Find the second match for the "at" string to get file src url from stack.
-          // Specifically works with the format of stack traces in IE.
-          var i, res = ((/.*at [^\(]*\((.*):.+:.+\)$/ig).exec(err.stack) || [false])[1];
-
-          // For all scripts on the page, if src matches or if ready state is interactive, return the script tag
-          for(i in scripts){
-            if(scripts[i].src == res || scripts[i].readyState == "interactive"){
-              return scripts[i];
-            }
-          }
-
-          // If no match, return null
-          return null;
-        }
-      }
-    });
-  }
-})(document);
-
-
-/***/ }),
-
 /***/ "f924":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -5289,26 +5309,34 @@ function each(subject, fn) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
 // CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/setPublicPath.js
 // This file is imported into lib/wc client bundles.
 
 if (typeof window !== 'undefined') {
+  var currentScript = window.document.currentScript
   if (true) {
-    __webpack_require__("f6fd")
+    var getCurrentScript = __webpack_require__("8875")
+    currentScript = getCurrentScript()
+
+    // for backward compatibility, because previously we directly included the polyfill
+    if (!('currentScript' in document)) {
+      Object.defineProperty(document, 'currentScript', { get: getCurrentScript })
+    }
   }
 
-  var i
-  if ((i = window.document.currentScript) && (i = i.src.match(/(.+\/)[^/]+\.js(\?.*)?$/))) {
-    __webpack_require__.p = i[1] // eslint-disable-line
+  var src = currentScript && currentScript.src.match(/(.+\/)[^/]+\.js(\?.*)?$/)
+  if (src) {
+    __webpack_require__.p = src[1] // eslint-disable-line
   }
 }
 
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4c601c4e-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/GiveworksForm.vue?vue&type=template&id=513b1c20&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"45b66c9f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/GiveworksForm.vue?vue&type=template&id=513b1c20&
 var render = function () {
 var this$1 = this;
 var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"giveworks-form"},[(_vm.error)?_c('div',[_c('div',{staticClass:"center-wrapper"},[_c('div',{staticClass:"center-content"},[_c('http-error-response',{attrs:{"error":_vm.error}})],1)])]):(_vm.page.id)?_c('form',{staticClass:"container",class:_vm.classes,attrs:{"novalidate":"novalidate"},on:{"submit":function($event){$event.preventDefault();return _vm.submit($event)}}},[_c(_vm.pageTypeComponent,{ref:"type",tag:"component",attrs:{"orientation":_vm.orientation,"page":_vm.page,"source":_vm.source,"redirect":_vm.redirect,"http-options":_vm.httpOptions},on:{"error":_vm.onError,"init":function($event){return _vm.$emit('init')},"submit":function () {
@@ -5368,7 +5396,7 @@ var Page = __webpack_require__("850f");
     baseURL: `${domain}/api/public/v1/`
   };
 });
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"4c601c4e-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/HttpErrorResponse.vue?vue&type=template&id=04e07aa6&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"45b66c9f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/HttpErrorResponse.vue?vue&type=template&id=04e07aa6&
 var HttpErrorResponsevue_type_template_id_04e07aa6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"text-left"},[_c('alert',{style:({'width': _vm.widthUnit, 'min-width': _vm.minWidthUnit, 'max-width': _vm.maxWidthUnit}),attrs:{"variant":"danger","heading":("Error: " + _vm.status)}},[_vm._v(" "+_vm._s(_vm.formattedMessage)+" ")])],1)}
 var HttpErrorResponsevue_type_template_id_04e07aa6_staticRenderFns = []
 
@@ -5391,7 +5419,7 @@ var unit = __webpack_require__("0f2b");
 /* harmony default export */ var HttpErrorResponsevue_type_script_lang_js_ = ({
   name: 'HttpErrorResponse',
   components: {
-    Alert: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "3259"))
+    Alert: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(1), __webpack_require__.e(13)]).then(__webpack_require__.bind(null, "3259"))
   },
   props: {
     minWidth: String,
@@ -5509,11 +5537,11 @@ var Functions = __webpack_require__("ca14");
   name: 'GiveworksForm',
   components: {
     HttpErrorResponse: HttpErrorResponse,
-    Signup: () => __webpack_require__.e(/* import() | signup-type */ 8).then(__webpack_require__.bind(null, "0dce")),
-    Survey: () => __webpack_require__.e(/* import() | survey-type */ 9).then(__webpack_require__.bind(null, "cc21")),
-    Petition: () => __webpack_require__.e(/* import() | petition-type */ 7).then(__webpack_require__.bind(null, "4053")),
-    Donation: () => Promise.all(/* import() | donation-type */[__webpack_require__.e(10), __webpack_require__.e(4)]).then(__webpack_require__.bind(null, "9ceb")),
-    ActivityIndicator: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, "a633"))
+    Signup: () => __webpack_require__.e(/* import() | signup-type */ 9).then(__webpack_require__.bind(null, "0dce")),
+    Survey: () => __webpack_require__.e(/* import() | survey-type */ 10).then(__webpack_require__.bind(null, "cc21")),
+    Petition: () => __webpack_require__.e(/* import() | petition-type */ 8).then(__webpack_require__.bind(null, "4053")),
+    Donation: () => Promise.all(/* import() | donation-type */[__webpack_require__.e(0), __webpack_require__.e(11), __webpack_require__.e(5)]).then(__webpack_require__.bind(null, "9ceb")),
+    ActivityIndicator: () => Promise.all(/* import() | vue-interface */[__webpack_require__.e(0), __webpack_require__.e(1), __webpack_require__.e(13)]).then(__webpack_require__.bind(null, "a633"))
   },
   props: {
     apiKey: {
@@ -5574,7 +5602,7 @@ var Functions = __webpack_require__("ca14");
 
   mounted() {
     const apiKey = "e66068bbbefd6ad235c13b0c178480da" || false;
-    Promise.all([Promise.resolve(/* import() */).then(__webpack_require__.t.bind(null, "353a", 7)), __webpack_require__.e(/* import() */ 13).then(__webpack_require__.t.bind(null, "3181", 7))]).then(([{
+    Promise.all([Promise.resolve(/* import() */).then(__webpack_require__.t.bind(null, "353a", 7)), __webpack_require__.e(/* import() */ 14).then(__webpack_require__.t.bind(null, "3181", 7))]).then(([{
       'default': bugsnag
     }, {
       'default': bugsnagVue

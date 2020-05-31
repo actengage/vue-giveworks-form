@@ -8,6 +8,7 @@
         :label="`${question.question}${question.required ? '*' : ''}`"
         :placeholder="`${question.question}${question.required ? '*' : ''}`"
         :required="question.required"
+        :value="question.default_value"
         :errors="errors"
         custom
         @input="updated" />

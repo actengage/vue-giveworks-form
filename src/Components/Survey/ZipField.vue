@@ -7,6 +7,7 @@
         :placeholder="`${question.question}${question.required ? '*' : ''}`"
         :required="question.required"
         :errors="errors"
+        :value="question.default_value"
         name="zip"
         maxlength="9"
         x_autocompletetype="postal-code"

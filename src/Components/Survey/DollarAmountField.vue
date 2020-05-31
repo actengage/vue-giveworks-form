@@ -17,7 +17,7 @@
                             type="text"
                             class="form-control"
                             :name="name"
-                            :value="value"
+                            :value="question.default_value"
                             :class="{'is-invalid': !!invalidFeedback}"
                             :required="question.required">
                     </input-group>

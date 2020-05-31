@@ -1,15 +1,17 @@
 <template>
-    <textarea-field
-        :id="question.id"
-        v-model="form[name]"
-        :autogrow="true"
-        :label="`${question.question}${question.required ? '*' : ''}`"
-        :placeholder="`${question.question}${question.required ? '*' : ''}`"
-        :name="name"
-        :required="question.required"
-        :errors="errors"
-        custom
-        @input="updated" />
+    <div>
+        <textarea-field
+            :id="question.id"
+            :autogrow="true"
+            :label="`${question.question}${question.required ? '*' : ''}`"
+            :placeholder="`${question.question}${question.required ? '*' : ''}`"
+            :name="name"
+            :required="question.required"
+            :value="question.default_value"
+            :errors="errors"
+            custom
+            @input="updated" />
+    </div>
 </template>
 
 <script>

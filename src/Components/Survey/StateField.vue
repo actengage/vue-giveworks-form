@@ -7,6 +7,7 @@
         :label="`${question.question}${question.required ? '*' : ''}`"
         :required="question.required"
         :errors="errors"
+        :value="question.default_value"
         custom
         @input="updated">
         <option v-for="(label, value) in page.site.config.states" :key="label" :value="value" v-html="label" />

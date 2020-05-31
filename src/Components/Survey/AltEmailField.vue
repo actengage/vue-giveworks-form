@@ -9,6 +9,7 @@
         :placeholder="`${question.question}${question.required ? '*' : ''}`"
         :required="question.required"
         :errors="errors"
+        :value="question.default_value"
         custom
         @input="updated" />
 </template>

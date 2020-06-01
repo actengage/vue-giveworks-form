@@ -124,16 +124,18 @@ function addEmptyClass(el, vnode) {
         },
 
         /**
-         * The value of label element. If no value, no label will appear.
+         * The field's default value.
          *
-         * @property String
+         * @property Mixed
          */
-        label: [Number, String],
+        defaultValue: {
+            default: null
+        },
 
         /**
-         * The field id attribute value.
+         * The field value.
          *
-         * @property String
+         * @property Mixed
          */
         value: {
             default: null
@@ -148,6 +150,13 @@ function addEmptyClass(el, vnode) {
             type: Boolean,
             default: true
         },
+
+        /**
+         * The value of label element. If no value, no label will appear.
+         *
+         * @property String
+         */
+        label: [Number, String],
 
         /**
          * An inline field validation error.
@@ -457,9 +466,15 @@ function addEmptyClass(el, vnode) {
 
     },
 
+    mounted() {
+        if(this.value === null && this.defaultValue !== null) {
+            this.$emit('input', this.defaultValue);
+        }
+    },
+
     data() {
         return {
-            currentValue: this.value
+            currentValue: this.value || this.defaultValue
         };
     }
 

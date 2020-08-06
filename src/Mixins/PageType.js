@@ -8,6 +8,8 @@ export default {
 
         source: [String, Number],
 
+        trackingId: [String, Number],
+
         redirect: {
             type: [Boolean, String],
             default: undefined
@@ -143,7 +145,8 @@ export default {
         return {
             form: {
                 source: this.source,
-                recurring: recurring
+                recurring: recurring,
+                trackingId: this.trackingId
             },
             errors: {},
             loaded: false,

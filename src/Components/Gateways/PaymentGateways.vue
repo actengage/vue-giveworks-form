@@ -2,11 +2,11 @@
     <div>
         <div v-if="buttons.length > 1" class="payment-gateway-buttons">
             <btn
-            v-for="(button, i) in buttons"
-            :key="i"
-            :class="{'btn-success': button.active, 'btn-secondary': !button.active}"
-            type="button"
-            @click="activate(button)">
+                v-for="(button, i) in buttons"
+                :key="i"
+                :class="{'btn-success': button.active, 'btn-secondary': !button.active}"
+                type="button"
+                @click="activate(button)">
                 <icon :icon="typeof button.icon === 'string' ? ['far', button.icon]: button.icon" :size="button.size || 'lg'" :class="{'mt-2 mb-1': !button.label}" />
                 <div v-if="button.label" class="small" v-html="button.label" />
             </btn>
@@ -18,13 +18,13 @@
         </alert>
 
         <component
-        :is="activeButton.component"
-        v-if="activeButton"
-        :form="form"
-        :page="page"
-        :errors="errors"
-        :page-type="pageType"
-        :gateway="activeButton.gateway" />
+            :is="activeButton.component"
+            v-if="activeButton"
+            :form="form"
+            :page="page"
+            :errors="errors"
+            :page-type="pageType"
+            :gateway="activeButton.gateway" />
     </div>
 </template>
 

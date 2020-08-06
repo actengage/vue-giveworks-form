@@ -15,6 +15,7 @@
                         <input-field v-model="form.apiKey" label="API Key*" placeholder="API Key*   " help-text="The Giveworks API for site." custom />
                         <input-field v-model="form.source" label="Source Code" placeholder="Source Code" help-text="Source codes are optional." custom />
                         <input-field v-model="form.session" label="Session Id" placeholder="Session Id" help-text="Sessions are optional." custom />
+                        <input-field v-model="form.trackingId" label="Tracking Id" placeholder="Tracking Id" help-text="Tracking ID's are optional." custom />
                         <div class="card mb-3">
                             <div class="card-body">
                                 <strong>Server</strong>
@@ -38,6 +39,7 @@
                 :page-id="this.$route.params.slug"
                 :source="this.$route.params.source"
                 :session="this.$route.params.session"
+                :tracking-id="this.$route.query.trackingId"
                 :api-key="this.$route.query.apiKey" />
         </div>
     </div>
@@ -91,7 +93,8 @@ export default {
                 name: 'index',
                 query: {
                     mode: this.form.mode,
-                    apiKey: this.form.apiKey
+                    apiKey: this.form.apiKey,
+                    trackingId: this.form.trackingId
                 },
                 params: pickBy({
                     apiKey: null,

@@ -14,19 +14,19 @@
         <payment-gateways v-if="$refs.submit" :page-type="this" :form="form" :errors="errors" :page="page" />
 
         <textarea-field
-        v-if="page.options.add_comment"
-        id="comment"
-        v-model="form.comment"
-        v-autogrow
-        :label="commentMessage" />
+            v-if="page.options.add_comment"
+            id="comment"
+            v-model="form.comment"
+            v-autogrow
+            :label="commentMessage" />
 
         <btn-activity
-        ref="submit"
-        type="submit"
-        size="lg"
-        :activity="submitting"
-        :label="buttonLabel || page.site.config.giveworks.button.donate"
-        block />
+            ref="submit"
+            type="submit"
+            size="lg"
+            :activity="submitting"
+            :label="buttonLabel || page.site.config.giveworks.button.donate"
+            block />
 
         <div v-if="page.options.add_optin">
             <label class="custom-control custom-checkbox">

@@ -14,6 +14,7 @@
             :label="answer"
             :value="answer"
             :checked-values="value || []"
+            :required="question.required"
             :name="name"
             custom
             @input="updated" />

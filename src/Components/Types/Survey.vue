@@ -2,22 +2,22 @@
     <div>
         <div v-for="question in page.questions" :key="question.id">
             <component
-            :is="component(question.type)"
-            :value="form[`field_${question.id}`]"
-            :name="`field_${question.id}`"
-            :page="page"
-            :form="form"
-            :errors="errors"
-            :question="question" />
+                :is="component(question.type)"
+                :value="form[`field_${question.id}`]"
+                :name="`field_${question.id}`"
+                :page="page"
+                :form="form"
+                :errors="errors"
+                :question="question" />
         </div>
 
         <btn-activity
-        size="lg"
-        type="submit"
-        :block="true"
-        orientation="right"
-        :activity="submitting"
-        :label="buttonLabel || page.site.config.giveworks.button.survey" />
+            size="lg"
+            type="submit"
+            :block="true"
+            orientation="right"
+            :activity="submitting"
+            :label="buttonLabel || page.site.config.giveworks.button.survey" />
     </div>
 </template>
 

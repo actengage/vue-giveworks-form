@@ -23,6 +23,10 @@ export default class PayPal extends Api {
     }
 
     button(el, context) {
+        if(!this.paypal()) {
+            return;
+        }
+        
         return this.paypal().Button.render({
             env: process.ENV === 'production' ? 'production' : 'sandbox',
 

@@ -2,24 +2,24 @@
     <div class="payment-buttons" :class="{'was-validated': !!errors.amount}">
         <div class="payment-buttons-grid mb-2">
             <btn v-for="amount in amounts"
-            :key="amount"
-            type="button"
-            outline
-            variant="success"
-            :active="value ? value.toString() === amount.toString() : false"
-            @click="onClickButton(amount)"
-            v-html="`$${amount}`" />
+                :key="amount"
+                type="button"
+                outline
+                variant="success"
+                :active="value ? value.toString() === amount.toString() : false"
+                @click="onClickButton(amount)"
+                v-html="`$${amount}`" />
         </div>
 
         <input-group prepend="$" :class="{'is-invalid': !!errors.amount, 'mb-3': !page.site.recurring}">
             <input-field
-            custom
-            label="Other Amount"
-            placeholder="Other Amount"
-            :group="false"
-            :value="value"
-            @keydown="onKeyDown"
-            @input="value => $emit('input', value)" />
+                custom
+                label="Other Amount"
+                placeholder="Other Amount"
+                :group="false"
+                :value="value"
+                @keydown="onKeyDown"
+                @input="value => $emit('input', value)" />
         </input-group>
 
         <form-feedback v-if="errors.amount" class="d-block" invalid v-html="errors.amount.join('<br>')" />

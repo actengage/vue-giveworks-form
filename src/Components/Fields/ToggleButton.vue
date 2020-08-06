@@ -1,14 +1,14 @@
 <template>
     <btn-group class="toggle-button" :size="size">
         <btn
-        v-for="(label, i) in buttons"
-        ref="buttons"
-        :key="i"
-        :outline="i !== value.toString()"
-        :variant="i === value.toString() ? 'success' : 'secondary'"
-        type="button"
-        @click="$emit('input', i)"
-        v-html="label" />
+            v-for="(label, i) in buttons"
+            ref="buttons"
+            :key="i"
+            :outline="i !== value.toString()"
+            :variant="i === value.toString() ? 'success' : 'secondary'"
+            type="button"
+            @click="$emit('input', i)"
+            v-html="label" />
         <slot />
     </btn-group>
 </template>
@@ -34,6 +34,7 @@ export default {
     props: {
 
         value: {
+            type: [String, Number],
             default: 0
         },
 

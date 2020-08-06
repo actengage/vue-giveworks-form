@@ -14,6 +14,7 @@
             :value="answer"
             :checked-value="value"
             :name="name"
+            :required="question.required"
             custom
             @change="updated" />
 

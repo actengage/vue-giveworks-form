@@ -14,6 +14,7 @@
                 :orientation="orientation"
                 :page="page"
                 :source="source"
+                :tracking-id="trackingId"
                 :redirect="redirect"
                 :http-options="httpOptions"
                 @error="onError"
@@ -74,14 +75,16 @@ export default {
 
         pageId: [Number, String],
 
-        source: [String, Number],
-
-        session: [String, Number],
-
         redirect: {
             type: [Boolean, String],
             default: undefined
         },
+
+        source: [String, Number],
+
+        session: [String, Number],
+
+        trackingId: [String, Number],
 
         onSubmitSuccess: Function
 
@@ -90,6 +93,7 @@ export default {
     data() {
         return {
             error: null,
+            wasValidated: false,
             page: this.data || {}
         };
     },
@@ -98,6 +102,7 @@ export default {
 
         classes() {
             return {
+                'was-validated': this.wasValidated,
                 'text-sm': this.width < 100
             };
         },
@@ -162,7 +167,9 @@ export default {
             this.$refs.type.submit(e).then(
                 this.$refs.type.onSubmitSuccess,
                 this.$refs.type.onSubmitError
-            );
+            ).finally(e => {
+                this.wasValidated = true;
+            });
         },
 
         onResize() {

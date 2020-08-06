@@ -2,26 +2,44 @@
 // Example:
 // $font-size-base: 1.2rem !default;
 $font-family-base: 'Helvetica Nueue', Helvetica, Arial, sans-serif;
-    
+
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
 @import '~bootstrap/scss/mixins';
-@import '~bootstrap/scss/root';
-@import '~bootstrap/scss/reboot';
-@import '~bootstrap/scss/type';
-@import '~bootstrap/scss/grid';
-@import '~bootstrap/scss/forms';
-@import '~bootstrap/scss/buttons';
-@import '~bootstrap/scss/button-group';
-@import '~bootstrap/scss/input-group';
-@import '~bootstrap/scss/custom-forms';
-@import '~bootstrap/scss/alert';
-@import '~bootstrap/scss/utilities';
 
+@mixin form-validation-state-selector($state) {
+    @if ($state == "valid" or $state == "invalid") {
+        .giveworks-form .was-validated #{if(&, "&", "")}:#{$state},
+        #{if(&, "&", "")}.is-#{$state} {
+            @content;
+        }
+    } @else {
+        #{if(&, "&", "")}.is-#{$state} {
+            @content;
+        }
+    }
+}
+
+@each $state, $data in $form-validation-states {
+    @include form-validation-state($state, map-get($data, color), map-get($data, icon));
+}
+  
 .giveworks-form {
     font-size: 16px;
     line-height: 1.5em;
     font-family: $font-family-base;
+    
+    @import '~bootstrap/scss/root';
+    @import '~bootstrap/scss/reboot';
+    @import '~bootstrap/scss/type';
+    @import '~bootstrap/scss/grid';
+    @import '~bootstrap/scss/forms';
+    @import '~bootstrap/scss/buttons';
+    @import '~bootstrap/scss/button-group';
+    @import '~bootstrap/scss/input-group';
+    @import '~bootstrap/scss/custom-forms';
+    @import '~bootstrap/scss/alert';
+    @import '~bootstrap/scss/utilities';
 
     & > .container {
         font-size: inherit;

@@ -87,7 +87,7 @@ module.exports =
 /******/ 		if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
 /******/ 		else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
 /******/ 			promises.push(installedCssChunks[chunkId] = new Promise(function(resolve, reject) {
-/******/ 				var href = "css/" + ({"0":"vendors~donation-type~vue-interface~vue-place-autocomplete","1":"vendors~vue-credit-card-field~vue-interface~vue-place-autocomplete","2":"vue-place-autocomplete","4":"contact-info-fieldset","5":"donation-type","6":"employment-info-fieldset","7":"go-to-webinar","8":"petition-type","9":"signup-type","10":"survey-type","11":"vendors~donation-type","12":"vendors~vue-credit-card-field","13":"vendors~vue-interface"}[chunkId]||chunkId) + "." + {"0":"31d6cfe0","1":"0d42abde","2":"0f9eb737","4":"31d6cfe0","5":"6783790e","6":"31d6cfe0","7":"31d6cfe0","8":"31d6cfe0","9":"31d6cfe0","10":"31d6cfe0","11":"31d6cfe0","12":"5d81c956","13":"73bb522b","14":"31d6cfe0"}[chunkId] + ".css";
+/******/ 				var href = "css/" + ({"0":"vendors~donation-type~vue-interface~vue-place-autocomplete","1":"vendors~vue-credit-card-field~vue-interface~vue-place-autocomplete","2":"vue-place-autocomplete","4":"contact-info-fieldset","5":"donation-type","6":"employment-info-fieldset","7":"go-to-webinar","8":"petition-type","9":"signup-type","10":"survey-type","11":"vendors~donation-type","12":"vendors~vue-credit-card-field","13":"vendors~vue-interface"}[chunkId]||chunkId) + "." + {"0":"31d6cfe0","1":"4e10b532","2":"b187331f","4":"31d6cfe0","5":"6783790e","6":"31d6cfe0","7":"31d6cfe0","8":"31d6cfe0","9":"31d6cfe0","10":"31d6cfe0","11":"31d6cfe0","12":"b1905fdc","13":"561a7a4d","14":"31d6cfe0"}[chunkId] + ".css";
 /******/ 				var fullhref = __webpack_require__.p + href;
 /******/ 				var existingLinkTags = document.getElementsByTagName("link");
 /******/ 				for(var i = 0; i < existingLinkTags.length; i++) {
@@ -5334,7 +5334,7 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"7fe78c36-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/GiveworksForm.vue?vue&type=template&id=0111ed7c&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d370b28-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/GiveworksForm.vue?vue&type=template&id=00327a64&
 var render = function () {
 var this$1 = this;
 var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"giveworks-form"},[(_vm.error)?_c('div',[_c('div',{staticClass:"center-wrapper"},[_c('div',{staticClass:"center-content"},[_c('http-error-response',{attrs:{"error":_vm.error}})],1)])]):(_vm.page.id)?_c('form',{staticClass:"container",class:_vm.classes,attrs:{"novalidate":"novalidate"},on:{"submit":function($event){$event.preventDefault();return _vm.submit($event)}}},[_c(_vm.pageTypeComponent,{ref:"type",tag:"component",attrs:{"orientation":_vm.orientation,"page":_vm.page,"source":_vm.source,"tracking-id":_vm.trackingId,"redirect":_vm.redirect,"http-options":_vm.httpOptions},on:{"error":_vm.onError,"init":function($event){return _vm.$emit('init')},"submit":function () {
@@ -5365,7 +5365,7 @@ var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Components/GiveworksForm.vue?vue&type=template&id=0111ed7c&
+// CONCATENATED MODULE: ./src/Components/GiveworksForm.vue?vue&type=template&id=00327a64&
 
 // EXTERNAL MODULE: ./src/Models/Page.js + 2 modules
 var Page = __webpack_require__("850f");
@@ -5394,7 +5394,7 @@ var Page = __webpack_require__("850f");
     baseURL: `${domain}/api/public/v1/`
   };
 });
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"7fe78c36-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/HttpErrorResponse.vue?vue&type=template&id=04e07aa6&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d370b28-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/Components/HttpErrorResponse.vue?vue&type=template&id=04e07aa6&
 var HttpErrorResponsevue_type_template_id_04e07aa6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"text-left"},[_c('alert',{style:({'width': _vm.widthUnit, 'min-width': _vm.minWidthUnit, 'max-width': _vm.maxWidthUnit}),attrs:{"variant":"danger","heading":("Error: " + _vm.status)}},[_vm._v(" "+_vm._s(_vm.formattedMessage)+" ")])],1)}
 var HttpErrorResponsevue_type_template_id_04e07aa6_staticRenderFns = []
 
@@ -5573,6 +5573,7 @@ var Functions = __webpack_require__("ca14");
   data() {
     return {
       error: null,
+      wasValidated: false,
       page: this.data || {}
     };
   },
@@ -5580,6 +5581,7 @@ var Functions = __webpack_require__("ca14");
   computed: {
     classes() {
       return {
+        'was-validated': this.wasValidated,
         'text-sm': this.width < 100
       };
     },
@@ -5634,7 +5636,9 @@ var Functions = __webpack_require__("ca14");
 
   methods: {
     submit(e) {
-      this.$refs.type.submit(e).then(this.$refs.type.onSubmitSuccess, this.$refs.type.onSubmitError);
+      this.$refs.type.submit(e).then(this.$refs.type.onSubmitSuccess, this.$refs.type.onSubmitError).finally(e => {
+        this.wasValidated = true;
+      });
     },
 
     onResize() {

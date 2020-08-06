@@ -1,6 +1,6 @@
 {
   "name": "vue-giveworks-form",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "repository": "https://github.com/actengage/vue-giveworks-form",
   "main": "src/export.js",
   "scripts": {

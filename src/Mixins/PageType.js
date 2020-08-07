@@ -144,9 +144,9 @@ export default {
         
         return {
             form: {
+                recurring,
                 source: this.source,
-                recurring: recurring,
-                trackingId: this.trackingId
+                tracking_id: this.trackingId
             },
             errors: {},
             loaded: false,

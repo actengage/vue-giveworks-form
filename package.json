@@ -32,7 +32,6 @@
     "vue": "^2.6.11",
     "vue-credit-card-field": "^0.3.14",
     "vue-interface": "^0.4.58",
-    "vue-place-autocomplete": "^0.5.3",
     "vue-router": "^3.4.1"
   },
   "devDependencies": {

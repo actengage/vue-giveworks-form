@@ -44,19 +44,14 @@
             :errors="errors"
             custom />
 
-        <place-autocomplete-field
+        <input-field
             v-if="address || page.options.add_street"
             v-model="form.street"
             v-query
-            v-place-autofill:street.query="form.street"
-            v-place-autofill:city="form.city"
-            v-place-autofill:state.short="form.state"
-            v-place-autofill:zip="form.zip"
             name="street"
             label="Address"
             placeholder="Address"
             :errors="errors"
-            :api-key="mapApiKey"
             custom />
 
         <div v-if="address || page.options.add_city || page.options.add_zip" class="row">
@@ -97,7 +92,6 @@
 import Query from '../../Directives/Query';
 import FormComponent from '../../Mixins/FormComponent';
 import GoogleMapsApiKey from '../../Mixins/GoogleMapsApiKey';
-import PlaceAutofill from 'vue-place-autocomplete/src/Directives/PlaceAutofill';
 
 export default {
 
@@ -106,12 +100,10 @@ export default {
     components: {
         InputField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/InputField'),
         SelectField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/SelectField'),
-        PlaceAutocompleteField: () => import(/* webpackChunkName: "place-autocomplete-field" */'vue-place-autocomplete/src/PlaceAutocompleteField')
     },
 
     directives: {
-        Query,
-        PlaceAutofill
+        Query
     },
 
     mixins: [

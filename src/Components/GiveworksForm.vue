@@ -167,7 +167,7 @@ export default {
             this.$refs.type.submit(e).then(
                 this.$refs.type.onSubmitSuccess,
                 this.$refs.type.onSubmitError
-            ).finally(e => {
+            ).finally(() => {
                 this.wasValidated = true;
             });
         },

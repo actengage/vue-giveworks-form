@@ -30,17 +30,12 @@
             :errors="errors"
             custom />
 
-        <place-autocomplete-field
+        <input-field
             v-if="address || page.options.show_address"
             v-model="form.address"
-            v-place-autofill:street.query="form.address"
-            v-place-autofill:city="form.city"
-            v-place-autofill:state.short="form.state"
-            v-place-autofill:zip="form.zip_code"
             name="address"
             label="Address"
             placeholder="Address"
-            :api-key="mapApiKey"
             :errors="errors"
             custom />
 
@@ -144,8 +139,6 @@
 <script>
 import FormComponent from '../../Mixins/FormComponent';
 import Autogrow from 'vue-interface/src/Directives/Autogrow';
-import GoogleMapsApiKey from '../../Mixins/GoogleMapsApiKey';
-import PlaceAutofill from 'vue-place-autocomplete/src/Directives/PlaceAutofill';
 
 
 export default {
@@ -156,7 +149,6 @@ export default {
         InputField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/InputField'),
         BtnActivity: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/BtnActivity'),
         TextareaField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/TextareaField'),
-        PlaceAutocompleteField: () => import(/* webpackChunkName: "vue-place-autocomplete" */'vue-place-autocomplete/src/PlaceAutocompleteField'),
     },
 
     directives: {
@@ -165,8 +157,7 @@ export default {
     },
 
     mixins: [
-        FormComponent,
-        GoogleMapsApiKey
+        FormComponent
     ],
 
     props: {

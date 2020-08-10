@@ -91,7 +91,6 @@
 <script>
 import Query from '../../Directives/Query';
 import FormComponent from '../../Mixins/FormComponent';
-import GoogleMapsApiKey from '../../Mixins/GoogleMapsApiKey';
 
 export default {
 
@@ -107,8 +106,7 @@ export default {
     },
 
     mixins: [
-        FormComponent,
-        GoogleMapsApiKey
+        FormComponent
     ],
 
     props: {

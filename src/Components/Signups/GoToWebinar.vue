@@ -152,8 +152,7 @@ export default {
     },
 
     directives: {
-        Autogrow,
-        PlaceAutofill
+        Autogrow
     },
 
     mixins: [

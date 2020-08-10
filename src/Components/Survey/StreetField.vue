@@ -14,7 +14,6 @@
 
 <script>
 import SurveyField from './SurveyField';
-import GoogleMapsApiKey from '../../Mixins/GoogleMapsApiKey';
 import Query from '../../Directives/Query';
 
 export default {
@@ -23,10 +22,6 @@ export default {
 
     components: {
         InputField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/InputField'),
-    },
-
-    directives: {
-        PlaceAutofill
     },
 
     extends: SurveyField

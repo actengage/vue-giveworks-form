@@ -27,8 +27,7 @@ export default {
         CheckboxField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/CheckboxField'),
         BtnActivity: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/BtnActivity'),
         TextareaField: () => import(/* webpackChunkName: "vue-interface" */'vue-interface/src/Components/TextareaField'),
-        ContactInfoFieldset: () => import(/* webpackChunkName: "contact-info-fieldset" */'../Fieldsets/ContactInfoFieldset'),
-        EmploymentInfoFieldset: () => import(/* webpackChunkName: "employment-info-fieldset" */'../Fieldsets/EmploymentInfoFieldset')
+        ContactInfoFieldset: () => import(/* webpackChunkName: "contact-info-fieldset" */'../Fieldsets/ContactInfoFieldset')
     },
 
     extends: PageType

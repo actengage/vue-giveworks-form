@@ -2,8 +2,6 @@
     <div>
         <contact-info-fieldset :legends="false" :form="form" :errors="errors" :page="page" />
 
-        <employment-info-fieldset v-if="shouldShowEmployment" :legends="false" :form="form" :errors="errors" :page="page" />
-
         <textarea-field v-if="page.options.add_comment" id="comment" v-model="form.comment" v-autogrow :label="commentMessage" />
 
         <btn-activity

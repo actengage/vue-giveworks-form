@@ -1,6 +1,6 @@
 <template>
     <fieldset>
-        <p v-if="page.special === 'donation' && (page.site.type == 'PAC' || page.site.type == 'Campaign')">
+        <p>
             <small class="text-muted" v-html="employmentOccurMessage" />
         </p>
 

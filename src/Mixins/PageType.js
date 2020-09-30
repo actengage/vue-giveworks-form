@@ -35,7 +35,9 @@ export default {
         },
 
         shouldShowEmployment() {
-            return this.page.site.type === 'PAC' || this.page.site.type === 'Campaign';
+            return this.page.page.special === 'donation' && (
+                this.page.site.type === 'PAC' || this.page.site.type === 'Campaign'
+            );
         }
 
     },

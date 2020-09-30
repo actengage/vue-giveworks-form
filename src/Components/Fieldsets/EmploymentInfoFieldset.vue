@@ -1,8 +1,6 @@
 <template>
     <fieldset>
-        <!-- <h3 v-if="legends">Employment Information</h3> -->
-
-        <p v-if="!form.recurring">
+        <p v-if="page.special === 'donation' && (page.site.type == 'PAC' || page.site.type == 'Campaign')">
             <small class="text-muted" v-html="employmentOccurMessage" />
         </p>
 
@@ -17,6 +15,7 @@
             :disabled="isRetired"
             :errors="errors"
             custom />
+
         <input-field v-if="!isRetired"
             id="occupation"
             ref="occupation"

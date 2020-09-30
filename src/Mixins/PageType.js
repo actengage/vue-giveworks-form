@@ -35,7 +35,7 @@ export default {
         },
 
         shouldShowEmployment() {
-            return this.page.page.special === 'donation' && (
+            return this.page.special === 'donation' && (
                 this.page.site.type === 'PAC' || this.page.site.type === 'Campaign'
             );
         }

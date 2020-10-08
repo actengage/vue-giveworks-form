@@ -10,16 +10,15 @@
                 @click="onClickButton(amount)"
                 v-html="`$${amount}`" />
         </div>
-
+    
         <input-group prepend="$" :class="{'is-invalid': !!errors.amount, 'mb-3': !page.site.recurring}">
             <input-field
+                ref="custom"
                 custom
                 label="Other Amount"
                 placeholder="Other Amount"
                 :group="false"
-                :value="value"
-                @keydown="onKeyDown"
-                @input="value => $emit('input', value)" />
+                @input="onInput" />
         </input-group>
 
         <form-feedback v-if="errors.amount" class="d-block" invalid v-html="errors.amount.join('<br>')" />
@@ -59,6 +58,10 @@ export default {
     },
 
     methods: {
+
+        onInput(value) {
+            this.$emit('input', parseInt(value));
+        },
 
         onClickButton(value) {
             this.$emit('input',

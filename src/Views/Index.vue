@@ -37,9 +37,9 @@
                 :env="this.$route.query.env"
                 :mode="this.$route.query.mode"
                 :page-id="this.$route.params.slug"
-                :source="this.$route.params.source"
-                :session="this.$route.params.session"
-                :tracking-id="this.$route.query.trackingId"
+                :source="this.$route.params.source || this.$route.query.source"
+                :session="this.$route.params.session || this.$route.query.session"
+                :tracking-id="this.$route.query.trackingId || this.$route.query.tracking_id || this.$route.query.tid"
                 :api-key="this.$route.query.apiKey" />
         </div>
     </div>

@@ -8,9 +8,11 @@
             <small class="text-muted">Minimum accepted amount is ${{ page.options.min_amount }}</small>
         </div>
 
-        <payment-buttons v-model="form.amount"
+        <payment-buttons
+            v-model="form.amount"
             v-query
             name="amount"
+            :value="form.amount"
             :amounts="amounts"
             :errors="errors"
             :page="page" />

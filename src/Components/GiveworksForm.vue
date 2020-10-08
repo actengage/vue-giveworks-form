@@ -167,8 +167,13 @@ export default {
             this.$refs.type.submit(e).then(
                 this.$refs.type.onSubmitSuccess,
                 this.$refs.type.onSubmitError
-            ).finally(() => {
+            ).then(() => {
                 this.wasValidated = true;
+            }, e => {
+                // Stop the uncaught promise exception!
+                console.warn(e);
+
+                this.$emit('error', e);
             });
         },
 

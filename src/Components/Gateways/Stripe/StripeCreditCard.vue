@@ -66,33 +66,24 @@ export default {
                 this.errors.token = event.error ? [event.error.message] : null;
 
                 if(event.complete) {
-                    // elapsed(500, (resolve, reject) => {
                     gateway.createToken(this.$card, {
+                        name: `${this.form.first} ${this.form.last}`.trim(),
+                        address_line1: this.form.street,
+                        address_line2: this.form.addr2,
+                        address_city: this.form.city,
+                        address_state: this.form.state,
+                        address_zip: this.form.zip,
+                        address_country: 'US',
                         currency: 'usd'
                     }).then((result) => {
-                        //wait(this.activity ? 750 : 0, (resolve, reject) => {
                         if(result.error) {
                             this.error = result.error.message;
-
-                            //reject(result.error.message);
                         }
                         else {
                             this.form.token = result.token.id;
                             this.pageType.enableSubmitButton();
-                                    
-                            //resolve(result);
                         }
-                        //}).then(resolve, reject);
                     });
-                    /*
-                    }, () => {
-                        this.activity = true;
-                    }).then(() => {
-                        this.activity = false;
-                    }, () => {
-                        this.activity = false;
-                    });
-                    */
                 }
             });
 

@@ -61,7 +61,7 @@
     "purgecss-webpack-plugin": "^2.3.0",
     "sass": "^1.27.0",
     "sass-loader": "^8.0.2",
-    "terser": "^4.8.0",
+    "terser": "^4.8.1",
     "vue-template-compiler": "^2.6.12",
     "vuex-persistent-plugin": "^0.1.1",
     "webpack": "^4.46.0"

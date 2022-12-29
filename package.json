@@ -37,11 +37,11 @@
   "devDependencies": {
     "@babel/polyfill": "^7.11.5",
     "@fullhuman/postcss-purgecss": "^2.3.0",
-    "@vue/cli-plugin-babel": "^4.5.7",
-    "@vue/cli-plugin-eslint": "^4.5.7",
-    "@vue/cli-plugin-pwa": "^4.5.7",
-    "@vue/cli-plugin-unit-jest": "^4.5.7",
-    "@vue/cli-service": "^4.5.7",
+    "@vue/cli-plugin-babel": "^5.0.8",
+    "@vue/cli-plugin-eslint": "^5.0.8",
+    "@vue/cli-plugin-pwa": "^5.0.8",
+    "@vue/cli-plugin-unit-jest": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
     "@vue/test-utils": "^1.1.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^25.5.1",
@@ -58,12 +58,12 @@
     "glob-all": "^3.2.1",
     "postcss-prefix-selector": "^1.7.2",
     "purgecss": "^2.3.0",
-    "purgecss-webpack-plugin": "^2.3.0",
+    "purgecss-webpack-plugin": "^5.0.0",
     "sass": "^1.27.0",
-    "sass-loader": "^8.0.2",
+    "sass-loader": "^13.2.0",
     "terser": "^4.8.0",
     "vue-template-compiler": "^2.6.12",
     "vuex-persistent-plugin": "^0.1.1",
-    "webpack": "^4.46.0"
+    "webpack": "^5.75.0"
   }
 }
